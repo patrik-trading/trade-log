@@ -163,6 +163,9 @@ table.tl tr:hover td{background:var(--surface2);}
 #log-form-panel .g4{grid-template-columns:1fr 1fr 1fr 1fr;}
 #log-form-panel .r-box .g3{grid-template-columns:1fr 1fr 1fr;}
 
+.sortable-th{cursor:pointer;user-select:none;white-space:nowrap;}
+.sortable-th:hover{color:var(--accent);}
+
 /* ANALYTICS PANEL */
 .analytics-dim-btn{font-family:'DM Mono';font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-dim-btn:hover{border-color:var(--muted2);color:var(--text);}
@@ -490,7 +493,7 @@ table.tl tr:hover td{background:var(--surface2);}
             <th>Notes</th>
             <th>Actions</th>
           </tr>
-            </thead>
+        </thead>
             <tbody id="histList"><tr><td colspan="16" class="empty" style="text-align:center;padding:22px">No entries yet</td></tr></tbody>
           </table>
         </div>
@@ -1267,8 +1270,19 @@ table.tl tr:hover td{background:var(--surface2);}
       <div class="ig">
         <label>Yield Spread — Current % / 4 Weeks Ago %</label>
         <div class="g2" style="margin-bottom:0">
-          <div class="num-wrap"><input type="number" id="se-ys-curr" step="0.01" placeholder="Current spread %"><span class="num-sfx">%</span></div>
-          <div class="num-wrap"><input type="number" id="se-ys-prev" step="0.01" placeholder="4w ago spread %"><span class="num-sfx">%</span></div>
+          <div class="num-wrap"><input type="number" id="se-ys-curr" oninput="seCalcYSM()" step="0.01" placeholder="Current spread %"><span class="num-sfx">%</span></div>
+          <div class="num-wrap"><input type="number" id="se-ys-prev" oninput="seCalcYSM()" step="0.01" placeholder="4w ago spread %"><span class="num-sfx">%</span></div>
+        </div>
+        <!-- YSM result display for edit modal -->
+        <div id="se-ysm-result" style="display:none;margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2)">YS MOMENTUM SCORE</div>
+            <div id="se-ysm-val" style="font-family:'Bebas Neue';font-size:1.5rem;line-height:1;color:var(--accent)">0</div>
+          </div>
+          <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px">
+            <div id="se-ysm-bar" style="height:100%;border-radius:3px;transition:width .3s,background .3s;width:50%"></div>
+          </div>
+          <div id="se-ysm-lbl" style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)"></div>
         </div>
       </div>
     </div>
@@ -1758,9 +1772,15 @@ function clearSigFilters(){
   const ss=document.getElementById('sig-filter-signal');
   const sf=document.getElementById('sig-filter-futures');
   const so=document.getElementById('sig-sort');
+  const sb=document.getElementById('sig-filter-bias-inline');
+  const si=document.getElementById('sig-filter-futures-inline');
   if(ss) ss.value='ALL';
   if(sf) sf.value='ALL';
   if(so) so.value='date_desc';
+  if(sb) sb.value='ALL';
+  if(si) si.value='ALL';
+  const fd=document.getElementById('sig-from-date');if(fd)fd.value='';
+  const td=document.getElementById('sig-to-date');if(td)td.value='';
   renderSignals();
 }
 
@@ -1771,15 +1791,20 @@ function renderSignals(){
   const fc=document.getElementById('freqChart');
   if(!entries.length){fc.innerHTML='<div class="empty">No signals yet</div>';}
   else{const cnt={};SORD.forEach(k=>cnt[k]=0);entries.forEach(e=>{if(cnt[e.signal_key]!==undefined)cnt[e.signal_key]++;});const mx=Math.max(...Object.values(cnt),1);fc.innerHTML=SORD.filter(k=>k!=='NE'||cnt[k]>0).map(k=>{const s=SIGS[k];return`<div class="f-row"><div class="f-lbl">${s.i} ${s.p.split('—')[0].trim().substring(0,9)}</div><div class="f-track"><div class="f-fill" style="width:${Math.round(cnt[k]/mx*100)}%;background:${s.c}"></div></div><div class="f-n">${cnt[k]}</div></div>`;}).join('');}
-  // Refresh futures dropdown
+  // Refresh futures dropdowns (both toolbar and inline)
   refreshSigFuturesDropdown();
   // Apply filters
   const fSig     = document.getElementById('sig-filter-signal')?.value  || 'ALL';
   const fFutures = document.getElementById('sig-filter-futures')?.value || 'ALL';
+  const fBias    = 'ALL';
   const fSort    = document.getElementById('sig-sort')?.value           || 'date_desc';
   let filtered = [...entries];
   if(fSig     !== 'ALL') filtered = filtered.filter(e=>e.signal_key===fSig);
   if(fFutures !== 'ALL') filtered = filtered.filter(e=>e.asset===fFutures);
+  const fFrom = document.getElementById('sig-from-date')?.value || '';
+  const fTo   = document.getElementById('sig-to-date')?.value   || '';
+  if(fFrom) filtered = filtered.filter(e=>e.date >= fFrom);
+  if(fTo)   filtered = filtered.filter(e=>e.date <= fTo);
   // Sort
   filtered.sort((a,b)=>{
     if(fSort==='date_desc')  return b.date.localeCompare(a.date);
@@ -1790,6 +1815,8 @@ function renderSignals(){
     if(fSort==='cot_asc')    return parseFloat(a.cot||0)-parseFloat(b.cot||0);
     if(fSort==='val_desc')   return parseFloat(b.val||0)-parseFloat(a.val||0);
     if(fSort==='val_asc')    return parseFloat(a.val||0)-parseFloat(b.val||0);
+    if(fSort==='ysm_desc')   return parseFloat(b.ys_momentum||0)-parseFloat(a.ys_momentum||0);
+    if(fSort==='score_desc') return parseFloat(b.inst_score||0)-parseFloat(a.inst_score||0);
     return 0;
   });
   const hl=document.getElementById('histList');
@@ -1865,6 +1892,8 @@ function openSigEditModal(id){
   document.getElementById('se-zscore').value = e.cot_zscore   != null ? e.cot_zscore   : '';
   document.getElementById('se-ys-curr').value= e.ys_curr_spread!= null ? e.ys_curr_spread: '';
   document.getElementById('se-ys-prev').value= e.ys_prev_spread!= null ? e.ys_prev_spread: '';
+  // Trigger YS momentum display if values saved
+  if(document.getElementById('se-ys-curr')?.value !== '') seCalcYSM();
   // Show institutional score label from saved data
   const seScoreBox = document.getElementById('inst-score-box');
   const seScoreVal = document.getElementById('inst-score-val');
@@ -2271,6 +2300,68 @@ function renderStaleness(entries) {
       <span style="font-family:'DM Mono';font-size:.62rem;color:${color}">${daysOld}d old${stale?' ⚠ STALE':''}</span>
     </div>`
   ).join('');
+}
+
+
+// ── SIGNAL EDIT — YS Momentum helper ──
+function seCalcYSM() {
+  const curr = parseFloat(document.getElementById('se-ys-curr').value);
+  const prev = parseFloat(document.getElementById('se-ys-prev').value);
+  if(isNaN(curr) || isNaN(prev)) return;
+
+  // Duplicate the YS momentum calculation inline (for edit modal context)
+  const change = curr - prev;
+  const roc    = prev !== 0 ? (change / Math.abs(prev)) * 100 : 0;
+
+  let levelScore = 0;
+  if     (curr > 2.5)  levelScore =  3;
+  else if(curr > 1.5)  levelScore =  2;
+  else if(curr > 0.75) levelScore =  1;
+  else if(curr > 0)    levelScore =  0;
+  else if(curr > -0.5) levelScore = -1;
+  else                 levelScore = -2;
+
+  let momScore = 0;
+  if     (roc >  15)  momScore =  7;
+  else if(roc >  8)   momScore =  5;
+  else if(roc >  3)   momScore =  3;
+  else if(roc >  0.5) momScore =  1;
+  else if(roc > -0.5) momScore =  0;
+  else if(roc > -3)   momScore = -1;
+  else if(roc > -8)   momScore = -3;
+  else if(roc > -15)  momScore = -5;
+  else                momScore = -7;
+
+  const score = Math.max(-10, Math.min(10, momScore + levelScore));
+
+  // Update the hidden ysMomentum input so calcInstitutionalScore reads it
+  const ymEl = document.getElementById('ysMomentum');
+  if(ymEl) ymEl.value = score;
+
+  const color  = score > 3 ? 'var(--mega-bull)' : score < -3 ? 'var(--mega-bear)' : score !== 0 ? 'var(--accent)' : 'var(--muted2)';
+  const labels = {'-10':'Extreme bearish','-9':'Very strong bearish','-8':'Strong bearish','-7':'Solid bearish','-6':'Moderate-strong bearish','-5':'Moderate bearish','-4':'Mild-moderate bearish','-3':'Mild bearish','-2':'Slight bearish drift','-1':'Marginally bearish','0':'Neutral','1':'Marginally bullish','2':'Slight bullish drift','3':'Mild bullish','4':'Mild-moderate bullish','5':'Moderate bullish','6':'Moderate-strong bullish','7':'Solid bullish','8':'Strong bullish','9':'Very strong bullish','10':'Extreme bullish'};
+  const scoreStr = score >= 0 ? '+' + score : String(score);
+  const barPct   = ((score + 10) / 20 * 100) + '%';
+
+  // Update edit modal display (se-ysm-*)
+  const seRes = document.getElementById('se-ysm-result');
+  const seVal = document.getElementById('se-ysm-val');
+  const seBar = document.getElementById('se-ysm-bar');
+  const seLbl = document.getElementById('se-ysm-lbl');
+  if(seRes) seRes.style.display = 'block';
+  if(seVal) { seVal.textContent = scoreStr; seVal.style.color = color; }
+  if(seBar) { seBar.style.width = barPct; seBar.style.background = color; }
+  if(seLbl) { seLbl.textContent = labels[String(score)] || ''; seLbl.style.color = color; }
+
+  // Trigger institutional score recalculation
+  calcInstitutionalScore();
+}
+
+// ── SIGNAL TABLE — inline sort ──
+function setSigSort(s) {
+  const sel = document.getElementById('sig-sort');
+  if(sel) sel.value = s;
+  renderSignals();
 }
 
 // ── TRADE LOG ──
