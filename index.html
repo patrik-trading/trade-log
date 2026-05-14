@@ -465,6 +465,7 @@ table.tl tr:hover td{background:var(--surface2);}
           <option value="val_asc">↑ Val%</option>
         </select>
         <button class="btn-sm" onclick="clearSigFilters()">✕ Clear</button>
+        <button class="btn-sm" onclick="recalcAllScores()" style="background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)" title="Recalculate all historical institutional scores using current formula">&#x21BA; Recalc Scores</button>
       </div>
       <div style="margin-left:auto;font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">
         <span>← scroll →</span>
@@ -1662,40 +1663,110 @@ function getYSMScore(ysm){
 }
 
 function calcInstitutionalScore(){
-  const cotRaw  = parseFloat(document.getElementById('cotIn').value);
-  const commRaw = parseFloat(document.getElementById('commIn').value);
-  const zRaw    = parseFloat(document.getElementById('zscoreIn').value);
-  const ysm     = parseInt(document.getElementById('ysMomentum').value)||0;
-  const box     = document.getElementById('inst-score-box');
+  // Use edit modal fields if the edit modal is open, otherwise use main form fields
+  const editOpen = document.getElementById('sig-edit-modal')?.style.display !== 'none'
+                && document.getElementById('sig-edit-modal')?.style.display !== '';
+  const cotRaw  = parseFloat(editOpen
+    ? document.getElementById('se-cot')?.value
+    : document.getElementById('cotIn').value);
+  const commRaw = parseFloat(editOpen
+    ? document.getElementById('se-comm')?.value
+    : document.getElementById('commIn').value);
+  const zRaw    = parseFloat(editOpen
+    ? document.getElementById('se-zscore')?.value
+    : document.getElementById('zscoreIn').value);
+  const ysm     = editOpen
+    ? (parseInt(document.getElementById('se-ysm-val')?.textContent) || 0)
+    : (parseInt(document.getElementById('ysMomentum').value) || 0);
+  const box     = editOpen
+    ? document.getElementById('inst-score-box')
+    : document.getElementById('inst-score-box');
   if(!box) return null;
   if(isNaN(cotRaw)){box.style.display='none';return null;}
   box.style.display='block';
 
-  let totalScore=50;
-  const breakdown=[];
+  // ── CORRECTED SCORING LOGIC ──
+  // This is a CONTRARIAN system. Low spec COT% = bullish (specs max short = opportunity).
+  // High commercial COT% = bullish (smart money accumulating).
+  // Score 0-100: 50 = neutral, >70 = bullish conviction, <30 = bearish conviction.
 
-  // 1. Spec COT Z-Score (-30 to +30 pts)
-  const z=!isNaN(zRaw)?zRaw:cotPctToZScore(cotRaw);
-  const zClamped=Math.max(-3,Math.min(3,z));
-  const cotPts=Math.round(zClamped*10);
-  const cotCol=cotPts>10?'var(--mega-bull)':cotPts<-10?'var(--mega-bear)':'var(--muted2)';
-  breakdown.push({label:'Spec COT Z-Score',detail:`${z.toFixed(2)}σ (${cotRaw}th pct)`,score:cotPts,color:cotCol});
-  totalScore+=cotPts;
+  let totalScore = 50;
+  const breakdown = [];
+  let filledFilters = 0; // track how many filters are actually entered
 
-  // 2. Commercial COT (+/-15 pts)
-  const commSig=!isNaN(commRaw)?getCommercialSignal(commRaw):null;
-  if(commSig){breakdown.push({label:'Commercial (Smart Money)',detail:commSig.label,score:commSig.score,color:commSig.color});totalScore+=commSig.score;}
+  // 1. SPEC COT POSITIONING (up to +/-25 pts)
+  // Low COT% = contrarian bullish (specs max short). High COT% = contrarian bearish.
+  // COT% maps as: 0%=+25, 15%=+20, 35%=+10, 50%=0, 65%=-10, 85%=-20, 100%=-25
+  const cotPts = Math.round(((50 - cotRaw) / 50) * 25);
+  const cotClamped = Math.max(-25, Math.min(25, cotPts));
+  const cotCol = cotClamped > 10 ? 'var(--mega-bull)' : cotClamped < -10 ? 'var(--mega-bear)' : 'var(--muted2)';
+  const cotLbl = cotRaw < 15 ? 'Specs max short — extreme bullish' :
+                 cotRaw < 35 ? 'Specs short-heavy — bullish lean' :
+                 cotRaw > 85 ? 'Specs max long — extreme bearish' :
+                 cotRaw > 65 ? 'Specs long-heavy — bearish lean' : 'Specs neutral';
+  breakdown.push({label:'Spec COT %',detail:`${cotRaw}% — ${cotLbl}`,score:cotClamped,color:cotCol});
+  totalScore += cotClamped;
+  filledFilters++;
 
-  // 3. OI Conviction (+/-20 pts)
-  const oiConv=getOIConviction();
-  if(oiConv){breakdown.push({label:'OI Conviction',detail:oiConv.label,score:oiConv.score,color:oiConv.color});totalScore+=oiConv.score;}
+  // 1b. Z-Score confirmation (+/-10 pts bonus on top of COT)
+  const z = !isNaN(zRaw) ? zRaw : cotPctToZScore(cotRaw);
+  // Invert: negative Z (specs max short) = bullish bonus
+  const zPts = Math.round(Math.max(-10, Math.min(10, -z * 3.33)));
+  const zCol = zPts > 4 ? 'var(--mega-bull)' : zPts < -4 ? 'var(--mega-bear)' : 'var(--muted2)';
+  breakdown.push({label:'Z-Score',detail:`${z.toFixed(2)}σ — ${Math.abs(z)>2?'statistically extreme':'within normal range'}`,score:zPts,color:zCol});
+  totalScore += zPts;
 
-  // 4. Yield Spread Momentum (+/-20 pts)
-  const ysmSig=getYSMScore(ysm);
-  breakdown.push({label:'Yield Spread Momentum',detail:ysmSig.label,score:ysmSig.score,color:ysmSig.color});
-  totalScore+=ysmSig.score;
+  // 2. COMMERCIAL COT (up to +/-20 pts)
+  // High commercial% = smart money accumulating = bullish
+  const commSig = !isNaN(commRaw) ? getCommercialSignal(commRaw) : null;
+  if(commSig){
+    breakdown.push({label:'Commercial (Smart Money)',detail:commSig.label,score:commSig.score,color:commSig.color});
+    totalScore += commSig.score;
+    filledFilters++;
+  }
 
-  totalScore=Math.max(0,Math.min(100,totalScore));
+  // 3. OI CONVICTION (up to +/-20 pts)
+  const oiConv = getOIConviction();
+  if(oiConv){
+    breakdown.push({label:'OI Conviction',detail:oiConv.label,score:oiConv.score,color:oiConv.color});
+    totalScore += oiConv.score;
+    filledFilters++;
+  }
+
+  // 4. YIELD SPREAD MOMENTUM (up to +/-20 pts)
+  const ysmSig = getYSMScore(ysm);
+  if(ysm !== 0){
+    breakdown.push({label:'Yield Spread Momentum',detail:ysmSig.label,score:ysmSig.score,color:ysmSig.color});
+    totalScore += ysmSig.score;
+    filledFilters++;
+  } else {
+    breakdown.push({label:'Yield Spread Momentum',detail:'Not entered — neutral (0 pts)',score:0,color:'var(--muted2)'});
+  }
+
+  // ── SPEC COT GATE ──
+  // If specs are not at an extreme, cap the maximum possible score.
+  // A high conviction score requires spec positioning to be extreme —
+  // that is the core of the contrarian framework.
+  let cap = 100;
+  if     (cotRaw <= 15 || cotRaw >= 85) cap = 100; // extreme — full score possible
+  else if(cotRaw <= 25 || cotRaw >= 75) cap = 82;  // approaching extreme
+  else if(cotRaw <= 35 || cotRaw >= 65) cap = 72;  // leaning but not extreme
+  else                                   cap = 62;  // neutral zone — no spec edge
+
+  // Apply cap symmetrically around 50
+  // (cap applies to distance from neutral, not absolute value)
+  const dist = totalScore - 50;
+  const maxDist = cap - 50;
+  if(Math.abs(dist) > maxDist) {
+    totalScore = Math.round(50 + Math.sign(dist) * maxDist);
+  }
+
+  // Scale: if fewer than 2 filters entered, pull toward 50
+  if(filledFilters < 2) {
+    totalScore = Math.round(50 + (totalScore - 50) * 0.6);
+  }
+
+  totalScore = Math.max(0, Math.min(100, totalScore));
 
   const scoreEl=document.getElementById('inst-score-val');
   const barEl=document.getElementById('inst-score-bar');
@@ -1894,6 +1965,7 @@ function openSigEditModal(id){
   document.getElementById('se-ys-prev').value= e.ys_prev_spread!= null ? e.ys_prev_spread: '';
   // Trigger YS momentum display if values saved
   if(document.getElementById('se-ys-curr')?.value !== '') seCalcYSM();
+  setTimeout(calcInstitutionalScore, 50);
   // Show institutional score label from saved data
   const seScoreBox = document.getElementById('inst-score-box');
   const seScoreVal = document.getElementById('inst-score-val');
@@ -1955,6 +2027,7 @@ function seSetValDir(d, silent){
 }
 
 function seDetect(){
+  calcInstitutionalScore();
   const c  = parseFloat(document.getElementById('se-cot').value);
   const v  = parseFloat(document.getElementById('se-val').value);
   const el = document.getElementById('se-result');
@@ -2000,6 +2073,7 @@ async function saveSigEdit(){
     price_dir:       (() => { if(document.getElementById('se-pd-up').classList.contains('sel-up'))return 'rising'; if(document.getElementById('se-pd-dn').classList.contains('sel-dn'))return 'falling'; if(document.getElementById('se-pd-fl').classList.contains('sel-fl'))return 'flat'; return null; })(),
     ys_curr_spread:  document.getElementById('se-ys-curr').value !== '' ? parseFloat(document.getElementById('se-ys-curr').value) : null,
     ys_prev_spread:  document.getElementById('se-ys-prev').value !== '' ? parseFloat(document.getElementById('se-ys-prev').value) : null,
+    ys_momentum:     (() => { const v = document.getElementById('se-ysm-val'); if(v && v.textContent && v.textContent !== '0') { const n = parseInt(v.textContent); return isNaN(n) ? null : n; } const orig = entries.find(x=>String(x.id)===String(seEditingId)); return orig ? orig.ys_momentum : null; })(),
     cot:        c,
     cot_dir:    cdL,
     val:        v,
@@ -2362,6 +2436,103 @@ function setSigSort(s) {
   const sel = document.getElementById('sig-sort');
   if(sel) sel.value = s;
   renderSignals();
+}
+
+
+// ── RECALCULATE ALL INSTITUTIONAL SCORES ──
+async function recalcAllScores(){
+  if(!confirm('Recalculate institutional scores for all ' + entries.length + ' entries using the updated formula?\n\nThis will update scores in Supabase based on saved COT%, Z-Score, Commercial%, and YS Momentum values.')) return;
+
+  let updated = 0, skipped = 0;
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Recalculating...';
+
+  for(const e of entries){
+    const cotRaw  = parseFloat(e.cot);
+    if(isNaN(cotRaw)){ skipped++; continue; }
+
+    const commRaw = parseFloat(e.commercial_cot);
+    const zRaw    = parseFloat(e.cot_zscore);
+    const ysm     = parseInt(e.ys_momentum) || 0;
+
+    // ── Exact copy of calcInstitutionalScore logic ──
+    let total = 50;
+    let filledFilters = 0;
+
+    // 1. Spec COT
+    const cotPts = Math.max(-25, Math.min(25, Math.round(((50 - cotRaw) / 50) * 25)));
+    total += cotPts;
+    filledFilters++;
+
+    // 2. Z-Score
+    const z = !isNaN(zRaw) ? zRaw : cotPctToZScore(cotRaw);
+    const zPts = Math.round(Math.max(-10, Math.min(10, -z * 3.33)));
+    total += zPts;
+
+    // 3. Commercial
+    if(!isNaN(commRaw)){
+      if(commRaw > 75) total += 15;
+      else if(commRaw > 60) total += 8;
+      else if(commRaw < 25) total -= 15;
+      else if(commRaw < 40) total -= 8;
+      filledFilters++;
+    }
+
+    // 4. OI
+    if(e.oi_change && e.price_dir){
+      const key = e.oi_change + '|' + e.price_dir;
+      if(key === 'rising|rising')        total += 20;
+      else if(key === 'falling|rising')  total -= 20;
+      else if(key === 'rising|falling' || key === 'falling|falling') total += 5;
+      filledFilters++;
+    }
+
+    // 5. YSM
+    if(ysm !== 0){
+      if(ysm > 6)       total += 20;
+      else if(ysm > 3)  total += 12;
+      else if(ysm > 0)  total += 5;
+      else if(ysm > -4) total -= 5;
+      else if(ysm > -7) total -= 12;
+      else              total -= 20;
+      filledFilters++;
+    }
+
+    // ── COT GATE (same as calcInstitutionalScore) ──
+    let cap = 100;
+    if     (cotRaw <= 15 || cotRaw >= 85) cap = 100;
+    else if(cotRaw <= 25 || cotRaw >= 75) cap = 82;
+    else if(cotRaw <= 35 || cotRaw >= 65) cap = 72;
+    else                                   cap = 62;
+
+    const dist = total - 50;
+    const maxDist = cap - 50;
+    if(Math.abs(dist) > maxDist) {
+      total = Math.round(50 + Math.sign(dist) * maxDist);
+    }
+    if(filledFilters < 2) {
+      total = Math.round(50 + (total - 50) * 0.6);
+    }
+
+    const newScore = Math.max(0, Math.min(100, total));
+    if(newScore === e.inst_score){ skipped++; continue; }
+
+    // Update in Supabase
+    try {
+      const res = await fetch(`${SB_URL}/rest/v1/signal_entries?id=eq.${e.id}`, {
+        method:'PATCH', headers:{...sbH()},
+        body: JSON.stringify({inst_score: newScore})
+      });
+      if(res.ok){
+        e.inst_score = newScore;
+        updated++;
+      }
+    } catch(err){ console.error('Failed to update', e.id, err); }
+  }
+
+  btn.disabled = false; btn.textContent = '\u21BA Recalc Scores';
+  renderSignals();
+  alert(`Done!\nUpdated: ${updated} entries\nSkipped (no change / no COT data): ${skipped}`);
 }
 
 // ── TRADE LOG ──
