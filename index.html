@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- v202605150924 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fundamental Trade Log</title>
@@ -395,25 +396,6 @@ table.tl tr:hover td{background:var(--surface2);}
       <!-- FOCUS OF THE WEEK -->
       <div class="panel" id="focus-panel">
         <div class="ptitle">Focus of the Week</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
-          <div class="ig" style="margin:0">
-            <label style="font-size:.55rem">From</label>
-            <input type="date" id="focus-from-date" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
-          </div>
-          <div class="ig" style="margin:0">
-            <label style="font-size:.55rem">To</label>
-            <input type="date" id="focus-to-date" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
-          </div>
-          <div class="ig" style="margin:0">
-            <label style="font-size:.55rem">Min Score</label>
-            <input type="number" id="focus-min-score" min="0" max="100" placeholder="0" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
-          </div>
-          <div class="ig" style="margin:0">
-            <label style="font-size:.55rem">Max Score</label>
-            <input type="number" id="focus-max-score" min="0" max="100" placeholder="100" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
-          </div>
-        </div>
-        <button class="btn-sm" onclick="clearFocusFilters()" style="width:100%;margin-bottom:10px;font-size:.6rem">&#10005; Clear Filters</button>
         <div id="focus-list"><div class="empty">No signals logged yet</div></div>
       </div>
 
@@ -482,6 +464,8 @@ table.tl tr:hover td{background:var(--surface2);}
           <option value="cot_asc">↑ COT%</option>
           <option value="val_desc">↓ Val%</option>
           <option value="val_asc">↑ Val%</option>
+          <option value="score_desc">↓ Score (High first)</option>
+          <option value="score_asc">↑ Score (Low first)</option>
         </select>
         <div style="display:flex;align-items:center;gap:4px">
           <input type="date" id="sig-from-date" onchange="renderSignals()" title="From date" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 7px;border-radius:5px;font-family:'DM Mono';font-size:.68rem;outline:none">
@@ -2150,44 +2134,23 @@ function renderFocusOfWeek(entries) {
   if (!el) return;
   if (!entries.length) { el.innerHTML = '<div class="empty">No signals logged yet</div>'; return; }
 
-  // Read filters
-  const fDateFrom = document.getElementById('focus-from-date')?.value || '';
-  const fDateTo   = document.getElementById('focus-to-date')?.value   || '';
-  const fMinScore = parseInt(document.getElementById('focus-min-score')?.value) || 0;
-  const fMaxScore = parseInt(document.getElementById('focus-max-score')?.value) || 100;
-
   // Get the most recent date in entries
   const latestDate = entries.reduce((max, e) => e.date > max ? e.date : max, '');
 
-  // Default: last 7 days — overridden by date filters if set
-  let pool;
-  if(fDateFrom || fDateTo) {
-    pool = entries.filter(e => {
-      if(fDateFrom && e.date < fDateFrom) return false;
-      if(fDateTo   && e.date > fDateTo)   return false;
-      return true;
-    });
-  } else {
-    const cutoff = new Date(latestDate);
-    cutoff.setDate(cutoff.getDate() - 7);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
-    pool = entries.filter(e => e.date >= cutoffStr);
-  }
+  // Show entries from last 7 days relative to most recent logged entry
+  const cutoff = new Date(latestDate);
+  cutoff.setDate(cutoff.getDate() - 7);
+  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  const pool = entries.filter(e => e.date >= cutoffStr);
 
-  // Apply score filter
-  pool = pool.filter(e => {
-    const sc = e.inst_score != null ? e.inst_score : 50;
-    return sc >= fMinScore && sc <= fMaxScore;
-  });
-
-  if (!pool.length) { el.innerHTML = '<div class="empty">No signals match current filters</div>'; return; }
+  if (!pool.length) { el.innerHTML = '<div class="empty">No recent signals</div>'; return; }
 
   // ── RANKING: Phase strength is PRIMARY, inst_score is SECONDARY ──
   // Phase strength: actionable phases score highest regardless of inst_score
   // A Spring Confirmed at score 12 outranks a Neutral at score 86
   const phaseRank = { SC:100, SW:85, CC:100, CW:85, TR:70, SL:65, SU:60, RC:55, CF:20, NE:0 };
 
-  // Deduplicate by asset FIRST — keep only the most recent entry per asset
+  // Deduplicate by asset — keep most recent entry per asset
   const latestPerAsset = {};
   pool.forEach(e => {
     if(!latestPerAsset[e.asset] || e.date > latestPerAsset[e.asset].date)
@@ -2195,20 +2158,18 @@ function renderFocusOfWeek(entries) {
   });
   const deduped = Object.values(latestPerAsset);
 
-  const today = new Date();
+  // Rank purely by institutional conviction
+  // instDist = distance from 50 in either direction
+  // Score 100 → 50, Score 12 → 38, Score 82 → 32, Score 50 → 0
+  // Phase is shown visually but does NOT affect ranking order
+  // Recency breaks exact ties only (< 1 pt max)
   const scored = deduped.map(e => {
-    const phase   = phaseRank[e.signal_key] || 0;
-    // Inst score is the PRIMARY ranking factor (0-50 pts)
-    // Distance from 50 in either direction = conviction strength
-    // Score 100 → 25pts, Score 12 → 19pts, Score 57 → 3.5pts, Score 50 → 0pts
-    const instBonus = e.inst_score != null ? Math.round(Math.abs(e.inst_score - 50) * 0.5) : 0;
-    // Recency is TIEBREAKER only (0-3 pts max) — cannot override inst score
-    const daysAgo = Math.max(0, Math.round((today - new Date(e.date)) / 86400000));
-    const recency = Math.max(0, 3 - Math.floor(daysAgo / 3)); // 3pts if <3d, 2pts if <6d, 1pt if <9d, 0 after
-    return { ...e, focusScore: phase + instBonus + recency };
+    const instDist = e.inst_score != null ? Math.abs(e.inst_score - 50) : 0;
+    const daysAgo  = Math.max(0, Math.round((new Date() - new Date(e.date)) / 86400000));
+    const recency  = Math.max(0, 0.9 - daysAgo * 0.1);
+    return { ...e, focusScore: instDist + recency };
   });
 
-  // Sort by focusScore, take top 3
   const top = scored
     .sort((a, b) => b.focusScore - a.focusScore)
     .slice(0, 3);
@@ -2274,9 +2235,6 @@ const CORR_MAP = {
 };
 
 function clearFocusFilters(){
-  ['focus-from-date','focus-to-date','focus-min-score','focus-max-score'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
   renderSignals();
 }
 
