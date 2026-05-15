@@ -328,16 +328,16 @@ table.tl tr:hover td{background:var(--surface2);}
           <label>Yield Spread Momentum <span style="font-size:.55rem;color:var(--muted2)">— enter current &amp; 4-week-ago spread, score auto-calculates</span></label>
           <div class="g2" style="margin-bottom:8px;margin-top:6px">
             <div class="ig">
-              <label>Current Yield Spread %</label>
+              <label>Current Yield Spread % <span style="font-size:.55rem;color:var(--muted2)">(Col D — percentile)</span></label>
               <div class="num-wrap">
-                <input type="number" id="ysCurrentSpread" step="0.01" placeholder="e.g. 1.85" oninput="calcYSMomentum()">
+                <input type="number" id="ysCurrentSpread" step="0.1" placeholder="e.g. 45" oninput="calcYSMomentum()">
                 <span class="num-sfx">%</span>
               </div>
             </div>
             <div class="ig">
-              <label>4 Weeks Ago Spread %</label>
+              <label>4 Weeks Ago Spread % <span style="font-size:.55rem;color:var(--muted2)">(Col D — 4W ago)</span></label>
               <div class="num-wrap">
-                <input type="number" id="ysPrevSpread" step="0.01" placeholder="e.g. 1.62" oninput="calcYSMomentum()">
+                <input type="number" id="ysPrevSpread" step="0.1" placeholder="e.g. 37" oninput="calcYSMomentum()">
                 <span class="num-sfx">%</span>
               </div>
             </div>
@@ -395,6 +395,25 @@ table.tl tr:hover td{background:var(--surface2);}
       <!-- FOCUS OF THE WEEK -->
       <div class="panel" id="focus-panel">
         <div class="ptitle">Focus of the Week</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+          <div class="ig" style="margin:0">
+            <label style="font-size:.55rem">From</label>
+            <input type="date" id="focus-from-date" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
+          </div>
+          <div class="ig" style="margin:0">
+            <label style="font-size:.55rem">To</label>
+            <input type="date" id="focus-to-date" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
+          </div>
+          <div class="ig" style="margin:0">
+            <label style="font-size:.55rem">Min Score</label>
+            <input type="number" id="focus-min-score" min="0" max="100" placeholder="0" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
+          </div>
+          <div class="ig" style="margin:0">
+            <label style="font-size:.55rem">Max Score</label>
+            <input type="number" id="focus-max-score" min="0" max="100" placeholder="100" onchange="renderSignals()" style="font-size:.68rem;padding:4px 7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:5px;outline:none;width:100%">
+          </div>
+        </div>
+        <button class="btn-sm" onclick="clearFocusFilters()" style="width:100%;margin-bottom:10px;font-size:.6rem">&#10005; Clear Filters</button>
         <div id="focus-list"><div class="empty">No signals logged yet</div></div>
       </div>
 
@@ -1269,7 +1288,7 @@ table.tl tr:hover td{background:var(--surface2);}
         </div>
       </div>
       <div class="ig">
-        <label>Yield Spread — Current % / 4 Weeks Ago %</label>
+        <label>Yield Spread Percentile — Current / 4 Weeks Ago <span style="font-size:.55rem;color:var(--muted2)">(Col D current &amp; 4W ago)</span></label>
         <div class="g2" style="margin-bottom:0">
           <div class="num-wrap"><input type="number" id="se-ys-curr" oninput="seCalcYSM()" step="0.01" placeholder="Current spread %"><span class="num-sfx">%</span></div>
           <div class="num-wrap"><input type="number" id="se-ys-prev" oninput="seCalcYSM()" step="0.01" placeholder="4w ago spread %"><span class="num-sfx">%</span></div>
@@ -1529,34 +1548,32 @@ function calcYSMomentum(){
   if(isNaN(curr) || isNaN(prev)){ resEl.style.display='none'; return; }
   resEl.style.display='block';
 
-  // Absolute change
+  // Change in percentile points (curr and prev are percentiles 0-100)
   const change = curr - prev;
 
-  // Rate of change % (over 4 weeks)
-  const roc = prev !== 0 ? (change / Math.abs(prev)) * 100 : 0;
-
-  // Level score: where is the current spread?
-  // > 2% = very high carry, < 0.5% = very low, negative = inverted
+  // Level score: where does current percentile sit?
+  // High percentile = elevated carry (bullish), Low percentile = cheap carry (bearish for carry, bullish for reversal)
+  // In your system: high yield spread % = bullish for the base currency (more carry)
   let levelScore = 0;
-  if     (curr > 2.5)  levelScore =  3;
-  else if(curr > 1.5)  levelScore =  2;
-  else if(curr > 0.75) levelScore =  1;
-  else if(curr > 0)    levelScore =  0;
-  else if(curr > -0.5) levelScore = -1;
-  else                 levelScore = -2;
+  if     (curr > 75) levelScore =  3;   // historically high carry
+  else if(curr > 55) levelScore =  2;
+  else if(curr > 45) levelScore =  1;
+  else if(curr > 35) levelScore =  0;   // neutral zone
+  else if(curr > 20) levelScore = -1;
+  else               levelScore = -2;   // historically low/negative carry
 
-  // Momentum score from rate of change
-  // RoC > +10% over 4 weeks = strong expansion, < -10% = strong contraction
+  // Momentum score from raw percentile point change over 4 weeks
+  // +12 pts = strong expansion, -12 pts = strong contraction
   let momScore = 0;
-  if     (roc >  15)  momScore =  7;
-  else if(roc >  8)   momScore =  5;
-  else if(roc >  3)   momScore =  3;
-  else if(roc >  0.5) momScore =  1;
-  else if(roc > -0.5) momScore =  0;
-  else if(roc > -3)   momScore = -1;
-  else if(roc > -8)   momScore = -3;
-  else if(roc > -15)  momScore = -5;
-  else                momScore = -7;
+  if     (change >  12) momScore =  7;
+  else if(change >  7)  momScore =  5;
+  else if(change >  3)  momScore =  3;
+  else if(change >  1)  momScore =  1;
+  else if(change > -1)  momScore =  0;
+  else if(change > -3)  momScore = -1;
+  else if(change > -7)  momScore = -3;
+  else if(change > -12) momScore = -5;
+  else                  momScore = -7;
 
   // Combined score -10 to +10
   let score = Math.max(-10, Math.min(10, momScore + levelScore));
@@ -1582,12 +1599,12 @@ function calcYSMomentum(){
   const changeEl = document.getElementById('ysm-change');
   const rocEl    = document.getElementById('ysm-roc');
   const levelEl  = document.getElementById('ysm-level');
-  changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+  changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(1) + ' pts';
   changeEl.style.color = change > 0 ? 'var(--mega-bull)' : change < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
-  rocEl.textContent    = (roc >= 0 ? '+' : '') + roc.toFixed(1) + '%';
-  rocEl.style.color    = roc > 0 ? 'var(--mega-bull)' : roc < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
-  levelEl.textContent  = curr.toFixed(2) + '%';
-  levelEl.style.color  = curr > 1.5 ? 'var(--mega-bull)' : curr < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
+  rocEl.textContent    = momScore >= 0 ? '+' + momScore + ' mom pts' : momScore + ' mom pts';
+  rocEl.style.color    = momScore > 0 ? 'var(--mega-bull)' : momScore < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
+  levelEl.textContent  = curr.toFixed(0) + '%ile';
+  levelEl.style.color  = curr > 55 ? 'var(--mega-bull)' : curr < 35 ? 'var(--mega-bear)' : 'var(--muted2)';
 
   const labels = {
     '-10':'Extreme bearish — carry collapsing fast',
@@ -1852,6 +1869,8 @@ function clearSigFilters(){
   if(si) si.value='ALL';
   const fd=document.getElementById('sig-from-date');if(fd)fd.value='';
   const td=document.getElementById('sig-to-date');if(td)td.value='';
+  const smn=document.getElementById('sig-score-min');if(smn)smn.value='';
+  const smx=document.getElementById('sig-score-max');if(smx)smx.value='';
   renderSignals();
 }
 
@@ -1876,6 +1895,10 @@ function renderSignals(){
   const fTo   = document.getElementById('sig-to-date')?.value   || '';
   if(fFrom) filtered = filtered.filter(e=>e.date >= fFrom);
   if(fTo)   filtered = filtered.filter(e=>e.date <= fTo);
+  const fScoreMin = parseInt(document.getElementById('sig-score-min')?.value);
+  const fScoreMax = parseInt(document.getElementById('sig-score-max')?.value);
+  if(!isNaN(fScoreMin)) filtered = filtered.filter(e=>e.inst_score==null||e.inst_score>=fScoreMin);
+  if(!isNaN(fScoreMax)) filtered = filtered.filter(e=>e.inst_score==null||e.inst_score<=fScoreMax);
   // Sort
   filtered.sort((a,b)=>{
     if(fSort==='date_desc')  return b.date.localeCompare(a.date);
@@ -2116,34 +2139,67 @@ function renderFocusOfWeek(entries) {
   if (!el) return;
   if (!entries.length) { el.innerHTML = '<div class="empty">No signals logged yet</div>'; return; }
 
+  // Read filters
+  const fDateFrom = document.getElementById('focus-from-date')?.value || '';
+  const fDateTo   = document.getElementById('focus-to-date')?.value   || '';
+  const fMinScore = parseInt(document.getElementById('focus-min-score')?.value) || 0;
+  const fMaxScore = parseInt(document.getElementById('focus-max-score')?.value) || 100;
+
   // Get the most recent date in entries
   const latestDate = entries.reduce((max, e) => e.date > max ? e.date : max, '');
 
-  // Filter to entries within 7 days of latest date
-  const cutoff = new Date(latestDate);
-  cutoff.setDate(cutoff.getDate() - 7);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  // Default: last 7 days — overridden by date filters if set
+  let pool;
+  if(fDateFrom || fDateTo) {
+    pool = entries.filter(e => {
+      if(fDateFrom && e.date < fDateFrom) return false;
+      if(fDateTo   && e.date > fDateTo)   return false;
+      return true;
+    });
+  } else {
+    const cutoff = new Date(latestDate);
+    cutoff.setDate(cutoff.getDate() - 7);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+    pool = entries.filter(e => e.date >= cutoffStr);
+  }
 
-  const recent = entries.filter(e => e.date >= cutoffStr);
-
-  if (!recent.length) { el.innerHTML = '<div class="empty">No recent signals</div>'; return; }
-
-  // Score each signal: inst_score (0-100) + recency bonus + signal strength
-  const signalStrength = { SC:10, SW:7, CC:10, CW:7, SU:6, RC:5, TR:8, SL:6, CF:1, NE:0 };
-
-  const scored = recent.map(e => {
-    const base   = signalStrength[e.signal_key] || 0;
-    const inst   = (e.inst_score || 50) / 10;       // 0–10 pts
-    const daysAgo = Math.max(0, Math.round((new Date(latestDate) - new Date(e.date)) / 86400000));
-    const recency = Math.max(0, 7 - daysAgo);       // 0–7 pts, newer = higher
-    return { ...e, focusScore: base + inst + recency };
+  // Apply score filter
+  pool = pool.filter(e => {
+    const sc = e.inst_score != null ? e.inst_score : 50;
+    return sc >= fMinScore && sc <= fMaxScore;
   });
 
-  // Sort by focusScore, take top 3, deduplicate by asset
-  const seen = new Set();
+  if (!pool.length) { el.innerHTML = '<div class="empty">No signals match current filters</div>'; return; }
+
+  // ── RANKING: Phase strength is PRIMARY, inst_score is SECONDARY ──
+  // Phase strength: actionable phases score highest regardless of inst_score
+  // A Spring Confirmed at score 12 outranks a Neutral at score 86
+  const phaseRank = { SC:100, SW:85, CC:100, CW:85, TR:70, SL:65, SU:60, RC:55, CF:20, NE:0 };
+
+  // Deduplicate by asset FIRST — keep only the most recent entry per asset
+  const latestPerAsset = {};
+  pool.forEach(e => {
+    if(!latestPerAsset[e.asset] || e.date > latestPerAsset[e.asset].date)
+      latestPerAsset[e.asset] = e;
+  });
+  const deduped = Object.values(latestPerAsset);
+
+  const today = new Date();
+  const scored = deduped.map(e => {
+    const phase   = phaseRank[e.signal_key] || 0;
+    // Inst score is the PRIMARY ranking factor (0-50 pts)
+    // Distance from 50 in either direction = conviction strength
+    // Score 100 → 25pts, Score 12 → 19pts, Score 57 → 3.5pts, Score 50 → 0pts
+    const instBonus = e.inst_score != null ? Math.round(Math.abs(e.inst_score - 50) * 0.5) : 0;
+    // Recency is TIEBREAKER only (0-3 pts max) — cannot override inst score
+    const daysAgo = Math.max(0, Math.round((today - new Date(e.date)) / 86400000));
+    const recency = Math.max(0, 3 - Math.floor(daysAgo / 3)); // 3pts if <3d, 2pts if <6d, 1pt if <9d, 0 after
+    return { ...e, focusScore: phase + instBonus + recency };
+  });
+
+  // Sort by focusScore, take top 3
   const top = scored
     .sort((a, b) => b.focusScore - a.focusScore)
-    .filter(e => { if (seen.has(e.asset)) return false; seen.add(e.asset); return true; })
     .slice(0, 3);
 
   const instColors = {
@@ -2176,7 +2232,7 @@ function renderFocusOfWeek(entries) {
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px">
         ${e.phase?`<span style="font-family:'DM Mono';font-size:.55rem;background:${pc}22;color:${pc};padding:1px 6px;border-radius:3px">${e.phase.split('—')[0].trim()}</span>`:''}
         ${e.inst_tag?`<span style="font-family:'DM Mono';font-size:.55rem;background:${ic}22;color:${ic};padding:1px 6px;border-radius:3px">${e.inst_tag}</span>`:''}
-        ${e.inst_score!=null?(()=>{const sc=e.inst_score;const col=sc>=70?'var(--mega-bull)':sc>=55?'var(--bull)':sc<=30?'var(--mega-bear)':sc<=45?'var(--bear)':'var(--muted2)';const lbl=sc>=70?'High Conv. Bullish':sc>=55?'Bullish':sc<=30?'High Conv. Bearish':sc<=45?'Bearish':'Neutral';return `<span style="font-family:'DM Mono';font-size:.55rem;color:${col}">${sc} — ${lbl}</span>`;})():''}
+        ${e.inst_score!=null?(()=>{const sc=e.inst_score;const col=sc>=70?'var(--mega-bull)':sc>=55?'var(--bull)':sc<=30?'var(--mega-bear)':sc<=45?'var(--bear)':'var(--muted2)';const lbl=sc>=70?'High Conv. Bullish':sc>=55?'Bullish':sc<=30?'High Conv. Bearish':sc<=45?'Bearish':'Neutral';return `<span style="font-family:'DM Mono';font-size:.55rem;color:${col}">${sc>=55?"▲":sc<=45?"▼":""} ${sc} — ${lbl}</span>`;})():''}
       </div>
       ${scoreBar}
     </div>`;
@@ -2205,6 +2261,13 @@ const CORR_GROUPS = {
 const CORR_MAP = {
   '6E':'EUR','6B':'GBP','6A':'AUD','6N':'NZD','6C':'CAD','6J':'JPY','6S':'CHF'
 };
+
+function clearFocusFilters(){
+  ['focus-from-date','focus-to-date','focus-min-score','focus-max-score'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  renderSignals();
+}
 
 function renderCorrRisk(entries) {
   const el = document.getElementById('corr-list');
@@ -2385,26 +2448,25 @@ function seCalcYSM() {
 
   // Duplicate the YS momentum calculation inline (for edit modal context)
   const change = curr - prev;
-  const roc    = prev !== 0 ? (change / Math.abs(prev)) * 100 : 0;
 
   let levelScore = 0;
-  if     (curr > 2.5)  levelScore =  3;
-  else if(curr > 1.5)  levelScore =  2;
-  else if(curr > 0.75) levelScore =  1;
-  else if(curr > 0)    levelScore =  0;
-  else if(curr > -0.5) levelScore = -1;
-  else                 levelScore = -2;
+  if     (curr > 75) levelScore =  3;
+  else if(curr > 55) levelScore =  2;
+  else if(curr > 45) levelScore =  1;
+  else if(curr > 35) levelScore =  0;
+  else if(curr > 20) levelScore = -1;
+  else               levelScore = -2;
 
   let momScore = 0;
-  if     (roc >  15)  momScore =  7;
-  else if(roc >  8)   momScore =  5;
-  else if(roc >  3)   momScore =  3;
-  else if(roc >  0.5) momScore =  1;
-  else if(roc > -0.5) momScore =  0;
-  else if(roc > -3)   momScore = -1;
-  else if(roc > -8)   momScore = -3;
-  else if(roc > -15)  momScore = -5;
-  else                momScore = -7;
+  if     (change >  12) momScore =  7;
+  else if(change >  7)  momScore =  5;
+  else if(change >  3)  momScore =  3;
+  else if(change >  1)  momScore =  1;
+  else if(change > -1)  momScore =  0;
+  else if(change > -3)  momScore = -1;
+  else if(change > -7)  momScore = -3;
+  else if(change > -12) momScore = -5;
+  else                  momScore = -7;
 
   const score = Math.max(-10, Math.min(10, momScore + levelScore));
 
@@ -2453,7 +2515,33 @@ async function recalcAllScores(){
 
     const commRaw = parseFloat(e.commercial_cot);
     const zRaw    = parseFloat(e.cot_zscore);
-    const ysm     = parseInt(e.ys_momentum) || 0;
+    // Recalculate YSM from raw spread values using corrected formula
+    let ysm = 0;
+    if(e.ys_curr_spread != null && e.ys_prev_spread != null) {
+      const curr = parseFloat(e.ys_curr_spread);
+      const prev = parseFloat(e.ys_prev_spread);
+      const chng = curr - prev;
+      let lvl = 0;
+      if     (curr > 75) lvl =  3;
+      else if(curr > 55) lvl =  2;
+      else if(curr > 45) lvl =  1;
+      else if(curr > 35) lvl =  0;
+      else if(curr > 20) lvl = -1;
+      else               lvl = -2;
+      let mom = 0;
+      if     (chng >  12) mom =  7;
+      else if(chng >  7)  mom =  5;
+      else if(chng >  3)  mom =  3;
+      else if(chng >  1)  mom =  1;
+      else if(chng > -1)  mom =  0;
+      else if(chng > -3)  mom = -1;
+      else if(chng > -7)  mom = -3;
+      else if(chng > -12) mom = -5;
+      else                mom = -7;
+      ysm = Math.max(-10, Math.min(10, mom + lvl));
+    } else {
+      ysm = parseInt(e.ys_momentum) || 0;
+    }
 
     // ── Exact copy of calcInstitutionalScore logic ──
     let total = 50;
@@ -2521,7 +2609,7 @@ async function recalcAllScores(){
     try {
       const res = await fetch(`${SB_URL}/rest/v1/signal_entries?id=eq.${e.id}`, {
         method:'PATCH', headers:{...sbH()},
-        body: JSON.stringify({inst_score: newScore})
+        body: JSON.stringify({inst_score: newScore, ys_momentum: ysm})
       });
       if(res.ok){
         e.inst_score = newScore;
