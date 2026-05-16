@@ -274,6 +274,15 @@ table.tl tr:hover td{background:var(--surface2);}
   <div class="sig-main" style="margin-bottom:16px">
     <div class="panel">
       <div class="ptitle">New Signal Entry</div>
+    <!-- COT Live Data Panel -->
+    <div id="cot-live-panel" style="display:none;background:var(--bg);border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:12px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--mega-bull)">&#x1F4E1; LIVE COT DATA</div>
+        <div id="cot-live-date" style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2)"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px" id="cot-live-grid"></div>
+      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Click a pair to auto-fill COT fields below</div>
+    </div>
       <div class="g2">
         <div class="ig"><label>Date</label><input type="date" id="eDate"></div>
         <div class="ig"><label>Futures</label><input type="text" id="eAsset" placeholder="e.g. 6E"></div>
@@ -480,6 +489,7 @@ table.tl tr:hover td{background:var(--surface2);}
         </div>
         <button class="btn-sm" onclick="clearSigFilters()">✕ Clear</button>
         <button class="btn-sm" onclick="recalcAllScores()" style="background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)" title="Recalculate all historical institutional scores using current formula">&#x21BA; Recalc Scores</button>
+        <button class="btn-sm" onclick="fetchCOTData()" id="btn-fetch-cot" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:var(--mega-bull)" title="Fetch latest COT data from CFTC via Supabase Edge Function">&#x1F4E1; Fetch COT</button>
       </div>
       <div style="margin-left:auto;font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">
         <span>← scroll →</span>
@@ -785,112 +795,130 @@ table.tl tr:hover td{background:var(--surface2);}
 <!-- TAB: FUTURES → CFD CONVERTER -->
 <div class="tab-pane" id="tab-converter">
   <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-bottom:16px">
+    <div style="display:flex;flex-direction:column;gap:14px">
 
-    <!-- LEFT: Zone Translator -->
-    <div class="panel">
-      <div class="ptitle">Futures Zone &#8594; CFD Zone Translator</div>
+      <!-- MODE TOGGLE -->
+      <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">&#128197; Weekend &mdash; Save Basis</button>
+        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">&#128205; Weekday &mdash; Translate Zones</button>
+      </div>
 
-      <!-- Step 1: Basis -->
-      <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">STEP 1 &#8212; CURRENT BASIS</div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:10px;line-height:1.7">Enter the current price for both charts, or use Auto-Fetch to populate them instantly.</div>
-
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:10px;line-height:1.7;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
-          Open both charts simultaneously. Read the current price on each and enter below at the same moment for an accurate basis.
+      <!-- WEEKEND: Save basis per symbol -->
+      <div id="zt-panel-basis" class="panel">
+        <div class="ptitle">Save Basis Per Symbol</div>
+        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.7">Saturday morning &mdash; open both charts simultaneously and read the current price at the same moment for an accurate basis.</div>
+        <div class="g2" style="margin-bottom:10px">
+          <div class="ig">
+            <label>Symbol <span style="font-size:.55rem;color:var(--muted2)">(6E, GC etc.)</span></label>
+            <select id="zt-sym" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;outline:none;width:100%">
+              <option>6E</option><option>6B</option><option>6A</option><option>6N</option>
+              <option>6C</option><option>6J</option><option>6S</option>
+              <option>GC</option><option>SI</option>
+            </select>
+          </div>
+          <div class="ig">
+            <label>CFD Symbol <span style="font-size:.55rem;color:var(--muted2)">(broker)</span></label>
+            <input type="text" id="zt-cfd-sym" placeholder="e.g. EURUSD" style="font-size:.8rem">
+          </div>
         </div>
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
-            <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(from TradingView)</span></label>
+            <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
             <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 1.08500" oninput="ztCalcBasis()">
           </div>
           <div class="ig">
-            <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(from your broker)</span></label>
+            <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(your broker)</span></label>
             <input type="number" id="zt-cfd-price" step="any" placeholder="e.g. 1.08513" oninput="ztCalcBasis()">
           </div>
         </div>
-        <div id="zt-basis-display" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px">
+        <div id="zt-basis-display" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px;margin-bottom:10px">
           <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2)">Current Basis (CFD &#8722; Futures)</div>
-            <div id="zt-basis-val" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent)">&#8212;</div>
+            <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2)">Basis (CFD &minus; Futures)</div>
+            <div id="zt-basis-val" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent)">&mdash;</div>
           </div>
           <div id="zt-basis-note" style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:4px"></div>
         </div>
+        <button class="btn-log" onclick="ztSaveBasisForSymbol()" style="width:100%">&#128190; Save Basis for This Symbol</button>
       </div>
 
-      <!-- Step 2: Zone Levels -->
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">STEP 2 &#8212; FUTURES ZONE LEVELS</div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:12px;line-height:1.7">Enter up to 3 zones. Each zone needs a top and bottom price from the futures chart.</div>
-
-        <!-- Zone 1 -->
-        <div style="margin-bottom:12px">
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-            <span>ZONE 1</span>
-            <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none">
-              <option value="demand">Demand</option><option value="supply">Supply</option>
-            </select>
+      <!-- WEEKDAY: Translate zones using saved basis -->
+      <div id="zt-panel-zones" class="panel" style="display:none">
+        <div class="ptitle">Translate Futures Zones &rarr; CFD</div>
+        <div class="ig" style="margin-bottom:10px">
+          <label>Select Symbol</label>
+          <select id="zt-zone-sym" onchange="ztLoadBasisForSym()" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;outline:none;width:100%">
+            <option value="">-- choose symbol --</option>
+          </select>
+        </div>
+        <div id="zt-active-basis" style="display:none;background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-family:'DM Mono';font-size:.6rem">
+            <span style="color:var(--muted2)">Active basis</span>
+            <span id="zt-active-basis-val" style="color:var(--accent)"></span>
           </div>
-          <div class="g2" style="margin-bottom:0">
-            <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z1-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z1-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+          <div id="zt-active-basis-date" style="font-family:'DM Mono';color:var(--muted2);font-size:.55rem;margin-top:2px"></div>
+        </div>
+        <div id="zt-no-basis-warn" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-family:'DM Mono';font-size:.6rem;color:#ef4444">
+          No saved basis for this symbol. Switch to Weekend mode to save one first.
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px">
+          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
+          <div style="margin-bottom:10px">
+            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
+              ZONE 1 <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
+            </div>
+            <div class="g2" style="margin-bottom:0">
+              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z1-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z1-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border);padding-top:10px;margin-bottom:10px">
+            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
+              ZONE 2 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-2" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
+            </div>
+            <div class="g2" style="margin-bottom:0">
+              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z2-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z2-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border);padding-top:10px">
+            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
+              ZONE 3 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-3" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
+            </div>
+            <div class="g2" style="margin-bottom:0">
+              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z3-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z3-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
+            </div>
           </div>
         </div>
-        <!-- Zone 2 -->
-        <div style="margin-bottom:12px;border-top:1px solid var(--border);padding-top:12px">
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-            <span>ZONE 2 <span style="font-size:.55rem;opacity:.6">(optional)</span></span>
-            <select id="zt-type-2" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none">
-              <option value="demand">Demand</option><option value="supply">Supply</option>
-            </select>
-          </div>
-          <div class="g2" style="margin-bottom:0">
-            <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z2-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z2-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-          </div>
-        </div>
-        <!-- Zone 3 -->
-        <div style="border-top:1px solid var(--border);padding-top:12px">
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-            <span>ZONE 3 <span style="font-size:.55rem;opacity:.6">(optional)</span></span>
-            <select id="zt-type-3" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none">
-              <option value="demand">Demand</option><option value="supply">Supply</option>
-            </select>
-          </div>
-          <div class="g2" style="margin-bottom:0">
-            <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z3-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z3-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-          </div>
+        <div style="display:flex;gap:7px">
+          <button class="btn-log" onclick="ztSaveZones()" style="flex:1">&#128190; Save Translation</button>
+          <button class="btn-sm" onclick="ztClear()">&#128465; Clear</button>
         </div>
       </div>
-      <button class="btn-sm" onclick="ztClear()" style="width:100%">&#128465; Clear All</button>
     </div>
 
-    <!-- RIGHT: Results + History + Explanation -->
+    <!-- RIGHT -->
     <div style="display:flex;flex-direction:column;gap:14px">
-
-      <!-- CFD Zone Output -->
       <div class="panel">
         <div class="ptitle">CFD Zone Equivalents</div>
-        <div id="zt-results"><div class="empty">Enter basis and zone levels to translate</div></div>
+        <div id="zt-results"><div class="empty">Select symbol and enter zone levels to translate</div></div>
       </div>
-
-      <!-- Saved Basis -->
-      <div class="panel">
+      <div class="panel" id="zt-saved-basis-panel">
         <div class="ptitle">Saved Basis Values</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:10px;line-height:1.6">Basis is stable between rolls. Save once per week &#8212; click any row to reload it.</div>
-        <button class="btn-sm" id="btn-save-basis" onclick="ztSaveBasis()" style="margin-bottom:10px;display:none;width:100%">&#128190; Save Current Basis</button>
-        <div id="zt-basis-history"><div class="empty">No saved basis values yet</div></div>
+        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
+        <div id="zt-basis-history"></div>
       </div>
-
-      <!-- How it works -->
+      <div class="panel">
+        <div class="ptitle">Saved Zone Translations</div>
+        <div id="zt-saved-zones"><div class="empty">No saved zones yet</div></div>
+      </div>
       <div class="panel">
         <div class="ptitle">How It Works</div>
         <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);line-height:2">
-          <div><b style="color:var(--accent)">Formula:</b> CFD Zone = Futures Zone + Basis</div>
-          <div><b style="color:var(--accent)">Basis</b> = Current CFD Price &#8722; Current Futures Price</div>
-          <div><b style="color:var(--accent)">Stability:</b> FX basis moves 1&#8211;3 pips/day outside rolls. Check weekly.</div>
-          <div><b style="color:var(--accent)">Roll Warning:</b> Basis jumps 10&#8211;15+ pips = contract roll. Re-read before translating zones.</div>
-          <div><b style="color:var(--accent)">Indices/Metals:</b> Basis is larger (points) but equally stable within a contract.</div>
+          <div><b style="color:var(--accent)">Weekend:</b> Save basis once per symbol. Open both charts at same moment.</div>
+          <div><b style="color:var(--accent)">Weekday:</b> Select symbol, enter futures zone &rarr; CFD zone instantly.</div>
+          <div><b style="color:var(--accent)">Formula:</b> CFD = Futures + Basis</div>
+          <div><b style="color:var(--accent)">Stability:</b> FX basis moves 1&ndash;3 pips/day. Re-save weekly or after quarterly roll.</div>
         </div>
       </div>
     </div>
@@ -1439,6 +1467,7 @@ async function launch(){
   document.getElementById('dateBadge').textContent=today.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   autoMonth();setCurrency(currentCurrency);
   setTimeout(loadDXYValues, 300);
+  setTimeout(loadLatestCOT, 600);
   setTimeout(tdLoadKey, 500);
   // Set default review period to YTD
   const rvNow=new Date();document.getElementById('rv-from').value=`${rvNow.getFullYear()}-01-01`;document.getElementById('rv-to').value=rvNow.toISOString().slice(0,10);
@@ -2621,6 +2650,155 @@ async function recalcAllScores(){
 }
 
 
+
+// ══════════════════════════════════════════
+// COT DATA FETCH — Supabase Edge Function
+// ══════════════════════════════════════════
+let cotLiveData = {};
+
+async function fetchCOTData() {
+  const btn = document.getElementById('btn-fetch-cot');
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Fetching...'; }
+
+  try {
+    // Call the Supabase Edge Function
+    const res = await fetch(`${SB_URL}/functions/v1/fetch-cot`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if(!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    const data = await res.json();
+
+    if(data.error) throw new Error(data.error);
+
+    // Store the fetched data
+    cotLiveData = data.data || {};
+
+    // Show the live panel and populate it
+    renderCOTLivePanel(cotLiveData, data.fetched_at);
+
+    if(btn){ btn.textContent='✓ COT Updated'; btn.style.color='var(--mega-bull)'; }
+    setTimeout(()=>{ if(btn){ btn.disabled=false; btn.textContent='📡 Fetch COT'; btn.style.color=''; } }, 3000);
+
+  } catch(err) {
+    // Show retry option
+    const retry = confirm('COT fetch failed: ' + err.message + '\n\nThis often happens when CFTC is temporarily unavailable.\nRetry in 30 seconds?');
+    if(retry) {
+      if(btn){ btn.textContent='⏳ Retrying in 30s...'; }
+      setTimeout(fetchCOTData, 30000);
+    } else {
+      if(btn){ btn.disabled=false; btn.textContent='📡 Fetch COT'; btn.style.color=''; }
+    }
+  }
+}
+
+function renderCOTLivePanel(data, fetchedAt) {
+  const panel   = document.getElementById('cot-live-panel');
+  const grid    = document.getElementById('cot-live-grid');
+  const dateEl  = document.getElementById('cot-live-date');
+  if(!panel || !grid) return;
+
+  panel.style.display = 'block';
+  if(dateEl && fetchedAt) dateEl.textContent = 'Fetched: ' + new Date(fetchedAt).toLocaleString();
+
+  const symbols = ['6E','6B','6A','6N','6C','6J','6S','GC','SI','DXY'];
+  grid.innerHTML = symbols.map(sym => {
+    const d = data[sym];
+    if(!d) return '<div style="background:var(--surface2);border:1px solid rgba(200,169,110,.2);border-radius:5px;padding:7px;opacity:.7"><div style="font-family:Bebas Neue,sans-serif;font-size:.9rem;color:var(--accent)">'+sym+'</div><div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--accent)">Enter manually</div></div>';
+
+    const specColor = d.spec_cot_pct <= 15 ? 'var(--mega-bull)' : d.spec_cot_pct >= 85 ? 'var(--mega-bear)' : 'var(--text)';
+    const commColor = d.comm_cot_pct >= 75 ? 'var(--mega-bull)' : d.comm_cot_pct <= 25 ? 'var(--mega-bear)' : 'var(--text)';
+    const dirColor  = d.cot_dir === 'Rising' ? 'var(--mega-bull)' : d.cot_dir === 'Falling' ? 'var(--mega-bear)' : 'var(--muted2)';
+
+    return `<div onclick="cotAutoFill('${sym}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:7px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--accent);margin-bottom:3px">${sym}</div>
+      <div style="font-family:'DM Mono';font-size:.55rem;line-height:1.7">
+        <div>Spec: <span style="color:${specColor}">${d.spec_cot_pct}%</span></div>
+        <div>Comm: <span style="color:${commColor}">${d.comm_cot_pct}%</span></div>
+        <div>Z: <span style="color:var(--muted2)">${d.cot_zscore}σ</span></div>
+        <div>Dir: <span style="color:${dirColor}">${d.cot_dir}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cotAutoFill(symbol) {
+  const d = cotLiveData[symbol];
+  if(!d) return;
+
+  // Set futures selector
+  const assetEl = document.getElementById('eAsset');
+  if(assetEl) assetEl.value = symbol;
+
+  // Fill COT %
+  const cotEl = document.getElementById('cotIn');
+  if(cotEl) { cotEl.value = d.spec_cot_pct; }
+
+  // Fill Commercial COT %
+  const commEl = document.getElementById('commIn');
+  if(commEl) commEl.value = d.comm_cot_pct;
+
+  // Fill Z-Score
+  const zEl = document.getElementById('zscoreIn');
+  if(zEl) zEl.value = d.cot_zscore;
+
+  // Set COT direction buttons
+  if(d.cot_dir === 'Rising')  { setCotDir('rising'); }
+  else if(d.cot_dir === 'Falling') { setCotDir('falling'); }
+  else { setCotDir('flat'); }
+
+  // Set OI direction
+  if(d.oi_change === 'rising')  { setOIDir('rising'); }
+  else if(d.oi_change === 'falling') { setOIDir('falling'); }
+
+  // Trigger detect and score recalc
+  detect();
+  calcInstitutionalScore();
+
+  // Highlight the selected pair
+  document.querySelectorAll('#cot-live-grid > div').forEach(el => el.style.background = 'var(--surface2)');
+  event.currentTarget.style.background = 'rgba(200,169,110,.15)';
+}
+
+// Also load latest COT from Supabase on dashboard open (if already fetched this week)
+async function loadLatestCOT() {
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/cot_data?select=*&order=report_date.desc&limit=9`, {
+      headers: sbH()
+    });
+    if(!res.ok) return;
+    const rows = await res.json();
+    if(!rows || !rows.length) return;
+
+    // Convert array to object keyed by symbol
+    const data = {};
+    rows.forEach(r => { if(!data[r.symbol]) data[r.symbol] = r; });
+
+    if(Object.keys(data).length > 0) {
+      cotLiveData = data;
+      // Map field names from DB to display format
+      const displayData = {};
+      Object.entries(data).forEach(([sym, r]) => {
+        displayData[sym] = {
+          spec_cot_pct: r.spec_cot_pct,
+          comm_cot_pct: r.comm_cot_pct,
+          cot_zscore:   r.cot_zscore,
+          cot_dir:      r.cot_dir,
+          oi_change:    r.oi_change,
+        };
+      });
+      cotLiveData = displayData;
+      renderCOTLivePanel(displayData, rows[0].fetched_at);
+    }
+  } catch(e) {
+    // Silently fail — COT panel just stays hidden
+  }
+}
+
 // ── TRADE LOG ──
 function autoMonth(){const d=document.getElementById('tl-date').value;if(!d)return;document.getElementById('tl-month').value=new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'});}
 function selTag(gid,btn){document.querySelectorAll(`#${gid} .tag-btn`).forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});btn.classList.add('sel');const m=btn.getAttribute('style').match(/--tc:([^;)]+)/);if(m){btn.style.background=m[1].trim();btn.style.color='#080a0f';}}
@@ -2673,7 +2851,7 @@ async function addTrade(){
   catch(e){sync('err','Save failed');alert('Error: '+e.message);}
   btn.disabled=false;btn.textContent='+ LOG TRADE';
 }
-async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>t.id!==id);renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
+async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
 function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
 
@@ -2918,6 +3096,96 @@ function tdPreFillCFD() {
 }
 
 
+
+// ── ZONE TRANSLATOR — Save/Load full zone sets ──
+let ztSavedZones = JSON.parse(localStorage.getItem('ztSavedZones') || '[]');
+
+function ztSaveZones() {
+  if(ztCurrentBasis === null) { alert('Enter prices and calculate basis first.'); return; }
+  const label    = document.getElementById('zt-label')?.value?.trim() || 'Zone';
+  const cfdLabel = document.getElementById('zt-cfd-label')?.value?.trim() || '';
+  const dp       = Math.abs(parseFloat(document.getElementById('zt-fut-price')?.value)||1) > 100 ? 2 : 5;
+
+  const zones = [1,2,3].map(n => {
+    const top  = parseFloat(document.getElementById('zt-z'+n+'-top')?.value);
+    const bot  = parseFloat(document.getElementById('zt-z'+n+'-bot')?.value);
+    const type = document.getElementById('zt-type-'+n)?.value || 'demand';
+    if(isNaN(top) && isNaN(bot)) return null;
+    return {
+      type,
+      futTop: isNaN(top) ? null : top,
+      futBot: isNaN(bot) ? null : bot,
+      cfdTop: isNaN(top) ? null : parseFloat((top + ztCurrentBasis).toFixed(dp)),
+      cfdBot: isNaN(bot) ? null : parseFloat((bot + ztCurrentBasis).toFixed(dp)),
+    };
+  }).filter(Boolean);
+
+  if(!zones.length) { alert('Enter at least one zone level first.'); return; }
+
+  const entry = {
+    id:       Date.now(),
+    date:     new Date().toISOString().slice(0,10),
+    label,
+    cfdLabel,
+    basis:    ztCurrentBasis,
+    futPrice: parseFloat(document.getElementById('zt-fut-price')?.value),
+    cfdPrice: parseFloat(document.getElementById('zt-cfd-price')?.value),
+    zones,
+  };
+
+  ztSavedZones.unshift(entry);
+  ztSavedZones = ztSavedZones.slice(0, 20);
+  localStorage.setItem('ztSavedZones', JSON.stringify(ztSavedZones));
+  ztRenderSavedZones();
+  alert('\u2713 Saved: ' + label + (cfdLabel ? ' / ' + cfdLabel : ''));
+}
+
+function ztRenderSavedZones() {
+  const el = document.getElementById('zt-saved-zones');
+  if(!el) return;
+  if(!ztSavedZones.length) { el.innerHTML = '<div class="empty">No saved zones yet</div>'; return; }
+
+  el.innerHTML = ztSavedZones.map(s => {
+    const dp = Math.abs(s.basis) < 1 ? 5 : 2;
+    const bStr = (s.basis >= 0 ? '+' : '') + s.basis.toFixed(dp);
+    const zonesHtml = s.zones.map(z => {
+      const isDemand = z.type === 'demand';
+      const col = isDemand ? 'var(--mega-bull)' : 'var(--mega-bear)';
+      const icon = isDemand ? '[D]' : '[S]';
+      const futRange = [z.futTop, z.futBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' \u2013 ');
+      const cfdRange = [z.cfdTop, z.cfdBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' \u2013 ');
+      return '<div style="display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:3px">'
+        + '<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2)">' + icon + ' ' + futRange + '</div>'
+        + '<div style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--muted2);text-align:center">\u2192</div>'
+        + '<div style="font-family:DM Mono,monospace;font-size:.58rem;color:' + col + '">' + cfdRange + '</div>'
+        + '</div>';
+    }).join('');
+
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:7px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
+      + '<div style="display:flex;align-items:center;gap:7px">'
+      + '<span style="font-family:Bebas Neue,sans-serif;font-size:1rem;color:var(--accent)">' + s.label + '</span>'
+      + (s.cfdLabel ? '<span style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--muted2)">' + s.cfdLabel + '</span>' : '')
+      + '<span style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--muted2)">' + s.date + '</span>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:6px">'
+      + '<span style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--accent)">basis ' + bStr + '</span>'
+      + '<button onclick="ztDeleteZone(' + s.id + ')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.7rem;padding:0 2px" title="Delete">\u2715</button>'
+      + '</div></div>'
+      + '<div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--muted2);margin-bottom:6px">Futures \u2192 CFD</div>'
+      + zonesHtml
+      + '</div>';
+  }).join('');
+}
+
+function ztDeleteZone(id) {
+  if(!confirm('Delete this saved zone?')) return;
+  ztSavedZones = ztSavedZones.filter(s => s.id !== id);
+  localStorage.setItem('ztSavedZones', JSON.stringify(ztSavedZones));
+  ztRenderSavedZones();
+}
+
+
 // ── ANALYTICS STATE ──
 let activeDims = new Set(['symbol']);
 let activeSort = 'r';
@@ -3049,7 +3317,7 @@ function renderAnalytics(ft) {
     </tr></thead>
     <tbody>${rowsHtml}</tbody>
   </table>
-  <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:8px" id="analytics-footnote">* Win Rate = Wins ÷ (Wins + Losses) — Break Even trades excluded from WR &amp; Expectancy<br><span id="analytics-sample-note" style="color:var(--accent)"></span></div>
+  <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:8px" id="analytics-footnote">* Win Rate = Wins ÷ (Wins + Losses) — Break Even trades excluded from WR & Expectancy<br><span id="analytics-sample-note" style="color:var(--accent)"></span></div>
   </div>`;
 }
 
@@ -3725,157 +3993,143 @@ function cvParsePaste(){
 // ══════════════════════════════════════════
 // ZONE TRANSLATOR
 // ══════════════════════════════════════════
-let ztBasisHistory = JSON.parse(localStorage.getItem('ztBasisHistory') || '[]');
+// ztBasisHistory migrated to ztBasisStore (per-symbol object)
 let ztCurrentBasis = null;
+let ztActiveBasis  = null;
+let ztBasisStore   = JSON.parse(localStorage.getItem('ztBasisStore') || '{}');
+
+function ztSetMode(mode) {
+  const bp=document.getElementById('zt-panel-basis'),zp=document.getElementById('zt-panel-zones');
+  const bb=document.getElementById('zt-mode-btn-basis'),zb=document.getElementById('zt-mode-btn-zones');
+  const sp=document.getElementById('zt-saved-basis-panel');
+  if(mode==='basis'){
+    if(bp)bp.style.display='block';if(zp)zp.style.display='none';
+    if(bb){bb.style.background='var(--accent)';bb.style.color='var(--bg)';}
+    if(zb){zb.style.background='transparent';zb.style.color='var(--muted2)';}
+    if(sp)sp.style.display='block';
+  } else {
+    if(bp)bp.style.display='none';if(zp)zp.style.display='block';
+    if(bb){bb.style.background='transparent';bb.style.color='var(--muted2)';}
+    if(zb){zb.style.background='var(--accent)';zb.style.color='var(--bg)';}
+    if(sp)sp.style.display='none';
+    ztPopulateSymSelector();
+  }
+}
 
 function ztCalcBasis() {
-  const fut = parseFloat(document.getElementById('zt-fut-price').value);
-  const cfd = parseFloat(document.getElementById('zt-cfd-price').value);
-  const dispEl  = document.getElementById('zt-basis-display');
-  const valEl   = document.getElementById('zt-basis-val');
-  const noteEl  = document.getElementById('zt-basis-note');
-  const saveBtn = document.getElementById('btn-save-basis');
-  if (isNaN(fut) || isNaN(cfd)) {
-    if (dispEl) dispEl.style.display = 'none';
-    ztCurrentBasis = null;
+  const fut=parseFloat(document.getElementById('zt-fut-price').value);
+  const cfd=parseFloat(document.getElementById('zt-cfd-price').value);
+  const dispEl=document.getElementById('zt-basis-display'),valEl=document.getElementById('zt-basis-val'),noteEl=document.getElementById('zt-basis-note');
+  if(isNaN(fut)||isNaN(cfd)){if(dispEl)dispEl.style.display='none';ztCurrentBasis=null;return;}
+  ztCurrentBasis=parseFloat((cfd-fut).toFixed(8));
+  if(dispEl)dispEl.style.display='block';
+  const dp=Math.abs(fut)>100?2:5;
+  if(valEl)valEl.textContent=(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp);
+  if(noteEl)noteEl.textContent='CFD = Futures + ('+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp)+')';
+}
+
+function ztSaveBasisForSymbol() {
+  if(ztCurrentBasis===null){alert('Enter both prices first.');return;}
+  const sym=document.getElementById('zt-sym')?.value;
+  const cfdSym=document.getElementById('zt-cfd-sym')?.value?.trim()||'';
+  const fut=parseFloat(document.getElementById('zt-fut-price').value);
+  if(!sym){alert('Select a symbol.');return;}
+  const dp=Math.abs(fut)>100?2:5;
+  ztBasisStore[sym]={sym,cfdSym,basis:ztCurrentBasis,futPrice:fut,cfdPrice:parseFloat(document.getElementById('zt-cfd-price').value),date:new Date().toISOString().slice(0,10),dp};
+  localStorage.setItem('ztBasisStore',JSON.stringify(ztBasisStore));
+  ztRenderBasisHistory();
+  alert('Saved basis for '+sym+(cfdSym?' / '+cfdSym:'')+': '+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp));
+}
+
+function ztPopulateSymSelector() {
+  const sel=document.getElementById('zt-zone-sym');
+  if(!sel)return;
+  sel.innerHTML='<option value="">-- choose symbol --</option>'+Object.keys(ztBasisStore).map(s=>{const b=ztBasisStore[s];return '<option value="'+s+'">'+s+(b.cfdSym?' / '+b.cfdSym:'')+' ('+b.date+')</option>';}).join('');
+}
+
+function ztLoadBasisForSym() {
+  const sym=document.getElementById('zt-zone-sym')?.value;
+  const info=sym?ztBasisStore[sym]:null;
+  const actEl=document.getElementById('zt-active-basis'),valEl=document.getElementById('zt-active-basis-val'),datEl=document.getElementById('zt-active-basis-date'),warnEl=document.getElementById('zt-no-basis-warn');
+  if(!info){
+    ztActiveBasis=null;ztCurrentBasis=null;
+    if(actEl)actEl.style.display='none';
+    if(warnEl)warnEl.style.display=sym?'block':'none';
     return;
   }
-  const basis = cfd - fut;
-  ztCurrentBasis = basis;
-  const dp = Math.abs(fut) > 100 ? 2 : 5;
-  const basisStr = (basis >= 0 ? '+' : '') + basis.toFixed(dp);
-  const isLarge  = (Math.abs(fut) < 100 && Math.abs(basis) > 0.002) ||
-                   (Math.abs(fut) >= 100 && Math.abs(basis) > 20);
-  const color    = isLarge ? 'var(--accent)' : 'var(--mega-bull)';
-  if (valEl)  { valEl.textContent = basisStr; valEl.style.color = color; }
-  if (dispEl)   dispEl.style.display = 'block';
-  if (saveBtn)  saveBtn.style.display = 'block';
-  if (noteEl) {
-    if (isLarge) {
-      noteEl.textContent = 'Basis larger than normal \u2014 check for contract roll.';
-      noteEl.style.color = 'var(--mega-bear)';
-    } else {
-      noteEl.textContent = 'Normal basis \u2014 apply to all zone levels.';
-      noteEl.style.color = 'var(--muted2)';
-    }
-  }
+  ztActiveBasis=info;ztCurrentBasis=info.basis;
+  if(actEl)actEl.style.display='block';if(warnEl)warnEl.style.display='none';
+  if(valEl)valEl.textContent=(info.basis>=0?'+':'')+info.basis.toFixed(info.dp);
+  if(datEl)datEl.textContent='Saved '+info.date+(info.cfdSym?' | CFD: '+info.cfdSym:'');
+  const lbl=document.getElementById('zt-label'),cfl=document.getElementById('zt-cfd-label');
+  if(lbl)lbl.value=sym;if(cfl)cfl.value=info.cfdSym||'';
   ztTranslate();
 }
 
 function ztTranslate() {
-  const el = document.getElementById('zt-results');
-  if (!el) return;
-  if (ztCurrentBasis === null) {
-    el.innerHTML = '<div class="empty">Enter current Futures and CFD prices first</div>';
-    return;
+  if(ztCurrentBasis===null){const el=document.getElementById('zt-results');if(el)el.innerHTML='<div class="empty">Select a symbol with a saved basis first</div>';return;}
+  const dp=ztActiveBasis?.dp??(Math.abs(ztCurrentBasis)<1?5:2);
+  const zones=[];
+  for(let n=1;n<=3;n++){
+    const top=parseFloat(document.getElementById('zt-z'+n+'-top')?.value),bot=parseFloat(document.getElementById('zt-z'+n+'-bot')?.value),type=document.getElementById('zt-type-'+n)?.value||'demand';
+    if(isNaN(top)&&isNaN(bot))continue;
+    zones.push({n,type,futTop:isNaN(top)?null:top,futBot:isNaN(bot)?null:bot,cfdTop:isNaN(top)?null:parseFloat((top+ztCurrentBasis).toFixed(dp)),cfdBot:isNaN(bot)?null:parseFloat((bot+ztCurrentBasis).toFixed(dp))});
   }
-  const dp = Math.abs(parseFloat(document.getElementById('zt-fut-price').value)||1) > 100 ? 2 : 5;
-  const basisStr = (ztCurrentBasis >= 0 ? '+' : '') + ztCurrentBasis.toFixed(dp);
-
-  const zones = [1,2,3].map(n => {
-    const top  = parseFloat(document.getElementById('zt-z' + n + '-top').value);
-    const bot  = parseFloat(document.getElementById('zt-z' + n + '-bot').value);
-    const type = document.getElementById('zt-type-' + n).value;
-    if (isNaN(top) && isNaN(bot)) return null;
-    return { n, top, bot, type, hasTop: !isNaN(top), hasBot: !isNaN(bot) };
-  }).filter(Boolean);
-
-  if (!zones.length) {
-    el.innerHTML = '<div class="empty">Enter at least one zone level in Step 2</div>';
-    return;
-  }
-
-  el.innerHTML = zones.map(z => {
-    const isDemand  = z.type === 'demand';
-    const color     = isDemand ? 'var(--mega-bull)' : 'var(--mega-bear)';
-    const bgColor   = isDemand ? 'rgba(34,197,94,.06)' : 'rgba(239,68,68,.06)';
-    const borderCol = isDemand ? 'rgba(34,197,94,.3)'  : 'rgba(239,68,68,.3)';
-    const label     = isDemand ? '\uD83D\uDCD7 Demand Zone ' : '\uD83D\uDCD5 Supply Zone ';
-    const cfdTop = z.hasTop ? (z.top + ztCurrentBasis).toFixed(dp) : null;
-    const cfdBot = z.hasBot ? (z.bot + ztCurrentBasis).toFixed(dp) : null;
-    const futTop = z.hasTop ? z.top.toFixed(dp) : null;
-    const futBot = z.hasBot ? z.bot.toFixed(dp) : null;
-    return '<div style="background:' + bgColor + ';border:1px solid ' + borderCol + ';border-left:3px solid ' + color + ';border-radius:8px;padding:14px;margin-bottom:10px">' +
-      '<div style="font-family:\'DM Mono\';font-size:.6rem;letter-spacing:.15em;color:' + color + ';margin-bottom:10px">' + label + z.n + '</div>' +
-      '<div style="display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:8px;margin-bottom:8px">' +
-        '<div><div style="font-family:\'DM Mono\';font-size:.55rem;color:var(--muted2);margin-bottom:3px">FUTURES</div>' +
-          (futTop ? '<div style="font-family:\'Bebas Neue\';font-size:1.1rem;color:var(--text)">' + futTop + '</div>' : '') +
-          (futBot ? '<div style="font-family:\'Bebas Neue\';font-size:1.1rem;color:var(--text)">' + futBot + '</div>' : '') +
-        '</div>' +
-        '<div style="font-family:\'DM Mono\';font-size:.8rem;color:var(--muted2);text-align:center">\u2192</div>' +
-        '<div><div style="font-family:\'DM Mono\';font-size:.55rem;color:var(--muted2);margin-bottom:3px">CFD</div>' +
-          (cfdTop ? '<div style="font-family:\'Bebas Neue\';font-size:1.1rem;color:' + color + '">' + cfdTop + '</div>' : '') +
-          (cfdBot ? '<div style="font-family:\'Bebas Neue\';font-size:1.1rem;color:' + color + '">' + cfdBot + '</div>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div style="font-family:\'DM Mono\';font-size:.58rem;color:var(--muted2)">Basis: <span style="color:var(--accent)">' + basisStr + '</span>' +
-        (z.hasTop && z.hasBot ? ' \u00B7 Width: <span style="color:var(--text)">' + Math.abs(z.top - z.bot).toFixed(dp) + '</span>' : '') +
-      '</div></div>';
+  const el=document.getElementById('zt-results');
+  if(!zones.length){el.innerHTML='<div class="empty">Enter zone levels above</div>';return;}
+  const sym=document.getElementById('zt-zone-sym')?.value||document.getElementById('zt-sym')?.value||'';
+  el.innerHTML=zones.map(z=>{
+    const isDemand=z.type==='demand',col=isDemand?'var(--mega-bull)':'var(--mega-bear)';
+    const futR=[z.futTop,z.futBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' - ');
+    const cfdR=[z.cfdTop,z.cfdBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' - ');
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid '+col+';border-radius:6px;padding:10px 13px;margin-bottom:8px">'
+      +'<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);margin-bottom:5px">'+(isDemand?'[D]':'[S]')+' ZONE '+z.n+' '+z.type.toUpperCase()+(sym?' ('+sym+')':'')+'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:6px">'
+      +'<div><div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--muted2);margin-bottom:2px">Futures</div><div style="font-family:DM Mono,monospace;font-size:.75rem;color:var(--text)">'+futR+'</div></div>'
+      +'<div style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--muted2);text-align:center">-></div>'
+      +'<div><div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--muted2);margin-bottom:2px">CFD</div><div style="font-family:DM Mono,monospace;font-size:.75rem;color:'+col+';font-weight:600">'+cfdR+'</div></div>'
+      +'</div></div>';
   }).join('');
 }
 
-function ztSaveBasis() {
-  if (ztCurrentBasis === null) return;
-  const fut = parseFloat(document.getElementById('zt-fut-price').value);
-  const cfd = parseFloat(document.getElementById('zt-cfd-price').value);
-  const dp  = Math.abs(fut) > 100 ? 2 : 5;
-  const entry = { date: new Date().toISOString().slice(0,10), basis: ztCurrentBasis, fut: fut.toFixed(dp), cfd: cfd.toFixed(dp) };
-  ztBasisHistory = ztBasisHistory.filter(b => b.date !== entry.date);
-  ztBasisHistory.unshift(entry);
-  ztBasisHistory = ztBasisHistory.slice(0, 12);
-  localStorage.setItem('ztBasisHistory', JSON.stringify(ztBasisHistory));
-  ztRenderBasisHistory();
+function ztClear() {
+  ['zt-z1-top','zt-z1-bot','zt-z2-top','zt-z2-bot','zt-z3-top','zt-z3-bot','zt-fut-price','zt-cfd-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ztCurrentBasis=null;
+  const bd=document.getElementById('zt-basis-display');if(bd)bd.style.display='none';
+  const rEl=document.getElementById('zt-results');if(rEl)rEl.innerHTML='<div class="empty">Enter zone levels to translate</div>';
 }
 
 function ztRenderBasisHistory() {
   const el = document.getElementById('zt-basis-history');
   if (!el) return;
-  if (!ztBasisHistory.length) { el.innerHTML = '<div class="empty">No saved basis values yet</div>'; return; }
-  el.innerHTML = ztBasisHistory.map(b => {
-    const dp    = Math.abs(b.basis) < 1 ? 5 : 2;
-    const bStr  = (b.basis >= 0 ? '+' : '') + b.basis.toFixed(dp);
-    const color = Math.abs(b.basis) > (Math.abs(parseFloat(b.fut)) > 100 ? 20 : 0.002) ? 'var(--accent)' : 'var(--mega-bull)';
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="ztLoadBasis(' + b.basis + ')">' +
-      '<div style="font-family:\'DM Mono\';font-size:.65rem;color:var(--muted2)">' + b.date + '</div>' +
-      '<div style="display:flex;align-items:center;gap:10px">' +
-        '<div style="font-family:\'DM Mono\';font-size:.6rem;color:var(--muted2)">' + b.fut + ' \u2192 ' + b.cfd + '</div>' +
-        '<div style="font-family:\'Bebas Neue\';font-size:.95rem;color:' + color + '">' + bStr + '</div>' +
-      '</div></div>';
+  const entries = Object.values(ztBasisStore);
+  if (!entries.length) { el.innerHTML = '<div class="empty">No saved basis values yet. Save one in Weekend mode.</div>'; return; }
+  entries.sort((a,b) => b.date.localeCompare(a.date));
+  el.innerHTML = entries.map(b => {
+    const dp = b.dp ?? (Math.abs(b.basis) < 1 ? 5 : 2);
+    const bStr = (b.basis >= 0 ? '+' : '') + b.basis.toFixed(dp);
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">'
+      +'<div><div style="font-family:DM Mono,monospace;font-size:.65rem;color:var(--accent)">'+b.sym+(b.cfdSym?' / '+b.cfdSym:'')+'</div>'
+      +'<div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--muted2)">'+b.date+'</div></div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+      +'<div style="font-family:Bebas Neue,sans-serif;font-size:1rem;color:var(--accent)">'+bStr+'</div>'
+      +'<button onclick="ztDeleteBasis(\''+b.sym+'\')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.7rem">x</button>'
+      +'</div></div>';
   }).join('');
 }
 
-function ztLoadBasis(basis) {
-  ztCurrentBasis = basis;
-  const dp      = Math.abs(basis) < 1 ? 5 : 2;
-  const bStr    = (basis >= 0 ? '+' : '') + basis.toFixed(dp);
-  const valEl   = document.getElementById('zt-basis-val');
-  const dispEl  = document.getElementById('zt-basis-display');
-  const noteEl  = document.getElementById('zt-basis-note');
-  const saveBtn = document.getElementById('btn-save-basis');
-  if (valEl)  { valEl.textContent = bStr; valEl.style.color = 'var(--accent)'; }
-  if (dispEl)   dispEl.style.display = 'block';
-  if (noteEl) { noteEl.textContent = 'Loaded from history \u2014 verify it is still current.'; noteEl.style.color = 'var(--accent)'; }
-  if (saveBtn)  saveBtn.style.display = 'block';
-  ztTranslate();
-}
-
-function ztClear() {
-  ['zt-fut-price','zt-cfd-price','zt-z1-top','zt-z1-bot','zt-z2-top','zt-z2-bot','zt-z3-top','zt-z3-bot']
-    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  ztCurrentBasis = null;
-  const d = document.getElementById('zt-basis-display'); if (d) d.style.display = 'none';
-  const r = document.getElementById('zt-results'); if (r) r.innerHTML = '<div class="empty">Enter basis and zone levels to translate</div>';
-  const s = document.getElementById('btn-save-basis'); if (s) s.style.display = 'none';
+function ztDeleteBasis(sym) {
+  if(!confirm('Delete saved basis for '+sym+'?')) return;
+  delete ztBasisStore[sym];
+  localStorage.setItem('ztBasisStore', JSON.stringify(ztBasisStore));
+  ztRenderBasisHistory();
+  ztPopulateSymSelector();
 }
 
 function ztInit() {
+  ztRenderSavedZones();
   ztRenderBasisHistory();
-  if (ztBasisHistory.length) {
-    const latest = ztBasisHistory[0];
-    ztLoadBasis(latest.basis);
-    const noteEl = document.getElementById('zt-basis-note');
-    if (noteEl) { noteEl.textContent = 'Last saved ' + latest.date + ' \u2014 re-read prices to update.'; noteEl.style.color = 'var(--muted2)'; }
-  }
+  ztSetMode('basis');
 }
 
 
