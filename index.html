@@ -904,7 +904,7 @@ table.tl tr:hover td{background:var(--surface2);}
         <div id="zt-results"><div class="empty">Select symbol and enter zone levels to translate</div></div>
       </div>
       <div class="panel" id="zt-saved-basis-panel">
-        <div class="ptitle">Saved Basis Values</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="ptitle" style="margin:0">Saved Basis Values</div><button class="btn-sm" onclick="ztLoadBasisFromSupabase().then(()=>ztPopulateSymSelector())" style="font-size:.6rem">&#x21BA; Sync</button></div>
         <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
         <div id="zt-basis-history"></div>
       </div>
