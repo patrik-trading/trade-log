@@ -1468,6 +1468,7 @@ async function launch(){
   autoMonth();setCurrency(currentCurrency);
   setTimeout(loadDXYValues, 300);
   setTimeout(loadLatestCOT, 600);
+  setTimeout(ztLoadBasisFromSupabase, 900);
   setTimeout(tdLoadKey, 500);
   // Set default review period to YTD
   const rvNow=new Date();document.getElementById('rv-from').value=`${rvNow.getFullYear()}-01-01`;document.getElementById('rv-to').value=rvNow.toISOString().slice(0,10);
@@ -3186,6 +3187,41 @@ function ztDeleteZone(id) {
 }
 
 
+
+// ── LOAD BASIS FROM SUPABASE ON CONNECT ──
+async function ztLoadBasisFromSupabase() {
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/zone_basis?select=*&order=updated_at.desc`, {
+      headers: sbH()
+    });
+    if(!res.ok) return;
+    const rows = await res.json();
+    if(!rows || !rows.length) return;
+
+    // Merge into ztBasisStore — Supabase wins over localStorage
+    rows.forEach(r => {
+      ztBasisStore[r.symbol] = {
+        sym:      r.symbol,
+        cfdSym:   r.cfd_symbol || '',
+        basis:    parseFloat(r.basis),
+        futPrice: r.fut_price,
+        cfdPrice: r.cfd_price,
+        dp:       r.dp || 5,
+        date:     r.updated_at ? r.updated_at.slice(0,10) : '',
+      };
+    });
+
+    // Update localStorage cache
+    localStorage.setItem('ztBasisStore', JSON.stringify(ztBasisStore));
+    ztRenderBasisHistory();
+    ztPopulateSymSelector();
+    console.log(`Loaded ${rows.length} basis values from Supabase`);
+  } catch(err) {
+    console.log('Could not load basis from Supabase:', err.message);
+    // Fall back to localStorage silently
+  }
+}
+
 // ── ANALYTICS STATE ──
 let activeDims = new Set(['symbol']);
 let activeSort = 'r';
@@ -4028,17 +4064,56 @@ function ztCalcBasis() {
   if(noteEl)noteEl.textContent='CFD = Futures + ('+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp)+')';
 }
 
-function ztSaveBasisForSymbol() {
+async function ztSaveBasisForSymbol() {
   if(ztCurrentBasis===null){alert('Enter both prices first.');return;}
   const sym=document.getElementById('zt-sym')?.value;
   const cfdSym=document.getElementById('zt-cfd-sym')?.value?.trim()||'';
   const fut=parseFloat(document.getElementById('zt-fut-price').value);
+  const cfd=parseFloat(document.getElementById('zt-cfd-price').value);
   if(!sym){alert('Select a symbol.');return;}
   const dp=Math.abs(fut)>100?2:5;
-  ztBasisStore[sym]={sym,cfdSym,basis:ztCurrentBasis,futPrice:fut,cfdPrice:parseFloat(document.getElementById('zt-cfd-price').value),date:new Date().toISOString().slice(0,10),dp};
-  localStorage.setItem('ztBasisStore',JSON.stringify(ztBasisStore));
-  ztRenderBasisHistory();
-  alert('Saved basis for '+sym+(cfdSym?' / '+cfdSym:'')+': '+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp));
+
+  const row = {
+    symbol:     sym,
+    cfd_symbol: cfdSym||null,
+    basis:      ztCurrentBasis,
+    fut_price:  fut,
+    cfd_price:  cfd,
+    dp,
+    updated_at: new Date().toISOString(),
+  };
+
+  try {
+    sync('busy','Saving basis...');
+    const res = await fetch(`${SB_URL}/rest/v1/zone_basis?symbol=eq.${sym}`, {
+      method:'GET', headers: sbH()
+    });
+    const existing = await res.json();
+
+    if(existing && existing.length > 0) {
+      // Update existing
+      await fetch(`${SB_URL}/rest/v1/zone_basis?symbol=eq.${sym}`, {
+        method:'PATCH', headers: sbH(),
+        body: JSON.stringify(row)
+      });
+    } else {
+      // Insert new
+      await fetch(`${SB_URL}/rest/v1/zone_basis`, {
+        method:'POST', headers: sbH(),
+        body: JSON.stringify(row)
+      });
+    }
+
+    // Also keep in localStorage as offline cache
+    ztBasisStore[sym]={sym,cfdSym,basis:ztCurrentBasis,futPrice:fut,cfdPrice:cfd,date:new Date().toISOString().slice(0,10),dp};
+    localStorage.setItem('ztBasisStore',JSON.stringify(ztBasisStore));
+    ztRenderBasisHistory();
+    sync('ok','Basis saved ✓');
+    alert('Saved basis for '+sym+(cfdSym?' / '+cfdSym:'')+': '+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp));
+  } catch(err) {
+    sync('err','Save failed');
+    alert('Failed to save: '+err.message);
+  }
 }
 
 function ztPopulateSymSelector() {
@@ -4118,8 +4193,13 @@ function ztRenderBasisHistory() {
   }).join('');
 }
 
-function ztDeleteBasis(sym) {
+async function ztDeleteBasis(sym) {
   if(!confirm('Delete saved basis for '+sym+'?')) return;
+  try {
+    await fetch(`${SB_URL}/rest/v1/zone_basis?symbol=eq.${sym}`, {
+      method:'DELETE', headers: sbH()
+    });
+  } catch(err) { console.log('Supabase delete failed:', err.message); }
   delete ztBasisStore[sym];
   localStorage.setItem('ztBasisStore', JSON.stringify(ztBasisStore));
   ztRenderBasisHistory();
