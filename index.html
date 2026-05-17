@@ -2198,16 +2198,26 @@ function renderFocusOfWeek(entries) {
   });
   const deduped = Object.values(latestPerAsset);
 
-  // Rank purely by institutional conviction
-  // instDist = distance from 50 in either direction
-  // Score 100 → 50, Score 12 → 38, Score 82 → 32, Score 50 → 0
-  // Phase is shown visually but does NOT affect ranking order
-  // Recency breaks exact ties only (< 1 pt max)
+  // ── RANKING: Phase is PRIMARY, inst score is SECONDARY ──
+  // Actionable phases (Spring/Cliff/Recovery/Surge/Trap/Slide) always beat Neutral/Wait/Conflict
+  // Within same phase tier: inst score distance from 50 differentiates
+  // Recency breaks exact ties only (max 0.9 pts — never overrides phase or score)
+  const phaseScore = {
+    SC: 1000, CC: 1000,   // Spring/Cliff Confirmed — highest priority
+    SW: 800,  CW: 800,    // Spring/Cliff Watching
+    TR: 700,              // Trap — high priority warning
+    RC: 600,              // Recovery Confirmed
+    SU: 500,  SL: 500,    // Surge / Slide
+    CF: 100,              // Conflict — low priority
+    NE: 0,                // Neutral/Wait — no phase edge
+  };
+
   const scored = deduped.map(e => {
+    const phase    = phaseScore[e.signal_key] ?? 0;
     const instDist = e.inst_score != null ? Math.abs(e.inst_score - 50) : 0;
     const daysAgo  = Math.max(0, Math.round((new Date() - new Date(e.date)) / 86400000));
     const recency  = Math.max(0, 0.9 - daysAgo * 0.1);
-    return { ...e, focusScore: instDist + recency };
+    return { ...e, focusScore: phase + instDist + recency };
   });
 
   const top = scored
