@@ -274,15 +274,7 @@ table.tl tr:hover td{background:var(--surface2);}
   <div class="sig-main" style="margin-bottom:16px">
     <div class="panel">
       <div class="ptitle">New Signal Entry</div>
-    <!-- COT Live Data Panel -->
-    <div id="cot-live-panel" style="display:none;background:var(--bg);border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:12px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--mega-bull)">&#x1F4E1; LIVE COT DATA</div>
-        <div id="cot-live-date" style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2)"></div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px" id="cot-live-grid"></div>
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Click a pair to auto-fill COT fields below</div>
-    </div>
+
       <div class="g2">
         <div class="ig"><label>Date</label><input type="date" id="eDate"></div>
         <div class="ig"><label>Futures</label><input type="text" id="eAsset" placeholder="e.g. 6E"></div>
@@ -489,7 +481,6 @@ table.tl tr:hover td{background:var(--surface2);}
         </div>
         <button class="btn-sm" onclick="clearSigFilters()">✕ Clear</button>
         <button class="btn-sm" onclick="recalcAllScores()" style="background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)" title="Recalculate all historical institutional scores using current formula">&#x21BA; Recalc Scores</button>
-        <button class="btn-sm" onclick="fetchCOTData()" id="btn-fetch-cot" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:var(--mega-bull)" title="Fetch latest COT data from CFTC via Supabase Edge Function">&#x1F4E1; Fetch COT</button>
       </div>
       <div style="margin-left:auto;font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">
         <span>← scroll →</span>
@@ -1467,7 +1458,6 @@ async function launch(){
   document.getElementById('dateBadge').textContent=today.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   autoMonth();setCurrency(currentCurrency);
   setTimeout(loadDXYValues, 300);
-  setTimeout(loadLatestCOT, 600);
   setTimeout(ztLoadBasisFromSupabase, 900);
   setTimeout(tdLoadKey, 500);
   // Set default review period to YTD
@@ -2661,154 +2651,6 @@ async function recalcAllScores(){
 }
 
 
-
-// ══════════════════════════════════════════
-// COT DATA FETCH — Supabase Edge Function
-// ══════════════════════════════════════════
-let cotLiveData = {};
-
-async function fetchCOTData() {
-  const btn = document.getElementById('btn-fetch-cot');
-  if(btn){ btn.disabled=true; btn.textContent='⏳ Fetching...'; }
-
-  try {
-    // Call the Supabase Edge Function
-    const res = await fetch(`${SB_URL}/functions/v1/fetch-cot`, {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + SB_KEY,
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if(!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    const data = await res.json();
-
-    if(data.error) throw new Error(data.error);
-
-    // Store the fetched data
-    cotLiveData = data.data || {};
-
-    // Show the live panel and populate it
-    renderCOTLivePanel(cotLiveData, data.fetched_at);
-
-    if(btn){ btn.textContent='✓ COT Updated'; btn.style.color='var(--mega-bull)'; }
-    setTimeout(()=>{ if(btn){ btn.disabled=false; btn.textContent='📡 Fetch COT'; btn.style.color=''; } }, 3000);
-
-  } catch(err) {
-    // Show retry option
-    const retry = confirm('COT fetch failed: ' + err.message + '\n\nThis often happens when CFTC is temporarily unavailable.\nRetry in 30 seconds?');
-    if(retry) {
-      if(btn){ btn.textContent='⏳ Retrying in 30s...'; }
-      setTimeout(fetchCOTData, 30000);
-    } else {
-      if(btn){ btn.disabled=false; btn.textContent='📡 Fetch COT'; btn.style.color=''; }
-    }
-  }
-}
-
-function renderCOTLivePanel(data, fetchedAt) {
-  const panel   = document.getElementById('cot-live-panel');
-  const grid    = document.getElementById('cot-live-grid');
-  const dateEl  = document.getElementById('cot-live-date');
-  if(!panel || !grid) return;
-
-  panel.style.display = 'block';
-  if(dateEl && fetchedAt) dateEl.textContent = 'Fetched: ' + new Date(fetchedAt).toLocaleString();
-
-  const symbols = ['6E','6B','6A','6N','6C','6J','6S','GC','SI','DXY'];
-  grid.innerHTML = symbols.map(sym => {
-    const d = data[sym];
-    if(!d) return '<div style="background:var(--surface2);border:1px solid rgba(200,169,110,.2);border-radius:5px;padding:7px;opacity:.7"><div style="font-family:Bebas Neue,sans-serif;font-size:.9rem;color:var(--accent)">'+sym+'</div><div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--accent)">Enter manually</div></div>';
-
-    const specColor = d.spec_cot_pct <= 15 ? 'var(--mega-bull)' : d.spec_cot_pct >= 85 ? 'var(--mega-bear)' : 'var(--text)';
-    const commColor = d.comm_cot_pct >= 75 ? 'var(--mega-bull)' : d.comm_cot_pct <= 25 ? 'var(--mega-bear)' : 'var(--text)';
-    const dirColor  = d.cot_dir === 'Rising' ? 'var(--mega-bull)' : d.cot_dir === 'Falling' ? 'var(--mega-bear)' : 'var(--muted2)';
-
-    return `<div onclick="cotAutoFill('${sym}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:7px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--accent);margin-bottom:3px">${sym}</div>
-      <div style="font-family:'DM Mono';font-size:.55rem;line-height:1.7">
-        <div>Spec: <span style="color:${specColor}">${d.spec_cot_pct}%</span></div>
-        <div>Comm: <span style="color:${commColor}">${d.comm_cot_pct}%</span></div>
-        <div>Z: <span style="color:var(--muted2)">${d.cot_zscore}σ</span></div>
-        <div>Dir: <span style="color:${dirColor}">${d.cot_dir}</span></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function cotAutoFill(symbol) {
-  const d = cotLiveData[symbol];
-  if(!d) return;
-
-  // Set futures selector
-  const assetEl = document.getElementById('eAsset');
-  if(assetEl) assetEl.value = symbol;
-
-  // Fill COT %
-  const cotEl = document.getElementById('cotIn');
-  if(cotEl) { cotEl.value = d.spec_cot_pct; }
-
-  // Fill Commercial COT %
-  const commEl = document.getElementById('commIn');
-  if(commEl) commEl.value = d.comm_cot_pct;
-
-  // Fill Z-Score
-  const zEl = document.getElementById('zscoreIn');
-  if(zEl) zEl.value = d.cot_zscore;
-
-  // Set COT direction buttons
-  if(d.cot_dir === 'Rising')  { setCotDir('rising'); }
-  else if(d.cot_dir === 'Falling') { setCotDir('falling'); }
-  else { setCotDir('flat'); }
-
-  // Set OI direction
-  if(d.oi_change === 'rising')  { setOIDir('rising'); }
-  else if(d.oi_change === 'falling') { setOIDir('falling'); }
-
-  // Trigger detect and score recalc
-  detect();
-  calcInstitutionalScore();
-
-  // Highlight the selected pair
-  document.querySelectorAll('#cot-live-grid > div').forEach(el => el.style.background = 'var(--surface2)');
-  event.currentTarget.style.background = 'rgba(200,169,110,.15)';
-}
-
-// Also load latest COT from Supabase on dashboard open (if already fetched this week)
-async function loadLatestCOT() {
-  try {
-    const res = await fetch(`${SB_URL}/rest/v1/cot_data?select=*&order=report_date.desc&limit=9`, {
-      headers: sbH()
-    });
-    if(!res.ok) return;
-    const rows = await res.json();
-    if(!rows || !rows.length) return;
-
-    // Convert array to object keyed by symbol
-    const data = {};
-    rows.forEach(r => { if(!data[r.symbol]) data[r.symbol] = r; });
-
-    if(Object.keys(data).length > 0) {
-      cotLiveData = data;
-      // Map field names from DB to display format
-      const displayData = {};
-      Object.entries(data).forEach(([sym, r]) => {
-        displayData[sym] = {
-          spec_cot_pct: r.spec_cot_pct,
-          comm_cot_pct: r.comm_cot_pct,
-          cot_zscore:   r.cot_zscore,
-          cot_dir:      r.cot_dir,
-          oi_change:    r.oi_change,
-        };
-      });
-      cotLiveData = displayData;
-      renderCOTLivePanel(displayData, rows[0].fetched_at);
-    }
-  } catch(e) {
-    // Silently fail — COT panel just stays hidden
-  }
-}
 
 // ── TRADE LOG ──
 function autoMonth(){const d=document.getElementById('tl-date').value;if(!d)return;document.getElementById('tl-month').value=new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'});}
