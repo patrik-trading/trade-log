@@ -40,6 +40,13 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-btns-desktop{display:flex;}
+.tab-btns-mobile{display:none;}
+@media(max-width:700px){
+  .tab-btns-desktop{display:none;}
+  .tab-btns-mobile{display:block;padding:8px 12px;}
+}
+[data-theme="light"] .tab-btns-mobile select{background:#f3f4f6!important;color:#111827!important;border-color:#d1d5db!important;}
 .tab-pane{display:none;}
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
@@ -192,14 +199,22 @@ table.tl tr:hover td{background:var(--surface2);}
 }
 
 /* Also fix all select elements in light mode */
-[data-theme="light"] select {
+[data-theme="light"] select,
+[data-theme="light"] input[type=date],
+[data-theme="light"] input[type=number],
+[data-theme="light"] input[type=text],
+[data-theme="light"] input[type=number] {
   background: #f3f4f6 !important;
   color: #111827 !important;
   border-color: #d1d5db !important;
 }
 [data-theme="light"] select option {
-  background: #ffffff;
-  color: #111827;
+  background: #ffffff !important;
+  color: #111827 !important;
+}
+[data-theme="light"] #sig-sort {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
 }
 
 /* ANALYTICS PANEL */
@@ -284,11 +299,24 @@ table.tl tr:hover td{background:var(--surface2);}
 </header>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('signals')">📡 Signal Dashboard</button>
-  <button class="tab-btn" onclick="switchTab('tradelog')">📒 Trade Log</button>
-  <button class="tab-btn" onclick="switchTab('review')">📊 Performance Review</button>
-  <button class="tab-btn" onclick="switchTab('converter')">🔄 Futures → CFD</button>
-  <button class="tab-btn" onclick="switchTab('rules')">📘 Trading Rules</button>
+  <!-- Desktop tabs -->
+  <div class="tab-btns-desktop">
+    <button class="tab-btn active" onclick="switchTab('signals')">&#x1F4E1; Signals</button>
+    <button class="tab-btn" onclick="switchTab('tradelog')">&#x1F4D2; Trade Log</button>
+    <button class="tab-btn" onclick="switchTab('review')">&#x1F4CA; Analytics</button>
+    <button class="tab-btn" onclick="switchTab('converter')">&#x1F504; Futures&#8594;CFD</button>
+    <button class="tab-btn" onclick="switchTab('rules')">&#x1F4D8; Rules</button>
+  </div>
+  <!-- Mobile tab selector -->
+  <div class="tab-btns-mobile">
+    <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer">
+      <option value="signals">&#x1F4E1; Signal Dashboard</option>
+      <option value="tradelog">&#x1F4D2; Trade Log</option>
+      <option value="review">&#x1F4CA; Performance Review</option>
+      <option value="converter">&#x1F504; Futures &#8594; CFD</option>
+      <option value="rules">&#x1F4D8; Trading Rules</option>
+    </select>
+  </div>
 </div>
 
 <!-- TAB SIGNALS -->
@@ -4340,7 +4368,17 @@ function toggleTheme(){
 }
 
 // ── TABS ──
-function switchTab(n){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+n).classList.add('active');document.querySelector(`.tab-btn[onclick="switchTab('${n}')"]`).classList.add('active');if(n==='review'){setTimeout(renderReview,50);} if(n==='converter'){setTimeout(()=>{cvRun();tdLoadKey();},50);}}
+function switchTab(n){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+n).classList.add('active');
+  const btn=document.querySelector(`.tab-btn[onclick="switchTab('${n}')"]`);
+  if(btn) btn.classList.add('active');
+  const mob=document.getElementById('mobile-tab-select');
+  if(mob) mob.value=n;
+  if(n==='review'){setTimeout(renderReview,50);}
+  if(n==='converter'){setTimeout(async()=>{await ztLoadBasisFromSupabase();ztInit();},50);}
+}
 
 // ── AUTO-CONNECT if credentials saved ──
 (function(){
