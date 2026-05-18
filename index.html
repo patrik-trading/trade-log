@@ -167,6 +167,41 @@ table.tl tr:hover td{background:var(--surface2);}
 .sortable-th{cursor:pointer;user-select:none;white-space:nowrap;}
 .sortable-th:hover{color:var(--accent);}
 
+.sig-chk-row {
+  display:flex;align-items:center;gap:8px;
+  padding:4px 12px;cursor:pointer;
+  font-family:'DM Mono';font-size:.65rem;
+  color:var(--text);
+  transition:background .1s;
+}
+.sig-chk-row:hover { background:var(--surface2); }
+.sig-chk-row input[type=checkbox] { accent-color:var(--accent); cursor:pointer; }
+
+/* Light mode fixes for filter dropdowns */
+[data-theme="light"] #sig-filter-signal-dd,
+[data-theme="light"] #sig-filter-futures-dd {
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+[data-theme="light"] .sig-chk-row { color: #111827; }
+[data-theme="light"] #sig-filter-signal-btn,
+[data-theme="light"] #sig-filter-futures-btn {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+/* Also fix all select elements in light mode */
+[data-theme="light"] select {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+}
+[data-theme="light"] select option {
+  background: #ffffff;
+  color: #111827;
+}
+
 /* ANALYTICS PANEL */
 .analytics-dim-btn{font-family:'DM Mono';font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-dim-btn:hover{border-color:var(--muted2);color:var(--text);}
@@ -440,22 +475,31 @@ table.tl tr:hover td{background:var(--surface2);}
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
       <div class="ptitle" style="margin:0;flex-shrink:0">Signal History</div>
       <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-left:0">
-        <select id="sig-filter-signal" onchange="renderSignals()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;outline:none">
-          <option value="ALL">All Signals</option>
-          <option value="SC">🌱 Spring — CONFIRMED</option>
-          <option value="SW">🌱 Spring — Waiting</option>
-          <option value="RC">♻️ Recovery</option>
-          <option value="SU">🚀 Surge</option>
-          <option value="CC">🪨 Cliff — CONFIRMED</option>
-          <option value="CW">🪨 Cliff — Watching</option>
-          <option value="TR">🪤 Trap</option>
-          <option value="SL">📉 Slide</option>
-          <option value="CF">⚡ Conflict</option>
-          <option value="NE">⏸ Neutral</option>
-        </select>
-        <select id="sig-filter-futures" onchange="renderSignals()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;outline:none">
-          <option value="ALL">All Futures</option>
-        </select>
+        <!-- Signal multi-select -->
+        <div style="position:relative;display:inline-block">
+          <button id="sig-filter-signal-btn" onclick="sigToggleDropdown('signal')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Signals &#9660;</button>
+          <div id="sig-filter-signal-dd" style="display:none;position:absolute;top:110%;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:6px;z-index:200;min-width:180px;box-shadow:0 4px 16px rgba(0,0,0,.3);padding:6px 0">
+            <div onclick="sigSelectAll('signal')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">&#10003; Select All / None</div>
+            <label class="sig-chk-row"><input type="checkbox" value="SC" onchange="renderSignals()"> Spring CONFIRMED</label>
+            <label class="sig-chk-row"><input type="checkbox" value="SW" onchange="renderSignals()"> Spring Waiting</label>
+            <label class="sig-chk-row"><input type="checkbox" value="RC" onchange="renderSignals()"> Recovery</label>
+            <label class="sig-chk-row"><input type="checkbox" value="SU" onchange="renderSignals()"> Surge</label>
+            <label class="sig-chk-row"><input type="checkbox" value="CC" onchange="renderSignals()"> Cliff CONFIRMED</label>
+            <label class="sig-chk-row"><input type="checkbox" value="CW" onchange="renderSignals()"> Cliff Watching</label>
+            <label class="sig-chk-row"><input type="checkbox" value="TR" onchange="renderSignals()"> Trap</label>
+            <label class="sig-chk-row"><input type="checkbox" value="SL" onchange="renderSignals()"> Slide</label>
+            <label class="sig-chk-row"><input type="checkbox" value="CF" onchange="renderSignals()"> Conflict</label>
+            <label class="sig-chk-row"><input type="checkbox" value="NE" onchange="renderSignals()"> Neutral</label>
+          </div>
+        </div>
+        <!-- Futures multi-select -->
+        <div style="position:relative;display:inline-block">
+          <button id="sig-filter-futures-btn" onclick="sigToggleDropdown('futures')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Futures &#9660;</button>
+          <div id="sig-filter-futures-dd" style="display:none;position:absolute;top:110%;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:6px;z-index:200;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.3);padding:6px 0" id="sig-filter-futures-list">
+            <div onclick="sigSelectAll('futures')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">&#10003; Select All / None</div>
+            <div id="sig-futures-options"></div>
+          </div>
+        </div>
         <select id="sig-sort" onchange="renderSignals()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;outline:none">
           <option value="date_desc">↓ Date (Newest)</option>
           <option value="date_asc">↑ Date (Oldest)</option>
@@ -1873,25 +1917,22 @@ function resetSigForm(){
 }
 
 function refreshSigFuturesDropdown(){
-  const sel = document.getElementById('sig-filter-futures');
-  if(!sel) return;
-  const cur = sel.value;
+  const container = document.getElementById('sig-futures-options');
+  if(!container) return;
   const futures = [...new Set(entries.map(e=>e.asset).filter(a=>a&&a!=='—'))].sort();
-  sel.innerHTML = '<option value="ALL">All Futures</option>' +
-    futures.map(f=>`<option value="${f}"${cur===f?' selected':''}>${f}</option>`).join('');
+  const checked = [...document.querySelectorAll('#sig-filter-futures-dd input[type=checkbox]:checked')].map(cb=>cb.value);
+  container.innerHTML = futures.map(f=>
+    `<label class="sig-chk-row"><input type="checkbox" value="${f}" onchange="renderSignals()"${checked.includes(f)?' checked':''}> ${f}</label>`
+  ).join('');
 }
 
 function clearSigFilters(){
-  const ss=document.getElementById('sig-filter-signal');
-  const sf=document.getElementById('sig-filter-futures');
+  document.querySelectorAll('#sig-filter-signal-dd input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('#sig-filter-futures-dd input[type=checkbox]').forEach(cb=>cb.checked=false);
   const so=document.getElementById('sig-sort');
-  const sb=document.getElementById('sig-filter-bias-inline');
-  const si=document.getElementById('sig-filter-futures-inline');
-  if(ss) ss.value='ALL';
-  if(sf) sf.value='ALL';
   if(so) so.value='date_desc';
-  if(sb) sb.value='ALL';
-  if(si) si.value='ALL';
+  sigUpdateBtnLabel('signal');
+  sigUpdateBtnLabel('futures');
   const fd=document.getElementById('sig-from-date');if(fd)fd.value='';
   const td=document.getElementById('sig-to-date');if(td)td.value='';
   const smn=document.getElementById('sig-score-min');if(smn)smn.value='';
@@ -1909,13 +1950,17 @@ function renderSignals(){
   // Refresh futures dropdowns (both toolbar and inline)
   refreshSigFuturesDropdown();
   // Apply filters
-  const fSig     = document.getElementById('sig-filter-signal')?.value  || 'ALL';
-  const fFutures = document.getElementById('sig-filter-futures')?.value || 'ALL';
+  // Read multi-select signal filters
+  const sigChecked = [...document.querySelectorAll('#sig-filter-signal-dd input[type=checkbox]:checked')].map(cb=>cb.value);
+  const fSig = sigChecked.length === 0 ? 'ALL' : sigChecked;
+  // Read multi-select futures filters
+  const futChecked = [...document.querySelectorAll('#sig-filter-futures-dd input[type=checkbox]:checked')].map(cb=>cb.value);
+  const fFutures = futChecked.length === 0 ? 'ALL' : futChecked;
   const fBias    = 'ALL';
   const fSort    = document.getElementById('sig-sort')?.value           || 'date_desc';
   let filtered = [...entries];
-  if(fSig     !== 'ALL') filtered = filtered.filter(e=>e.signal_key===fSig);
-  if(fFutures !== 'ALL') filtered = filtered.filter(e=>e.asset===fFutures);
+  if(fSig     !== 'ALL') filtered = filtered.filter(e=>fSig.includes(e.signal_key));
+  if(fFutures !== 'ALL') filtered = filtered.filter(e=>fFutures.includes(e.asset));
   const fFrom = document.getElementById('sig-from-date')?.value || '';
   const fTo   = document.getElementById('sig-to-date')?.value   || '';
   if(fFrom) filtered = filtered.filter(e=>e.date >= fFrom);
@@ -2651,6 +2696,51 @@ async function recalcAllScores(){
 }
 
 
+
+
+function sigToggleDropdown(type) {
+  const dd = document.getElementById('sig-filter-'+type+'-dd');
+  if(!dd) return;
+  const isOpen = dd.style.display !== 'none';
+  // Close all dropdowns first
+  document.querySelectorAll('[id$="-dd"]').forEach(el => el.style.display='none');
+  if(!isOpen) dd.style.display = 'block';
+}
+
+function sigSelectAll(type) {
+  const cbs = document.querySelectorAll('#sig-filter-'+type+'-dd input[type=checkbox]');
+  const anyChecked = [...cbs].some(cb=>cb.checked);
+  cbs.forEach(cb=>cb.checked = !anyChecked);
+  sigUpdateBtnLabel(type);
+  renderSignals();
+}
+
+function sigUpdateBtnLabel(type) {
+  const btn  = document.getElementById('sig-filter-'+type+'-btn');
+  if(!btn) return;
+  const cbs  = [...document.querySelectorAll('#sig-filter-'+type+'-dd input[type=checkbox]:checked')];
+  const cap  = type === 'signal' ? 'Signals' : 'Futures';
+  btn.innerHTML = cbs.length === 0
+    ? cap + ' &#9660;'
+    : cbs.length + ' selected &#9660;';
+}
+
+// Update button label when checkbox changes
+document.addEventListener('change', e => {
+  if(e.target.matches('#sig-filter-signal-dd input, #sig-filter-futures-dd input')) {
+    const type = e.target.closest('[id$="-dd"]').id.includes('signal') ? 'signal' : 'futures';
+    sigUpdateBtnLabel(type);
+  }
+});
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', e => {
+  if(!e.target.closest('[id$="-btn"]') && !e.target.closest('[id$="-dd"]')) {
+    document.querySelectorAll('[id$="-dd"]').forEach(el => {
+      if(el.id.startsWith('sig-filter-')) el.style.display='none';
+    });
+  }
+});
 
 // ── TRADE LOG ──
 function autoMonth(){const d=document.getElementById('tl-date').value;if(!d)return;document.getElementById('tl-month').value=new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'});}
