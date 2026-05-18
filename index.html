@@ -46,7 +46,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   .tab-btns-desktop{display:none;}
   .tab-btns-mobile{display:block;padding:8px 12px;}
 }
-[data-theme="light"] .tab-btns-mobile select{background:#f3f4f6!important;color:#111827!important;border-color:#d1d5db!important;}
+body.light .tab-btns-mobile select{background:#f0ece2!important;color:#1a1810!important;border-color:#ddd8cc!important;}
 .tab-pane{display:none;}
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
@@ -185,36 +185,50 @@ table.tl tr:hover td{background:var(--surface2);}
 .sig-chk-row input[type=checkbox] { accent-color:var(--accent); cursor:pointer; }
 
 /* Light mode fixes for filter dropdowns */
-[data-theme="light"] #sig-filter-signal-dd,
-[data-theme="light"] #sig-filter-futures-dd {
+body.light #sig-filter-signal-dd,
+body.light #sig-filter-futures-dd {
   background: #ffffff;
   border-color: #d1d5db;
 }
-[data-theme="light"] .sig-chk-row { color: #111827; }
-[data-theme="light"] #sig-filter-signal-btn,
-[data-theme="light"] #sig-filter-futures-btn {
+body.light .sig-chk-row { color: #111827; }
+body.light #sig-filter-signal-btn,
+body.light #sig-filter-futures-btn {
   background: #f3f4f6;
   border-color: #d1d5db;
   color: #111827;
 }
 
-/* Also fix all select elements in light mode */
-[data-theme="light"] select,
-[data-theme="light"] input[type=date],
-[data-theme="light"] input[type=number],
-[data-theme="light"] input[type=text],
-[data-theme="light"] input[type=number] {
-  background: #f3f4f6 !important;
-  color: #111827 !important;
-  border-color: #d1d5db !important;
+/* Fix all select/input in light mode — use body.light to match theme toggle */
+body.light select,
+body.light input[type=date],
+body.light input[type=number],
+body.light input[type=text],
+body.light input[type=password],
+body.light textarea {
+  background: #f0ece2 !important;
+  color: #1a1810 !important;
+  border-color: #ddd8cc !important;
 }
-[data-theme="light"] select option {
+body.light select option {
   background: #ffffff !important;
-  color: #111827 !important;
+  color: #1a1810 !important;
 }
-[data-theme="light"] #sig-sort {
-  background: #f3f4f6 !important;
-  color: #111827 !important;
+body.light #sig-sort,
+body.light #sig-filter-signal-btn,
+body.light #sig-filter-futures-btn {
+  background: #f0ece2 !important;
+  color: #1a1810 !important;
+  border-color: #ddd8cc !important;
+}
+body.light .sig-chk-row { color: #1a1810 !important; }
+body.light #sig-filter-signal-dd,
+body.light #sig-filter-futures-dd {
+  background: #ffffff !important;
+  border-color: #ddd8cc !important;
+}
+body.light #sig-filter-signal-dd *,
+body.light #sig-filter-futures-dd * {
+  color: #1a1810 !important;
 }
 
 /* ANALYTICS PANEL */
@@ -257,6 +271,123 @@ table.tl tr:hover td{background:var(--surface2);}
 @media(max-width:900px){#tab-rules .g2-rules{grid-template-columns:1fr;}}
 @media(max-width:1000px){.sig-main{grid-template-columns:1fr;}.tl-layout{grid-template-columns:1fr!important;}.tl-stats{grid-template-columns:repeat(5,1fr);}#tab-rules .rules-two-col{grid-template-columns:1fr;}}
 @media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr;}.legend{grid-template-columns:1fr 1fr;}.tl-stats{grid-template-columns:repeat(3,1fr)!important;}.stats{grid-template-columns:repeat(2,1fr);}}
+
+/* ══════════════════════════════════════════
+   MOBILE LAYOUT — max-width 700px
+   Desktop unchanged above this breakpoint
+   ══════════════════════════════════════════ */
+@media(max-width:700px){
+
+  /* ── Wrapper / spacing ── */
+  .wrapper{padding:12px 14px;}
+  header{margin-bottom:14px;gap:8px;}
+  .logo{font-size:1.8rem;}
+  .logo small{font-size:.58rem;}
+  .badge{font-size:.65rem;padding:4px 10px;}
+  .sync-bar{font-size:.58rem;}
+
+  /* ── Panels ── */
+  .panel{padding:14px 12px;border-radius:8px;}
+  .ptitle{font-size:.62rem;margin-bottom:12px;}
+
+  /* ── Grids → single column on mobile ── */
+  .g2,.g3,.g4{grid-template-columns:1fr;}
+  .sig-main{grid-template-columns:1fr!important;}
+  .tl-layout{grid-template-columns:1fr!important;}
+
+  /* ── Signal Dashboard toolbar ── */
+  .sig-toolbar{flex-direction:column;align-items:stretch!important;gap:8px!important;}
+  .sig-toolbar > div{flex-direction:column;gap:6px!important;width:100%;}
+  .sig-toolbar button,.sig-toolbar input,.sig-toolbar select{width:100%!important;font-size:.75rem!important;}
+  #sig-filter-signal-btn,#sig-filter-futures-btn{width:100%!important;}
+
+  /* ── Signal history table — horizontal scroll ── */
+  .hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table.hist{min-width:700px;font-size:.6rem;}
+
+  /* ── Form inputs ── */
+  input[type=text],input[type=number],input[type=date],
+  input[type=password],select,textarea{
+    padding:10px 12px;font-size:.85rem;
+  }
+  .ig label{font-size:.7rem;}
+  .dir-btn{padding:9px 3px;font-size:.7rem;}
+
+  /* ── Institutional score box ── */
+  #inst-score-box{margin:12px 0;}
+
+  /* ── Result box ── */
+  .result-box{padding:14px;}
+
+  /* ── Buttons ── */
+  .btn-log{padding:13px;font-size:.85rem;border-radius:8px;}
+  .btn-sm{padding:6px 10px;font-size:.68rem;}
+
+  /* ── Trade log stats ── */
+  .tl-stats{grid-template-columns:repeat(2,1fr)!important;gap:8px;}
+
+  /* ── Analytics ── */
+  #analytics-panel{margin-bottom:10px;}
+  .analytics-dim-btn{padding:5px 10px;font-size:.62rem;}
+
+  /* ── Focus of week cards ── */
+  #focus-list > div{padding:10px;}
+
+  /* ── Right sidebar panels — stack below main ── */
+  .sig-sidebar{display:flex;flex-direction:column;gap:12px;}
+
+  /* ── Zone translator ── */
+  #tab-converter > div{grid-template-columns:1fr!important;}
+
+  /* ── Modals ── */
+  .modal-box{width:95vw!important;padding:16px!important;}
+  .edit-modal-box{
+    width:95vw!important;
+    max-width:95vw!important;
+    max-height:85vh!important;
+    padding:16px!important;
+    border-radius:10px;
+  }
+
+  /* ── Performance review ── */
+  .perf-table-wrap{overflow-x:auto;}
+
+  /* ── Tag rows ── */
+  .tag-row{flex-wrap:wrap;gap:5px;}
+  .tag-btn{font-size:.62rem;padding:5px 8px;}
+
+  /* ── DXY overlay inputs ── */
+  #dxy-cot,#dxy-yield{font-size:.8rem;}
+
+  /* ── Dropdown fix on mobile ── */
+  #sig-filter-signal-dd,#sig-filter-futures-dd{
+    position:fixed!important;
+    left:14px!important;
+    right:14px!important;
+    top:auto!important;
+    max-height:60vh;
+    overflow-y:auto;
+  }
+
+  /* ── Correlation risk ── */
+  .corr-grid{grid-template-columns:1fr 1fr!important;}
+
+  /* ── Hide scroll hint on small screens ── */
+  .scroll-hint{display:none;}
+
+  /* ── Setup screen ── */
+  .setup-box{padding:20px 16px;}
+  .setup-title{font-size:1.8rem;}
+  .setup-steps{font-size:.58rem;padding:12px;}
+}
+
+/* ── Very small phones (< 400px) ── */
+@media(max-width:400px){
+  .wrapper{padding:10px 10px;}
+  .tl-stats{grid-template-columns:1fr 1fr!important;}
+  .panel{padding:12px 10px;}
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
