@@ -4423,10 +4423,19 @@ function setEditCur(c) {
 }
 
 function editAutoCalcR() {
-  const rv  = parseFloat(document.getElementById('edit-rvalue').value);
-  const pnl = parseFloat(document.getElementById('edit-pnl').value);
+  const rv     = parseFloat(document.getElementById('edit-rvalue').value);
+  const pnl    = parseFloat(document.getElementById('edit-pnl').value);
+  const risked = parseFloat(document.getElementById('edit-risked').value);
+  // Recalc P&L R
   if (!isNaN(rv) && rv !== 0 && !isNaN(pnl)) {
     document.getElementById('edit-r').value = (pnl / rv).toFixed(2);
+  }
+  // Recalc Risked R
+  const riskedREl = document.getElementById('edit-risked-r');
+  if (!isNaN(rv) && rv !== 0 && !isNaN(risked)) {
+    riskedREl.value = (risked / rv).toFixed(2);
+  } else {
+    riskedREl.value = '';
   }
 }
 
