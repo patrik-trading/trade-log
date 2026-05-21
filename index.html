@@ -1154,8 +1154,8 @@ body.light #sig-filter-futures-dd * {
           </tbody>
         </table>
         <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
-          <b style="color:var(--text)">Read Saturday morning</b> after CFTC release (Friday 3:30 PM ET).<br>
-          Use <b style="color:var(--accent)">last closed bar</b> values from the yield table — yellow rows for preview, white rows to log.
+          <b style="color:var(--text)">Read Monday morning</b> before market open.<br>
+          Use <b style="color:var(--accent)">last closed bar</b> values (white rows) from the yield table to log COT, yield, OI and price direction.
         </div>
       </div>
 
@@ -1170,8 +1170,8 @@ body.light #sig-filter-futures-dd * {
           </tbody>
         </table>
         <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
-          <b style="color:var(--text)">Read Monday morning</b> before market open.<br>
-          Tactical below 10% = entry window open. Hook = raw crosses above smoothed from below 10.
+          <b style="color:var(--text)">Monitor daily until order is placed.</b><br>
+          Tactical below 10% = entry window open. Hook = raw crosses above smoothed from below 10. Once filled — no need to monitor daily.
         </div>
       </div>
     </div>
@@ -2891,9 +2891,10 @@ function renderTrades(){
     const acTag=t.account&&t.account!=='Default'?` <span style="font-size:.5rem;color:var(--muted2)">[${t.account}]</span>`:'';
     const riskedCell=t.risked!=null?`<td style="color:var(--accent)">${ts}${t.risked.toFixed(2)}</td>`:'<td style="color:var(--muted2)">—</td>';
     const riskedRCell=t.risked_r!=null?`<td style="color:var(--accent)">${t.risked_r.toFixed(2)}R</td>`:'<td style="color:var(--muted2)">—</td>';
-    const rrVal = (t.r!=null && t.risked_r!=null && t.risked_r!==0) ? Math.abs(t.r/t.risked_r) : null;
-    const rrCell = rrVal!=null ? `<td style="color:${rrVal>=2?'var(--mega-bull)':rrVal>=1?'var(--bull)':'var(--muted2)'};font-family:'DM Mono'">${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+Math.abs(t.pnl).toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
+    const rrVal = (t.r!=null && t.risked_r!=null && t.risked_r!==0) ? t.r/t.risked_r : null;
+    const rrCol = rrVal==null?'var(--muted2)':rrVal>=2?'var(--mega-bull)':rrVal>=1?'var(--bull)':rrVal>0?'var(--muted2)':rrVal>-1?'var(--bear)':'var(--mega-bear)';
+    const rrCell = rrVal!=null ? `<td style="color:${rrCol};font-family:'DM Mono'">${rrVal>=0?'+':''}${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
   }).join('');
 
   // ── STREAKS (BE trades ignored, not streak-breaking) ──
