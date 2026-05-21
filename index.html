@@ -890,8 +890,8 @@ body.light #sig-filter-futures-dd * {
         <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between"><span>← scroll sideways · scroll down ↕</span><span id="trade-count-label"></span></div>
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>1R Val</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
-            <tbody id="tl-tbody"><tr><td colspan="15" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
+            <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
+            <tbody id="tl-tbody"><tr><td colspan="19" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -1131,325 +1131,212 @@ body.light #sig-filter-futures-dd * {
 <!-- TAB TRADING RULES -->
 <div class="tab-pane" id="tab-rules">
 
-  <!-- Section 1: Weekly Bias -->
-  <div class="panel" style="margin-bottom:18px">
-    <div class="ptitle">Weekly Bias — Scenario Map</div>
-    <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem;min-width:600px">
-        <thead>
-          <tr>
-            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Scenario</th>
-            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">COT Index</th>
-            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Yield Spread % (Col D)</th>
-            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Weekly Bias</th>
-            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Trade Strategy (Daily Chart)</th>
-          </tr>
-        </thead>
-        <tbody id="rules-bias-tbody">
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#22c55e">🌱 The Spring</td>
-            <td class="rules-cell">&lt; 15 <span class="rules-tag">Max Short · Both ▲</span></td>
-            <td class="rules-cell">&lt; 35 <span class="rules-tag">Cheap · Turning UP</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-mega-bull">MEGA BULLISH</span></td>
-            <td class="rules-cell rules-strategy">Market abandoned but macro spread improving. Early institutional accumulation before broad participation. Both COT and yield turning up together — highest conviction long. Buy the Hook when Daily 21 hooks up from below 10.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#34d399">♻️ The Recovery</td>
-            <td class="rules-cell">15 – 40 <span class="rules-tag">Covering · ▲ Rising</span></td>
-            <td class="rules-cell">40 – 65 <span class="rules-tag">Improving · ▲ Rising</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td>
-            <td class="rules-cell rules-strategy">Macro backdrop improving while institutions rebuild exposure. Trend emerging from recovery phase — buy dips to 20 SMA. Smaller size than Spring. Momentum building but not yet at full expansion.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#3b82f6">🚀 The Surge</td>
-            <td class="rules-cell">60 – 85 <span class="rules-tag">Actively Buying · ▲</span></td>
-            <td class="rules-cell">60 – 85 <span class="rules-tag">Strong · ▲ Rising</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td>
-            <td class="rules-cell rules-strategy">Full trend expansion — strong carry regime with broad institutional participation and momentum alignment. Buy 20 SMA dips when Daily hooks up. Do not fade this move.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#ef4444">🪨 The Cliff</td>
-            <td class="rules-cell">&gt; 85 <span class="rules-tag">Max Long · Still Rising/Flat</span></td>
-            <td class="rules-cell">&gt; 80 <span class="rules-tag">Expensive · Flat or Slowing</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-mega-bear">MEGA BEARISH</span></td>
-            <td class="rules-cell rules-strategy">Crowded carry trade — everyone already positioned. Trend intact but asymmetry deteriorating as yield spread flattens. Late-stage exhaustion risk. Sell the Hook when Daily 21 hooks down from above 90.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#a855f7">🪤 The Trap</td>
-            <td class="rules-cell">&gt; 85 <span class="rules-tag">Max Long · Flat/▼</span></td>
-            <td class="rules-cell">50 – 80 <span class="rules-tag">▼ Falling</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td>
-            <td class="rules-cell rules-strategy">Institutions remain heavily long while macro yield advantage deteriorates. Distribution phase beginning — longs are trapped. Look for shorts at supply zones. Do not buy this market.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#f97316">📉 The Slide</td>
-            <td class="rules-cell">20 – 45 <span class="rules-tag">Distributing · ▼</span></td>
-            <td class="rules-cell">&lt; 45 <span class="rules-tag">Weak · ▼ Falling</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td>
-            <td class="rules-cell rules-strategy">Weak macro spread with declining institutional participation. Persistent bearish environment — sell 20 SMA rallies when Daily hooks down. Do not try to pick a bottom.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-scenario" style="color:#6b7280">⚡ The Conflict</td>
-            <td class="rules-cell">Extreme <span class="rules-tag">Diverging</span></td>
-            <td class="rules-cell">Opposite Extreme <span class="rules-tag">Diverging</span></td>
-            <td class="rules-cell"><span class="rules-bias rules-neutral">NEUTRAL</span></td>
-            <td class="rules-cell rules-strategy">STAY FLAT. Positioning and macro spreads completely disagree. Transitional/choppy regime with unstable flows and false moves. Wait for resolution before committing any capital.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Category tabs -->
+  <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;max-width:520px">
+    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">&#x1F4CA; Indicator Setup</button>
+    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">&#x1F4C5; Weekly Bias</button>
+    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">&#x26A1; Daily Trigger</button>
   </div>
 
-  <!-- Section 2: Extreme Valuation Setup + Entry Steps side by side -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px" class="rules-two-col">
+  <!-- ══ INDICATOR SETUP ══ -->
+  <div id="rules-cat-indicator">
 
-    <!-- Extreme Valuation/Reversal Setup -->
-    <div class="panel">
-      <div class="ptitle">Extreme Valuation / Reversal Setup</div>
-      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem;margin-bottom:18px">
-        <thead>
-          <tr>
-            <th class="rules-th">Timeframe</th>
-            <th class="rules-th">Lookback</th>
-            <th class="rules-th">Smoothing</th>
-            <th class="rules-th">The Job</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="rules-row">
-            <td class="rules-cell" style="font-weight:600;color:var(--accent)">Weekly</td>
-            <td class="rules-cell">13</td>
-            <td class="rules-cell">3</td>
-            <td class="rules-cell" style="color:var(--text)">The <b>Filter</b>: Tells you the dominant institutional regime (Bullish &gt; 50 / Bearish &lt; 50).</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="font-weight:600;color:var(--accent)">Daily</td>
-            <td class="rules-cell">21</td>
-            <td class="rules-cell">3</td>
-            <td class="rules-cell" style="color:var(--text)">The <b>Trigger</b>: Finds the "overstretched" points (90/10) for the snap-back.</td>
-          </tr>
-        </tbody>
-      </table>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px" class="rules-two-col">
 
-      <!-- Entry Steps -->
-      <div style="font-family:'DM Mono';font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Entry Steps</div>
-      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
-        <thead>
-          <tr>
-            <th class="rules-th">Step</th>
-            <th class="rules-th">Indicator Status</th>
-            <th class="rules-th">Action</th>
-            <th class="rules-th">Psychology</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="rules-row">
-            <td class="rules-cell"><span class="rules-step">1</span> The Hook</td>
-            <td class="rules-cell">Daily 21 hits &lt; 10</td>
-            <td class="rules-cell"><span class="rules-action-bull">Buy 1st Half</span></td>
-            <td class="rules-cell rules-psych">I am buying the panic.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell"><span class="rules-step">2</span> The Shift</td>
-            <td class="rules-cell">Daily 21 crosses 50</td>
-            <td class="rules-cell"><span class="rules-action-hold">Hold</span></td>
-            <td class="rules-cell rules-psych">Fair value reached. Let's see if it trends.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell"><span class="rules-step">3</span> The Surge</td>
-            <td class="rules-cell">Daily 63 crosses 65</td>
-            <td class="rules-cell"><span class="rules-action-bull">Buy 2nd Half</span></td>
-            <td class="rules-cell rules-psych">Institutions are joining. This is a trend.</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell"><span class="rules-step">4</span> The Exit</td>
-            <td class="rules-cell">Daily 63 crosses &lt; 50</td>
-            <td class="rules-cell"><span class="rules-action-exit">Close All</span></td>
-            <td class="rules-cell rules-psych">Momentum is dead. Take the bag.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Momentum Setup -->
-    <div class="panel">
-      <div class="ptitle">Momentum Setup</div>
-      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem;margin-bottom:18px">
-        <thead>
-          <tr>
-            <th class="rules-th">Feature</th>
-            <th class="rules-th">Daily Chart (Entry)</th>
-            <th class="rules-th">Weekly Chart (Trend)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">Yield Percentile Lookback</td>
-            <td class="rules-cell">63 Days</td>
-            <td class="rules-cell">13 Weeks</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">Yield Signal Smoothing (EMA)</td>
-            <td class="rules-cell">5</td>
-            <td class="rules-cell">3</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">COT Percentile Lookback</td>
-            <td class="rules-cell">13 Weeks</td>
-            <td class="rules-cell">13 Weeks</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">COT Smoothing (EMA)</td>
-            <td class="rules-cell">3</td>
-            <td class="rules-cell">3</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">Upper Threshold (Bullish)</td>
-            <td class="rules-cell">65</td>
-            <td class="rules-cell">65</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">Lower Threshold (Bearish)</td>
-            <td class="rules-cell">35</td>
-            <td class="rules-cell">35</td>
-          </tr>
-          <tr class="rules-row">
-            <td class="rules-cell" style="color:var(--accent)">Price Filter</td>
-            <td class="rules-cell">20 SMA</td>
-            <td class="rules-cell" style="color:var(--muted2)">None (Context only)</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Long & Short setups -->
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-left:3px solid var(--mega-bull);border-radius:7px;padding:14px">
-          <div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:.08em;color:var(--mega-bull);margin-bottom:8px">1. The Long Setup (Buy)</div>
-          <div style="font-family:'DM Mono';font-size:.72rem;color:var(--text);line-height:1.8">
-            <div><span style="color:var(--muted2)">Weekly:</span> COT and Yield Percentile both above 50 — "The Big Money" is bullish.</div>
-            <div><span style="color:var(--muted2)">Daily:</span> Yield Percentile crosses above 65.</div>
-            <div><span style="color:var(--muted2)">Price:</span> Sitting in a Demand Zone or pulling back to the 20 SMA.</div>
-          </div>
-        </div>
-        <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-left:3px solid var(--mega-bear);border-radius:7px;padding:14px">
-          <div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:.08em;color:var(--mega-bear);margin-bottom:8px">2. The Short Setup (Sell)</div>
-          <div style="font-family:'DM Mono';font-size:.72rem;color:var(--text);line-height:1.8">
-            <div><span style="color:var(--muted2)">Weekly:</span> COT and Yield Percentile both below 50 — "The Big Money" is bearish.</div>
-            <div><span style="color:var(--muted2)">Daily:</span> Yield Percentile crosses below 35.</div>
-            <div><span style="color:var(--muted2)">Price:</span> Sitting in a Supply Zone or pulling back to the 20 SMA.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- Section 3: Institutional Filters -->
-  <div class="panel" style="margin-top:18px">
-    <div class="ptitle">Institutional Filters — How to Use Them for Decisions</div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px" class="rules-two-col">
-
-      <!-- Left: What each filter tells you -->
-      <div>
-        <div style="font-family:'DM Mono';font-size:.65rem;letter-spacing:.18em;color:var(--accent);margin-bottom:12px">WHAT EACH FILTER TELLS YOU</div>
-
-        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem;margin-bottom:14px">
-          <thead>
-            <tr>
-              <th class="rules-th">Filter</th>
-              <th class="rules-th">What You Enter</th>
-              <th class="rules-th">What It Tells You</th>
-            </tr>
-          </thead>
+      <!-- Weekly settings -->
+      <div class="panel">
+        <div class="ptitle">Weekly Chart Settings (13,3)</div>
+        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+          <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
-            <tr class="rules-row">
-              <td class="rules-cell" style="color:var(--accent);font-weight:500">Spec COT %<br><span style="color:var(--muted2);font-size:.6rem">Col B</span></td>
-              <td class="rules-cell">0–100 percentile of speculative net position</td>
-              <td class="rules-cell" style="color:var(--text)">Where specs are positioned relative to history. Below 15 = max short (contrarian bullish). Above 85 = max long (contrarian bearish).</td>
-            </tr>
-            <tr class="rules-row">
-              <td class="rules-cell" style="color:var(--accent);font-weight:500">Commercial COT %<br><span style="color:var(--muted2);font-size:.6rem">Col F</span></td>
-              <td class="rules-cell">0–100 percentile of commercial hedger net position</td>
-              <td class="rules-cell" style="color:var(--text)">Where the smart money is. Above 75 = hedgers accumulating aggressively (prices cheap to them). Below 25 = distributing (prices expensive). This confirms or questions the spec signal.</td>
-            </tr>
-            <tr class="rules-row">
-              <td class="rules-cell" style="color:var(--accent);font-weight:500">Z-Score<br><span style="color:var(--muted2);font-size:.6rem">Col G</span></td>
-              <td class="rules-cell">Standard deviations from mean (auto-calculated from Col B)</td>
-              <td class="rules-cell" style="color:var(--text)">Normalises positioning for regime changes. -2σ is statistically extreme short regardless of era. More precise than raw percentile when position sizes have shifted over time.</td>
-            </tr>
-            <tr class="rules-row">
-              <td class="rules-cell" style="color:var(--accent);font-weight:500">Open Interest</td>
-              <td class="rules-cell">OI direction + Price direction (week-on-week)</td>
-              <td class="rules-cell" style="color:var(--text)">Reveals WHO is driving the move. Rising price + Rising OI = new institutional longs entering (strong). Rising price + Falling OI = short covering (weak, may reverse).</td>
-            </tr>
-            <tr class="rules-row">
-              <td class="rules-cell" style="color:var(--accent);font-weight:500">Yield Spread Momentum</td>
-              <td class="rules-cell">Current spread % + 4-week-ago spread %</td>
-              <td class="rules-cell" style="color:var(--text)">Rate of change of the carry differential. Fast-expanding carry (+8 to +10) = strong institutional tailwind. Contracting carry = headwind even if level is still positive.</td>
-            </tr>
+            <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">COT Engine</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Positioning filter — who is positioned where</td></tr>
+            <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Yield Valuation</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Carry filter — is the macro environment supportive</td></tr>
           </tbody>
         </table>
-      </div>
-
-      <!-- Right: Decision framework -->
-      <div>
-        <div style="font-family:'DM Mono';font-size:.65rem;letter-spacing:.18em;color:var(--accent);margin-bottom:12px">HOW TO COMBINE THEM — DECISION FRAMEWORK</div>
-
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-left:3px solid var(--mega-bull);border-radius:7px;padding:13px">
-            <div style="font-family:'Bebas Neue';font-size:1rem;color:var(--mega-bull);letter-spacing:.06em;margin-bottom:6px">🟢 HIGH CONVICTION LONG (Score 70–100)</div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);line-height:1.8">
-              Spec COT &lt;15 + Commercial &gt;75 + Z-Score &lt;-2 + OI Accumulation + Yield Expanding<br>
-              <span style="color:var(--muted2)">→ Full position size. All five signals aligned. Rare — when it happens, this is your highest-R trade.</span>
-            </div>
-          </div>
-          <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:13px">
-            <div style="font-family:'Bebas Neue';font-size:1rem;color:var(--bull);letter-spacing:.06em;margin-bottom:6px">🔵 BULLISH (Score 55–70)</div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);line-height:1.8">
-              3–4 filters bullish, 1–2 neutral or missing<br>
-              <span style="color:var(--muted2)">→ Standard position size. Good setup but not maximum conviction. Use your Extreme or Momentum entry type.</span>
-            </div>
-          </div>
-          <div style="background:rgba(107,114,128,.07);border:1px solid rgba(107,114,128,.2);border-left:3px solid var(--neutral);border-radius:7px;padding:13px">
-            <div style="font-family:'Bebas Neue';font-size:1rem;color:var(--neutral);letter-spacing:.06em;margin-bottom:6px">⚪ NEUTRAL (Score 45–55)</div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);line-height:1.8">
-              Filters mixed or pointing in different directions<br>
-              <span style="color:var(--muted2)">→ Wait. The Conflict phase. No edge — preserve capital until filters align.</span>
-            </div>
-          </div>
-          <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-left:3px solid var(--mega-bear);border-radius:7px;padding:13px">
-            <div style="font-family:'Bebas Neue';font-size:1rem;color:var(--mega-bear);letter-spacing:.06em;margin-bottom:6px">🔴 HIGH CONVICTION SHORT (Score 0–30)</div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);line-height:1.8">
-              Spec COT &gt;85 + Commercial &lt;25 + Z-Score &gt;+2 + OI Distribution + Yield Contracting<br>
-              <span style="color:var(--muted2)">→ Full position size short. Crowded carry trade unwinding — highest-R short setup.</span>
-            </div>
-          </div>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
+          <b style="color:var(--text)">Read Saturday morning</b> after CFTC release (Friday 3:30 PM ET).<br>
+          Use <b style="color:var(--accent)">last closed bar</b> values from the yield table — yellow rows for preview, white rows to log.
         </div>
       </div>
+
+      <!-- Daily settings -->
+      <div class="panel">
+        <div class="ptitle">Daily Chart Settings (21,3)</div>
+        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+          <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
+          <tbody>
+            <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Tactical (fast)</td><td class="rules-cell">21 days</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Entry trigger — finds the hook below 10 or above 90</td></tr>
+            <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Strategic (slow)</td><td class="rules-cell">65 days</td><td class="rules-cell">5 EMA</td><td class="rules-cell">Regime — above 50 bullish, below 50 bearish</td></tr>
+          </tbody>
+        </table>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
+          <b style="color:var(--text)">Read Monday morning</b> before market open.<br>
+          Tactical below 10% = entry window open. Hook = raw crosses above smoothed from below 10.
+        </div>
+      </div>
+    </div>
+
+    <!-- COT Engine columns -->
+    <div class="panel" style="margin-bottom:18px">
+      <div class="ptitle">COT Engine — Column Guide</div>
+      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
+        <thead><tr><th class="rules-th">Column</th><th class="rules-th">What It Shows</th><th class="rules-th">What You Enter in Dashboard</th></tr></thead>
+        <tbody>
+          <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col B — Spec COT %</td><td class="rules-cell">Speculative positioning percentile (0–100) vs 13-week history</td><td class="rules-cell">COT % field. Below 15 = contrarian bullish. Above 85 = contrarian bearish.</td></tr>
+          <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col C — COT Direction</td><td class="rules-cell">Smoothed line rising or falling vs 2 weeks ago</td><td class="rules-cell">COT Direction buttons (Rising / Falling / Flat)</td></tr>
+          <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col D — Yield %</td><td class="rules-cell">Yield spread percentile (0–100) — last closed bar</td><td class="rules-cell">Current Yield % and 4W Ago % in the YS Momentum section</td></tr>
+          <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col F — Comm COT %</td><td class="rules-cell">Commercial hedger positioning percentile</td><td class="rules-cell">Commercial COT % field. Above 75 = smart money accumulating.</td></tr>
+          <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col G — Z-Score</td><td class="rules-cell">Standard deviations from mean (auto-calculated)</td><td class="rules-cell">Z-Score field. Below -2 = statistically extreme short.</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- OI Quick Reference -->
-    <div style="font-family:'DM Mono';font-size:.65rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">OPEN INTEREST QUICK REFERENCE</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-      <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px 12px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);font-weight:500;margin-bottom:4px">📈 Accumulation</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price ▲ + OI ▲<br>New longs entering — institutional buying. Strong trend confirmation. +20 pts.</div>
-      </div>
-      <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:10px 12px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);font-weight:500;margin-bottom:4px">📉 Distribution</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price ▼ + OI ▲<br>New shorts entering — institutional selling. Strong downtrend. -20 pts.</div>
-      </div>
-      <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);border-radius:6px;padding:10px 12px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--bear);font-weight:500;margin-bottom:4px">⚠ Short Covering</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price ▲ + OI ▼<br>Shorts exiting, not new longs. Weak rally — do not chase. +5 pts only.</div>
-      </div>
-      <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.2);border-radius:6px;padding:10px 12px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);font-weight:500;margin-bottom:4px">⚠ Long Liquidation</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price ▼ + OI ▼<br>Longs exiting — exhaustion, possible reversal coming. Watch for hook. +5 pts.</div>
+    <div class="panel">
+      <div class="ptitle">Open Interest Quick Reference</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px 12px">
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);font-weight:500;margin-bottom:4px">Accumulation</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25B2; + OI &#x25B2;<br>New longs entering. Strong. +20 pts.</div>
+        </div>
+        <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:10px 12px">
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);font-weight:500;margin-bottom:4px">Distribution</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25BC; + OI &#x25B2;<br>New shorts entering. Strong. -20 pts.</div>
+        </div>
+        <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);border-radius:6px;padding:10px 12px">
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--bear);font-weight:500;margin-bottom:4px">Short Covering</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25B2; + OI &#x25BC;<br>Shorts exiting. Weak rally. +5 pts.</div>
+        </div>
+        <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.2);border-radius:6px;padding:10px 12px">
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);font-weight:500;margin-bottom:4px">Long Liquidation</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25BC; + OI &#x25BC;<br>Longs exiting. Possible reversal. +5 pts.</div>
+        </div>
       </div>
     </div>
-  </div>
+
+  </div><!-- /rules-cat-indicator -->
+
+  <!-- ══ WEEKLY BIAS ══ -->
+  <div id="rules-cat-bias" style="display:none">
+
+    <!-- Scenario Map -->
+    <div class="panel" style="margin-bottom:18px">
+      <div class="ptitle">Weekly Bias — Scenario Map</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem;min-width:600px">
+          <thead><tr>
+            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Scenario</th>
+            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">COT Index</th>
+            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Yield Spread %</th>
+            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Bias</th>
+            <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Strategy &amp; Size</th>
+          </tr></thead>
+          <tbody id="rules-bias-tbody">
+            <tr class="rules-row"><td class="rules-scenario" style="color:#22c55e">&#x1F331; Spring</td><td class="rules-cell">&lt;15 <span class="rules-tag">Max Short &#x25B2;</span></td><td class="rules-cell">&lt;35 <span class="rules-tag">Cheap &#x25B2;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bull">MEGA BULL</span></td><td class="rules-cell rules-strategy">Both COT and yield turning up. Hook from daily below 10. 1R long.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#34d399">&#x267B;&#xFE0F; Recovery</td><td class="rules-cell">15–40 <span class="rules-tag">Covering &#x25B2;</span></td><td class="rules-cell">40–65 <span class="rules-tag">Improving</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Institutions rebuilding. 0.75R long.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#3b82f6">&#x1F680; Surge</td><td class="rules-cell">60–85 <span class="rules-tag">Buying &#x25B2;</span></td><td class="rules-cell">60–85 <span class="rules-tag">Strong</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Full expansion. Trend follow only. 0.75R long.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#ef4444">&#x1FAA8; Cliff</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">&gt;80 <span class="rules-tag">Expensive &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bear">MEGA BEAR</span></td><td class="rules-cell rules-strategy">Crowded. Hook from daily above 90. 1R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#a855f7">&#x1FA24; Trap</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">50–80 <span class="rules-tag">Falling</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Distribution phase. Supply zone shorts. 0.5R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#f97316">&#x1F4C9; Slide</td><td class="rules-cell">20–45 <span class="rules-tag">Distributing &#x25BC;</span></td><td class="rules-cell">&lt;45 <span class="rules-tag">Weak &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Persistent bearish. Sell rallies. 0.75R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#6b7280">&#x26A1; Conflict</td><td class="rules-cell">Extreme</td><td class="rules-cell">Opposite extreme</td><td class="rules-cell"><span class="rules-bias rules-neutral">NEUTRAL</span></td><td class="rules-cell rules-strategy">STAY FLAT. No edge — skip regardless of inst score.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Decision grid -->
+    <div class="panel" style="margin-bottom:18px">
+      <div class="ptitle">Position Sizing by Setup</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:14px">
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);letter-spacing:.12em;margin-bottom:10px">BULLISH SETUPS</div>
+          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
+            <div><b style="color:var(--mega-bull)">Spring</b> — phase + score 70+ → 1R</div>
+            <div><b style="color:var(--bull)">Recovery</b> — phase confirmed → 0.75R</div>
+            <div><b style="color:var(--bull)">Surge</b> — trend following → 0.75R</div>
+            <div><b style="color:var(--accent)">Just Inst Filter</b> — score 70+, no phase → 0.5R max</div>
+          </div>
+        </div>
+        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:14px">
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);letter-spacing:.12em;margin-bottom:10px">BEARISH SETUPS</div>
+          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
+            <div><b style="color:var(--mega-bear)">Cliff</b> — phase + score 0-30 → 1R short</div>
+            <div><b style="color:var(--bear)">Trap</b> — distribution phase → 0.5R short</div>
+            <div><b style="color:var(--bear)">Slide</b> — persistent bearish → 0.75R short</div>
+            <div><b style="color:var(--accent)">Just Inst Filter</b> — score 0-30, no phase → 0.5R short max</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(107,114,128,.1);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px">
+        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.12em;margin-bottom:6px">SKIP — NO TRADE</div>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2">
+          <div>Conflict phase — regardless of inst score</div>
+          <div>Neutral + inst score 30–70 — no directional edge</div>
+          <div>Score below 40 on any phase signal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inst score guide -->
+    <div class="panel">
+      <div class="ptitle">Institutional Score Interpretation</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-left:3px solid var(--mega-bull);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--mega-bull);margin-bottom:4px">70–100 — HIGH CONVICTION LONG</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">Spec COT &lt;15 + Comm &gt;75 + Z &lt;-2 + OI Accumulation + Yield Expanding → Full 1R with phase, 0.5R without.</div></div>
+        <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--bull);margin-bottom:4px">55–70 — BULLISH</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">3–4 filters bullish → Standard position with phase confirmation.</div></div>
+        <div style="background:rgba(107,114,128,.07);border:1px solid rgba(107,114,128,.2);border-left:3px solid var(--neutral);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--neutral);margin-bottom:4px">45–55 — NEUTRAL</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">Filters mixed → Wait. No edge.</div></div>
+        <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-left:3px solid var(--bear);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--bear);margin-bottom:4px">30–45 — BEARISH</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">3–4 filters bearish → Standard short with phase confirmation.</div></div>
+        <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-left:3px solid var(--mega-bear);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--mega-bear);margin-bottom:4px">0–30 — HIGH CONVICTION SHORT</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">Spec COT &gt;85 + Comm &lt;25 + Z &gt;+2 + OI Distribution + Yield Contracting → 1R short with phase, 0.5R without.</div></div>
+      </div>
+    </div>
+
+  </div><!-- /rules-cat-bias -->
+
+  <!-- ══ DAILY TRIGGER ══ -->
+  <div id="rules-cat-trigger" style="display:none">
+
+    <div class="panel" style="margin-bottom:18px">
+      <div class="ptitle">Daily Trigger — Entry Sequence</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">1</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Weekly bias confirmed Saturday — COT, yield, inst score all checked</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">The decision is made on Saturday. Monday is just execution.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">2</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Daily raw percentile below 10% (long) or above 90% (short)</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Entry timing window open. Not a trigger — just permission to look for entry.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">3</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Identify 4H demand (long) or supply (short) zone on unadjusted futures chart</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Where did price spend least time before moving away aggressively? Mark top and bottom.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">4</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Translate zone to CFD using saved basis in Zone Translator tab</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Use Weekday mode. Enter futures zone levels → CFD levels calculated instantly.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">5</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Place limit order inside CFD zone — let price come to you</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Stop below zone bottom (long) or above zone top (short). Zone defines the stop.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">6</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Daily 21,3 hook confirms (optional but preferred)</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Hook = raw crosses above smoothed from below 10. If it fired Friday, enter Monday open.</div></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ptitle">Execution Rules</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bull);letter-spacing:.12em;margin-bottom:8px">DO</div>
+          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
+            <div>Place limit orders at the zone — wait</div>
+            <div>Use previous week high/low as reference</div>
+            <div>Enter at London open for best fills</div>
+            <div>Check order is still valid after weekend gap</div>
+            <div>Log the trade immediately after fill</div>
+            <div>Use unadjusted futures for zone identification</div>
+            <div>Use adjusted futures for indicator reading</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bear);letter-spacing:.12em;margin-bottom:8px">DON'T</div>
+          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
+            <div>Chase entry after hook fires — wait for retest</div>
+            <div>Move stop closer during the trade</div>
+            <div>Add filters at execution time</div>
+            <div>Trade Conflict phase regardless of inst score</div>
+            <div>Size up beyond 1R on any single trade</div>
+            <div>Overtrade — one clean setup beats three mediocre</div>
+            <div>Use EMA on price for entry — that's retail bias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /rules-cat-trigger -->
 
 </div><!-- /tab-rules -->
 <!-- SIGNAL EDIT MODAL -->
@@ -2906,6 +2793,19 @@ document.addEventListener('click', e => {
   }
 });
 
+
+function switchRulesCat(cat) {
+  ['indicator','bias','trigger'].forEach(c => {
+    const panel = document.getElementById('rules-cat-'+c);
+    const btn   = document.getElementById('rules-btn-'+c);
+    if(panel) panel.style.display = c===cat ? 'block' : 'none';
+    if(btn) {
+      if(c===cat) { btn.style.background='var(--accent)'; btn.style.color='var(--bg)'; }
+      else { btn.style.background='transparent'; btn.style.color='var(--muted2)'; }
+    }
+  });
+}
+
 // ── TRADE LOG ──
 function autoMonth(){const d=document.getElementById('tl-date').value;if(!d)return;document.getElementById('tl-month').value=new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'});}
 function selTag(gid,btn){document.querySelectorAll(`#${gid} .tag-btn`).forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});btn.classList.add('sel');const m=btn.getAttribute('style').match(/--tc:([^;)]+)/);if(m){btn.style.background=m[1].trim();btn.style.color='#080a0f';}}
@@ -2981,7 +2881,7 @@ function renderTrades(){
   const ex=document.getElementById('tl-expect');ex.textContent=exp;ex.style.color=parseFloat(exp)>=0?'var(--mega-bull)':'var(--mega-bear)';
   const sym=currentCurrency==='EUR'?'€':'$';
   const tb=document.getElementById('tl-tbody');
-  if(!ft.length){tb.innerHTML='<tr><td colspan="15" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
+  if(!ft.length){tb.innerHTML='<tr><td colspan="19" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
   else tb.innerHTML=ft.map(t=>{
     const pc=PC[t.phase]||'#6b7280',ts=t.currency==='EUR'?'€':'$';
     const rC=t.r===null?'td-zero':t.r>0.1?'td-pos':t.r<-0.1?'td-neg':'td-zero';
@@ -2991,7 +2891,9 @@ function renderTrades(){
     const acTag=t.account&&t.account!=='Default'?` <span style="font-size:.5rem;color:var(--muted2)">[${t.account}]</span>`:'';
     const riskedCell=t.risked!=null?`<td style="color:var(--accent)">${ts}${t.risked.toFixed(2)}</td>`:'<td style="color:var(--muted2)">—</td>';
     const riskedRCell=t.risked_r!=null?`<td style="color:var(--accent)">${t.risked_r.toFixed(2)}R</td>`:'<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+Math.abs(t.pnl).toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td><td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
+    const rrVal = (t.r!=null && t.risked_r!=null && t.risked_r!==0) ? Math.abs(t.r/t.risked_r) : null;
+    const rrCell = rrVal!=null ? `<td style="color:${rrVal>=2?'var(--mega-bull)':rrVal>=1?'var(--bull)':'var(--muted2)'};font-family:'DM Mono'">${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+Math.abs(t.pnl).toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
   }).join('');
 
   // ── STREAKS (BE trades ignored, not streak-breaking) ──
@@ -3543,29 +3445,30 @@ function renderReview(){
   else{
     if(rCanvas) rCanvas.style.display='block'; if(rEmpty) rEmpty.style.display='none';
     if(rdistChartInst){ rdistChartInst.destroy(); rdistChartInst=null; }
-    const buckets = {'-3+':0,'-2to-3':0,'-1to-2':0,'-0to-1':0,'BE':0,'0to1':0,'1to2':0,'2to3':0,'3+':0};
-    ft.forEach(t=>{
-      const r = t.r;
-      if(r>=-0.1&&r<=0.1) buckets['BE']++;
-      else if(r>3)  buckets['3+']++;
-      else if(r>2)  buckets['2to3']++;
-      else if(r>1)  buckets['1to2']++;
-      else if(r>0.1) buckets['0to1']++;
-      else if(r>=-1) buckets['-0to-1']++;
-      else if(r>=-2) buckets['-1to-2']++;
-      else if(r>=-3) buckets['-2to-3']++;
-      else buckets['-3+']++;
+    // Collect all unique R values rounded to 0.5 increments for granular buckets
+    const rValues = ft.map(t=>t.r).filter(r=>r!=null);
+    const beCount = rValues.filter(r=>r>=-0.1&&r<=0.1).length;
+    // Round each R to nearest 0.5 for bucketing
+    const bucketMap = {};
+    rValues.forEach(r=>{
+      if(r>=-0.1&&r<=0.1){ bucketMap['BE']=(bucketMap['BE']||0)+1; return; }
+      const rounded = Math.round(r*2)/2; // round to nearest 0.5
+      const key = rounded>=0?'+'+rounded.toFixed(1)+'R':rounded.toFixed(1)+'R';
+      bucketMap[key]=(bucketMap[key]||0)+1;
     });
-    const labels=['-3R+','-2 to -3R','-1 to -2R','0 to -1R','BE','0 to +1R','+1 to +2R','+2 to +3R','+3R+'];
-    const bkeys=['-3+','-2to-3','-1to-2','-0to-1','BE','0to1','1to2','2to3','3+'];
-    const colors=['#ef4444','#ef4444','#f97316','#fbbf24','#6b7280','#86efac','#22c55e','#16a34a','#14532d'];
+    // Sort keys: negatives first (most negative), then BE, then positives
+    const negKeys = Object.keys(bucketMap).filter(k=>k!=='BE'&&k.startsWith('-')).sort((a,b)=>parseFloat(a)-parseFloat(b));
+    const posKeys = Object.keys(bucketMap).filter(k=>k!=='BE'&&!k.startsWith('-')).sort((a,b)=>parseFloat(a)-parseFloat(b));
+    const bkeys = [...negKeys,'BE',...posKeys];
+    const labels = bkeys;
+    const colors = bkeys.map(k=>{ if(k==='BE') return '#6b7280'; const v=parseFloat(k); return v<-1?'#ef4444':v<0?'#f97316':v>2?'#14532d':v>1?'#16a34a':'#86efac'; });
     const isLight = document.body.classList.contains('light');
     const gridCol = isLight ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.06)';
     const textCol = isLight ? '#6b6050' : '#5a6380';
     const ctx2 = rCanvas.getContext('2d');
     rdistChartInst = new Chart(ctx2, {
       type:'bar',
-      data:{ labels, datasets:[{ data:bkeys.map(k=>buckets[k]), backgroundColor:colors, borderRadius:4 }] },
+      data:{ labels, datasets:[{ data:bkeys.map(k=>bucketMap[k]||0), backgroundColor:colors, borderRadius:4 }] },
       options:{
         responsive:true, maintainAspectRatio:false, animation:{duration:400},
         plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} trade${ctx.parsed.y!==1?'s':''}`}}},
@@ -3788,10 +3691,11 @@ function renderOpenTrades(){
       <table class="tl">
         <thead>
           <tr>
-            <th>Date</th><th>Month</th><th>Dir</th><th>Size</th>
-            <th>Symbol</th><th>Type</th><th>Entry Price</th>
-            <th>Risked</th><th>Risked R</th>
-            <th>Phase</th><th>Entry Type</th><th>Notes</th><th>Action</th>
+            <th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th>
+            <th>Symbol</th><th>Type</th><th>Price</th>
+            <th>Risked</th><th>Risked R</th><th>RR</th>
+            <th>PnL</th><th>R</th><th>1R Val</th>
+            <th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
