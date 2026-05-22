@@ -2372,11 +2372,11 @@ function renderFocusOfWeek(entries) {
         watchDir    = 'Short';
         proximity   = (50 - score) + Math.min(Math.abs(ysm), 8);
       }
-      // Commercial extreme building — even if COT not yet at threshold
-      else if (comm >= 80 && score >= 60) {
+      // Commercial extreme building — catches high comm + decent score
+      else if (comm >= 75 && score >= 58) {
         watchReason = 'Comm. Accumulation';
         watchDir    = 'Long';
-        proximity   = (comm - 75) + (score - 55);
+        proximity   = (comm - 70) + (score - 55);
       }
       else if (comm <= 20 && score <= 40) {
         watchReason = 'Comm. Distribution';
