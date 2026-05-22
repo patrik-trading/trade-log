@@ -449,8 +449,8 @@ body.light #sig-filter-futures-dd * {
       <option value="signals">📡 Signal Dashboard</option>
       <option value="tradelog">📒 Trade Log</option>
       <option value="review">📊 Performance Review</option>
-      <option value="converter">⇌ Futures → CFD</option>
-      <option value="rules">❋ Trading Rules</option>
+      <option value="converter">🔄 Futures → CFD</option>
+      <option value="rules">📘 Trading Rules</option>
     </select>
   </div>
 </div>
@@ -999,8 +999,8 @@ body.light #sig-filter-futures-dd * {
 
       <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📅 Weekend — Save Basis</button>
-        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📍 Weekday — Translate Zones</button>
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">🗓 Weekend — Save Basis</button>
+        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📐 Weekday — Translate Zones</button>
       </div>
 
       <!-- WEEKEND: Save basis per symbol -->
@@ -1311,7 +1311,7 @@ body.light #sig-filter-futures-dd * {
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">Daily Entry Types</div>
       <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">Weekly bias determines direction and size. The daily chart determines <b style="color:var(--text)">when</b> to enter. Two valid entry types — usable on any weekly setup regardless of phase.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="rp-entry-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.25);border-left:3px solid var(--accent);border-radius:7px;padding:14px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--accent);letter-spacing:.06em;margin-bottom:8px">Type 1 &mdash; Extreme Reversal</div>
           <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
