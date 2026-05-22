@@ -440,24 +440,23 @@ body.light #sig-filter-futures-dd * {
 <div class="tabs">
   <!-- Desktop tabs -->
   <div class="tab-btns-desktop">
-  <div class="tab-btns-desktop">
     <button class="tab-btn active" onclick="switchTab('signals')">📡 Signal Dashboard</button>
     <button class="tab-btn" onclick="switchTab('tradelog')">📒 Trade Log</button>
     <button class="tab-btn" onclick="switchTab('review')">📊 Performance Review</button>
     <button class="tab-btn" onclick="switchTab('converter')">🔄 Futures&#8594;CFD</button>
     <button class="tab-btn" onclick="switchTab('rules')">📘 Trading Rules</button>
+  </div>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
     <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer">
-      <option value="signals">Signal Dashboard</option>
-      <option value="tradelog">Trade Log</option>
-      <option value="review">Analytics</option>
-      <option value="converter">Futures → CFD</option>
-      <option value="rules">Rules</option>
+      <option value="signals">📡 Signal Dashboard</option>
+      <option value="tradelog">📒 Trade Log</option>
+      <option value="review">📊 Performance Review</option>
+      <option value="converter">🔄 Futures → CFD</option>
+      <option value="rules">📘 Trading Rules</option>
     </select>
   </div>
 </div>
-
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
   <div class="legend">
