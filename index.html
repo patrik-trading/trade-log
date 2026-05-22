@@ -2332,7 +2332,7 @@ function renderFocusOfWeek(entries) {
   // ── ON WATCH: Neutrals approaching a phase ──
   // Score proximity to Spring, Cliff, Recovery, Surge thresholds
   const onWatch = deduped
-    .filter(e => e.signal_key === 'NE' || e.signal_key === 'CF')
+    .filter(e => e.signal_key === 'NE')
     .map(e => {
       const cot    = parseFloat(e.cot) || 50;
       const comm   = parseFloat(e.commercial_cot) || 50;
