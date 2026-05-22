@@ -1001,7 +1001,16 @@ body.light #sig-filter-futures-dd * {
 
       <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">🗓 Weekend &mdash; Save Basis</button>
+        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📐 Weekday &mdash; Translate Zones</button>
+      </div>
+
+<!-- TAB TRADING RULES -->
+<div class="tab-pane" id="tab-rules">
+
+  <!-- Category tabs -->
+  <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;max-width:520px">
+    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
     <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📅 Weekly Bias</button>
     <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">⚡ Daily Trigger</button>
   </div>
@@ -1014,13 +1023,13 @@ body.light #sig-filter-futures-dd * {
       <!-- Weekly settings -->
       <div class="panel">
         <div class="ptitle">Weekly Chart Settings (13,3)</div>
-        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+        <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
           <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">COT Engine</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Positioning filter — who is positioned where</td></tr>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Yield Valuation</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Carry filter — is the macro environment supportive</td></tr>
           </tbody>
-        </table>
+        </table></div>
         <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
           <b style="color:var(--text)">Read Monday morning</b> before market open.<br>
           Use <b style="color:var(--accent)">last closed bar</b> values (white rows) from the yield table to log COT, yield, OI and price direction.
@@ -1030,13 +1039,13 @@ body.light #sig-filter-futures-dd * {
       <!-- Daily settings -->
       <div class="panel">
         <div class="ptitle">Daily Chart Settings (21,3)</div>
-        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+        <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
           <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Tactical (fast)</td><td class="rules-cell">21 days</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Entry trigger — finds the hook below 10 or above 90</td></tr>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Strategic (slow)</td><td class="rules-cell">65 days</td><td class="rules-cell">5 EMA</td><td class="rules-cell">Regime — above 50 bullish, below 50 bearish</td></tr>
           </tbody>
-        </table>
+        </table></div>
         <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
           <b style="color:var(--text)">Monitor daily until order is placed.</b><br>
           Tactical below 10% = entry window open. Hook = raw crosses above smoothed from below 10. Once filled — no need to monitor daily.
@@ -1047,7 +1056,7 @@ body.light #sig-filter-futures-dd * {
     <!-- COT Engine columns -->
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">COT Engine — Column Guide</div>
-      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
         <thead><tr><th class="rules-th">Column</th><th class="rules-th">What It Shows</th><th class="rules-th">What You Enter in Dashboard</th></tr></thead>
         <tbody>
           <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col B — Spec COT %</td><td class="rules-cell">Speculative positioning percentile (0–100) vs 13-week history</td><td class="rules-cell">COT % field. Below 15 = contrarian bullish. Above 85 = contrarian bearish.</td></tr>
@@ -1056,7 +1065,7 @@ body.light #sig-filter-futures-dd * {
           <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col F — Comm COT %</td><td class="rules-cell">Commercial hedger positioning percentile</td><td class="rules-cell">Commercial COT % field. Above 75 = smart money accumulating.</td></tr>
           <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col G — Z-Score</td><td class="rules-cell">Standard deviations from mean (auto-calculated)</td><td class="rules-cell">Z-Score field. Below -2 = statistically extreme short.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- OI Quick Reference -->
