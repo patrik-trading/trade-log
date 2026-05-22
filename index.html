@@ -429,7 +429,7 @@ body.light #sig-filter-futures-dd * {
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
     <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span id="sync-status">Connecting…</span></div>
     <div class="badge" id="dateBadge"></div>
-    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Light Mode</button>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Light</button>
     <button class="btn-sm" style="font-size:.55rem;padding:4px 9px" onclick="disconnectDB()">⚙ Reset DB Connection</button>
   </div>
 </header>
@@ -437,20 +437,20 @@ body.light #sig-filter-futures-dd * {
 <div class="tabs">
   <!-- Desktop tabs -->
   <div class="tab-btns-desktop">
-    <button class="tab-btn active" onclick="switchTab('signals')">&#x1F4E1; Signals</button>
-    <button class="tab-btn" onclick="switchTab('tradelog')">&#x1F4D2; Trade Log</button>
-    <button class="tab-btn" onclick="switchTab('review')">&#x1F4CA; Analytics</button>
-    <button class="tab-btn" onclick="switchTab('converter')">&#x1F504; Futures&#8594;CFD</button>
-    <button class="tab-btn" onclick="switchTab('rules')">&#x1F4D8; Rules</button>
+    <button class="tab-btn active" onclick="switchTab('signals')">📡 Signal Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('tradelog')">📒 Trade Log</button>
+    <button class="tab-btn" onclick="switchTab('review')">📊 Performance Review</button>
+    <button class="tab-btn" onclick="switchTab('converter')">🔄 Futures→CFD</button>
+    <button class="tab-btn" onclick="switchTab('rules')">📘 Trading Rules</button>
   </div>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
     <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer">
-      <option value="signals">&#x1F4E1; Signal Dashboard</option>
-      <option value="tradelog">&#x1F4D2; Trade Log</option>
-      <option value="review">&#x1F4CA; Performance Review</option>
-      <option value="converter">&#x1F504; Futures &#8594; CFD</option>
-      <option value="rules">&#x1F4D8; Trading Rules</option>
+      <option value="signals">📡 Signal Dashboard</option>
+      <option value="tradelog">📒 Trade Log</option>
+      <option value="review">📊 Performance Review</option>
+      <option value="converter">⇌ Futures → CFD</option>
+      <option value="rules">❋ Trading Rules</option>
     </select>
   </div>
 </div>
@@ -458,16 +458,16 @@ body.light #sig-filter-futures-dd * {
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
   <div class="legend">
-    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring CONFIRMED</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Both ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring Waiting</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Not both ▲ yet</div></div>
-    <div class="legend-item" style="--sig-color:var(--recovery)"><div class="legend-sig">♻️ BULLISH — Recovery</div><div class="legend-rule">COT 15–40 ▲ · Yield 40–65 ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--bull)"><div class="legend-sig">🚀 BULLISH — Surge</div><div class="legend-rule">COT 60–85 ▲ · Yield 60–85 ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Yield ⏸ Flat/▼</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff Watching</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Not yet confirmed</div></div>
-    <div class="legend-item" style="--sig-color:var(--trap)"><div class="legend-sig">🪤 BEARISH — Trap CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield 50–80 ▼ Falling</div></div>
-    <div class="legend-item" style="--sig-color:var(--bear)"><div class="legend-sig">📉 BEARISH — Slide</div><div class="legend-rule">COT 20–45 ▼ · Yield &lt;45 ▼ Falling</div></div>
-    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⚡ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
-    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⏸ NEUTRAL / WAIT</div><div class="legend-rule">No clear alignment — preserve capital</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">↑ MEGA BULLISH — Spring CONFIRMED</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Both ▲ Rising</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">↑ MEGA BULLISH — Spring Waiting</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Not both ▲ yet</div></div>
+    <div class="legend-item" style="--sig-color:var(--recovery)"><div class="legend-sig">↗ BULLISH — Recovery</div><div class="legend-rule">COT 15–40 ▲ · Yield 40–65 ▲ Rising</div></div>
+    <div class="legend-item" style="--sig-color:var(--bull)"><div class="legend-sig">▲ BULLISH — Surge</div><div class="legend-rule">COT 60–85 ▲ · Yield 60–85 ▲ Rising</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">↓ MEGA BEARISH — Cliff CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Yield ◌ Flat/▼</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">↓ MEGA BEARISH — Cliff Watching</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Not yet confirmed</div></div>
+    <div class="legend-item" style="--sig-color:var(--trap)"><div class="legend-sig">⊘ BEARISH — Trap CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield 50–80 ▼ Falling</div></div>
+    <div class="legend-item" style="--sig-color:var(--bear)"><div class="legend-sig">▼ BEARISH — Slide</div><div class="legend-rule">COT 20–45 ▼ · Yield &lt;45 ▼ Falling</div></div>
+    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">≠ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
+    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">◌ NEUTRAL / WAIT</div><div class="legend-rule">No clear alignment — preserve capital</div></div>
   </div>
   <!-- TOP ROW: form + stats + distribution side by side -->
   <div class="sig-main" style="margin-bottom:16px">
@@ -496,7 +496,7 @@ body.light #sig-filter-futures-dd * {
       </div>
       <!-- TIER 1 INSTITUTIONAL INPUTS -->
       <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:12px">⚡ INSTITUTIONAL FILTERS (TIER 1)</div>
+        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:12px">≠ INSTITUTIONAL FILTERS (TIER 1)</div>
         <div class="g2" style="margin-bottom:11px">
           <div class="ig">
             <label>Commercial COT % <span style="font-size:.55rem;color:var(--muted2)">(Hedgers — Col F)</span></label>
@@ -643,7 +643,7 @@ body.light #sig-filter-futures-dd * {
         <div style="position:relative;display:inline-block">
           <button id="sig-filter-signal-btn" onclick="sigToggleDropdown('signal')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Signals &#9660;</button>
           <div id="sig-filter-signal-dd" style="display:none;position:absolute;top:110%;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:6px;z-index:200;min-width:180px;box-shadow:0 4px 16px rgba(0,0,0,.3);padding:6px 0">
-            <div onclick="sigSelectAll('signal')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">&#10003; Select All / None</div>
+            <div onclick="sigSelectAll('signal')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">◻ All / None</div>
             <label class="sig-chk-row"><input type="checkbox" value="SC" onchange="renderSignals()"> Spring CONFIRMED</label>
             <label class="sig-chk-row"><input type="checkbox" value="SW" onchange="renderSignals()"> Spring Waiting</label>
             <label class="sig-chk-row"><input type="checkbox" value="RC" onchange="renderSignals()"> Recovery</label>
@@ -660,7 +660,7 @@ body.light #sig-filter-futures-dd * {
         <div style="position:relative;display:inline-block">
           <button id="sig-filter-futures-btn" onclick="sigToggleDropdown('futures')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Futures &#9660;</button>
           <div id="sig-filter-futures-dd" style="display:none;position:absolute;top:110%;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:6px;z-index:200;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.3);padding:6px 0" id="sig-filter-futures-list">
-            <div onclick="sigSelectAll('futures')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">&#10003; Select All / None</div>
+            <div onclick="sigSelectAll('futures')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">◻ All / None</div>
             <div id="sig-futures-options"></div>
           </div>
         </div>
@@ -687,8 +687,8 @@ body.light #sig-filter-futures-dd * {
           <span style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">&#8211;</span>
           <input type="number" id="sig-score-max" min="0" max="100" placeholder="100" onchange="renderSignals()" title="Max score" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:5px;font-family:'DM Mono';font-size:.68rem;outline:none;width:50px">
         </div>
-        <button class="btn-sm" onclick="clearSigFilters()">✕ Clear</button>
-        <button class="btn-sm" onclick="recalcAllScores()" style="background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)" title="Recalculate all historical institutional scores using current formula">&#x21BA; Recalc Scores</button>
+        <button class="btn-sm" onclick="clearSigFilters()">🗑️ Clear</button>
+        <button class="btn-sm" onclick="recalcAllScores()" style="background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)" title="Recalculate all historical institutional scores using current formula">↺ Recalc Scores</button>
       </div>
       <div style="margin-left:auto;font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">
         <span>← scroll →</span>
@@ -812,7 +812,7 @@ body.light #sig-filter-futures-dd * {
           <div class="ig"></div>
         </div>
         <div class="r-box">
-          <div class="r-box-title">⚡ R CALCULATION</div>
+          <div class="r-box-title">≠ R CALCULATION</div>
           <!-- Row 1: 1R Value + auto-filled Risked amount + Risked R -->
           <div class="g3" style="margin-bottom:10px">
             <div class="ig">
@@ -849,22 +849,23 @@ body.light #sig-filter-futures-dd * {
           <button class="tag-btn" data-val="Slide" onclick="selTag('phase-tags',this)" style="--tc:#f97316">📉 Slide</button>
           <button class="tag-btn" data-val="Trap" onclick="selTag('phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
           <button class="tag-btn" data-val="Recovery" onclick="selTag('phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
-          <button class="tag-btn" data-val="Neutral" onclick="selTag('phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
+          <button class="tag-btn" data-val="Neutral" onclick="selTag('phase-tags',this)" style="--tc:#6b7280">◌ Neutral</button>
         </div></div>
         <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
-          <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">🔴 Extreme</button>
-          <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">🔵 Momentum</button>
+          <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
+          <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
         </div></div>
         <div class="ig" style="margin-bottom:11px"><label>Institutional Signal Tag
           <span style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-left:4px">— from your Institutional Score</span>
         </label><div class="tag-row" id="inst-tags">
-          <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('inst-tags',this)" style="--tc:#22c55e">🟢 High Conviction Long</button>
-          <button class="tag-btn" data-val="Bullish"               onclick="selTag('inst-tags',this)" style="--tc:#3b82f6">🔵 Bullish</button>
+          <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
+          <button class="tag-btn" data-val="Bullish"               onclick="selTag('inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
           <button class="tag-btn" data-val="Neutral"               onclick="selTag('inst-tags',this)" style="--tc:#6b7280">⚪ Neutral</button>
-          <button class="tag-btn" data-val="Bearish"               onclick="selTag('inst-tags',this)" style="--tc:#f97316">🟠 Bearish</button>
-          <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('inst-tags',this)" style="--tc:#ef4444">🔴 High Conviction Short</button>
+          <button class="tag-btn" data-val="Bearish"               onclick="selTag('inst-tags',this)" style="--tc:#f97316">● Bearish</button>
+          <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
         </div></div>
         <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><input type="checkbox" id="tl-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="tl-addon" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
         <button class="btn-log" id="btn-trade" onclick="addTrade()">+ LOG TRADE</button>
       </div>
     </div>
@@ -876,8 +877,8 @@ body.light #sig-filter-futures-dd * {
           <span>Trade History</span>
           <div style="display:flex;gap:6px;margin-left:auto;flex-wrap:wrap">
             <button class="btn-sm" onclick="exportCSV()">⬇ CSV</button>
-            <button class="btn-sm" onclick="backupJSON()" style="color:var(--accent);border-color:rgba(200,169,110,.4)">💾 Backup JSON</button>
-            <button class="btn-sm" onclick="document.getElementById('restoreFile').click()">📂 Restore JSON</button>
+            <button class="btn-sm" onclick="backupJSON()" style="color:var(--accent);border-color:rgba(200,169,110,.4)">↓ Backup JSON</button>
+            <button class="btn-sm" onclick="document.getElementById('restoreFile').click()">▷ Restore JSON</button>
             <input type="file" id="restoreFile" accept=".json" style="display:none" onchange="restoreJSON(this)">
           </div>
         </div>
@@ -890,8 +891,8 @@ body.light #sig-filter-futures-dd * {
         <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between"><span>← scroll sideways · scroll down ↕</span><span id="trade-count-label"></span></div>
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
-            <tbody id="tl-tbody"><tr><td colspan="19" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
+            <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Add-on</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
+            <tbody id="tl-tbody"><tr><td colspan="20" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -968,11 +969,11 @@ body.light #sig-filter-futures-dd * {
     <div class="panel">
       <div class="ptitle">Best &amp; Worst Trades</div>
       <div style="margin-bottom:12px">
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--mega-bull);letter-spacing:.15em;margin-bottom:8px">🏆 TOP 3 WINNERS</div>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--mega-bull);letter-spacing:.15em;margin-bottom:8px">◇ TOP 3 WINNERS</div>
         <div id="best-trades"></div>
       </div>
       <div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--mega-bear);letter-spacing:.15em;margin-bottom:8px">💀 TOP 3 LOSERS</div>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--mega-bear);letter-spacing:.15em;margin-bottom:8px">⊘ TOP 3 LOSERS</div>
         <div id="worst-trades"></div>
       </div>
     </div>
@@ -998,8 +999,8 @@ body.light #sig-filter-futures-dd * {
 
       <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">&#128197; Weekend &mdash; Save Basis</button>
-        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">&#128205; Weekday &mdash; Translate Zones</button>
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📅 Weekend — Save Basis</button>
+        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📍 Weekday — Translate Zones</button>
       </div>
 
       <!-- WEEKEND: Save basis per symbol -->
@@ -1037,7 +1038,7 @@ body.light #sig-filter-futures-dd * {
           </div>
           <div id="zt-basis-note" style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:4px"></div>
         </div>
-        <button class="btn-log" onclick="ztSaveBasisForSymbol()" style="width:100%">&#128190; Save Basis for This Symbol</button>
+        <button class="btn-log" onclick="ztSaveBasisForSymbol()" style="width:100%">💾 Save Basis for This Symbol</button>
       </div>
 
       <!-- WEEKDAY: Translate zones using saved basis -->
@@ -1090,8 +1091,8 @@ body.light #sig-filter-futures-dd * {
           </div>
         </div>
         <div style="display:flex;gap:7px">
-          <button class="btn-log" onclick="ztSaveZones()" style="flex:1">&#128190; Save Translation</button>
-          <button class="btn-sm" onclick="ztClear()">&#128465; Clear</button>
+          <button class="btn-log" onclick="ztSaveZones()" style="flex:1">💾 Save Translation</button>
+          <button class="btn-sm" onclick="ztClear()">🗑️ Clear</button>
         </div>
       </div>
     </div>
@@ -1103,7 +1104,7 @@ body.light #sig-filter-futures-dd * {
         <div id="zt-results"><div class="empty">Select symbol and enter zone levels to translate</div></div>
       </div>
       <div class="panel" id="zt-saved-basis-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="ptitle" style="margin:0">Saved Basis Values</div><button class="btn-sm" onclick="ztLoadBasisFromSupabase().then(()=>ztPopulateSymSelector())" style="font-size:.6rem">&#x21BA; Sync</button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="ptitle" style="margin:0">Saved Basis Values</div><button class="btn-sm" onclick="ztLoadBasisFromSupabase().then(()=>ztPopulateSymSelector())" style="font-size:.6rem">↺ Sync</button></div>
         <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
         <div id="zt-basis-history"></div>
       </div>
@@ -1133,9 +1134,9 @@ body.light #sig-filter-futures-dd * {
 
   <!-- Category tabs -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;max-width:520px">
-    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">&#x1F4CA; Indicator Setup</button>
-    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">&#x1F4C5; Weekly Bias</button>
-    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">&#x26A1; Daily Trigger</button>
+    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
+    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📅 Weekly Bias</button>
+    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">⚡ Daily Trigger</button>
   </div>
 
   <!-- ══ INDICATOR SETUP ══ -->
@@ -1232,13 +1233,13 @@ body.light #sig-filter-futures-dd * {
             <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Strategy &amp; Size</th>
           </tr></thead>
           <tbody id="rules-bias-tbody">
-            <tr class="rules-row"><td class="rules-scenario" style="color:#22c55e">&#x1F331; Spring</td><td class="rules-cell">&lt;15 <span class="rules-tag">Max Short &#x25B2;</span></td><td class="rules-cell">&lt;35 <span class="rules-tag">Cheap &#x25B2;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bull">MEGA BULL</span></td><td class="rules-cell rules-strategy">Both COT and yield turning up. Hook from daily below 10. 1R long.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#34d399">&#x267B;&#xFE0F; Recovery</td><td class="rules-cell">15–40 <span class="rules-tag">Covering &#x25B2;</span></td><td class="rules-cell">40–65 <span class="rules-tag">Improving</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Institutions rebuilding. 0.75R long.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#3b82f6">&#x1F680; Surge</td><td class="rules-cell">60–85 <span class="rules-tag">Buying &#x25B2;</span></td><td class="rules-cell">60–85 <span class="rules-tag">Strong</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Full expansion. Trend follow only. 0.75R long.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#ef4444">&#x1FAA8; Cliff</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">&gt;80 <span class="rules-tag">Expensive &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bear">MEGA BEAR</span></td><td class="rules-cell rules-strategy">Crowded. Hook from daily above 90. 1R short.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#a855f7">&#x1FA24; Trap</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">50–80 <span class="rules-tag">Falling</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Distribution phase. Supply zone shorts. 0.5R short.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#f97316">&#x1F4C9; Slide</td><td class="rules-cell">20–45 <span class="rules-tag">Distributing &#x25BC;</span></td><td class="rules-cell">&lt;45 <span class="rules-tag">Weak &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Persistent bearish. Sell rallies. 0.75R short.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#6b7280">&#x26A1; Conflict</td><td class="rules-cell">Extreme</td><td class="rules-cell">Opposite extreme</td><td class="rules-cell"><span class="rules-bias rules-neutral">NEUTRAL</span></td><td class="rules-cell rules-strategy">STAY FLAT. No edge — skip regardless of inst score.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#22c55e">🌱 Spring</td><td class="rules-cell">&lt;15 <span class="rules-tag">Max Short &#x25B2;</span></td><td class="rules-cell">&lt;35 <span class="rules-tag">Cheap &#x25B2;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bull">MEGA BULL</span></td><td class="rules-cell rules-strategy">Both COT and yield turning up. Hook from daily below 10. 1R long.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#34d399">♻️ Recovery</td><td class="rules-cell">15–40 <span class="rules-tag">Covering &#x25B2;</span></td><td class="rules-cell">40–65 <span class="rules-tag">Improving</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Institutions rebuilding. 0.75R long.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#3b82f6">🚀 Surge</td><td class="rules-cell">60–85 <span class="rules-tag">Buying &#x25B2;</span></td><td class="rules-cell">60–85 <span class="rules-tag">Strong</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Full expansion. Trend follow only. 0.75R long.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#ef4444">🪨 Cliff</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">&gt;80 <span class="rules-tag">Expensive &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bear">MEGA BEAR</span></td><td class="rules-cell rules-strategy">Crowded. Hook from daily above 90. 1R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#a855f7">🪤 Trap</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">50–80 <span class="rules-tag">Falling</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Distribution phase. Supply zone shorts. 0.5R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#f97316">📉 Slide</td><td class="rules-cell">20–45 <span class="rules-tag">Distributing &#x25BC;</span></td><td class="rules-cell">&lt;45 <span class="rules-tag">Weak &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Persistent bearish. Sell rallies. 0.75R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#6b7280">⊘ Conflict</td><td class="rules-cell">Extreme</td><td class="rules-cell">Opposite extreme</td><td class="rules-cell"><span class="rules-bias rules-neutral">NEUTRAL</span></td><td class="rules-cell rules-strategy">STAY FLAT. No edge — skip regardless of inst score.</td></tr>
           </tbody>
         </table>
       </div>
@@ -1381,7 +1382,7 @@ body.light #sig-filter-futures-dd * {
 
     <!-- TIER 1 fields in edit modal -->
     <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:13px;margin-bottom:13px">
-      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">⚡ INSTITUTIONAL FILTERS</div>
+      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">≠ INSTITUTIONAL FILTERS</div>
       <div class="g2" style="margin-bottom:10px">
         <div class="ig"><label>Commercial COT %</label>
           <div class="num-wrap"><input type="number" id="se-comm" min="0" max="100" step="any" placeholder="0–100"><span class="num-sfx">%</span></div>
@@ -1467,7 +1468,7 @@ body.light #sig-filter-futures-dd * {
       </div>
     </div>
     <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px">
-      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.15em;color:var(--accent);margin-bottom:10px">⚡ R CALCULATION</div>
+      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.15em;color:var(--accent);margin-bottom:10px">≠ R CALCULATION</div>
       <div class="g3" style="margin-bottom:8px">
         <div class="ig"><label>1R Value</label><input type="number" id="edit-rvalue" step="any" oninput="editAutoCalcR()"></div>
         <div class="ig"><label>Risked (<span id="edit-risk-cur">$</span>) <span style="font-size:.52rem;background:rgba(200,169,110,.15);color:var(--accent);padding:1px 5px;border-radius:3px">AUTO</span></label>
@@ -1490,20 +1491,21 @@ body.light #sig-filter-futures-dd * {
       <button class="tag-btn" data-val="Slide" onclick="selTag('edit-phase-tags',this)" style="--tc:#f97316">📉 Slide</button>
       <button class="tag-btn" data-val="Trap" onclick="selTag('edit-phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
       <button class="tag-btn" data-val="Recovery" onclick="selTag('edit-phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
-      <button class="tag-btn" data-val="Neutral" onclick="selTag('edit-phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
+      <button class="tag-btn" data-val="Neutral" onclick="selTag('edit-phase-tags',this)" style="--tc:#6b7280">◌ Neutral</button>
     </div></div>
     <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
-      <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">🔴 Extreme</button>
-      <button class="tag-btn" data-val="Momentum" onclick="selTag('edit-entry-tags',this)" style="--tc:#3b82f6">🔵 Momentum</button>
+      <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
+      <button class="tag-btn" data-val="Momentum" onclick="selTag('edit-entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
     </div></div>
     <div class="ig" style="margin-bottom:14px"><label>Institutional Signal</label><div class="tag-row" id="edit-inst-tags">
-      <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('edit-inst-tags',this)" style="--tc:#22c55e">🟢 High Conviction Long</button>
-      <button class="tag-btn" data-val="Bullish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#3b82f6">🔵 Bullish</button>
+      <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('edit-inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
+      <button class="tag-btn" data-val="Bullish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
       <button class="tag-btn" data-val="Neutral"               onclick="selTag('edit-inst-tags',this)" style="--tc:#6b7280">⚪ Neutral</button>
-      <button class="tag-btn" data-val="Bearish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#f97316">🟠 Bearish</button>
-      <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('edit-inst-tags',this)" style="--tc:#ef4444">🔴 High Conviction Short</button>
+      <button class="tag-btn" data-val="Bearish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#f97316">● Bearish</button>
+      <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('edit-inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
     </div></div>
     <div class="ig" style="margin-bottom:16px"><label>Notes</label><textarea id="edit-notes"></textarea></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="edit-addon" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
     <div style="display:flex;gap:8px">
       <button class="btn-log" id="btn-save-edit" onclick="saveEdit()" style="flex:1">💾 Save Changes</button>
       <button class="btn-sm" onclick="closeEditModal()" style="flex-shrink:0;padding:12px 18px">Cancel</button>
@@ -1577,55 +1579,55 @@ const PC={Spring:'#22c55e',Cliff:'#ef4444',Surge:'#3b82f6',Slide:'#f97316',Trap:
 const SIGS={
   // SPRING: COT<15 (max short) + Yield Spread<35 (cheap, turning up)
   // Market abandoned but macro improving. Both turning up = early accumulation.
-  SC:{l:'MEGA BULLISH',p:'Spring — CONFIRMED',i:'🌱',c:'var(--mega-bull)',
+  SC:{l:'MEGA BULLISH',p:'Spring — CONFIRMED',i:'↑',c:'var(--mega-bull)',
     d:'Market abandoned while yield spread is historically cheap — both COT and yield spread turning up simultaneously. Early institutional accumulation before broad participation. Highest conviction long.',
     t:(c,cd,v,vd)=>c<15&&v<35&&cd==='rising'&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%<15`,ok:1},{t:`Yield ${v}%<35`,ok:1},{t:'COT ▲ Rising',ok:1},{t:'Yield ▲ Rising',ok:1}]},
-  SW:{l:'MEGA BULLISH',p:'Spring — Waiting for Turn',i:'🌱',c:'var(--mega-bull)',
+  SW:{l:'MEGA BULLISH',p:'Spring — Waiting for Turn',i:'↑',c:'var(--mega-bull)',
     d:'COT and yield spread at extremes but not yet both turning up. Conditions set — wait for both directions to confirm before committing capital.',
     t:(c,cd,v,vd)=>c<15&&v<35,
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%<15`,ok:1},{t:`Yield ${v}%<35`,ok:1},{t:'Both ▲ Rising',ok:0,w:1}]},
   // RECOVERY: COT 15–40 (covering) + Yield 40–65 (rising from lows)
   // Trend emerging from recovery phase. Institutions rebuilding exposure.
-  RC:{l:'BULLISH',p:'Recovery',i:'♻️',c:'var(--recovery)',
+  RC:{l:'BULLISH',p:'Recovery',i:'↗',c:'var(--recovery)',
     d:'Macro backdrop improving while institutions begin rebuilding exposure. Trend emerging from recovery — buy dips to 20 SMA. Smaller size than Spring, momentum not yet full.',
     t:(c,cd,v,vd)=>c>=15&&c<=40&&cd==='rising'&&v>=40&&v<=65&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (15–40)`,ok:1},{t:'COT ▲',ok:1},{t:`Yield ${v}% (40–65)`,ok:1},{t:'Yield ▲',ok:1}]},
   // SURGE: COT 60–85 + Yield 60–85 + both Rising
   // Full trend expansion. Strong carry with broad institutional participation.
-  SU:{l:'BULLISH',p:'Surge',i:'🚀',c:'var(--bull)',
+  SU:{l:'BULLISH',p:'Surge',i:'▲',c:'var(--bull)',
     d:'Full trend expansion — strong carry regime with broad institutional participation and momentum alignment. Buy 20 SMA dips when Daily hooks up. Do not fade this move.',
     t:(c,cd,v,vd)=>c>=60&&c<=85&&cd==='rising'&&v>=60&&v<=85&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (60–85)`,ok:1},{t:'COT ▲',ok:1},{t:`Yield ${v}% (60–85)`,ok:1},{t:'Yield ▲',ok:1}]},
   // CLIFF: COT>85 + Yield>80 + Yield Flat or Slowing
   // Crowded carry. Everyone positioned. Asymmetry deteriorating — late-stage exhaustion.
-  CC:{l:'MEGA BEARISH',p:'Cliff — CONFIRMED',i:'🪨',c:'var(--mega-bear)',
+  CC:{l:'MEGA BEARISH',p:'Cliff — CONFIRMED',i:'↓',c:'var(--mega-bear)',
     d:'Crowded carry trade — everyone already positioned for the bullish macro regime. Trend intact but asymmetry deteriorating. Yield spread flat or slowing signals exhaustion. Short the hook down.',
     t:(c,cd,v,vd)=>c>85&&v>80&&(vd==='flat'||vd==='falling'),
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ⏸ Flat/▼',ok:1}]},
-  CW:{l:'MEGA BEARISH',p:'Cliff — Watching',i:'🪨',c:'var(--mega-bear)',
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ◌ Flat/▼',ok:1}]},
+  CW:{l:'MEGA BEARISH',p:'Cliff — Watching',i:'↓',c:'var(--mega-bear)',
     d:'COT at max long and yield spread at historic highs. Not yet confirmed — wait for yield spread to flatten or roll before shorting. Prepare your levels.',
     t:(c,cd,v,vd)=>c>85&&v>80,
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ⏸/▼',ok:0,w:1}]},
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ◌/▼',ok:0,w:1}]},
   // TRAP: COT>85 + Yield 50–80 + Yield Falling
   // Institutions heavily long while macro yield advantage deteriorates. Distribution begins.
-  TR:{l:'BEARISH',p:'Trap — CONFIRMED',i:'🪤',c:'var(--trap)',
+  TR:{l:'BEARISH',p:'Trap — CONFIRMED',i:'⊘',c:'var(--trap)',
     d:'Institutions remain heavily long while macro yield advantage deteriorates. Distribution phase beginning — longs trapped without carry support. Look for shorts at supply zones.',
     t:(c,cd,v,vd)=>c>85&&v>=50&&v<=80&&vd==='falling',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}% (50–80)`,ok:1},{t:'Yield ▼ Falling',ok:1}]},
   // SLIDE: COT 20–45 + Yield<45 + both Falling
   // Weak macro spread with declining institutional participation. Persistent bearish.
-  SL:{l:'BEARISH',p:'Slide',i:'📉',c:'var(--bear)',
+  SL:{l:'BEARISH',p:'Slide',i:'▼',c:'var(--bear)',
     d:'Weak macro spread with declining institutional participation. Persistent bearish environment — sell 20 SMA rallies when Daily hooks down. Do not buy this market.',
     t:(c,cd,v,vd)=>c>=20&&c<=45&&cd==='falling'&&v<45&&vd==='falling',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (20–45)`,ok:1},{t:'COT ▼',ok:1},{t:`Yield ${v}%<45`,ok:1},{t:'Yield ▼',ok:1}]},
   // CONFLICT: Extreme disagreement between COT and Yield direction
   // Transitional/choppy regime — false moves and unstable flows.
-  CF:{l:'NEUTRAL',p:'The Conflict',i:'⚡',c:'var(--neutral)',
+  CF:{l:'NEUTRAL',p:'The Conflict',i:'≠',c:'var(--neutral)',
     d:'Positioning and macro spreads completely disagree. Transitional choppy regime with unstable flows and false moves. STAY FLAT — wait for resolution before committing any capital.',
     t:(c,cd,v,vd)=>(c>80&&v<20)||(c<20&&v>80)||(cd==='rising'&&vd==='falling'&&(c>70||c<30))||(cd==='falling'&&vd==='rising'&&(c>70||c<30)),
     pl:(c,cd,v,vd)=>[{t:'COT & Yield Diverging',ok:1}]},
-  NE:{l:'NEUTRAL',p:'Wait',i:'⏸',c:'var(--neutral)',
+  NE:{l:'NEUTRAL',p:'Wait',i:'◌',c:'var(--neutral)',
     d:'No clear alignment between institutional positioning and yield spread direction. No edge — preserve capital and wait.',
     t:()=>true,pl:()=>[]}
 };
@@ -1770,12 +1772,12 @@ function cotPctToZScore(pct){
 function getOIConviction(){
   if(!oiChange||!priceDir) return null;
   const map={
-    'rising|rising':  {label:'📈 Institutional Accumulation',desc:'Rising price + Rising OI = new longs. Strong trend confirmation.',score:+20,color:'var(--mega-bull)',bullish:true},
-    'falling|rising': {label:'📉 Institutional Distribution',desc:'Falling price + Rising OI = new shorts. Strong downtrend confirmation.',score:-20,color:'var(--mega-bear)',bullish:false},
+    'rising|rising':  {label:'▲ Institutional Accumulation',desc:'Rising price + Rising OI = new longs. Strong trend confirmation.',score:+20,color:'var(--mega-bull)',bullish:true},
+    'falling|rising': {label:'▼ Institutional Distribution',desc:'Falling price + Rising OI = new shorts. Strong downtrend confirmation.',score:-20,color:'var(--mega-bear)',bullish:false},
     'rising|falling': {label:'⚠ Short Covering Rally',desc:'Rising price + Falling OI = shorts covering, not new longs. Weak move — fade potential.',score:+5,color:'var(--bear)',bullish:null},
     'falling|falling':{label:'⚠ Long Liquidation',desc:'Falling price + Falling OI = longs exiting. Possible exhaustion — reversal watch.',score:+5,color:'var(--accent)',bullish:null},
-    'flat|rising':    {label:'⏸ Building for a Move',desc:'Price flat + Rising OI = positioning. Breakout likely — watch direction.',score:0,color:'var(--muted2)',bullish:null},
-    'flat|falling':   {label:'⏸ Position Unwinding',desc:'Price flat + Falling OI = positions closing. Low conviction.',score:-5,color:'var(--muted2)',bullish:null},
+    'flat|rising':    {label:'◌ Building for a Move',desc:'Price flat + Rising OI = positioning. Breakout likely — watch direction.',score:0,color:'var(--muted2)',bullish:null},
+    'flat|falling':   {label:'◌ Position Unwinding',desc:'Price flat + Falling OI = positions closing. Low conviction.',score:-5,color:'var(--muted2)',bullish:null},
   };
   return map[`${oiChange}|${priceDir}`]||null;
 }
@@ -2481,31 +2483,31 @@ function calcDXYRegime() {
   let regime, color, bgColor, description, filterMsg;
 
   if (cot > 60 && yield_ > 55) {
-    regime = '🦅 DXY BULLISH REGIME';
+    regime = '◈ DXY BULLISH REGIME';
     color  = '#ef4444';
     bgColor= 'rgba(239,68,68,.08)';
     description = `Specs are bullish USD (COT ${cot}%) and yield spread supports USD (${yield_}%). Dollar has institutional backing and carry tailwind.`;
     filterMsg = `<span style="color:var(--mega-bear)">⚠ USD long bias</span> — Be cautious on EUR, GBP, AUD, NZD, CAD longs. The dollar tailwind works against these setups. Only take the highest conviction Spring signals (Score 75+).`;
   } else if (cot < 40 && yield_ < 45) {
-    regime = '🕊 DXY BEARISH REGIME';
+    regime = '◌ DXY BEARISH REGIME';
     color  = '#22c55e';
     bgColor= 'rgba(34,197,94,.08)';
     description = `Specs are bearish USD (COT ${cot}%) and yield spread is weak for USD (${yield_}%). Dollar has positioning and carry headwind.`;
     filterMsg = `<span style="color:var(--mega-bull)">✓ USD short bias</span> — EUR, GBP, AUD, NZD, CAD longs have a macro tailwind. Spring and Recovery signals in these pairs are high probability.`;
   } else if (cot > 70 && yield_ < 35) {
-    regime = '⚡ DXY CONFLICT';
+    regime = '≠ DXY CONFLICT';
     color  = '#6b7280';
     bgColor= 'rgba(107,114,128,.08)';
     description = `DXY specs bullish but yield spread doesn't support it (COT ${cot}%, Yield ${yield_}%). Dollar positioning and carry are diverging.`;
     filterMsg = `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY itself is in a Conflict phase. FX signals unreliable — reduce all position sizes by 50% until DXY resolves.`;
   } else if (cot < 30 && yield_ > 65) {
-    regime = '⚡ DXY CONFLICT';
+    regime = '≠ DXY CONFLICT';
     color  = '#6b7280';
     bgColor= 'rgba(107,114,128,.08)';
     description = `DXY specs bearish but yield spread supports USD (COT ${cot}%, Yield ${yield_}%). Positioning and carry diverging.`;
     filterMsg = `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY itself is in a Conflict phase. Reduce all position sizes by 50% until resolved.`;
   } else {
-    regime = '⏸ DXY NEUTRAL';
+    regime = '◌ DXY NEUTRAL';
     color  = '#6b7280';
     bgColor= 'rgba(107,114,128,.08)';
     description = `DXY COT ${cot}%, Yield ${yield_}% — no strong dollar directional bias either way.`;
@@ -2845,21 +2847,21 @@ function autoCalcR(){
     hint.style.color = 'var(--muted2)';
   }
 }
-function clearAutoR(){document.getElementById('r-auto-badge').style.display='none';document.getElementById('r-hint').textContent='';}
+function clearAutoR(){document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.getElementById('r-hint').textContent='';}
 
 async function addTrade(){
   const date=document.getElementById('tl-date').value,symbol=document.getElementById('tl-symbol').value;
   if(!date||!symbol){alert('Date and Symbol are required.');return;}
   const pv=document.getElementById('tl-pnl').value,rv=document.getElementById('tl-r').value,rvv=document.getElementById('tl-rvalue').value;
   const riskedV=document.getElementById('tl-risked').value,riskedRV=document.getElementById('tl-risked-r').value;
-  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value};
+  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value,addon:document.getElementById('tl-addon').checked};
   const btn=document.getElementById('btn-trade');btn.disabled=true;btn.textContent='Saving…';
   try{sync('busy','Saving…');await sbPost('trades',row);trades.unshift(row);renderTrades();resetTradeForm();sync('ok','Saved ✓');}
   catch(e){sync('err','Save failed');alert('Error: '+e.message);}
   btn.disabled=false;btn.textContent='+ LOG TRADE';
 }
 async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
-function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
+function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
 
 function renderTrades(){
@@ -2881,7 +2883,7 @@ function renderTrades(){
   const ex=document.getElementById('tl-expect');ex.textContent=exp;ex.style.color=parseFloat(exp)>=0?'var(--mega-bull)':'var(--mega-bear)';
   const sym=currentCurrency==='EUR'?'€':'$';
   const tb=document.getElementById('tl-tbody');
-  if(!ft.length){tb.innerHTML='<tr><td colspan="19" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
+  if(!ft.length){tb.innerHTML='<tr><td colspan="20" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
   else tb.innerHTML=ft.map(t=>{
     const pc=PC[t.phase]||'#6b7280',ts=t.currency==='EUR'?'€':'$';
     const rC=t.r===null?'td-zero':t.r>0.1?'td-pos':t.r<-0.1?'td-neg':'td-zero';
@@ -2894,7 +2896,7 @@ function renderTrades(){
     const rrVal = (t.r!=null && t.risked_r!=null && t.risked_r!==0) ? t.r/t.risked_r : null;
     const rrCol = rrVal==null?'var(--muted2)':rrVal>=2?'var(--mega-bull)':rrVal>=1?'var(--bull)':rrVal>0?'var(--muted2)':rrVal>-1?'var(--bear)':'var(--mega-bear)';
     const rrCell = rrVal!=null ? `<td style="color:${rrCol};font-family:'DM Mono'">${rrVal>=0?'+':''}${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:\'DM Mono\';font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
   }).join('');
 
   // ── STREAKS (BE trades ignored, not streak-breaking) ──
@@ -3068,7 +3070,7 @@ async function tdFetch() {
   } catch (e) {
     if (statusEl) { statusEl.textContent = `✗ ${e.message}`; statusEl.style.color = 'var(--mega-bear)'; }
   } finally {
-    if (fetchBtn) { fetchBtn.disabled = false; fetchBtn.textContent = '⚡ Auto-Fetch Data'; }
+    if (fetchBtn) { fetchBtn.disabled = false; fetchBtn.textContent = '≠ Auto-Fetch Data'; }
   }
 }
 
@@ -3161,7 +3163,7 @@ function ztRenderSavedZones() {
     const zonesHtml = s.zones.map(z => {
       const isDemand = z.type === 'demand';
       const col = isDemand ? 'var(--mega-bull)' : 'var(--mega-bear)';
-      const icon = isDemand ? '[D]' : '[S]';
+      const icon = isDemand ? 'D' : 'S';
       const futRange = [z.futTop, z.futBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' \u2013 ');
       const cfdRange = [z.cfdTop, z.cfdBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' \u2013 ');
       return '<div style="display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:3px">'
@@ -4169,7 +4171,7 @@ function ztTranslate() {
     const futR=[z.futTop,z.futBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' - ');
     const cfdR=[z.cfdTop,z.cfdBot].filter(v=>v!=null).map(v=>v.toFixed(dp)).join(' - ');
     return '<div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid '+col+';border-radius:6px;padding:10px 13px;margin-bottom:8px">'
-      +'<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);margin-bottom:5px">'+(isDemand?'[D]':'[S]')+' ZONE '+z.n+' '+z.type.toUpperCase()+(sym?' ('+sym+')':'')+'</div>'
+      +'<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);margin-bottom:5px">'+(isDemand?'D':'S')+' ZONE '+z.n+' '+z.type.toUpperCase()+(sym?' ('+sym+')':'')+'</div>'
       +'<div style="display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:6px">'
       +'<div><div style="font-family:DM Mono,monospace;font-size:.55rem;color:var(--muted2);margin-bottom:2px">Futures</div><div style="font-family:DM Mono,monospace;font-size:.75rem;color:var(--text)">'+futR+'</div></div>'
       +'<div style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--muted2);text-align:center">-></div>'
@@ -4286,6 +4288,7 @@ function openEditModal(id) {
   const editSym = (t.currency||currentCurrency)==='EUR'?'€':'$';
   const ercEl = document.getElementById('edit-risk-cur'); if(ercEl) ercEl.textContent=editSym;
   document.getElementById('edit-notes').value   = t.notes || '';
+  document.getElementById('edit-addon').checked  = t.addon || false;
   document.getElementById('edit-oc').value      = t.oc || 'Close';
   document.getElementById('edit-dir').value     = t.dir || 'Buy';
   document.getElementById('edit-type').value    = t.type || 'Forex';
@@ -4384,6 +4387,7 @@ async function saveEdit() {
     entry:    getSelTag('edit-entry-tags'),
     inst_tag: getSelTag('edit-inst-tags'),
     notes:    document.getElementById('edit-notes').value,
+    addon:    document.getElementById('edit-addon').checked,
   };
 
   const btn = document.getElementById('btn-save-edit');
@@ -4414,7 +4418,7 @@ async function saveEdit() {
 function toggleTheme(){
   const isLight=document.body.classList.toggle('light');
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark Mode' : '☀️ Light Mode';
+  document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
 }
 
 // ── TABS ──
@@ -4436,7 +4440,7 @@ function switchTab(n){
   if(localStorage.getItem('theme')==='light'){
     document.body.classList.add('light');
     const btn=document.getElementById('theme-btn');
-    if(btn) btn.textContent='🌙 Dark Mode';
+    if(btn) btn.textContent='🌙 Dark';
   }
   if(url&&key){SB_URL=url;SB_KEY=key;launch();}
 })();
