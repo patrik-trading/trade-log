@@ -441,11 +441,11 @@ body.light #sig-filter-futures-dd * {
   <!-- Desktop tabs -->
   <div class="tab-btns-desktop">
   <div class="tab-btns-desktop">
-    <button class="tab-btn active" onclick="switchTab('signals')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Signal Dashboard</button>
-    <button class="tab-btn" onclick="switchTab('tradelog')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Trade Log</button>
-    <button class="tab-btn" onclick="switchTab('review')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Analytics</button>
-    <button class="tab-btn" onclick="switchTab('converter')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Futures&#8594;CFD</button>
-    <button class="tab-btn" onclick="switchTab('rules')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Rules</button>
+    <button class="tab-btn active" onclick="switchTab('signals')">📡 Signal Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('tradelog')">📒 Trade Log</button>
+    <button class="tab-btn" onclick="switchTab('review')">📊 Performance Review</button>
+    <button class="tab-btn" onclick="switchTab('converter')">🔄 Futures&#8594;CFD</button>
+    <button class="tab-btn" onclick="switchTab('rules')">📘 Trading Rules</button>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
     <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer">
@@ -1002,144 +1002,9 @@ body.light #sig-filter-futures-dd * {
 
       <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Weekend — Save Basis</button>
-        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Weekday — Translate Zones</button>
-      </div>
-
-      <!-- WEEKEND: Save basis per symbol -->
-      <div id="zt-panel-basis" class="panel">
-        <div class="ptitle">Save Basis Per Symbol</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.7">Saturday morning &mdash; open both charts simultaneously and read the current price at the same moment for an accurate basis.</div>
-        <div class="g2" style="margin-bottom:10px">
-          <div class="ig">
-            <label>Symbol <span style="font-size:.55rem;color:var(--muted2)">(6E, GC etc.)</span></label>
-            <select id="zt-sym" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;outline:none;width:100%">
-              <option>6E</option><option>6B</option><option>6A</option><option>6N</option>
-              <option>6C</option><option>6J</option><option>6S</option>
-              <option>GC</option><option>SI</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>CFD Symbol <span style="font-size:.55rem;color:var(--muted2)">(broker)</span></label>
-            <input type="text" id="zt-cfd-sym" placeholder="e.g. EURUSD" style="font-size:.8rem">
-          </div>
-        </div>
-        <div class="g2" style="margin-bottom:10px">
-          <div class="ig">
-            <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
-            <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 1.08500" oninput="ztCalcBasis()">
-          </div>
-          <div class="ig">
-            <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(your broker)</span></label>
-            <input type="number" id="zt-cfd-price" step="any" placeholder="e.g. 1.08513" oninput="ztCalcBasis()">
-          </div>
-        </div>
-        <div id="zt-basis-display" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px;margin-bottom:10px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2)">Basis (CFD &minus; Futures)</div>
-            <div id="zt-basis-val" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent)">&mdash;</div>
-          </div>
-          <div id="zt-basis-note" style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:4px"></div>
-        </div>
-        <button class="btn-log" onclick="ztSaveBasisForSymbol()" style="width:100%">💾 Save Basis for This Symbol</button>
-      </div>
-
-      <!-- WEEKDAY: Translate zones using saved basis -->
-      <div id="zt-panel-zones" class="panel" style="display:none">
-        <div class="ptitle">Translate Futures Zones &rarr; CFD</div>
-        <div class="ig" style="margin-bottom:10px">
-          <label>Select Symbol</label>
-          <select id="zt-zone-sym" onchange="ztLoadBasisForSym()" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;outline:none;width:100%">
-            <option value="">-- choose symbol --</option>
-          </select>
-        </div>
-        <div id="zt-active-basis" style="display:none;background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;font-family:'DM Mono';font-size:.6rem">
-            <span style="color:var(--muted2)">Active basis</span>
-            <span id="zt-active-basis-val" style="color:var(--accent)"></span>
-          </div>
-          <div id="zt-active-basis-date" style="font-family:'DM Mono';color:var(--muted2);font-size:.55rem;margin-top:2px"></div>
-        </div>
-        <div id="zt-no-basis-warn" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-family:'DM Mono';font-size:.6rem;color:#ef4444">
-          No saved basis for this symbol. Switch to Weekend mode to save one first.
-        </div>
-        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px">
-          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
-          <div style="margin-bottom:10px">
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 1 <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
-            </div>
-            <div class="g2" style="margin-bottom:0">
-              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z1-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z1-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:10px;margin-bottom:10px">
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 2 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-2" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
-            </div>
-            <div class="g2" style="margin-bottom:0">
-              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z2-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z2-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:10px">
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 3 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-3" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
-            </div>
-            <div class="g2" style="margin-bottom:0">
-              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z3-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z3-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:7px">
-          <button class="btn-log" onclick="ztSaveZones()" style="flex:1">💾 Save Translation</button>
-          <button class="btn-sm" onclick="ztClear()">🗑️ Clear</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="panel">
-        <div class="ptitle">CFD Zone Equivalents</div>
-        <div id="zt-results"><div class="empty">Select symbol and enter zone levels to translate</div></div>
-      </div>
-      <div class="panel" id="zt-saved-basis-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="ptitle" style="margin:0">Saved Basis Values</div><button class="btn-sm" onclick="ztLoadBasisFromSupabase().then(()=>ztPopulateSymSelector())" style="font-size:.6rem">↺ Sync</button></div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
-        <div id="zt-basis-history"></div>
-      </div>
-      <div class="panel">
-        <div class="ptitle">Saved Zone Translations</div>
-        <div id="zt-saved-zones"><div class="empty">No saved zones yet</div></div>
-      </div>
-      <div class="panel">
-        <div class="ptitle">How It Works</div>
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);line-height:2">
-          <div><b style="color:var(--accent)">Weekend:</b> Save basis once per symbol. Open both charts at same moment.</div>
-          <div><b style="color:var(--accent)">Weekday:</b> Select symbol, enter futures zone &rarr; CFD zone instantly.</div>
-          <div><b style="color:var(--accent)">Formula:</b> CFD = Futures + Basis</div>
-          <div><b style="color:var(--accent)">Stability:</b> FX basis moves 1&ndash;3 pips/day. Re-save weekly or after quarterly roll.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div><!-- /tab-converter -->
-
-
-
-
-
-<!-- TAB TRADING RULES -->
-<div class="tab-pane" id="tab-rules">
-
-  <!-- Category tabs -->
-  <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;max-width:520px">
-    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg> Indicator Setup</button>
-    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Weekly Bias</button>
-    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Daily Trigger</button>
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
+    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📅 Weekly Bias</button>
+    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">⚡ Daily Trigger</button>
   </div>
 
   <!-- ══ INDICATOR SETUP ══ -->
