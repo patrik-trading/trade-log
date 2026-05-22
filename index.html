@@ -1307,6 +1307,43 @@ body.light #sig-filter-futures-dd * {
       </div>
     </div>
 
+    <!-- Entry Types -->
+    <div class="panel" style="margin-bottom:18px">
+      <div class="ptitle">Daily Entry Types</div>
+      <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">Weekly bias determines direction and size. The daily chart determines <b style="color:var(--text)">when</b> to enter. Two valid entry types — usable on any weekly setup regardless of phase.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.25);border-left:3px solid var(--accent);border-radius:7px;padding:14px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--accent);letter-spacing:.06em;margin-bottom:8px">Type 1 &mdash; Extreme Reversal</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
+            <div><b style="color:var(--text)">Indicator:</b> 21,3 Tactical</div>
+            <div><b style="color:var(--text)">Trigger:</b> Raw below 10% (long) or above 90% (short) + hook forming</div>
+            <div><b style="color:var(--text)">Entry:</b> At 4H demand / supply zone</div>
+            <div><b style="color:var(--text)">Character:</b> Earlier entry &mdash; catches more of the move, higher risk of being early</div>
+            <div style="margin-top:8px;padding:7px 9px;background:var(--bg);border-radius:4px;border:1px solid var(--border);line-height:2">
+              <span style="color:var(--mega-bull)">Long</span> &mdash; raw crosses above smoothed from below 10<br>
+              <span style="color:var(--mega-bear)">Short</span> &mdash; raw crosses below smoothed from above 90
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:14px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--bull);letter-spacing:.06em;margin-bottom:8px">Type 2 &mdash; Momentum Confirmation</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
+            <div><b style="color:var(--text)">Indicator:</b> 65,5 Strategic</div>
+            <div><b style="color:var(--text)">Trigger:</b> Crosses above 65 (long) or below 35 (short)</div>
+            <div><b style="color:var(--text)">Entry:</b> On the cross or first pullback after</div>
+            <div><b style="color:var(--text)">Character:</b> Later entry &mdash; direction confirmed, less risk of being early but smaller potential move</div>
+            <div style="margin-top:8px;padding:7px 9px;background:var(--bg);border-radius:4px;border:1px solid var(--border);line-height:2">
+              <span style="color:var(--mega-bull)">Long</span> &mdash; 65,5 line crosses above 65<br>
+              <span style="color:var(--mega-bear)">Short</span> &mdash; 65,5 line crosses below 35
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px;margin-top:12px;font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
+        <b style="color:var(--accent)">How to choose:</b> Price at zone + 21,3 extreme &rarr; Type 1. Price bounced but 65,5 not yet crossed &rarr; wait for Type 2. Never force both on the same pair at the same time.
+      </div>
+    </div>
+
     <div class="panel">
       <div class="ptitle">Execution Rules</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
