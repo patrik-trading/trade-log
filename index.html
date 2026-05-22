@@ -433,6 +433,28 @@ body.light #sig-filter-futures-dd * {
 
 /* SVG icon alignment in tabs */
 .tab-btn svg, .tab-btn-rules svg { vertical-align:middle; margin-right:5px; display:inline-block; }
+
+/* ── SVG Phase Icons ── */
+.phase-svg-icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  vertical-align:middle;
+  margin-right:6px;
+  flex-shrink:0;
+}
+.phase-svg-icon svg {
+  display:block;
+}
+.sig-result-icon {
+  width:44px;height:44px;
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  margin-right:2px;
+}
+.sig-result-icon svg { width:24px;height:24px; }
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
@@ -497,16 +519,16 @@ body.light #sig-filter-futures-dd * {
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
   <div class="legend">
-    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">↑ MEGA BULLISH — Spring CONFIRMED</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Both ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">↑ MEGA BULLISH — Spring Waiting</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Not both ▲ yet</div></div>
-    <div class="legend-item" style="--sig-color:var(--recovery)"><div class="legend-sig">↗ BULLISH — Recovery</div><div class="legend-rule">COT 15–40 ▲ · Yield 40–65 ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--bull)"><div class="legend-sig">▲ BULLISH — Surge</div><div class="legend-rule">COT 60–85 ▲ · Yield 60–85 ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">↓ MEGA BEARISH — Cliff CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Yield ◌ Flat/▼</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">↓ MEGA BEARISH — Cliff Watching</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Not yet confirmed</div></div>
-    <div class="legend-item" style="--sig-color:var(--trap)"><div class="legend-sig">⊘ BEARISH — Trap CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield 50–80 ▼ Falling</div></div>
-    <div class="legend-item" style="--sig-color:var(--bear)"><div class="legend-sig">▼ BEARISH — Slide</div><div class="legend-rule">COT 20–45 ▼ · Yield &lt;45 ▼ Falling</div></div>
-    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">≠ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
-    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">◌ NEUTRAL / WAIT</div><div class="legend-rule">No clear alignment — preserve capital</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring CONFIRMED</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Both ▲ Rising</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring Waiting</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Not both ▲ yet</div></div>
+    <div class="legend-item" style="--sig-color:var(--recovery)"><div class="legend-sig">♻️ BULLISH — Recovery</div><div class="legend-rule">COT 15–40 ▲ · Yield 40–65 ▲ Rising</div></div>
+    <div class="legend-item" style="--sig-color:var(--bull)"><div class="legend-sig">🚀 BULLISH — Surge</div><div class="legend-rule">COT 60–85 ▲ · Yield 60–85 ▲ Rising</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Yield ⏸ Flat/▼</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff Watching</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Not yet confirmed</div></div>
+    <div class="legend-item" style="--sig-color:var(--trap)"><div class="legend-sig">🪤 BEARISH — Trap CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield 50–80 ▼ Falling</div></div>
+    <div class="legend-item" style="--sig-color:var(--bear)"><div class="legend-sig">📉 BEARISH — Slide</div><div class="legend-rule">COT 20–45 ▼ · Yield &lt;45 ▼ Falling</div></div>
+    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⚡ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
+    <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⏸ NEUTRAL / WAIT</div><div class="legend-rule">No clear alignment — preserve capital</div></div>
   </div>
   <!-- TOP ROW: form + stats + distribution side by side -->
   <div class="sig-main" style="margin-bottom:16px">
@@ -888,7 +910,7 @@ body.light #sig-filter-futures-dd * {
           <button class="tag-btn" data-val="Slide" onclick="selTag('phase-tags',this)" style="--tc:#f97316">📉 Slide</button>
           <button class="tag-btn" data-val="Trap" onclick="selTag('phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
           <button class="tag-btn" data-val="Recovery" onclick="selTag('phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
-          <button class="tag-btn" data-val="Neutral" onclick="selTag('phase-tags',this)" style="--tc:#6b7280">◌ Neutral</button>
+          <button class="tag-btn" data-val="Neutral" onclick="selTag('phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
         </div></div>
         <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
           <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
@@ -1766,7 +1788,7 @@ body.light #sig-filter-futures-dd * {
       <button class="tag-btn" data-val="Slide" onclick="selTag('edit-phase-tags',this)" style="--tc:#f97316">📉 Slide</button>
       <button class="tag-btn" data-val="Trap" onclick="selTag('edit-phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
       <button class="tag-btn" data-val="Recovery" onclick="selTag('edit-phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
-      <button class="tag-btn" data-val="Neutral" onclick="selTag('edit-phase-tags',this)" style="--tc:#6b7280">◌ Neutral</button>
+      <button class="tag-btn" data-val="Neutral" onclick="selTag('edit-phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
     </div></div>
     <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
       <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
@@ -1828,7 +1850,7 @@ async function launch(){
   document.getElementById('eDate').value=today.toISOString().slice(0,10);
   document.getElementById('tl-date').value=today.toISOString().slice(0,10);
   document.getElementById('dateBadge').textContent=today.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
-  autoMonth();setCurrency(currentCurrency);
+  autoMonth();setCurrency(currentCurrency);setTimeout(injectLegendSvgs,200);
   setTimeout(loadDXYValues, 300);
   setTimeout(ztLoadBasisFromSupabase, 900);
   setTimeout(tdLoadKey, 500);
@@ -1854,55 +1876,55 @@ const PC={Spring:'#22c55e',Cliff:'#ef4444',Surge:'#3b82f6',Slide:'#f97316',Trap:
 const SIGS={
   // SPRING: COT<15 (max short) + Yield Spread<35 (cheap, turning up)
   // Market abandoned but macro improving. Both turning up = early accumulation.
-  SC:{l:'MEGA BULLISH',p:'Spring — CONFIRMED',i:'↑',c:'var(--mega-bull)',
+  SC:{l:'MEGA BULLISH',p:'Spring — CONFIRMED',i:'🌱',c:'var(--mega-bull)',
     d:'Market abandoned while yield spread is historically cheap — both COT and yield spread turning up simultaneously. Early institutional accumulation before broad participation. Highest conviction long.',
     t:(c,cd,v,vd)=>c<15&&v<35&&cd==='rising'&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%<15`,ok:1},{t:`Yield ${v}%<35`,ok:1},{t:'COT ▲ Rising',ok:1},{t:'Yield ▲ Rising',ok:1}]},
-  SW:{l:'MEGA BULLISH',p:'Spring — Waiting for Turn',i:'↑',c:'var(--mega-bull)',
+  SW:{l:'MEGA BULLISH',p:'Spring — Waiting for Turn',i:'🌱',c:'var(--mega-bull)',
     d:'COT and yield spread at extremes but not yet both turning up. Conditions set — wait for both directions to confirm before committing capital.',
     t:(c,cd,v,vd)=>c<15&&v<35,
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%<15`,ok:1},{t:`Yield ${v}%<35`,ok:1},{t:'Both ▲ Rising',ok:0,w:1}]},
   // RECOVERY: COT 15–40 (covering) + Yield 40–65 (rising from lows)
   // Trend emerging from recovery phase. Institutions rebuilding exposure.
-  RC:{l:'BULLISH',p:'Recovery',i:'↗',c:'var(--recovery)',
+  RC:{l:'BULLISH',p:'Recovery',i:'♻️',c:'var(--recovery)',
     d:'Macro backdrop improving while institutions begin rebuilding exposure. Trend emerging from recovery — buy dips to 20 SMA. Smaller size than Spring, momentum not yet full.',
     t:(c,cd,v,vd)=>c>=15&&c<=40&&cd==='rising'&&v>=40&&v<=65&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (15–40)`,ok:1},{t:'COT ▲',ok:1},{t:`Yield ${v}% (40–65)`,ok:1},{t:'Yield ▲',ok:1}]},
   // SURGE: COT 60–85 + Yield 60–85 + both Rising
   // Full trend expansion. Strong carry with broad institutional participation.
-  SU:{l:'BULLISH',p:'Surge',i:'▲',c:'var(--bull)',
+  SU:{l:'BULLISH',p:'Surge',i:'🚀',c:'var(--bull)',
     d:'Full trend expansion — strong carry regime with broad institutional participation and momentum alignment. Buy 20 SMA dips when Daily hooks up. Do not fade this move.',
     t:(c,cd,v,vd)=>c>=60&&c<=85&&cd==='rising'&&v>=60&&v<=85&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (60–85)`,ok:1},{t:'COT ▲',ok:1},{t:`Yield ${v}% (60–85)`,ok:1},{t:'Yield ▲',ok:1}]},
   // CLIFF: COT>85 + Yield>80 + Yield Flat or Slowing
   // Crowded carry. Everyone positioned. Asymmetry deteriorating — late-stage exhaustion.
-  CC:{l:'MEGA BEARISH',p:'Cliff — CONFIRMED',i:'↓',c:'var(--mega-bear)',
+  CC:{l:'MEGA BEARISH',p:'Cliff — CONFIRMED',i:'🪨',c:'var(--mega-bear)',
     d:'Crowded carry trade — everyone already positioned for the bullish macro regime. Trend intact but asymmetry deteriorating. Yield spread flat or slowing signals exhaustion. Short the hook down.',
     t:(c,cd,v,vd)=>c>85&&v>80&&(vd==='flat'||vd==='falling'),
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ◌ Flat/▼',ok:1}]},
-  CW:{l:'MEGA BEARISH',p:'Cliff — Watching',i:'↓',c:'var(--mega-bear)',
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ⏸ Flat/▼',ok:1}]},
+  CW:{l:'MEGA BEARISH',p:'Cliff — Watching',i:'🪨',c:'var(--mega-bear)',
     d:'COT at max long and yield spread at historic highs. Not yet confirmed — wait for yield spread to flatten or roll before shorting. Prepare your levels.',
     t:(c,cd,v,vd)=>c>85&&v>80,
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ◌/▼',ok:0,w:1}]},
   // TRAP: COT>85 + Yield 50–80 + Yield Falling
   // Institutions heavily long while macro yield advantage deteriorates. Distribution begins.
-  TR:{l:'BEARISH',p:'Trap — CONFIRMED',i:'⊘',c:'var(--trap)',
+  TR:{l:'BEARISH',p:'Trap — CONFIRMED',i:'🪤',c:'var(--trap)',
     d:'Institutions remain heavily long while macro yield advantage deteriorates. Distribution phase beginning — longs trapped without carry support. Look for shorts at supply zones.',
     t:(c,cd,v,vd)=>c>85&&v>=50&&v<=80&&vd==='falling',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}% (50–80)`,ok:1},{t:'Yield ▼ Falling',ok:1}]},
   // SLIDE: COT 20–45 + Yield<45 + both Falling
   // Weak macro spread with declining institutional participation. Persistent bearish.
-  SL:{l:'BEARISH',p:'Slide',i:'▼',c:'var(--bear)',
+  SL:{l:'BEARISH',p:'Slide',i:'📉',c:'var(--bear)',
     d:'Weak macro spread with declining institutional participation. Persistent bearish environment — sell 20 SMA rallies when Daily hooks down. Do not buy this market.',
     t:(c,cd,v,vd)=>c>=20&&c<=45&&cd==='falling'&&v<45&&vd==='falling',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (20–45)`,ok:1},{t:'COT ▼',ok:1},{t:`Yield ${v}%<45`,ok:1},{t:'Yield ▼',ok:1}]},
   // CONFLICT: Extreme disagreement between COT and Yield direction
   // Transitional/choppy regime — false moves and unstable flows.
-  CF:{l:'NEUTRAL',p:'The Conflict',i:'≠',c:'var(--neutral)',
+  CF:{l:'NEUTRAL',p:'The Conflict',i:'⚡',c:'var(--neutral)',
     d:'Positioning and macro spreads completely disagree. Transitional choppy regime with unstable flows and false moves. STAY FLAT — wait for resolution before committing any capital.',
     t:(c,cd,v,vd)=>(c>80&&v<20)||(c<20&&v>80)||(cd==='rising'&&vd==='falling'&&(c>70||c<30))||(cd==='falling'&&vd==='rising'&&(c>70||c<30)),
     pl:(c,cd,v,vd)=>[{t:'COT & Yield Diverging',ok:1}]},
-  NE:{l:'NEUTRAL',p:'Wait',i:'◌',c:'var(--neutral)',
+  NE:{l:'NEUTRAL',p:'Wait',i:'⏸',c:'var(--neutral)',
     d:'No clear alignment between institutional positioning and yield spread direction. No edge — preserve capital and wait.',
     t:()=>true,pl:()=>[]}
 };
@@ -2051,8 +2073,8 @@ function getOIConviction(){
     'falling|rising': {label:'▼ Institutional Distribution',desc:'Falling price + Rising OI = new shorts. Strong downtrend confirmation.',score:-20,color:'var(--mega-bear)',bullish:false},
     'rising|falling': {label:'⚠ Short Covering Rally',desc:'Rising price + Falling OI = shorts covering, not new longs. Weak move — fade potential.',score:+5,color:'var(--bear)',bullish:null},
     'falling|falling':{label:'⚠ Long Liquidation',desc:'Falling price + Falling OI = longs exiting. Possible exhaustion — reversal watch.',score:+5,color:'var(--accent)',bullish:null},
-    'flat|rising':    {label:'◌ Building for a Move',desc:'Price flat + Rising OI = positioning. Breakout likely — watch direction.',score:0,color:'var(--muted2)',bullish:null},
-    'flat|falling':   {label:'◌ Position Unwinding',desc:'Price flat + Falling OI = positions closing. Low conviction.',score:-5,color:'var(--muted2)',bullish:null},
+    'flat|rising':    {label:'⏸ Building for a Move',desc:'Price flat + Rising OI = positioning. Breakout likely — watch direction.',score:0,color:'var(--muted2)',bullish:null},
+    'flat|falling':   {label:'⏸ Position Unwinding',desc:'Price flat + Falling OI = positions closing. Low conviction.',score:-5,color:'var(--muted2)',bullish:null},
   };
   return map[`${oiChange}|${priceDir}`]||null;
 }
@@ -2833,7 +2855,7 @@ function calcDXYRegime() {
     description = `Specs are bullish USD (COT ${cot}%) and yield spread supports USD (${yield_}%). Dollar has institutional backing and carry tailwind.`;
     filterMsg = `<span style="color:var(--mega-bear)">⚠ USD long bias</span> — Be cautious on EUR, GBP, AUD, NZD, CAD longs. The dollar tailwind works against these setups. Only take the highest conviction Spring signals (Score 75+).`;
   } else if (cot < 40 && yield_ < 45) {
-    regime = '◌ DXY BEARISH REGIME';
+    regime = '⏸ DXY BEARISH REGIME';
     color  = '#22c55e';
     bgColor= 'rgba(34,197,94,.08)';
     description = `Specs are bearish USD (COT ${cot}%) and yield spread is weak for USD (${yield_}%). Dollar has positioning and carry headwind.`;
@@ -2851,7 +2873,7 @@ function calcDXYRegime() {
     description = `DXY specs bearish but yield spread supports USD (COT ${cot}%, Yield ${yield_}%). Positioning and carry diverging.`;
     filterMsg = `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY itself is in a Conflict phase. Reduce all position sizes by 50% until resolved.`;
   } else {
-    regime = '◌ DXY NEUTRAL';
+    regime = '⏸ DXY NEUTRAL';
     color  = '#6b7280';
     bgColor= 'rgba(107,114,128,.08)';
     description = `DXY COT ${cot}%, Yield ${yield_}% — no strong dollar directional bias either way.`;
@@ -4788,6 +4810,44 @@ function switchTab(n){
   }
   if(url&&key){SB_URL=url;SB_KEY=key;launch();}
 })();
+
+// ── PHASE SVG ICONS ──
+const PHASE_SVGS = {
+  SC: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.1 2 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.8.8z"/><path d="M14.1 6a7 7 0 0 1 1.7 9c-1.9 0-3.4-.5-4.5-1.5"/></svg>`,
+  SW: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.1 2 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.8.8z"/><path d="M14.1 6a7 7 0 0 1 1.7 9c-1.9 0-3.4-.5-4.5-1.5"/></svg>`,
+  RC: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  SU: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+  CC: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>`,
+  CW: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>`,
+  TR: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>`,
+  SL: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>`,
+  CF: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`,
+  NE: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+};
+
+function phaseSvg(key, size) {
+  if(!PHASE_SVGS[key]) return '';
+  const s = size || 16;
+  return PHASE_SVGS[key].replace(/width="16"/g, `width="${s}"`).replace(/height="16"/g, `height="${s}"`);
+}
+
+// Inject SVG into legend items on load
+function injectLegendSvgs() {
+  document.querySelectorAll('.legend-sig').forEach(el => {
+    const text = el.textContent || '';
+    // Match signal key from SIGS
+    for(const [key, sig] of Object.entries(SIGS)) {
+      if(text.includes(sig.l) || text.includes(sig.p)) {
+        if(!el.querySelector('svg')) {
+          el.innerHTML = `<span class="phase-svg-icon" style="color:${sig.c}">${phaseSvg(key)}</span>` + el.innerHTML;
+        }
+        break;
+      }
+    }
+  });
+}
+
+
 </script>
 </body>
 </html>
