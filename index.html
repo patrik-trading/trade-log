@@ -423,6 +423,21 @@ body.light #sig-filter-futures-dd * {
   #tab-converter>div{grid-template-columns:1fr!important;}
 }
 
+
+  /* 2.2 Trade form fields full width */
+  .tl-form-grid { grid-template-columns:1fr!important; }
+
+  /* 2.4 Review period */
+  #rv-from,#rv-to { width:100%!important; font-size:.8rem!important; }
+
+  /* 2.5 Equity above rdist */
+  .review-charts-grid { flex-direction:column!important; }
+  #equity-panel { order:1; }
+  #rdist-panel  { order:2; }
+
+  /* 2.6 OI grid 2x2 */
+  .corr-grid { grid-template-columns:1fr 1fr!important; }
+
 /* ── Very small phones (< 400px) ── */
 @media(max-width:400px){
   .wrapper{padding:10px 10px;}
@@ -516,7 +531,7 @@ body.light #sig-filter-futures-dd * {
       <div class="ptitle">New Signal Entry</div>
 
       <div class="g2">
-        <div class="ig"><label>Date</label><input type="date" id="eDate"></div>
+        <div class="ig"><label>Date</label><input type="date" id="eDate" style="max-width:160px;width:100%"></div>
         <div class="ig"><label>Futures</label><input type="text" id="eAsset" placeholder="e.g. 6E"></div>
       </div>
       <div class="g2" style="margin-bottom:6px">
@@ -647,30 +662,30 @@ body.light #sig-filter-futures-dd * {
         <div id="corr-list"><div class="empty">No signals to analyse</div></div>
       </div>
 
-      <!-- DXY REGIME OVERLAY -->
-      <div class="panel" id="dxy-panel">
-        <div class="ptitle">DXY Regime Overlay</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Enter your current DXY COT % and Yield Spread % to get the dollar regime. All FX signals are filtered against this.</div>
-        <div class="g2" style="margin-bottom:10px">
-          <div class="ig">
-            <label>DXY COT % <span style="font-size:.55rem;color:var(--muted2)">(Spec, Col B)</span></label>
-            <div class="num-wrap"><input type="number" id="dxy-cot" min="0" max="100" step="any" placeholder="0–100" oninput="calcDXYRegime()"><span class="num-sfx">%</span></div>
-          </div>
-          <div class="ig">
-            <label>DXY Yield Spread % <span style="font-size:.55rem;color:var(--muted2)">(Col D)</span></label>
-            <div class="num-wrap"><input type="number" id="dxy-yield" min="0" max="100" step="any" placeholder="0–100" oninput="calcDXYRegime()"><span class="num-sfx">%</span></div>
-          </div>
-        </div>
-        <div id="dxy-result" style="display:none;border-radius:7px;padding:12px;border:1px solid var(--border)">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-            <div id="dxy-label" style="font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.06em"></div>
-            <div id="dxy-badge" style="font-family:'DM Mono';font-size:.62rem;padding:3px 9px;border-radius:4px"></div>
-          </div>
-          <div id="dxy-desc" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);line-height:1.7;margin-bottom:8px"></div>
-          <div id="dxy-filter-impact" style="font-family:'DM Mono';font-size:.63rem;line-height:1.8"></div>
-        </div>
-      </div>
+    </div>
+  </div>
 
+  <!-- DXY REGIME OVERLAY — desktop, below trade log -->
+  <div class="panel" id="dxy-panel" style="margin-top:14px">
+    <div class="ptitle">DXY Regime Overlay</div>
+    <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Enter your current DXY COT % and Yield Spread % to get the dollar regime. All FX signals are filtered against this.</div>
+    <div class="g2" style="margin-bottom:10px">
+      <div class="ig">
+    <label>DXY COT % <span style="font-size:.55rem;color:var(--muted2)">(Spec, Col B)</span></label>
+    <div class="num-wrap"><input type="number" id="dxy-cot" min="0" max="100" step="any" placeholder="0–100" oninput="calcDXYRegime()"><span class="num-sfx">%</span></div>
+      </div>
+      <div class="ig">
+    <label>DXY Yield Spread % <span style="font-size:.55rem;color:var(--muted2)">(Col D)</span></label>
+    <div class="num-wrap"><input type="number" id="dxy-yield" min="0" max="100" step="any" placeholder="0–100" oninput="calcDXYRegime()"><span class="num-sfx">%</span></div>
+      </div>
+    </div>
+    <div id="dxy-result" style="display:none;border-radius:7px;padding:12px;border:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div id="dxy-label" style="font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.06em"></div>
+    <div id="dxy-badge" style="font-family:'DM Mono';font-size:.62rem;padding:3px 9px;border-radius:4px"></div>
+      </div>
+      <div id="dxy-desc" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);line-height:1.7;margin-bottom:8px"></div>
+      <div id="dxy-filter-impact" style="font-family:'DM Mono';font-size:.63rem;line-height:1.8"></div>
     </div>
   </div>
 
@@ -763,9 +778,7 @@ body.light #sig-filter-futures-dd * {
           </table>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+</div><!-- /tab-signals -->
 
 <!-- TAB TRADE LOG -->
 <div class="tab-pane" id="tab-tradelog">
@@ -947,35 +960,37 @@ body.light #sig-filter-futures-dd * {
 
   <!-- Date filter bar -->
   <div class="panel" style="margin-bottom:16px">
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.15em">REVIEW PERIOD</div>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <div class="ig" style="margin:0"><label>From</label><input type="date" id="rv-from" onchange="renderReview()"></div>
-        <div class="ig" style="margin:0"><label>To</label><input type="date" id="rv-to" onchange="renderReview()"></div>
-        <button class="btn-sm" onclick="setReviewPeriod('all')">All Time</button>
-        <button class="btn-sm" onclick="setReviewPeriod('ytd')">YTD</button>
-        <button class="btn-sm" onclick="setReviewPeriod('3m')">3 Months</button>
-        <button class="btn-sm" onclick="setReviewPeriod('1m')">This Month</button>
-      </div>
-      <div style="margin-left:auto">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.15em">REVIEW PERIOD</div>
         <select id="rv-account" onchange="renderReview()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none">
           <option value="ALL">All Accounts</option>
         </select>
       </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <div class="ig" style="margin:0;flex:1;min-width:130px"><label>From</label><input type="date" id="rv-from" onchange="renderReview()" style="width:100%"></div>
+        <div class="ig" style="margin:0;flex:1;min-width:130px"><label>To</label><input type="date" id="rv-to" onchange="renderReview()" style="width:100%"></div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:16px">
+          <button class="btn-sm" onclick="setReviewPeriod('all')">All</button>
+          <button class="btn-sm" onclick="setReviewPeriod('ytd')">YTD</button>
+          <button class="btn-sm" onclick="setReviewPeriod('3m')">3M</button>
+          <button class="btn-sm" onclick="setReviewPeriod('1m')">1M</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start">
+  <div class="review-charts-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start">
 
     <!-- Equity Curve -->
-    <div class="panel">
+    <div class="panel" id="equity-panel">
       <div class="ptitle">Equity Curve <span style="font-size:.6rem;color:var(--muted2);font-weight:normal;letter-spacing:0">cumulative R</span></div>
       <div style="position:relative;width:100%;height:200px;max-height:200px;overflow:hidden"><canvas id="equity-chart" style="position:absolute;top:0;left:0;width:100%!important;height:100%!important"></canvas></div>
       <div id="equity-empty" class="empty" style="display:none">No closed trades yet</div>
     </div>
 
     <!-- R Distribution -->
-    <div class="panel">
+    <div class="panel" id="rdist-panel">
       <div class="ptitle">R Distribution <span style="font-size:.6rem;color:var(--muted2);font-weight:normal;letter-spacing:0">outcome frequency</span></div>
       <div style="position:relative;width:100%;height:200px;max-height:200px;overflow:hidden"><canvas id="rdist-chart" style="position:absolute;top:0;left:0;width:100%!important;height:100%!important"></canvas></div>
       <div id="rdist-empty" class="empty" style="display:none">No closed trades yet</div>
@@ -1009,28 +1024,23 @@ body.light #sig-filter-futures-dd * {
     <!-- Best & Worst Trades -->
     <div class="panel">
       <div class="ptitle">Best &amp; Worst Trades</div>
-      <div style="margin-bottom:12px">
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--mega-bull);letter-spacing:.15em;margin-bottom:8px">◇ TOP 3 WINNERS</div>
-        <div id="best-trades"></div>
+      <div style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <div style="width:3px;height:12px;background:var(--mega-bull);border-radius:2px;flex-shrink:0"></div>
+          <span style="font-family:'DM Mono';font-size:.58rem;color:var(--mega-bull);letter-spacing:.18em">TOP 3 WINNERS</span>
+        </div>
+        <div id="best-trades" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
-      <div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--mega-bear);letter-spacing:.15em;margin-bottom:8px">⊘ TOP 3 LOSERS</div>
-        <div id="worst-trades"></div>
+      <div style="border-top:1px solid var(--border);padding-top:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <div style="width:3px;height:12px;background:var(--mega-bear);border-radius:2px;flex-shrink:0"></div>
+          <span style="font-family:'DM Mono';font-size:.58rem;color:var(--mega-bear);letter-spacing:.18em">TOP 3 LOSERS</span>
+        </div>
+        <div id="worst-trades" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
     </div>
-  </div>
-
-  <!-- Open Trades Tracker — auto-derived from Trade Log entries with O/C = "Open" -->
-  <div class="panel">
-    <div class="ptitle">Open Trades
-      <span style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.05em;font-weight:normal">auto-synced from Trade Log (Open entries)</span>
-    </div>
-    <div id="open-trades-list">
-      <div class="empty">No open trades — log a trade with Open/Close set to "Open" in the Trade Log</div>
-    </div>
-  </div>
-
-</div><!-- /tab-review -->
+  </div><!-- /review-grid -->
+  </div><!-- /tab-review -->
 
 
 <!-- TAB: FUTURES → CFD CONVERTER -->
@@ -1617,6 +1627,7 @@ body.light #sig-filter-futures-dd * {
   </div><!-- /rules-cat-trigger -->
 
 </div><!-- /tab-rules -->
+
 <!-- SIGNAL EDIT MODAL -->
 <div class="modal-overlay" id="sig-edit-modal" onclick="if(event.target===this)closeSigEditModal()">
   <div class="edit-modal-box">
@@ -1792,6 +1803,20 @@ body.light #sig-filter-futures-dd * {
 
 </div><!-- /wrapper -->
 
+
+<div id="err-overlay" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a0000;border-top:2px solid #ef4444;padding:10px;z-index:99999;font-family:monospace;font-size:.7rem;color:#ef4444;max-height:40vh;overflow-y:auto"></div>
+<script>
+window.onerror = function(msg, src, line, col, err) {
+  const el = document.getElementById('err-overlay');
+  if(el) { el.style.display='block'; el.innerHTML += '<div>⚠ '+msg+' (line '+line+')</div>'; }
+  return false;
+};
+window.addEventListener('unhandledrejection', function(e) {
+  const el = document.getElementById('err-overlay');
+  if(el) { el.style.display='block'; el.innerHTML += '<div>⚠ Promise: '+e.reason+'</div>'; }
+});
+</script>
+
 <script>
 // ── SUPABASE REST WRAPPER ──
 let SB_URL='',SB_KEY='';
@@ -1851,6 +1876,7 @@ let trades=[],entries=[],accounts=['Default'];
 let currentCurrency=localStorage.getItem('fxCurrency')||'USD';
 let cotDir='',valDir='';
 const PC={Spring:'#22c55e',Cliff:'#ef4444',Surge:'#3b82f6',Slide:'#f97316',Trap:'#a855f7',Recovery:'#34d399',Neutral:'#6b7280'};
+const INST_COLORS={'High Conviction Long':'#22c55e','Bullish':'#3b82f6','Neutral':'#6b7280','Bearish':'#f97316','High Conviction Short':'#ef4444'};
 
 // ── SIGNALS ──
 const SIGS={
@@ -3235,14 +3261,21 @@ function renderTrades(){
     const rC=t.r===null?'td-zero':t.r>0.1?'td-pos':t.r<-0.1?'td-neg':'td-zero';
     const pC=t.pnl===null?'td-zero':t.pnl>0?'td-pos':t.pnl<0?'td-neg':'td-zero';
     const ph=t.phase?`<span class="chip" style="color:${pc};border-color:${pc}">${t.phase}</span>`:'—';
-    const en=t.entry==='Extreme'?`<span class="etype etype-ext">Extreme</span>`:t.entry==='Momentum'?`<span class="etype etype-mom">Momentum</span>`:'—';
+    const ec = t.entry==='Extreme'?'#ef4444':t.entry==='Momentum'?'#3b82f6':'#6b7280';
+    const en = t.entry
+      ? `<span style="display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono';font-size:.62rem;color:${ec};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ec};flex-shrink:0;display:inline-block"></span>${t.entry}</span>`
+      : '—';
     const acTag=t.account&&t.account!=='Default'?` <span style="font-size:.5rem;color:var(--muted2)">[${t.account}]</span>`:'';
     const riskedCell=t.risked!=null?`<td style="color:var(--accent)">${ts}${t.risked.toFixed(2)}</td>`:'<td style="color:var(--muted2)">—</td>';
     const riskedRCell=t.risked_r!=null?`<td style="color:var(--accent)">${t.risked_r.toFixed(2)}R</td>`:'<td style="color:var(--muted2)">—</td>';
     const rrVal = (t.r!=null && t.risked_r!=null && t.risked_r!==0) ? t.r/t.risked_r : null;
     const rrCol = rrVal==null?'var(--muted2)':rrVal>=2?'var(--mega-bull)':rrVal>=1?'var(--bull)':rrVal>0?'var(--muted2)':rrVal>-1?'var(--bear)':'var(--mega-bear)';
     const rrCell = rrVal!=null ? `<td style="color:${rrCol};font-family:'DM Mono'">${rrVal>=0?'+':''}${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:\'DM Mono\';font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td><td>${t.inst_tag?`<span style="font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;background:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'rgba(34,197,94,.15)':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'rgba(239,68,68,.15)':t.inst_tag==='Bullish'?'rgba(59,130,246,.15)':t.inst_tag==='Bearish'?'rgba(249,115,22,.15)':'rgba(107,114,128,.15)'};color:${t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Long')?'#22c55e':t.inst_tag.includes('High Conv')&&t.inst_tag.includes('Short')?'#ef4444':t.inst_tag==='Bullish'?'#3b82f6':t.inst_tag==='Bearish'?'#f97316':'#6b7280'};white-space:nowrap">${t.inst_tag}</span>`:'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
+    const ic2 = INST_COLORS[t.inst_tag]||'#6b7280';
+    const instCell = t.inst_tag
+      ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono';font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
+      : '<td style="color:var(--muted2)">—</td>';
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:\'DM Mono\';font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
   }).join('');
 
   // ── STREAKS (BE trades ignored, not streak-breaking) ──
@@ -3872,19 +3905,30 @@ function renderReview(){
 
   // ── BEST & WORST TRADES ──
   // Exclude BE trades (r between -0.1 and 0.1) from best/worst
-  const nonBE  = ft.filter(t => t.r > 0.1 || t.r < -0.1);
+  const nonBE  = ft.filter(t => t.r !== null && t.r !== undefined);
   const sorted = [...nonBE].sort((a,b)=>b.r-a.r);
-  const top3   = sorted.filter(t=>t.r>0.1).slice(0,3);
-  const bot3   = sorted.filter(t=>t.r<-0.1).slice(-3).reverse();
+  const top3   = sorted.filter(t=>t.r>0).slice(0,3);
+  const bot3   = sorted.filter(t=>t.r<0).slice(-3).reverse();
   function tradeCard(t, isWin){
     const col = isWin?'var(--mega-bull)':'var(--mega-bear)';
-    const pc = PC[t.phase]||'#6b7280';
-    return `<div class="rv-trade-card" style="border-left:3px solid ${col}">
-      <div class="rv-trade-r" style="color:${col}">${t.r>=0?'+':''}${t.r.toFixed(1)}R</div>
-      <div class="rv-trade-body">
-        <div class="rv-trade-sym">${t.symbol} <span style="font-size:.7rem;color:${t.dir==='Buy'?'var(--mega-bull)':'var(--mega-bear)'}">● ${t.dir}</span></div>
-        <div class="rv-trade-meta">${t.date} · ${t.phase?`<span style="color:${pc}">${t.phase}</span>`:'No phase'} · ${t.entry||'No entry type'}</div>
-        ${t.notes?`<div class="rv-trade-meta" style="font-style:italic;margin-top:2px">${t.notes.substring(0,60)}${t.notes.length>60?'…':''}</div>`:''}
+    const bg  = isWin?'rgba(34,197,94,.05)':'rgba(239,68,68,.05)';
+    const pc  = PC[t.phase]||'#6b7280';
+    const dirCol = t.dir==='Buy'?'var(--mega-bull)':'var(--mega-bear)';
+    const rr  = (t.r!=null&&t.risked_r&&t.risked_r!==0)?(t.r/t.risked_r).toFixed(2):null;
+    return `<div style="background:${bg};border:1px solid ${col}33;border-left:3px solid ${col};border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:12px">
+      <div style="font-family:'Bebas Neue';font-size:1.6rem;color:${col};line-height:1;min-width:44px;text-align:center">${t.r>=0?'+':''}${t.r.toFixed(1)}<div style="font-family:'DM Mono';font-size:.5rem;color:${col};opacity:.7;letter-spacing:.08em">R</div></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+          <span style="font-family:'Bebas Neue';font-size:1.05rem;color:var(--text);letter-spacing:.04em">${t.symbol}</span>
+          <span style="font-family:'DM Mono';font-size:.58rem;color:${dirCol}">● ${t.dir}</span>
+          ${t.phase?`<span style="font-family:'DM Mono';font-size:.55rem;color:${pc};background:${pc}18;padding:1px 5px;border-radius:3px">${t.phase}</span>`:''}
+        </div>
+        <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);display:flex;gap:10px;flex-wrap:wrap">
+          <span>${t.date}</span>
+          ${t.entry?`<span style="color:var(--muted3)">${t.entry}</span>`:''}
+          ${rr?`<span style="color:${col};opacity:.8">RR ${rr}</span>`:''}
+        </div>
+        ${t.notes?`<div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);font-style:italic;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.notes.substring(0,55)}${t.notes.length>55?'…':''}</div>`:''}
       </div>
     </div>`;
   }
@@ -3893,8 +3937,6 @@ function renderReview(){
   if(bestEl)  bestEl.innerHTML  = top3.length  ? top3.map(t=>tradeCard(t,true)).join('')  : '<div class="empty" style="padding:12px">No winning trades yet</div>';
   if(worstEl) worstEl.innerHTML = bot3.length  ? bot3.map(t=>tradeCard(t,false)).join('') : '<div class="empty" style="padding:12px">No losing trades yet</div>';
 
-  // ── OPEN TRADES ──
-  renderOpenTrades();
 }
 
 // ── OPEN TRADES ──
@@ -4320,6 +4362,10 @@ function cvRenderTable(){
     const spread = h.cfd-h.futures;
     const ratio  = h.cfd/h.futures;
     const sCol = spread>=0?'color:var(--mega-bull)':'color:var(--mega-bear)';
+    const ic2 = INST_COLORS[t.inst_tag]||'#6b7280';
+    const instCell = t.inst_tag
+      ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono';font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
+      : '<td style="color:var(--muted2)">—</td>';
     return`<tr>
       <td style="color:var(--muted2)">${i+1}</td>
       <td style="color:var(--muted2)">${h.date||'—'}</td>
