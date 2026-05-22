@@ -1337,6 +1337,209 @@ body.light #sig-filter-futures-dd * {
       </div>
     </div>
 
+
+  <!-- Reversal Pattern Reference -->
+  <div class="panel" style="margin-top:18px" id="rules-patterns-panel">
+    <div class="ptitle">Reversal Confirmation Patterns — Visual Reference</div>
+    <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">
+      Look for these patterns forming <b style="color:var(--text)">at your 4H demand or supply zone</b> after the daily raw percentile enters the trigger window.
+    </div>
+    <style>
+      .rp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+      @media(max-width:900px){.rp-grid{grid-template-columns:repeat(2,1fr)}}
+      @media(max-width:600px){.rp-grid{grid-template-columns:1fr}}
+      .rp-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:12px;position:relative;overflow:hidden}
+      .rp-card.rp-bull::before,.rp-card.rp-bear::before,.rp-card.rp-neut::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+      .rp-card.rp-bull::before{background:linear-gradient(90deg,var(--mega-bull),transparent)}
+      .rp-card.rp-bear::before{background:linear-gradient(90deg,var(--mega-bear),transparent)}
+      .rp-card.rp-neut::before{background:linear-gradient(90deg,var(--accent),transparent)}
+      .rp-rank{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;position:absolute;top:8px;right:12px;opacity:.07;color:var(--text);line-height:1}
+      .rp-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;margin-bottom:2px}
+      .rp-card.rp-bull .rp-name{color:var(--mega-bull)}
+      .rp-card.rp-bear .rp-name{color:var(--mega-bear)}
+      .rp-card.rp-neut .rp-name{color:var(--accent)}
+      .rp-dir{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:9px}
+      .rp-svg-wrap{display:flex;justify-content:center;background:var(--bg);border-radius:5px;padding:8px 4px;border:1px solid var(--border);margin-bottom:9px}
+      .rp-desc{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);line-height:1.7}
+      .rp-desc b{color:var(--text)}
+      .rp-stars{font-size:.65rem;margin-top:7px;color:var(--accent)}
+      .rp-footer2{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 13px;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted2);line-height:1.9}
+      .rp-footer2 b{color:var(--accent)}
+      .rp-zone{stroke:var(--accent);stroke-dasharray:4 3;stroke-width:1;opacity:.5}
+    </style>
+
+    <div class="rp-grid">
+      <div class="rp-card rp-bull"><div class="rp-rank">1</div>
+        <div class="rp-name">Bullish Engulfing</div>
+        <div class="rp-dir">&#x2191; BULLISH &mdash; STRONGEST SINGLE SIGNAL</div>
+        <div class="rp-svg-wrap"><svg width="120" height="105" viewBox="0 0 120 105">
+          <line x1="0" y1="84" x2="120" y2="84" class="rp-zone"/>
+          <line x1="0" y1="96" x2="120" y2="96" class="rp-zone"/>
+          <text x="2" y="82" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">DEMAND</text>
+          <line x1="18" y1="16" x2="18" y2="40" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="13" y="22" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="18" y1="36" x2="18" y2="48" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="40" y1="28" x2="40" y2="52" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="35" y="34" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="40" y1="48" x2="40" y2="60" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="62" y1="42" x2="62" y2="68" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="57" y="48" width="10" height="16" fill="var(--mega-bear)" rx="1"/>
+          <line x1="62" y1="64" x2="62" y2="76" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="84" y1="68" x2="84" y2="90" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="79" y="74" width="10" height="12" fill="var(--mega-bear)" rx="1"/>
+          <line x1="84" y1="86" x2="84" y2="94" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="106" y1="60" x2="106" y2="68" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="101" y="68" width="10" height="32" fill="var(--mega-bull)" rx="1"/>
+          <line x1="106" y1="100" x2="106" y2="104" stroke="var(--mega-bull)" stroke-width="1.5"/>
+        </svg></div>
+        <div class="rp-desc"><b>Body engulfs previous red candle entirely.</b> Opens below prior close, closes above prior open. Institutional buyers overwhelmed sellers in one session. Enter on close.</div>
+        <div class="rp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+
+      <div class="rp-card rp-bull"><div class="rp-rank">2</div>
+        <div class="rp-name">Hammer</div>
+        <div class="rp-dir">&#x2191; BULLISH &mdash; ZONE REJECTION</div>
+        <div class="rp-svg-wrap"><svg width="120" height="105" viewBox="0 0 120 105">
+          <line x1="0" y1="84" x2="120" y2="84" class="rp-zone"/>
+          <line x1="0" y1="96" x2="120" y2="96" class="rp-zone"/>
+          <text x="2" y="82" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">DEMAND</text>
+          <line x1="18" y1="16" x2="18" y2="40" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="13" y="22" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="18" y1="36" x2="18" y2="48" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="40" y1="28" x2="40" y2="52" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="35" y="34" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="40" y1="48" x2="40" y2="60" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="62" y1="44" x2="62" y2="68" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="57" y="50" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="62" y1="64" x2="62" y2="76" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="88" y1="60" x2="88" y2="66" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="83" y="66" width="10" height="8" fill="var(--mega-bull)" rx="1"/>
+          <line x1="88" y1="74" x2="88" y2="102" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <text x="98" y="69" fill="var(--muted2)" font-size="6" font-family="DM Mono,monospace">body</text>
+          <text x="98" y="90" fill="var(--mega-bull)" font-size="6" font-family="DM Mono,monospace">2-3x</text>
+        </svg></div>
+        <div class="rp-desc"><b>Small body at top, wick 2-3x the body.</b> Market tested lower, rejected completely. Most powerful when forming directly at a demand zone after a sustained decline.</div>
+        <div class="rp-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      </div>
+
+      <div class="rp-card rp-bull"><div class="rp-rank">3</div>
+        <div class="rp-name">Morning Star</div>
+        <div class="rp-dir">&#x2191; BULLISH &mdash; 3-CANDLE CONFIRMATION</div>
+        <div class="rp-svg-wrap"><svg width="120" height="105" viewBox="0 0 120 105">
+          <line x1="0" y1="84" x2="120" y2="84" class="rp-zone"/>
+          <line x1="0" y1="96" x2="120" y2="96" class="rp-zone"/>
+          <text x="2" y="82" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">DEMAND</text>
+          <line x1="14" y1="16" x2="14" y2="26" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="9" y="22" width="10" height="12" fill="var(--mega-bear)" rx="1"/>
+          <line x1="14" y1="34" x2="14" y2="42" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="34" y1="24" x2="34" y2="34" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="29" y="30" width="10" height="12" fill="var(--mega-bear)" rx="1"/>
+          <line x1="34" y1="42" x2="34" y2="50" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="56" y1="36" x2="56" y2="44" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="51" y="44" width="10" height="28" fill="var(--mega-bear)" rx="1"/>
+          <line x1="56" y1="72" x2="56" y2="80" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <text x="46" y="34" fill="var(--muted2)" font-size="7" font-family="DM Mono,monospace">&#9312;</text>
+          <line x1="78" y1="78" x2="78" y2="84" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="73" y="84" width="10" height="4" fill="var(--accent)" rx="1"/>
+          <line x1="78" y1="88" x2="78" y2="94" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="68" y="76" fill="var(--accent)" font-size="7" font-family="DM Mono,monospace">&#9313;</text>
+          <line x1="100" y1="38" x2="100" y2="46" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="95" y="46" width="10" height="38" fill="var(--mega-bull)" rx="1"/>
+          <line x1="100" y1="84" x2="100" y2="90" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <text x="90" y="36" fill="var(--mega-bull)" font-size="7" font-family="DM Mono,monospace">&#9314;</text>
+        </svg></div>
+        <div class="rp-desc"><b>Large red &#x2192; small doji &#x2192; large green.</b> Third candle must close well into the first. Takes 3 sessions. Rarest but most reliable — worth waiting for at key zones.</div>
+        <div class="rp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+
+      <div class="rp-card rp-bear"><div class="rp-rank">4</div>
+        <div class="rp-name">Shooting Star</div>
+        <div class="rp-dir">&#x2193; BEARISH &mdash; ZONE REJECTION</div>
+        <div class="rp-svg-wrap"><svg width="120" height="105" viewBox="0 0 120 105">
+          <line x1="0" y1="20" x2="120" y2="20" class="rp-zone"/>
+          <line x1="0" y1="10" x2="120" y2="10" class="rp-zone"/>
+          <text x="2" y="32" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">SUPPLY</text>
+          <line x1="18" y1="64" x2="18" y2="84" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="13" y="62" width="10" height="16" fill="var(--mega-bull)" rx="1"/>
+          <line x1="18" y1="82" x2="18" y2="90" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="40" y1="50" x2="40" y2="70" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="35" y="48" width="10" height="16" fill="var(--mega-bull)" rx="1"/>
+          <line x1="40" y1="68" x2="40" y2="76" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="62" y1="38" x2="62" y2="58" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="57" y="36" width="10" height="16" fill="var(--mega-bull)" rx="1"/>
+          <line x1="62" y1="56" x2="62" y2="64" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="88" y1="12" x2="88" y2="36" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="83" y="36" width="10" height="8" fill="var(--mega-bear)" rx="1"/>
+          <line x1="88" y1="44" x2="88" y2="48" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <text x="98" y="20" fill="var(--mega-bear)" font-size="6" font-family="DM Mono,monospace">wick</text>
+          <text x="98" y="42" fill="var(--muted2)" font-size="6" font-family="DM Mono,monospace">body</text>
+        </svg></div>
+        <div class="rp-desc"><b>Mirror of hammer.</b> Small body at bottom, long upper wick 2-3x body. Market tested higher at supply zone, got completely rejected. Bearish continuation expected.</div>
+        <div class="rp-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      </div>
+
+      <div class="rp-card rp-bear"><div class="rp-rank">5</div>
+        <div class="rp-name">Bearish Engulfing</div>
+        <div class="rp-dir">&#x2193; BEARISH &mdash; INSTITUTIONAL SELLING</div>
+        <div class="rp-svg-wrap"><svg width="120" height="105" viewBox="0 0 120 105">
+          <line x1="0" y1="20" x2="120" y2="20" class="rp-zone"/>
+          <line x1="0" y1="10" x2="120" y2="10" class="rp-zone"/>
+          <text x="2" y="32" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">SUPPLY</text>
+          <line x1="18" y1="62" x2="18" y2="82" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="13" y="60" width="10" height="16" fill="var(--mega-bull)" rx="1"/>
+          <line x1="18" y1="80" x2="18" y2="88" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="40" y1="48" x2="40" y2="68" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="35" y="46" width="10" height="16" fill="var(--mega-bull)" rx="1"/>
+          <line x1="40" y1="66" x2="40" y2="74" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="62" y1="34" x2="62" y2="54" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="57" y="32" width="10" height="16" fill="var(--mega-bull)" rx="1"/>
+          <line x1="62" y1="52" x2="62" y2="60" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="84" y1="22" x2="84" y2="30" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <rect x="79" y="24" width="10" height="12" fill="var(--mega-bull)" rx="1"/>
+          <line x1="84" y1="40" x2="84" y2="46" stroke="var(--mega-bull)" stroke-width="1.5"/>
+          <line x1="106" y1="14" x2="106" y2="22" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="101" y="22" width="10" height="40" fill="var(--mega-bear)" rx="1"/>
+          <line x1="106" y1="62" x2="106" y2="68" stroke="var(--mega-bear)" stroke-width="1.5"/>
+        </svg></div>
+        <div class="rp-desc"><b>Red body engulfs previous green candle entirely.</b> Opens above prior close, closes below prior open. Sellers overwhelmed buyers at supply zone in one session. Enter on close.</div>
+        <div class="rp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+
+      <div class="rp-card rp-neut"><div class="rp-rank">6</div>
+        <div class="rp-name">Doji at Zone</div>
+        <div class="rp-dir">&#x25C8; INDECISION &mdash; EARLY WARNING ONLY</div>
+        <div class="rp-svg-wrap"><svg width="120" height="105" viewBox="0 0 120 105">
+          <line x1="0" y1="84" x2="120" y2="84" class="rp-zone"/>
+          <line x1="0" y1="96" x2="120" y2="96" class="rp-zone"/>
+          <text x="2" y="82" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">DEMAND</text>
+          <line x1="18" y1="18" x2="18" y2="42" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="13" y="24" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="18" y1="38" x2="18" y2="50" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="40" y1="30" x2="40" y2="54" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="35" y="36" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="40" y1="50" x2="40" y2="62" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="62" y1="46" x2="62" y2="70" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <rect x="57" y="52" width="10" height="14" fill="var(--mega-bear)" rx="1"/>
+          <line x1="62" y1="66" x2="62" y2="78" stroke="var(--mega-bear)" stroke-width="1.5"/>
+          <line x1="86" y1="68" x2="86" y2="84" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="81" y="84" width="10" height="3" fill="var(--accent)" rx="1"/>
+          <line x1="86" y1="87" x2="86" y2="100" stroke="var(--accent)" stroke-width="1.5"/>
+          <line x1="106" y1="58" x2="106" y2="66" stroke="var(--mega-bull)" stroke-width="1.5" opacity=".3"/>
+          <rect x="101" y="66" width="10" height="22" fill="var(--mega-bull)" rx="1" opacity=".3"/>
+          <text x="74" y="66" fill="var(--accent)" font-size="6" font-family="DM Mono,monospace">doji</text>
+          <text x="96" y="56" fill="var(--mega-bull)" font-size="6" font-family="DM Mono,monospace" opacity=".5">confirm</text>
+        </svg></div>
+        <div class="rp-desc"><b>Equal open and close &mdash; pure indecision.</b> Meaningful only at key zones after a sustained move. Always wait for the next candle to confirm direction before entering.</div>
+        <div class="rp-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      </div>
+    </div>
+
+    <div class="rp-footer2">
+      <b>Key principle:</b> Every pattern is only meaningful at a structurally significant level &mdash; a 4H demand or supply zone on the unadjusted futures chart. &nbsp;|&nbsp;
+      <b>Best combo:</b> Inst. score 65+ &middot; COT extreme &middot; Pattern at 4H zone &middot; Daily hook aligning &nbsp;|&nbsp;
+      <b>Engulfing and Morning Star</b> &mdash; enter on close. <b>Hammer and Shooting Star</b> &mdash; confirm wick held on the next candle before adding size.
+    </div>
+  </div>
   </div><!-- /rules-cat-trigger -->
 
 </div><!-- /tab-rules -->
