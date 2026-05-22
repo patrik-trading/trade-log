@@ -2332,63 +2332,47 @@ function renderFocusOfWeek(entries) {
   // ── ON WATCH: Neutrals approaching a phase ──
   // Score proximity to Spring, Cliff, Recovery, Surge thresholds
   const onWatch = deduped
-    .filter(e => (e.signal_key === 'NE' || e.signal_key === 'CF') && !top.find(t => t.asset === e.asset))
+    .filter(e => e.signal_key === 'NE' || e.signal_key === 'CF')
     .map(e => {
-      const cot   = parseFloat(e.cot)   || 50;
-      const comm  = parseFloat(e.commercial_cot) || 50;
-      const score = e.inst_score ?? 50;
-      const ysm   = e.ys_momentum ?? 0;
-      let watchReason = null;
-      let watchDir    = null;
-      let proximity   = 0;
+      const cot    = parseFloat(e.cot) || 50;
+      const comm   = parseFloat(e.commercial_cot) || 50;
+      const score  = e.inst_score != null ? e.inst_score : 50;
+      const ysm    = e.ys_momentum != null ? e.ys_momentum : 0;
+      const valRising  = e.val_dir && e.val_dir.toLowerCase().includes('ris');
+      const valFalling = e.val_dir && e.val_dir.toLowerCase().includes('fall');
+      let watchReason = null, watchDir = null, proximity = 0;
 
-      // Approaching Spring (bullish) — COT < 30, score >= 52, ysm positive
-      if (cot < 30 && score >= 52 && ysm >= 0) {
-        watchReason = 'Approaching Spring';
-        watchDir    = 'Long';
-        proximity   = (30 - cot) + (score - 50) + Math.min(ysm, 10);
-      }
-      // Approaching Cliff (bearish) — COT > 70, score <= 48, ysm negative
-      else if (cot > 70 && score <= 48 && ysm <= 0) {
-        watchReason = 'Approaching Cliff';
-        watchDir    = 'Short';
-        proximity   = (cot - 70) + (50 - score) + Math.min(Math.abs(ysm), 10);
-      }
-      // Approaching Recovery — COT 15-45, score >= 58, ysm positive
-      else if (cot >= 15 && cot <= 45 && score >= 58 && ysm > 0) {
-        watchReason = 'Approaching Recovery';
-        watchDir    = 'Long';
-        proximity   = (score - 55) + Math.min(ysm, 8);
-      }
-      // Approaching Surge — COT 55-72, score >= 55, ysm positive
-      else if (cot >= 55 && cot <= 72 && score >= 55 && ysm > 0) {
-        watchReason = 'Approaching Surge';
-        watchDir    = 'Long';
-        proximity   = (score - 50) + Math.min(ysm, 8);
-      }
-      // Approaching Slide — COT 28-45, score <= 44, ysm negative
-      else if (cot >= 28 && cot <= 45 && score <= 44 && ysm < 0) {
-        watchReason = 'Approaching Slide';
-        watchDir    = 'Short';
-        proximity   = (50 - score) + Math.min(Math.abs(ysm), 8);
-      }
-      // Commercial extreme building — catches high comm + decent score
-      else if (comm >= 75 && score >= 58) {
-        watchReason = 'Comm. Accumulation';
-        watchDir    = 'Long';
-        proximity   = (comm - 70) + (score - 55);
-      }
-      else if (comm <= 20 && score <= 40) {
-        watchReason = 'Comm. Distribution';
-        watchDir    = 'Short';
-        proximity   = (25 - comm) + (50 - score);
+      if (cot <= 35 && score >= 50 && (ysm >= 0 || valRising)) {
+        watchReason = 'Approaching Spring'; watchDir = 'Long';
+        proximity = (35 - cot) + (score - 48) + Math.min(Math.max(ysm, 0), 10);
+      } else if (cot >= 65 && score <= 50 && (ysm <= 0 || valFalling)) {
+        watchReason = 'Approaching Cliff'; watchDir = 'Short';
+        proximity = (cot - 65) + (52 - score) + Math.min(Math.abs(Math.min(ysm, 0)), 10);
+      } else if (cot >= 15 && cot <= 52 && score >= 53 && (ysm > 0 || valRising)) {
+        watchReason = 'Approaching Recovery'; watchDir = 'Long';
+        proximity = (score - 50) + Math.min(Math.max(ysm, 0), 8);
+      } else if (cot >= 52 && cot <= 75 && score >= 53 && (ysm > 0 || valRising)) {
+        watchReason = 'Approaching Surge'; watchDir = 'Long';
+        proximity = (score - 50) + Math.min(Math.max(ysm, 0), 8);
+      } else if (cot >= 25 && cot <= 52 && score <= 47 && (ysm < 0 || valFalling)) {
+        watchReason = 'Approaching Slide'; watchDir = 'Short';
+        proximity = (50 - score) + Math.min(Math.abs(Math.min(ysm, 0)), 8);
+      } else if (cot >= 65 && score >= 48 && score <= 58 && (ysm < 0 || valFalling)) {
+        watchReason = 'Approaching Trap'; watchDir = 'Short';
+        proximity = (cot - 62) + Math.min(Math.abs(Math.min(ysm, 0)), 8);
+      } else if (comm >= 72 && score >= 55) {
+        watchReason = 'Comm. Accumulation'; watchDir = 'Long';
+        proximity = (comm - 68) + (score - 52);
+      } else if (comm <= 28 && score <= 45) {
+        watchReason = 'Comm. Distribution'; watchDir = 'Short';
+        proximity = (30 - comm) + (50 - score);
       }
 
       return watchReason ? { ...e, watchReason, watchDir, proximity } : null;
     })
     .filter(Boolean)
     .sort((a, b) => b.proximity - a.proximity)
-    .slice(0, 2);
+    .slice(0, 3);
 
   el.innerHTML = top.map((e, i) => {
     const sigColor=e.color||'var(--muted2)',pc=PC[e.phase]||'#6b7280',ic=instColors[e.inst_tag]||'var(--muted2)';
