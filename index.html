@@ -389,6 +389,11 @@ body.light #sig-filter-futures-dd * {
 
 /* ── Additional mobile fixes ── */
 @media(max-width:700px){
+  /* Equity + R dist — full width stacked on mobile */
+  .review-charts-grid { display:flex!important; flex-direction:column!important; gap:12px!important; }
+  #equity-panel { order:1; width:100%!important; max-width:100%!important; }
+  #rdist-panel  { order:2; width:100%!important; max-width:100%!important; }
+
   /* Date badge constrain */
   #dateBadge{font-size:.6rem!important;padding:4px 6px!important;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
@@ -430,10 +435,6 @@ body.light #sig-filter-futures-dd * {
   /* 2.4 Review period */
   #rv-from,#rv-to { width:100%!important; font-size:.8rem!important; }
 
-  /* 2.5 Equity + R dist — full width stacked */
-  .review-charts-grid { display:flex!important; flex-direction:column!important; gap:12px!important; }
-  #equity-panel { order:1; width:100%!important; max-width:100%!important; }
-  #rdist-panel  { order:2; width:100%!important; max-width:100%!important; }
 
   /* 2.6 OI grid 2x2 */
   .corr-grid { grid-template-columns:1fr 1fr!important; }
