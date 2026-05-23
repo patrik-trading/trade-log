@@ -279,7 +279,7 @@ body.light #sig-filter-futures-dd * {
 @media(max-width:700px){
 
   /* ── Wrapper / spacing ── */
-  .wrapper{padding:12px 14px;}
+  .wrapper{padding:12px 14px;overflow-x:hidden;max-width:100%;}
   header{margin-bottom:14px;gap:6px;flex-wrap:wrap;}
   .logo{font-size:1.8rem;}
   .logo small{font-size:.58rem;}
@@ -401,11 +401,9 @@ body.light #sig-filter-futures-dd * {
   #best-trades, #worst-trades { width:100%!important; }
   #best-trades > div, #worst-trades > div { overflow:hidden; }
 
-  /* From/To dates — stack on mobile */
-  .rv-date-row { grid-template-columns:1fr!important; }
-
-  /* Review period date inputs full width */
-  #rv-from, #rv-to { width:100%!important; font-size:.8rem!important; }
+  /* From/To dates — 2 col, contained */
+  .rv-date-row { grid-template-columns:1fr 1fr!important; width:100%!important; }
+  #rv-from, #rv-to { width:100%!important; min-width:0!important; font-size:.75rem!important; box-sizing:border-box!important; }
 
   /* Equity + R dist — full width stacked on mobile */
   .review-charts-grid { display:flex!important; flex-direction:column!important; gap:12px!important; }
@@ -1009,17 +1007,15 @@ body.light #sig-filter-futures-dd * {
   <!-- Date filter bar -->
   <div class="panel" style="margin-bottom:16px">
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.15em">REVIEW PERIOD</div>
-        <select id="rv-account" onchange="renderReview()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none">
-          <option value="ALL">All Accounts</option>
-        </select>
-      </div>
-      <div class="rv-date-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.15em;margin-bottom:8px">REVIEW PERIOD</div>
+      <select id="rv-account" onchange="renderReview()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none;width:100%;margin-bottom:10px">
+        <option value="ALL">All Accounts</option>
+      </select>
+      <div class="rv-date-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <div class="ig" style="margin:0"><label>From</label><input type="date" id="rv-from" onchange="renderReview()" style="width:100%"></div>
         <div class="ig" style="margin:0"><label>To</label><input type="date" id="rv-to" onchange="renderReview()" style="width:100%"></div>
       </div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
         <button class="btn-sm" onclick="setReviewPeriod('all')">All</button>
         <button class="btn-sm" onclick="setReviewPeriod('ytd')">YTD</button>
         <button class="btn-sm" onclick="setReviewPeriod('3m')">3M</button>
