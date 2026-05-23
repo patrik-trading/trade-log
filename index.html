@@ -600,6 +600,76 @@ input[type=date] {
   }
 }
 
+
+/* ══════════════════════════════════
+   MOBILE SHEET MODAL
+   ══════════════════════════════════ */
+@media(max-width:700px) {
+
+  /* Trigger buttons — shown only on mobile */
+  .sheet-trigger { display:flex; gap:8px; margin-bottom:0; }
+
+  /* Overlay backdrop */
+  .sheet-overlay {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:8000;
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+    animation:fadeIn .2s ease;
+  }
+  .sheet-overlay.open { display:block; }
+
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+  /* Sheet panel */
+  .sheet-panel {
+    position:fixed;
+    bottom:0; left:0; right:0;
+    background:var(--surface);
+    border-radius:20px 20px 0 0;
+    max-height:90vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:0 16px max(24px, env(safe-area-inset-bottom));
+    z-index:8001;
+    animation:slideUp .3s cubic-bezier(.32,.72,0,1);
+    padding-bottom:calc(80px + env(safe-area-inset-bottom));
+  }
+
+  /* Drag handle */
+  .sheet-handle {
+    width:36px; height:4px;
+    background:var(--border);
+    border-radius:2px;
+    margin:12px auto 16px;
+  }
+
+  /* Sheet title */
+  .sheet-title {
+    font-family:'Inter',sans-serif;
+    font-size:1.1rem;
+    font-weight:700;
+    letter-spacing:-.02em;
+    color:var(--text);
+    margin-bottom:16px;
+  }
+
+  /* Hide the desktop form panels on mobile */
+  .sig-main > .panel { display:none; }
+  #log-form-panel { display:none; }
+}
+
+@media(min-width:701px) {
+  /* Hide trigger buttons on desktop */
+  .sheet-trigger { display:none; }
+  /* Show forms normally on desktop */
+  .sheet-overlay { display:none !important; }
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
@@ -699,6 +769,11 @@ input[type=date] {
     <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⚡ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
     <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⏸ NEUTRAL / WAIT</div><div class="legend-rule">No clear alignment — preserve capital</div></div>
   </div>
+  <!-- MOBILE SHEET TRIGGERS -->
+  <div class="sheet-trigger">
+    <button class="btn-log" style="flex:1" onclick="openSheet('signal-sheet')">+ Log Signal</button>
+  </div>
+
   <!-- TOP ROW: form + stats + distribution side by side -->
   <div class="sig-main" style="margin-bottom:16px">
     <div class="panel">
@@ -1016,6 +1091,11 @@ input[type=date] {
       </div>
     </div>
     <div id="analytics-table"><div class="empty">No trades yet</div></div>
+  </div>
+
+  <!-- MOBILE SHEET TRIGGER -->
+  <div class="sheet-trigger" style="margin-bottom:12px">
+    <button class="btn-log" style="flex:1" onclick="openSheet('trade-sheet')">+ Log New Trade</button>
   </div>
 
   <div class="tl-layout">
@@ -4989,6 +5069,59 @@ function toggleTheme(){
 
 // ── TABS ──
 
+
+// ── MOBILE SHEET MODAL ──
+function openSheet(id) {
+  if(window.innerWidth > 700) return; // desktop: do nothing
+  const overlay = document.getElementById(id);
+  if(!overlay) return;
+
+  // Move form content into sheet on first open
+  if(id === 'signal-sheet') {
+    const target = document.getElementById('signal-sheet-content');
+    const source = document.querySelector('.sig-main > .panel');
+    if(source && target && !target.hasChildNodes()) {
+      // Move children (not clone — same inputs, same JS)
+      while(source.firstChild) target.appendChild(source.firstChild);
+    }
+  }
+  if(id === 'trade-sheet') {
+    const target = document.getElementById('trade-sheet-content');
+    const source = document.getElementById('log-form-panel');
+    if(source && target && !target.hasChildNodes()) {
+      while(source.firstChild) target.appendChild(source.firstChild);
+    }
+  }
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSheet(id) {
+  const overlay = document.getElementById(id);
+  if(overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close sheets after successful save
+const _origAddSig = typeof addSignalEntry !== 'undefined' ? addSignalEntry : null;
+document.addEventListener('DOMContentLoaded', function() {
+  // Patch save buttons to also close sheet
+  const btnSig = document.getElementById('btn-sig');
+  if(btnSig) {
+    const orig = btnSig.onclick;
+    btnSig.addEventListener('click', function() {
+      setTimeout(() => closeSheet('signal-sheet'), 1500);
+    });
+  }
+  const btnTL = document.getElementById('btn-tl');
+  if(btnTL) {
+    btnTL.addEventListener('click', function() {
+      setTimeout(() => closeSheet('trade-sheet'), 1500);
+    });
+  }
+});
+
 // ── MOBILE BOTTOM TAB BAR ──
 function updateBottomBar(tab) {
   document.querySelectorAll('.btb-item').forEach(b => b.classList.remove('active'));
@@ -5025,5 +5158,31 @@ function switchTab(n){
 
 
 </script>
+
+<!-- ══ SIGNAL SHEET ══ -->
+<div class="sheet-overlay" id="signal-sheet" onclick="if(event.target===this)closeSheet('signal-sheet')">
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="sheet-title">New Signal</div>
+      <button onclick="closeSheet('signal-sheet')" style="background:var(--surface2);border:none;color:var(--muted2);width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <!-- Clone of signal form content — reads same input IDs -->
+    <div id="signal-sheet-content"></div>
+  </div>
+</div>
+
+<!-- ══ TRADE SHEET ══ -->
+<div class="sheet-overlay" id="trade-sheet" onclick="if(event.target===this)closeSheet('trade-sheet')">
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="sheet-title">Log Trade</div>
+      <button onclick="closeSheet('trade-sheet')" style="background:var(--surface2);border:none;color:var(--muted2);width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div id="trade-sheet-content"></div>
+  </div>
+</div>
+
 </body>
 </html>
