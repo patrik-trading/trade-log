@@ -269,7 +269,7 @@ body.light #sig-filter-futures-dd * {
 .rules-action-hold{display:inline-block;background:rgba(200,169,110,.15);color:var(--accent);border:1px solid rgba(200,169,110,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
 .rules-action-exit{display:inline-block;background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
 @media(max-width:900px){#tab-rules .g2-rules{grid-template-columns:1fr;}}
-@media(max-width:1000px){.sig-main{grid-template-columns:1fr;}.tl-layout{grid-template-columns:1fr!important;}.tl-stats{grid-template-columns:repeat(5,1fr);}#tab-rules .rules-two-col{grid-template-columns:1fr;}}
+@media(max-width:1000px){.sig-main{grid-template-columns:1fr;}.tl-layout{grid-template-columns:1fr!important;}.tl-stats{grid-template-columns:repeat(5,1fr);}#tab-rules .rules-two-col{grid-template-columns:1fr 1fr;}}
 @media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr;}.legend{grid-template-columns:1fr 1fr;}.tl-stats{grid-template-columns:repeat(3,1fr)!important;}.stats{grid-template-columns:repeat(2,1fr);}}
 
 /* ══════════════════════════════════════════
@@ -430,8 +430,8 @@ body.light #sig-filter-futures-dd * {
   /* 2.4 Review period */
   #rv-from,#rv-to { width:100%!important; font-size:.8rem!important; }
 
-  /* 2.5 Equity above rdist */
-  .review-charts-grid { flex-direction:column!important; }
+  /* 2.5 Equity above rdist — force single column */
+  .review-charts-grid { display:flex!important; flex-direction:column!important; }
   #equity-panel { order:1; }
   #rdist-panel  { order:2; }
 
@@ -442,9 +442,9 @@ body.light #sig-filter-futures-dd * {
   /* OI Quick Reference — 2x2 on mobile */
   .oi-grid { grid-template-columns:1fr 1fr!important; }
 
-  /* Trade form top grid — 2 col (date+month, account full width) */
+  /* Trade form top: date full width, month+account side by side */
   .tl-g4-top { grid-template-columns:1fr 1fr!important; }
-  .tl-g4-top .ig:last-child { grid-column:1/-1; }
+  .tl-g4-top .ig:first-child { grid-column:1/-1; }
 
   /* Trade form mid grid — 2 col */
   .tl-g4-mid { grid-template-columns:1fr 1fr!important; }
@@ -1217,7 +1217,7 @@ body.light #sig-filter-futures-dd * {
   <!-- ══ INDICATOR SETUP ══ -->
   <div id="rules-cat-indicator">
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px" class="rules-two-col">
+    <div style="display:grid;gap:18px;margin-bottom:18px" class="rules-two-col">
 
       <!-- Weekly settings -->
       <div class="panel">
