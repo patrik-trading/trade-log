@@ -392,9 +392,20 @@ body.light #sig-filter-futures-dd * {
   /* Monthly + Best/Worst grid — single column on mobile */
   .review-bottom-grid { grid-template-columns:1fr!important; }
 
-  /* Monthly table full width */
-  .review-bottom-grid .panel { width:100%; }
-  .review-bottom-grid table { min-width:400px!important; font-size:.62rem!important; }
+  /* Monthly table — fit all columns */
+  .review-bottom-grid .panel { width:100%; overflow-x:auto; }
+  .review-bottom-grid table { width:100%!important; min-width:0!important; font-size:.58rem!important; }
+  .review-bottom-grid th, .review-bottom-grid td { padding:5px 4px!important; white-space:nowrap; }
+
+  /* Best & Worst — full width */
+  #best-trades, #worst-trades { width:100%!important; }
+  #best-trades > div, #worst-trades > div { overflow:hidden; }
+
+  /* From/To dates — stack on mobile */
+  .rv-date-row { grid-template-columns:1fr!important; }
+
+  /* Review period date inputs full width */
+  #rv-from, #rv-to { width:100%!important; font-size:.8rem!important; }
 
   /* Equity + R dist — full width stacked on mobile */
   .review-charts-grid { display:flex!important; flex-direction:column!important; gap:12px!important; }
@@ -1004,15 +1015,15 @@ body.light #sig-filter-futures-dd * {
           <option value="ALL">All Accounts</option>
         </select>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-        <div class="ig" style="margin:0;flex:1;min-width:130px"><label>From</label><input type="date" id="rv-from" onchange="renderReview()" style="width:100%"></div>
-        <div class="ig" style="margin:0;flex:1;min-width:130px"><label>To</label><input type="date" id="rv-to" onchange="renderReview()" style="width:100%"></div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;padding-top:16px">
-          <button class="btn-sm" onclick="setReviewPeriod('all')">All</button>
-          <button class="btn-sm" onclick="setReviewPeriod('ytd')">YTD</button>
-          <button class="btn-sm" onclick="setReviewPeriod('3m')">3M</button>
-          <button class="btn-sm" onclick="setReviewPeriod('1m')">1M</button>
-        </div>
+      <div class="rv-date-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="ig" style="margin:0"><label>From</label><input type="date" id="rv-from" onchange="renderReview()" style="width:100%"></div>
+        <div class="ig" style="margin:0"><label>To</label><input type="date" id="rv-to" onchange="renderReview()" style="width:100%"></div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn-sm" onclick="setReviewPeriod('all')">All</button>
+        <button class="btn-sm" onclick="setReviewPeriod('ytd')">YTD</button>
+        <button class="btn-sm" onclick="setReviewPeriod('3m')">3M</button>
+        <button class="btn-sm" onclick="setReviewPeriod('1m')">1M</button>
       </div>
     </div>
   </div>
@@ -1040,7 +1051,7 @@ body.light #sig-filter-futures-dd * {
     <div class="panel">
       <div class="ptitle">Monthly P&amp;L Summary</div>
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-        <table class="analytics-table" style="width:100%;min-width:500px;font-size:.62rem">
+        <table class="analytics-table" style="width:100%;min-width:100%;font-size:.6rem">
           <thead>
             <tr>
               <th>Month</th>
