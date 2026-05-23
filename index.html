@@ -7,14 +7,14 @@
 <title>Fundamental Trade Log</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#09090b;--surface:#111113;--surface2:#18181b;--border:#27272a;--text:#fafafa;--muted:#52525b;--muted2:#71717a;--accent:#c8a96e;--mega-bull:#22c55e;--mega-bear:#ef4444;--bull:#3b82f6;--bear:#f97316;--trap:#a855f7;--neutral:#71717a;--recovery:#34d399;}
-body.light{--bg:#f4f4f5;--surface:#ffffff;--surface2:#f4f4f5;--border:#e4e4e7;--text:#09090b;--muted:#d4d4d8;--muted2:#a1a1aa;--accent:#9a7a3a;}
+:root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#0f172a;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
+body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#0f172a;}
 .theme-toggle{font-family:'DM Mono';font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(200,169,110,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,169,110,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(148,163,184,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.08) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
@@ -46,7 +46,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   .tab-btns-desktop{display:none;}
   .tab-btns-mobile{display:none;}
 }
-body.light .tab-btns-mobile select{background:#f0ece2!important;color:#1a1810!important;border-color:#ddd8cc!important;}
+body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!important;border-color:#e2e8f0!important;}
 .tab-pane{display:none;}
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
@@ -207,29 +207,29 @@ body.light input[type=text],
 body.light input[type=password],
 body.light textarea {
   background: #f4f4f5 !important;
-  color: #1a1810 !important;
-  border-color: #e4e4e7 !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
 }
 body.light select option {
   background: #ffffff !important;
-  color: #1a1810 !important;
+  color: #0f172a !important;
 }
 body.light #sig-sort,
 body.light #sig-filter-signal-btn,
 body.light #sig-filter-futures-btn {
   background: #f4f4f5 !important;
-  color: #1a1810 !important;
-  border-color: #e4e4e7 !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
 }
-body.light .sig-chk-row { color: #1a1810 !important; }
+body.light .sig-chk-row { color: #0f172a !important; }
 body.light #sig-filter-signal-dd,
 body.light #sig-filter-futures-dd {
   background: #ffffff !important;
-  border-color: #e4e4e7 !important;
+  border-color: #e2e8f0 !important;
 }
 body.light #sig-filter-signal-dd *,
 body.light #sig-filter-futures-dd * {
-  color: #1a1810 !important;
+  color: #0f172a !important;
 }
 
 /* ANALYTICS PANEL */
@@ -544,7 +544,8 @@ input[type=date] {
   }
 
   body.light .bottom-tab-bar {
-    background: rgba(255,255,255,.88);
+    background: rgba(248,250,252,.92);
+    border-top: 1px solid #e2e8f0;
   }
 
   /* Dark mode bar */
@@ -688,6 +689,25 @@ input[type=date] {
 .sig-card-metric-val{font-size:.75rem;font-weight:700;color:var(--text);}
 .sig-card-note{font-size:.6rem;color:var(--muted2);margin-top:7px;font-style:italic;line-height:1.4;}
 .sig-card-actions{display:flex;gap:6px;margin-top:8px;justify-content:flex-end;}
+
+
+body:not(.light){
+  --bg:#0f172a;
+  --surface:#1e293b;
+  --surface2:#263042;
+  --border:#334155;
+  --text:#f8fafc;
+  --muted:#334155;
+  --muted2:#64748b;
+  --accent:#38bdf8;
+  --mega-bull:#22c55e;
+  --mega-bear:#ef4444;
+  --bull:#60a5fa;
+  --bear:#fb923c;
+  --trap:#c084fc;
+  --neutral:#94a3b8;
+  --recovery:#34d399;
+}
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
