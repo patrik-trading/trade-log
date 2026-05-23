@@ -280,7 +280,7 @@ body.light #sig-filter-futures-dd * {
 
   /* ── Wrapper / spacing ── */
   .wrapper{padding:12px 14px;}
-  header{margin-bottom:14px;gap:8px;}
+  header{margin-bottom:14px;gap:6px;flex-wrap:wrap;}
   .logo{font-size:1.8rem;}
   .logo small{font-size:.58rem;}
   .badge{font-size:.65rem;padding:4px 10px;}
@@ -390,7 +390,7 @@ body.light #sig-filter-futures-dd * {
 /* ── Additional mobile fixes ── */
 @media(max-width:700px){
   /* Date badge constrain */
-  #dateBadge{font-size:.62rem!important;padding:4px 8px!important;}
+  #dateBadge{font-size:.6rem!important;padding:4px 6px!important;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   /* Signal toolbar date inputs */
   #sig-from-date,#sig-to-date{width:100%!important;font-size:.72rem!important;}
@@ -430,10 +430,10 @@ body.light #sig-filter-futures-dd * {
   /* 2.4 Review period */
   #rv-from,#rv-to { width:100%!important; font-size:.8rem!important; }
 
-  /* 2.5 Equity above rdist — force single column */
-  .review-charts-grid { display:flex!important; flex-direction:column!important; }
-  #equity-panel { order:1; }
-  #rdist-panel  { order:2; }
+  /* 2.5 Equity + R dist — full width stacked */
+  .review-charts-grid { display:flex!important; flex-direction:column!important; gap:12px!important; }
+  #equity-panel { order:1; width:100%!important; max-width:100%!important; }
+  #rdist-panel  { order:2; width:100%!important; max-width:100%!important; }
 
   /* 2.6 OI grid 2x2 */
   .corr-grid { grid-template-columns:1fr 1fr!important; }
@@ -462,7 +462,8 @@ body.light #sig-filter-futures-dd * {
   #tab-rules th, #tab-rules td { padding:6px 8px!important; }
   #tab-rules .panel { overflow-x:auto!important; -webkit-overflow-scrolling:touch!important; }
   #tab-rules .ptitle { font-size:.55rem!important; }
-
+  /* Indicator setup — force single column */
+  .rules-two-col { grid-template-columns:1fr!important; display:grid!important; }
   /* Rules description text — prevent overflow */
   #tab-rules .panel > div[style*="DM Mono"] { font-size:.6rem!important; line-height:1.7!important; word-break:break-word; }
 
@@ -1031,7 +1032,7 @@ body.light #sig-filter-futures-dd * {
     <div class="panel">
       <div class="ptitle">Monthly P&amp;L Summary</div>
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-        <table class="analytics-table" style="width:100%;min-width:420px">
+        <table class="analytics-table" style="width:100%;min-width:500px;font-size:.62rem">
           <thead>
             <tr>
               <th>Month</th>
