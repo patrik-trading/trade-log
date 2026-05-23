@@ -757,6 +757,12 @@ input[type=date] {
 </div>
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
+
+  <!-- MOBILE: Log Signal button at top -->
+  <div class="sheet-trigger" style="margin-bottom:12px">
+    <button class="btn-log" onclick="openSheet('signal-sheet')">+ Log Signal</button>
+  </div>
+
   <div class="legend">
     <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring CONFIRMED</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Both ▲ Rising</div></div>
     <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring Waiting</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Not both ▲ yet</div></div>
@@ -769,11 +775,6 @@ input[type=date] {
     <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⚡ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
     <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⏸ NEUTRAL / WAIT</div><div class="legend-rule">No clear alignment — preserve capital</div></div>
   </div>
-  <!-- MOBILE SHEET TRIGGERS -->
-  <div class="sheet-trigger">
-    <button class="btn-log" style="flex:1" onclick="openSheet('signal-sheet')">+ Log Signal</button>
-  </div>
-
   <!-- TOP ROW: form + stats + distribution side by side -->
   <div class="sig-main" style="margin-bottom:16px">
     <div class="panel">
@@ -1031,6 +1032,12 @@ input[type=date] {
 
 <!-- TAB TRADE LOG -->
 <div class="tab-pane" id="tab-tradelog">
+
+  <!-- MOBILE: Log Trade button at top -->
+  <div class="sheet-trigger" style="margin-bottom:12px">
+    <button class="btn-log" onclick="openSheet('trade-sheet')">+ Log New Trade</button>
+  </div>
+
   <div class="tl-topbar">
     <span class="tl-lbl">ACCOUNT</span>
     <select id="tl-acct-filter" onchange="renderTrades()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none">
@@ -1091,11 +1098,6 @@ input[type=date] {
       </div>
     </div>
     <div id="analytics-table"><div class="empty">No trades yet</div></div>
-  </div>
-
-  <!-- MOBILE SHEET TRIGGER -->
-  <div class="sheet-trigger" style="margin-bottom:12px">
-    <button class="btn-log" style="flex:1" onclick="openSheet('trade-sheet')">+ Log New Trade</button>
   </div>
 
   <div class="tl-layout">
