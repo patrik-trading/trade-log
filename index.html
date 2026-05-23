@@ -456,6 +456,16 @@ body.light #sig-filter-futures-dd * {
   #rules-cat-bias table { min-width:480px; }
   #rules-cat-bias .panel { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 
+
+  /* Rules tables — smaller text, proper scroll */
+  #tab-rules table { font-size:.6rem!important; }
+  #tab-rules th, #tab-rules td { padding:6px 8px!important; }
+  #tab-rules .panel { overflow-x:auto!important; -webkit-overflow-scrolling:touch!important; }
+  #tab-rules .ptitle { font-size:.55rem!important; }
+
+  /* Rules description text — prevent overflow */
+  #tab-rules .panel > div[style*="DM Mono"] { font-size:.6rem!important; line-height:1.7!important; word-break:break-word; }
+
 /* ── Very small phones (< 400px) ── */
 @media(max-width:400px){
   .wrapper{padding:10px 10px;}
@@ -1212,14 +1222,14 @@ body.light #sig-filter-futures-dd * {
       <!-- Weekly settings -->
       <div class="panel">
         <div class="ptitle">Weekly Chart Settings (13,3)</div>
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:480px" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:420px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
           <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">COT Engine</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Positioning filter — who is positioned where</td></tr>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Yield Valuation</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Carry filter — is the macro environment supportive</td></tr>
           </tbody>
         </table></div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
+        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:10px;line-height:1.7;word-break:break-word">
           <b style="color:var(--text)">Read Monday morning</b> before market open.<br>
           Use <b style="color:var(--accent)">last closed bar</b> values (white rows) from the yield table to log COT, yield, OI and price direction.
         </div>
@@ -1228,14 +1238,14 @@ body.light #sig-filter-futures-dd * {
       <!-- Daily settings -->
       <div class="panel">
         <div class="ptitle">Daily Chart Settings (21,3)</div>
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:480px" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:420px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
           <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Tactical (fast)</td><td class="rules-cell">21 days</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Entry trigger — finds the hook below 10 or above 90</td></tr>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Strategic (slow)</td><td class="rules-cell">65 days</td><td class="rules-cell">5 EMA</td><td class="rules-cell">Regime — above 50 bullish, below 50 bearish</td></tr>
           </tbody>
         </table></div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:10px;line-height:1.8">
+        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:10px;line-height:1.7;word-break:break-word">
           <b style="color:var(--text)">Monitor daily until order is placed.</b><br>
           Tactical below 10% = entry window open. Hook = raw crosses above smoothed from below 10. Once filled — no need to monitor daily.
         </div>
@@ -1245,7 +1255,7 @@ body.light #sig-filter-futures-dd * {
     <!-- COT Engine columns -->
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">COT Engine — Column Guide</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:400px" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:380px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
         <thead><tr><th class="rules-th">Column</th><th class="rules-th">What It Shows</th><th class="rules-th">What You Enter in Dashboard</th></tr></thead>
         <tbody>
           <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col B — Spec COT %</td><td class="rules-cell">Speculative positioning percentile (0–100) vs 13-week history</td><td class="rules-cell">COT % field. Below 15 = contrarian bullish. Above 85 = contrarian bearish.</td></tr>
