@@ -670,6 +670,25 @@ input[type=date] {
   .sheet-overlay { display:none !important; }
 }
 
+
+/* ── Signal history mobile cards ── */
+@media(max-width:700px) {
+  .hist-wrap { display:none !important; }
+  #signal-cards-mobile { display:block !important; }
+}
+.sig-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;margin-bottom:9px;position:relative;overflow:hidden;}
+.sig-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.sig-card-asset{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:-.01em;}
+.sig-card-phase{font-size:.62rem;margin-top:2px;font-weight:500;}
+.sig-card-score{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.sig-card-meta{font-size:.58rem;color:var(--muted2);text-align:right;margin-top:2px;}
+.sig-card-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:8px;}
+.sig-card-metric{background:var(--surface2);border-radius:7px;padding:5px 7px;}
+.sig-card-metric-label{font-size:.52rem;color:var(--muted2);margin-bottom:1px;font-weight:500;}
+.sig-card-metric-val{font-size:.75rem;font-weight:700;color:var(--text);}
+.sig-card-note{font-size:.6rem;color:var(--muted2);margin-top:7px;font-style:italic;line-height:1.4;}
+.sig-card-actions{display:flex;gap:6px;margin-top:8px;justify-content:flex-end;}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
@@ -2624,6 +2643,66 @@ function renderSignals(){
       </td>
     </tr>`;
   }).join('');
+
+  // ── Mobile card view ──
+  const mc = document.getElementById('signal-cards-mobile');
+  if(mc) {
+    if(!filtered.length) {
+      mc.innerHTML = '<div class="empty" style="padding:24px;text-align:center">No signals match filters</div>';
+    } else {
+      mc.innerHTML = filtered.map(e => {
+        const col   = e.color || 'var(--muted2)';
+        const score = e.inst_score != null ? e.inst_score : '—';
+        const scol  = e.inst_score >= 70 ? 'var(--mega-bull)' : e.inst_score >= 55 ? 'var(--bull)' : e.inst_score <= 30 ? 'var(--mega-bear)' : e.inst_score <= 45 ? 'var(--bear)' : 'var(--muted2)';
+        const ysm   = e.ys_momentum != null ? (e.ys_momentum >= 0 ? '+' : '') + e.ys_momentum : '—';
+        const ysmCol= e.ys_momentum > 0 ? 'var(--mega-bull)' : e.ys_momentum < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
+        return `<div class="sig-card" style="border-left:3px solid ${col}">
+          <div class="sig-card-top">
+            <div>
+              <div class="sig-card-asset">${e.asset || '—'}</div>
+              <div class="sig-card-phase" style="color:${col}">${e.icon || ''} ${e.label || ''}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="sig-card-score" style="color:${scol}">${score}</div>
+              <div class="sig-card-meta">${e.date || ''}</div>
+            </div>
+          </div>
+          <div class="sig-card-grid">
+            <div class="sig-card-metric">
+              <div class="sig-card-metric-label">Spec COT</div>
+              <div class="sig-card-metric-val">${e.cot != null ? e.cot + '%' : '—'}</div>
+            </div>
+            <div class="sig-card-metric">
+              <div class="sig-card-metric-label">Yield</div>
+              <div class="sig-card-metric-val">${e.val != null ? e.val + '%' : '—'}</div>
+            </div>
+            <div class="sig-card-metric">
+              <div class="sig-card-metric-label">Comm %</div>
+              <div class="sig-card-metric-val">${e.commercial_cot != null ? e.commercial_cot + '%' : '—'}</div>
+            </div>
+            <div class="sig-card-metric">
+              <div class="sig-card-metric-label">YS Mom</div>
+              <div class="sig-card-metric-val" style="color:${ysmCol}">${ysm}</div>
+            </div>
+            <div class="sig-card-metric">
+              <div class="sig-card-metric-label">COT Dir</div>
+              <div class="sig-card-metric-val">${e.cot_dir || '—'}</div>
+            </div>
+            <div class="sig-card-metric">
+              <div class="sig-card-metric-label">OI</div>
+              <div class="sig-card-metric-val">${e.oi_change || '—'}</div>
+            </div>
+          </div>
+          ${e.notes ? `<div class="sig-card-note">${e.notes.substring(0,60)}${e.notes.length>60?'…':''}</div>` : ''}
+          <div class="sig-card-actions">
+            <button class="btn-sm" onclick="openSigEditModal('${e.id}')" style="font-size:.6rem;padding:4px 10px">✏️ Edit</button>
+            <button class="btn-sm" onclick="deleteSigEntry('${e.id}')" style="font-size:.6rem;padding:4px 10px;color:var(--mega-bear)">✕</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
 }
 
 
