@@ -44,7 +44,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tab-btns-mobile{display:none;}
 @media(max-width:700px){
   .tab-btns-desktop{display:none;}
-  .tab-btns-mobile{display:block;padding:8px 12px;}
+  .tab-btns-mobile{display:none;}
 }
 body.light .tab-btns-mobile select{background:#f0ece2!important;color:#1a1810!important;border-color:#ddd8cc!important;}
 .tab-pane{display:none;}
@@ -519,6 +519,87 @@ input[type=date] {
   position: relative;
 }
 
+
+/* ══════════════════════════════════
+   MOBILE BOTTOM TAB BAR
+   ══════════════════════════════════ */
+.bottom-tab-bar {
+  display: none;
+}
+
+@media(max-width:700px) {
+  .bottom-tab-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9000;
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0,0,0,.08);
+    padding: 6px 0 max(12px, env(safe-area-inset-bottom));
+    gap: 0;
+  }
+
+  body.light .bottom-tab-bar {
+    background: rgba(255,255,255,.88);
+  }
+
+  /* Dark mode bar */
+  body:not(.light) .bottom-tab-bar {
+    background: rgba(17,17,19,.85);
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+
+  .btb-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: transform .1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btb-item:active { transform: scale(.92); }
+
+  .btb-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+    display: block;
+  }
+
+  .btb-label {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: .58rem;
+    font-weight: 500;
+    color: var(--muted2);
+    display: block;
+    transition: color .15s;
+  }
+
+  .btb-item.active .btb-label {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .btb-item.active .btb-icon {
+    filter: drop-shadow(0 0 4px rgba(200,169,110,.4));
+  }
+
+  /* Push content up so it doesn't hide behind bar */
+  .wrapper {
+    padding-bottom: 76px !important;
+  }
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
@@ -571,7 +652,7 @@ input[type=date] {
   </div>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
-    <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer">
+    <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer;display:none">
       <option value="signals">📡 Signal Dashboard</option>
       <option value="tradelog">📒 Trade Log</option>
       <option value="review">📊 Performance Review</option>
@@ -579,6 +660,30 @@ input[type=date] {
       <option value="rules">📘 Trading Rules</option>
     </select>
   </div>
+</div>
+
+<!-- MOBILE BOTTOM TAB BAR -->
+<div class="bottom-tab-bar" id="bottom-tab-bar">
+  <button class="btb-item active" id="btb-signals" onclick="switchTab('signals');updateBottomBar('signals')">
+    <span class="btb-icon">📡</span>
+    <span class="btb-label">Signals</span>
+  </button>
+  <button class="btb-item" id="btb-tradelog" onclick="switchTab('tradelog');updateBottomBar('tradelog')">
+    <span class="btb-icon">📒</span>
+    <span class="btb-label">Log</span>
+  </button>
+  <button class="btb-item" id="btb-review" onclick="switchTab('review');updateBottomBar('review')">
+    <span class="btb-icon">📊</span>
+    <span class="btb-label">Review</span>
+  </button>
+  <button class="btb-item" id="btb-converter" onclick="switchTab('converter');updateBottomBar('converter')">
+    <span class="btb-icon">🔄</span>
+    <span class="btb-label">CFD</span>
+  </button>
+  <button class="btb-item" id="btb-rules" onclick="switchTab('rules');updateBottomBar('rules')">
+    <span class="btb-icon">📘</span>
+    <span class="btb-label">Rules</span>
+  </button>
 </div>
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
@@ -4883,6 +4988,17 @@ function toggleTheme(){
 }
 
 // ── TABS ──
+
+// ── MOBILE BOTTOM TAB BAR ──
+function updateBottomBar(tab) {
+  document.querySelectorAll('.btb-item').forEach(b => b.classList.remove('active'));
+  const active = document.getElementById('btb-' + tab);
+  if(active) active.classList.add('active');
+  // Keep mobile select in sync (for any code that reads it)
+  const sel = document.getElementById('mobile-tab-select');
+  if(sel) sel.value = tab;
+}
+
 function switchTab(n){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
@@ -4892,6 +5008,7 @@ function switchTab(n){
   const mob=document.getElementById('mobile-tab-select');
   if(mob) mob.value=n;
   if(n==='review'){setTimeout(renderReview,50);}
+  updateBottomBar(n);
   if(n==='converter'){setTimeout(async()=>{await ztLoadBasisFromSupabase();ztInit();},50);}
 }
 
