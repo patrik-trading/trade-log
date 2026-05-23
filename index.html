@@ -1877,18 +1877,6 @@ input[type=date] {
 </div><!-- /wrapper -->
 
 
-<div id="err-overlay" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a0000;border-top:2px solid #ef4444;padding:10px;z-index:99999;font-family:monospace;font-size:.7rem;color:#ef4444;max-height:40vh;overflow-y:auto"></div>
-<script>
-window.onerror = function(msg, src, line, col, err) {
-  const el = document.getElementById('err-overlay');
-  if(el) { el.style.display='block'; el.innerHTML += '<div>⚠ '+msg+' (line '+line+')</div>'; }
-  return false;
-};
-window.addEventListener('unhandledrejection', function(e) {
-  const el = document.getElementById('err-overlay');
-  if(el) { el.style.display='block'; el.innerHTML += '<div>⚠ Promise: '+e.reason+'</div>'; }
-});
-</script>
 
 <script>
 // ── SUPABASE REST WRAPPER ──
