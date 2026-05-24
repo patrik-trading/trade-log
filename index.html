@@ -281,7 +281,59 @@ body.light #sig-filter-futures-dd * {
 
   /* ── Wrapper / spacing ── */
   .wrapper{padding:12px 14px;overflow-x:hidden;max-width:100%;box-sizing:border-box;}
-  header{margin-bottom:14px;gap:6px;flex-wrap:wrap;}
+  /* ── Header mobile cleanup ── */
+  header {
+    margin-bottom:10px;
+    gap:6px;
+    align-items:flex-start;
+  }
+
+  /* Title smaller on mobile */
+  .logo {
+    font-size:1.8rem !important;
+    letter-spacing:.04em !important;
+  }
+  .logo small {
+    font-size:.58rem !important;
+    letter-spacing:.15em !important;
+  }
+
+  /* Right side — stack neatly */
+  header > div:last-child {
+    display:flex !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
+    gap:6px !important;
+  }
+
+  /* Sync bar compact */
+  .sync-bar {
+    font-size:.58rem !important;
+    gap:5px !important;
+  }
+
+  /* Date badge compact */
+  .badge {
+    font-size:.65rem !important;
+    padding:4px 8px !important;
+    max-width:120px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  /* Theme toggle compact */
+  .theme-toggle {
+    font-size:.65rem !important;
+    padding:5px 10px !important;
+  }
+
+  /* Reset DB — very subtle on mobile */
+  header .btn-sm {
+    font-size:.52rem !important;
+    padding:3px 7px !important;
+    opacity:.7;
+  }
   .logo{font-size:1.8rem;}
   .logo small{font-size:.58rem;}
   .badge{font-size:.65rem;padding:4px 10px;}
@@ -991,7 +1043,59 @@ body.light #sig-filter-futures-dd * {
 
   /* ── Wrapper / spacing ── */
   .wrapper{padding:12px 14px;overflow-x:hidden;max-width:100%;box-sizing:border-box;}
-  header{margin-bottom:14px;gap:6px;flex-wrap:wrap;}
+  /* ── Header mobile cleanup ── */
+  header {
+    margin-bottom:10px;
+    gap:6px;
+    align-items:flex-start;
+  }
+
+  /* Title smaller on mobile */
+  .logo {
+    font-size:1.8rem !important;
+    letter-spacing:.04em !important;
+  }
+  .logo small {
+    font-size:.58rem !important;
+    letter-spacing:.15em !important;
+  }
+
+  /* Right side — stack neatly */
+  header > div:last-child {
+    display:flex !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
+    gap:6px !important;
+  }
+
+  /* Sync bar compact */
+  .sync-bar {
+    font-size:.58rem !important;
+    gap:5px !important;
+  }
+
+  /* Date badge compact */
+  .badge {
+    font-size:.65rem !important;
+    padding:4px 8px !important;
+    max-width:120px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  /* Theme toggle compact */
+  .theme-toggle {
+    font-size:.65rem !important;
+    padding:5px 10px !important;
+  }
+
+  /* Reset DB — very subtle on mobile */
+  header .btn-sm {
+    font-size:.52rem !important;
+    padding:3px 7px !important;
+    opacity:.7;
+  }
   .logo{font-size:1.8rem;}
   .logo small{font-size:.58rem;}
   .badge{font-size:.65rem;padding:4px 10px;}
