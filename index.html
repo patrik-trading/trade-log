@@ -7,8 +7,8 @@
 <title>Fundamental Trade Log</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#2563eb;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
-body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#2563eb;}
+:root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
+body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;}
 .theme-toggle{font-family:'DM Mono';font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -709,6 +709,100 @@ body:not(.light){
   --recovery:#34d399;
 }
 
+
+/* ── Trade log mobile cards ── */
+@media(max-width:700px) {
+  .tl-table-desktop { display:none !important; }
+  #trade-cards-mobile { display:block !important; }
+}
+
+.tl-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px 14px;
+  margin-bottom:9px;
+  border-left:3px solid var(--border);
+}
+.tl-card-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+.tl-card-left { flex:1; min-width:0; }
+.tl-card-symbol {
+  font-family:'Inter',sans-serif;
+  font-size:1.05rem;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+.tl-card-meta {
+  font-size:.6rem;
+  color:var(--muted2);
+  margin-top:2px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.tl-card-r {
+  font-family:'Inter',sans-serif;
+  font-size:1.6rem;
+  font-weight:800;
+  letter-spacing:-.04em;
+  line-height:1;
+  text-align:right;
+}
+.tl-card-r-label {
+  font-size:.5rem;
+  font-weight:600;
+  text-align:right;
+  opacity:.6;
+  margin-top:1px;
+}
+.tl-card-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:5px;
+  margin-top:8px;
+}
+.tl-card-metric {
+  background:var(--surface2);
+  border-radius:7px;
+  padding:5px 7px;
+}
+.tl-card-metric-l {
+  font-size:.52rem;
+  color:var(--muted2);
+  margin-bottom:1px;
+}
+.tl-card-metric-v {
+  font-size:.75rem;
+  font-weight:700;
+  color:var(--text);
+}
+.tl-card-tags {
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+.tl-card-tag {
+  font-size:.58rem;
+  font-weight:600;
+  padding:2px 7px;
+  border-radius:20px;
+  background:var(--surface2);
+  color:var(--muted2);
+}
+.tl-card-actions {
+  display:flex;
+  gap:6px;
+  margin-top:9px;
+  justify-content:flex-end;
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
@@ -1238,12 +1332,14 @@ body:not(.light){
           <span id="trade-count-label" style="opacity:.6">0 trades</span>
         </div>
         <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between"><span>← scroll sideways · scroll down ↕</span><span id="trade-count-label"></span></div>
-        <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
+        <div class="tl-wrap tl-table-desktop" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
             <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Add-on</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
             <tbody id="tl-tbody"><tr><td colspan="20" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
+        <!-- MOBILE: trade cards -->
+        <div id="trade-cards-mobile" style="display:none"></div>
       </div>
     </div>
   </div>
@@ -3624,6 +3720,69 @@ function renderTrades(){
       : '<td style="color:var(--muted2)">—</td>';
     return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:\'DM Mono\';font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
   }).join('');
+
+  // ── Mobile trade cards ──
+  const mc2 = document.getElementById('trade-cards-mobile');
+  if(mc2) {
+    if(!ft.length) {
+      mc2.innerHTML = '<div class="empty" style="padding:24px;text-align:center">No trades logged yet</div>';
+    } else {
+      mc2.innerHTML = [...ft].reverse().map(t => {
+        const rCol  = t.r > 0 ? 'var(--mega-bull)' : t.r < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
+        const pc    = PC[t.phase] || 'var(--muted2)';
+        const dirCol = t.dir === 'Buy' ? 'var(--mega-bull)' : 'var(--mega-bear)';
+        const ec    = t.entry === 'Extreme' ? '#ef4444' : t.entry === 'Momentum' ? '#3b82f6' : 'var(--muted2)';
+        const ic2   = INST_COLORS[t.inst_tag] || 'var(--muted2)';
+        const rDisp = t.r != null ? (t.r >= 0 ? '+' : '') + t.r.toFixed(1) : '—';
+        const rrDisp = (t.r != null && t.risked_r && t.risked_r !== 0) ? (t.r/t.risked_r).toFixed(2) : '—';
+        const ts    = t.currency === 'EUR' ? '€' : '$';
+        return `<div class="tl-card" style="border-left-color:${rCol}">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-card-symbol">${t.symbol || '—'}
+                <span style="font-size:.7rem;color:${dirCol};font-weight:600;margin-left:5px">● ${t.dir || ''}</span>
+                ${t.addon ? '<span style="font-size:.58rem;background:var(--accent);color:#fff;padding:1px 5px;border-radius:4px;margin-left:4px">+</span>' : ''}
+              </div>
+              <div class="tl-card-meta">
+                <span>${t.date || ''}</span>
+                <span>${t.oc || ''}</span>
+                ${t.phase ? `<span style="color:${pc};font-weight:600">${t.phase}</span>` : ''}
+              </div>
+            </div>
+            <div>
+              <div class="tl-card-r" style="color:${rCol}">${rDisp}</div>
+              <div class="tl-card-r-label" style="color:${rCol}">R</div>
+            </div>
+          </div>
+          <div class="tl-card-grid">
+            <div class="tl-card-metric">
+              <div class="tl-card-metric-l">Risked R</div>
+              <div class="tl-card-metric-v">${t.risked_r != null ? t.risked_r + 'R' : '—'}</div>
+            </div>
+            <div class="tl-card-metric">
+              <div class="tl-card-metric-l">PnL</div>
+              <div class="tl-card-metric-v" style="color:${rCol}">${t.pnl != null ? ts + t.pnl.toFixed(0) : '—'}</div>
+            </div>
+            <div class="tl-card-metric">
+              <div class="tl-card-metric-l">RR</div>
+              <div class="tl-card-metric-v" style="color:${rCol}">${rrDisp}</div>
+            </div>
+          </div>
+          <div class="tl-card-tags">
+            ${t.entry ? `<span class="tl-card-tag" style="color:${ec};border:1px solid ${ec}30">● ${t.entry}</span>` : ''}
+            ${t.inst_tag ? `<span class="tl-card-tag" style="color:${ic2};border:1px solid ${ic2}30">● ${t.inst_tag}</span>` : ''}
+            ${t.size ? `<span class="tl-card-tag">${t.size} lots</span>` : ''}
+          </div>
+          ${t.notes ? `<div style="font-size:.6rem;color:var(--muted2);margin-top:7px;font-style:italic;line-height:1.4">${t.notes.substring(0,60)}${t.notes.length>60?'…':''}</div>` : ''}
+          <div class="tl-card-actions">
+            <button class="btn-sm" onclick="openEditModal('${t.id}')" style="font-size:.6rem;padding:4px 10px">✏️ Edit</button>
+            <button class="btn-sm" onclick="deleteTrade('${t.id}')" style="font-size:.6rem;padding:4px 10px;color:var(--mega-bear)">✕</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
 
   // ── STREAKS (BE trades ignored, not streak-breaking) ──
   const closedChron = ft.filter(t=>t.oc==='Close'&&t.r!==null).slice().reverse();
