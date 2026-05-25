@@ -285,6 +285,7 @@ body.light #sig-filter-futures-dd * {
 
   /* Trade calculator — mobile */
   #calc-positions-grid { grid-template-columns:1fr!important; }
+  #conv-panel-cfd > div:first-child { grid-template-columns:1fr!important; }
 
   /* ── Trade stats grid — 2 col on mobile ── */
   .tl-stats { grid-template-columns:repeat(2,1fr)!important; gap:8px!important; }
@@ -1058,6 +1059,7 @@ body.light #sig-filter-futures-dd * {
 
   /* Trade calculator — mobile */
   #calc-positions-grid { grid-template-columns:1fr!important; }
+  #conv-panel-cfd > div:first-child { grid-template-columns:1fr!important; }
 
   /* ── Trade stats grid — 2 col on mobile ── */
   .tl-stats { grid-template-columns:repeat(2,1fr)!important; gap:8px!important; }
@@ -2271,6 +2273,19 @@ body:not(.light){
 
 <!-- TAB: FUTURES → CFD CONVERTER -->
 <div class="tab-pane" id="tab-converter">
+
+  <!-- Sub-tab bar -->
+  <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
+    <button id="conv-btn-cfd" onclick="switchConvTab('cfd')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s">
+      🔄 Futures → CFD
+    </button>
+    <button id="conv-btn-calc" onclick="switchConvTab('calc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">
+      🧮 Trade Calculator
+    </button>
+  </div>
+
+  <!-- CFD CONVERTER PANEL -->
+  <div id="conv-panel-cfd">
   <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-bottom:16px">
     <div style="display:flex;flex-direction:column;gap:14px">
 
@@ -2400,6 +2415,11 @@ body:not(.light){
       </div>
     </div>
   </div>
+
+  </div><!-- /conv-panel-cfd -->
+
+  <!-- TRADE CALCULATOR PANEL -->
+  <div id="conv-panel-calc" style="display:none">
 
   <!-- ══════════════════════════════════════
        TRADE CALCULATOR — Merged Entry + Margin + Risk
@@ -2546,6 +2566,8 @@ body:not(.light){
     <!-- Clear button -->
     <button class="btn-sm" onclick="clearCalc()" style="margin-top:16px;width:100%">⌫ Clear All</button>
   </div>
+
+  </div><!-- /conv-panel-calc -->
 
 </div><!-- /tab-converter -->
 
@@ -6298,6 +6320,27 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+
+// ── CFD TAB SUB-TABS ──
+function switchConvTab(tab) {
+  const panels = ['cfd','calc'];
+  panels.forEach(p => {
+    const panel = document.getElementById('conv-panel-' + p);
+    const btn   = document.getElementById('conv-btn-' + p);
+    if(panel) panel.style.display = p === tab ? 'block' : 'none';
+    if(btn) {
+      if(p === tab) {
+        btn.style.background = 'var(--accent)';
+        btn.style.color      = '#fff';
+        btn.style.fontWeight = '600';
+      } else {
+        btn.style.background = 'transparent';
+        btn.style.color      = 'var(--muted2)';
+        btn.style.fontWeight = '500';
+      }
+    }
+  });
+}
 
 // ══════════════════════════════════════
 // TRADE CALCULATOR
