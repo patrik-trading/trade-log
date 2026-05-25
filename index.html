@@ -282,6 +282,10 @@ body.light #sig-filter-futures-dd * {
   /* ── Wrapper / spacing ── */
   .wrapper{padding:12px 14px;overflow-x:hidden;max-width:100%;box-sizing:border-box;}
 
+
+  /* Trade calculator — mobile */
+  #calc-positions-grid { grid-template-columns:1fr!important; }
+
   /* ── Trade stats grid — 2 col on mobile ── */
   .tl-stats { grid-template-columns:repeat(2,1fr)!important; gap:8px!important; }
   .tl-stat { padding:13px 10px!important; border-radius:12px!important; }
@@ -1050,6 +1054,10 @@ body.light #sig-filter-futures-dd * {
 
   /* ── Wrapper / spacing ── */
   .wrapper{padding:12px 14px;overflow-x:hidden;max-width:100%;box-sizing:border-box;}
+
+
+  /* Trade calculator — mobile */
+  #calc-positions-grid { grid-template-columns:1fr!important; }
 
   /* ── Trade stats grid — 2 col on mobile ── */
   .tl-stats { grid-template-columns:repeat(2,1fr)!important; gap:8px!important; }
@@ -2392,6 +2400,153 @@ body:not(.light){
       </div>
     </div>
   </div>
+
+  <!-- ══════════════════════════════════════
+       TRADE CALCULATOR — Merged Entry + Margin + Risk
+       ══════════════════════════════════════ -->
+  <div class="panel" style="margin-top:18px">
+    <div class="ptitle">Trade Calculator</div>
+
+    <!-- SECTION 1: Weighted Entry -->
+    <div style="margin-bottom:20px">
+      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+        <div style="width:3px;height:12px;background:var(--accent);border-radius:2px"></div>
+        Weighted Average Entry
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px" id="calc-positions-grid">
+        <!-- Position 1 -->
+        <div class="panel" style="padding:12px;background:var(--surface2)">
+          <div style="font-family:'DM Mono';font-size:.58rem;color:var(--accent);margin-bottom:8px;font-weight:600">POSITION 1</div>
+          <div class="ig" style="margin-bottom:8px"><label>Entry Price</label><input type="number" id="calc-p1-price" placeholder="e.g. 0.78820" step="any" oninput="calcWeightedEntry()"></div>
+          <div class="ig"><label>Size (lots)</label><input type="number" id="calc-p1-lots" placeholder="e.g. 0.09" step="any" oninput="calcWeightedEntry()"></div>
+        </div>
+        <!-- Position 2 -->
+        <div class="panel" style="padding:12px;background:var(--surface2)">
+          <div style="font-family:'DM Mono';font-size:.58rem;color:var(--accent);margin-bottom:8px;font-weight:600">POSITION 2</div>
+          <div class="ig" style="margin-bottom:8px"><label>Entry Price</label><input type="number" id="calc-p2-price" placeholder="e.g. 0.78568" step="any" oninput="calcWeightedEntry()"></div>
+          <div class="ig"><label>Size (lots)</label><input type="number" id="calc-p2-lots" placeholder="e.g. 0.03" step="any" oninput="calcWeightedEntry()"></div>
+        </div>
+        <!-- Position 3 -->
+        <div class="panel" style="padding:12px;background:var(--surface2)">
+          <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:8px;font-weight:600">POSITION 3 <span style="font-size:.52rem;opacity:.6">(optional)</span></div>
+          <div class="ig" style="margin-bottom:8px"><label>Entry Price</label><input type="number" id="calc-p3-price" placeholder="optional" step="any" oninput="calcWeightedEntry()"></div>
+          <div class="ig"><label>Size (lots)</label><input type="number" id="calc-p3-lots" placeholder="optional" step="any" oninput="calcWeightedEntry()"></div>
+        </div>
+      </div>
+
+      <!-- Weighted Entry Result -->
+      <div id="calc-entry-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;text-align:center">
+          <div>
+            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">WEIGHTED ENTRY</div>
+            <div id="calc-we-price" style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--accent);letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">TOTAL LOTS</div>
+            <div id="calc-we-lots" style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--text);letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">POSITIONS</div>
+            <div id="calc-we-count" style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--text);letter-spacing:.04em">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);margin-bottom:20px"></div>
+
+    <!-- SECTION 2: Risk Calculator -->
+    <div style="margin-bottom:20px">
+      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+        <div style="width:3px;height:12px;background:var(--mega-bull);border-radius:2px"></div>
+        Risk Per Trade
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="ig"><label>1R Value (€)</label><input type="number" id="calc-1r" placeholder="e.g. 90" step="any" oninput="calcRisk()"></div>
+        <div class="ig"><label>R Multiple</label>
+          <select id="calc-r-mult" onchange="calcRisk()">
+            <option value="1">1R</option>
+            <option value="0.5" selected>0.5R</option>
+            <option value="0.25">0.25R</option>
+            <option value="2">2R</option>
+          </select>
+        </div>
+        <div class="ig"><label>Lot Size</label><input type="number" id="calc-lots" placeholder="e.g. 0.05" step="any" oninput="calcRisk()"></div>
+        <div class="ig"><label>Stop (pips)</label><input type="number" id="calc-stop-pips" placeholder="e.g. 164.9" step="any" oninput="calcRisk()"></div>
+        <div class="ig"><label>Pip Value (€/pip/lot)</label><input type="number" id="calc-pip-val" placeholder="e.g. 0.30" step="any" oninput="calcRisk()"></div>
+        <div class="ig"><label>TP (pips)</label><input type="number" id="calc-tp-pips" placeholder="e.g. 385.7" step="any" oninput="calcRisk()"></div>
+      </div>
+
+      <div id="calc-risk-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;text-align:center">
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">RISK (€)</div>
+            <div id="calc-risk-eur" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--mega-bear);letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">REWARD (€)</div>
+            <div id="calc-reward-eur" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--mega-bull);letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">R:R RATIO</div>
+            <div id="calc-rr" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">R CHECK</div>
+            <div id="calc-r-check" style="font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.04em">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);margin-bottom:20px"></div>
+
+    <!-- SECTION 3: Margin Safety -->
+    <div>
+      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+        <div style="width:3px;height:12px;background:var(--bear);border-radius:2px"></div>
+        Margin Safety Check
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="ig"><label>Account Balance (€)</label><input type="number" id="calc-balance" placeholder="e.g. 981.19" step="any" oninput="calcMargin()"></div>
+        <div class="ig"><label>Current Equity (€)</label><input type="number" id="calc-equity" placeholder="e.g. 881.90" step="any" oninput="calcMargin()"></div>
+        <div class="ig"><label>Used Margin (€)</label><input type="number" id="calc-used-margin" placeholder="e.g. 344.45" step="any" oninput="calcMargin()"></div>
+        <div class="ig"><label>Stop Out Level (%)</label><input type="number" id="calc-stopout" placeholder="e.g. 50" value="50" step="any" oninput="calcMargin()"></div>
+        <div class="ig"><label>New Trade Margin (€)</label><input type="number" id="calc-new-margin" placeholder="e.g. 230" step="any" oninput="calcMargin()"></div>
+        <div class="ig"><label>New Trade P&amp;L at SL (€)</label><input type="number" id="calc-sl-pnl" placeholder="e.g. -45" step="any" oninput="calcMargin()"></div>
+      </div>
+
+      <div id="calc-margin-result" style="display:none;border-radius:10px;padding:14px;border:2px solid var(--border)">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;margin-bottom:12px">
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">MARGIN LEVEL</div>
+            <div id="calc-margin-level" style="font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">FREE MARGIN</div>
+            <div id="calc-free-margin" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);letter-spacing:.04em">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-bottom:4px">AT STOP OUT</div>
+            <div id="calc-stopout-level" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--mega-bear);letter-spacing:.04em">—</div>
+          </div>
+        </div>
+        <!-- Traffic light -->
+        <div id="calc-safety-bar" style="border-radius:8px;padding:10px 14px;text-align:center">
+          <div id="calc-safety-icon" style="font-size:1.4rem;margin-bottom:4px">—</div>
+          <div id="calc-safety-text" style="font-family:'DM Mono';font-size:.65rem;font-weight:600"></div>
+          <div id="calc-safety-sub" style="font-family:'DM Mono';font-size:.58rem;opacity:.7;margin-top:3px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clear button -->
+    <button class="btn-sm" onclick="clearCalc()" style="margin-top:16px;width:100%">⌫ Clear All</button>
+  </div>
+
 </div><!-- /tab-converter -->
 
 <!-- TAB TRADING RULES -->
@@ -6142,6 +6297,146 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+
+// ══════════════════════════════════════
+// TRADE CALCULATOR
+// ══════════════════════════════════════
+
+function calcWeightedEntry() {
+  const p1 = parseFloat(document.getElementById('calc-p1-price').value);
+  const l1 = parseFloat(document.getElementById('calc-p1-lots').value);
+  const p2 = parseFloat(document.getElementById('calc-p2-price').value);
+  const l2 = parseFloat(document.getElementById('calc-p2-lots').value);
+  const p3 = parseFloat(document.getElementById('calc-p3-price').value);
+  const l3 = parseFloat(document.getElementById('calc-p3-lots').value);
+
+  const positions = [];
+  if(!isNaN(p1) && !isNaN(l1) && l1 > 0) positions.push({p:p1, l:l1});
+  if(!isNaN(p2) && !isNaN(l2) && l2 > 0) positions.push({p:p2, l:l2});
+  if(!isNaN(p3) && !isNaN(l3) && l3 > 0) positions.push({p:p3, l:l3});
+
+  const res = document.getElementById('calc-entry-result');
+  if(positions.length < 2) { res.style.display='none'; return; }
+
+  const totalLots = positions.reduce((s,x) => s + x.l, 0);
+  const weighted  = positions.reduce((s,x) => s + x.p * x.l, 0) / totalLots;
+
+  // Determine decimal places from input
+  const dec = Math.max(...positions.map(x => {
+    const s = x.p.toString();
+    return s.includes('.') ? s.split('.')[1].length : 0;
+  }));
+
+  document.getElementById('calc-we-price').textContent = weighted.toFixed(dec);
+  document.getElementById('calc-we-lots').textContent  = totalLots.toFixed(2);
+  document.getElementById('calc-we-count').textContent = positions.length;
+  res.style.display = 'block';
+}
+
+function calcRisk() {
+  const lots    = parseFloat(document.getElementById('calc-lots').value);
+  const stop    = parseFloat(document.getElementById('calc-stop-pips').value);
+  const pipVal  = parseFloat(document.getElementById('calc-pip-val').value);
+  const tp      = parseFloat(document.getElementById('calc-tp-pips').value);
+  const oneR    = parseFloat(document.getElementById('calc-1r').value);
+  const rMult   = parseFloat(document.getElementById('calc-r-mult').value);
+
+  const res = document.getElementById('calc-risk-result');
+  if(isNaN(lots) || isNaN(stop) || isNaN(pipVal)) { res.style.display='none'; return; }
+
+  const risk    = lots * stop * pipVal;
+  const reward  = !isNaN(tp) ? lots * tp * pipVal : null;
+  const rr      = reward ? (reward / risk).toFixed(2) : null;
+
+  // R check
+  const expectedRisk = !isNaN(oneR) ? oneR * rMult : null;
+  const rDiff = expectedRisk ? Math.abs(risk - expectedRisk) : null;
+  const rOk   = rDiff !== null && rDiff < 5;
+
+  document.getElementById('calc-risk-eur').textContent   = '€' + risk.toFixed(2);
+  document.getElementById('calc-reward-eur').textContent = reward ? '€' + reward.toFixed(2) : '—';
+  document.getElementById('calc-rr').textContent         = rr ? rr + 'R' : '—';
+
+  const rEl = document.getElementById('calc-r-check');
+  if(expectedRisk) {
+    rEl.textContent = rOk ? '✓' : '!';
+    rEl.style.color = rOk ? 'var(--mega-bull)' : 'var(--mega-bear)';
+    rEl.title = rOk ? 'Risk matches plan' : `Expected €${expectedRisk.toFixed(2)}, got €${risk.toFixed(2)}`;
+  } else {
+    rEl.textContent = '—';
+    rEl.style.color = 'var(--muted2)';
+  }
+
+  res.style.display = 'block';
+}
+
+function calcMargin() {
+  const equity     = parseFloat(document.getElementById('calc-equity').value);
+  const usedMargin = parseFloat(document.getElementById('calc-used-margin').value);
+  const stopOut    = parseFloat(document.getElementById('calc-stopout').value) || 50;
+  const newMargin  = parseFloat(document.getElementById('calc-new-margin').value) || 0;
+  const slPnl      = parseFloat(document.getElementById('calc-sl-pnl').value) || 0;
+
+  const res = document.getElementById('calc-margin-result');
+  if(isNaN(equity) || isNaN(usedMargin)) { res.style.display='none'; return; }
+
+  const totalMargin   = usedMargin + newMargin;
+  const equityAtSL    = equity + slPnl;  // equity after worst case
+  const marginLevel   = totalMargin > 0 ? (equityAtSL / totalMargin) * 100 : 0;
+  const freeMargin    = equityAtSL - totalMargin;
+  const stopOutLevel  = totalMargin * (stopOut / 100);
+
+  document.getElementById('calc-margin-level').textContent  = marginLevel.toFixed(0) + '%';
+  document.getElementById('calc-free-margin').textContent   = '€' + freeMargin.toFixed(2);
+  document.getElementById('calc-stopout-level').textContent = '€' + stopOutLevel.toFixed(2);
+
+  // Color margin level
+  const mlEl = document.getElementById('calc-margin-level');
+  mlEl.style.color = marginLevel > 200 ? 'var(--mega-bull)' : marginLevel > 120 ? 'var(--bear)' : 'var(--mega-bear)';
+
+  // Traffic light
+  const bar  = document.getElementById('calc-safety-bar');
+  const icon = document.getElementById('calc-safety-icon');
+  const text = document.getElementById('calc-safety-text');
+  const sub  = document.getElementById('calc-safety-sub');
+
+  if(marginLevel > 200) {
+    bar.style.background  = 'rgba(34,197,94,.08)';
+    bar.style.borderColor = 'rgba(34,197,94,.2)';
+    icon.textContent = '🟢';
+    text.textContent = 'SAFE';
+    text.style.color = 'var(--mega-bull)';
+    sub.textContent  = `Margin level ${marginLevel.toFixed(0)}% — well above stop out`;
+  } else if(marginLevel > 120) {
+    bar.style.background  = 'rgba(249,115,22,.08)';
+    bar.style.borderColor = 'rgba(249,115,22,.2)';
+    icon.textContent = '🟡';
+    text.textContent = 'CAUTION';
+    text.style.color = 'var(--bear)';
+    sub.textContent  = `Margin level ${marginLevel.toFixed(0)}% — getting close to stop out`;
+  } else {
+    bar.style.background  = 'rgba(239,68,68,.08)';
+    bar.style.borderColor = 'rgba(239,68,68,.2)';
+    icon.textContent = '🔴';
+    text.textContent = 'DANGER';
+    text.style.color = 'var(--mega-bear)';
+    sub.textContent  = `Margin level ${marginLevel.toFixed(0)}% — stop out risk HIGH`;
+  }
+
+  res.style.display = 'block';
+}
+
+function clearCalc() {
+  ['calc-p1-price','calc-p1-lots','calc-p2-price','calc-p2-lots',
+   'calc-p3-price','calc-p3-lots','calc-1r','calc-lots','calc-stop-pips',
+   'calc-pip-val','calc-tp-pips','calc-balance','calc-equity',
+   'calc-used-margin','calc-stopout','calc-new-margin','calc-sl-pnl'
+  ].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('calc-entry-result').style.display='none';
+  document.getElementById('calc-risk-result').style.display='none';
+  document.getElementById('calc-margin-result').style.display='none';
+}
 
 // ── MOBILE BOTTOM TAB BAR ──
 function updateBottomBar(tab) {
