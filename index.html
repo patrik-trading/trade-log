@@ -6350,6 +6350,31 @@ function switchConvTab(tab) {
 // ══════════════════════════════════════
 // TRADE CALCULATOR
 // ══════════════════════════════════════
+// ── TABS ──
+function switchTab(n){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  const pane = document.getElementById('tab-'+n);
+  if(pane) pane.classList.add('active');
+  const btn=document.querySelector(`.tab-btn[onclick="switchTab('${n}')"]`);
+  if(btn) btn.classList.add('active');
+  const mob=document.getElementById('mobile-tab-select');
+  if(mob) mob.value=n;
+  if(n==='review'){setTimeout(renderReview,50);}
+  if(n==='converter'){setTimeout(async()=>{await ztLoadBasisFromSupabase();ztInit();},50);}
+  updateBottomBar(n);
+}
+
+// ── MOBILE BOTTOM TAB BAR ──
+function updateBottomBar(tab) {
+  document.querySelectorAll('.btb-item').forEach(b=>b.classList.remove('active'));
+  const active = document.getElementById('btb-'+tab);
+  if(active) active.classList.add('active');
+  const sel = document.getElementById('mobile-tab-select');
+  if(sel) sel.value = tab;
+}
+
+
 // ── AUTO-CONNECT if credentials saved ──
 (function(){
   const url=localStorage.getItem('sb_url'),key=localStorage.getItem('sb_key');
