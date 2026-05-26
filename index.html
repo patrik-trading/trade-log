@@ -6392,5 +6392,30 @@ function updateBottomBar(tab) {
 
 
 </script>
+
+<!-- ══ SIGNAL SHEET ══ -->
+<div class="sheet-overlay" id="signal-sheet" onclick="if(event.target===this)closeSheet('signal-sheet')">
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="sheet-title">New Signal</div>
+      <button onclick="closeSheet('signal-sheet')" style="background:var(--surface2);border:none;color:var(--muted2);width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div id="signal-sheet-content"></div>
+  </div>
+</div>
+
+<!-- ══ TRADE SHEET ══ -->
+<div class="sheet-overlay" id="trade-sheet" onclick="if(event.target===this)closeSheet('trade-sheet')">
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="sheet-title">Log Trade</div>
+      <button onclick="closeSheet('trade-sheet')" style="background:var(--surface2);border:none;color:var(--muted2);width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div id="trade-sheet-content"></div>
+  </div>
+</div>
+
 </body>
 </html>
