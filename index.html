@@ -2304,21 +2304,31 @@ body:not(.light){
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
             <label>Symbol <span style="font-size:.55rem;color:var(--muted2)">(6E, GC etc.)</span></label>
-            <select id="zt-sym" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;outline:none;width:100%">
-              <option>6E</option><option>6B</option><option>6A</option><option>6N</option>
-              <option>6C</option><option>6J</option><option>6S</option>
-              <option>GC</option><option>SI</option>
+            <select id="zt-sym" onchange="ztAutoFillCFD()" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;outline:none;width:100%">
+              <option value="">— Select —</option>
+              <option value="6E">6E — EUR/USD</option>
+              <option value="6B">6B — GBP/USD</option>
+              <option value="6A">6A — AUD/USD</option>
+              <option value="6N">6N — NZD/USD</option>
+              <option value="6C">6C — USD/CAD</option>
+              <option value="6J">6J — USD/JPY</option>
+              <option value="6S">6S — USD/CHF</option>
+              <option value="GC">GC — XAU/USD</option>
+              <option value="SI">SI — XAG/USD</option>
+              <option value="CL">CL — USOil</option>
+              <option value="HG">HG — Copper</option>
             </select>
           </div>
           <div class="ig">
             <label>CFD Symbol <span style="font-size:.55rem;color:var(--muted2)">(broker)</span></label>
-            <input type="text" id="zt-cfd-sym" placeholder="e.g. EURUSD" style="font-size:.8rem">
+            <input type="text" id="zt-cfd-sym" placeholder="Auto-filled" style="font-size:.8rem;background:var(--surface2)" readonly>
           </div>
         </div>
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
             <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
-            <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 1.08500" oninput="ztCalcBasis()">
+            <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 1.08500" oninput="ztAutoInvert();ztCalcBasis()">
+            <div id="zt-inverted-note" style="display:none;font-family:'DM Mono';font-size:.58rem;color:var(--bear);margin-top:4px">⚠ Inverted pair — 1/price used</div>
           </div>
           <div class="ig">
             <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(your broker)</span></label>
@@ -6214,6 +6224,55 @@ function toggleTheme(){
   document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
 }
 
+
+// ── CFD CONVERTER AUTO-FILL ──
+const ZT_MAP = {
+  '6E':  { cfd:'EURUSD',  inv:false },
+  '6B':  { cfd:'GBPUSD',  inv:false },
+  '6A':  { cfd:'AUDUSD',  inv:false },
+  '6N':  { cfd:'NZDUSD',  inv:false },
+  '6C':  { cfd:'USDCAD',  inv:true  }, // 6C = CAD/USD, CFD = USD/CAD
+  '6J':  { cfd:'USDJPY',  inv:true  }, // 6J = JPY/USD, CFD = USD/JPY
+  '6S':  { cfd:'USDCHF',  inv:true  }, // 6S = CHF/USD, CFD = USD/CHF
+  'GC':  { cfd:'XAUUSD',  inv:false },
+  'SI':  { cfd:'XAGUSD',  inv:false },
+  'CL':  { cfd:'USOil',   inv:false },
+  'HG':  { cfd:'Copper',  inv:false },
+};
+
+function ztAutoFillCFD() {
+  const sym = document.getElementById('zt-sym').value;
+  const cfdEl = document.getElementById('zt-cfd-sym');
+  const noteEl = document.getElementById('zt-inverted-note');
+  if(!sym || !ZT_MAP[sym]) {
+    if(cfdEl) cfdEl.value = '';
+    if(noteEl) noteEl.style.display = 'none';
+    return;
+  }
+  const map = ZT_MAP[sym];
+  if(cfdEl) cfdEl.value = map.cfd;
+  if(noteEl) noteEl.style.display = map.inv ? 'block' : 'none';
+  // Re-calc basis if prices already entered
+  ztAutoInvert();
+  ztCalcBasis();
+}
+
+function ztAutoInvert() {
+  const sym = document.getElementById('zt-sym').value;
+  if(!sym || !ZT_MAP[sym] || !ZT_MAP[sym].inv) return;
+  const futEl = document.getElementById('zt-fut-price');
+  const futVal = parseFloat(futEl.value);
+  if(!isNaN(futVal) && futVal > 0) {
+    // Show inverted price as placeholder in CFD price field hint
+    const inv = (1 / futVal).toFixed(5);
+    const cfdEl = document.getElementById('zt-cfd-price');
+    if(cfdEl && !cfdEl.value) {
+      cfdEl.placeholder = 'e.g. ' + inv + ' (1/fut)';
+    }
+  }
+}
+
+
 // ── TABS ──
 
 
@@ -6354,6 +6413,7 @@ function switchConvTab(tab) {
 // ══════════════════════════════════════
 // TRADE CALCULATOR
 // ══════════════════════════════════════
+
 // ── TABS ──
 function switchTab(n){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
