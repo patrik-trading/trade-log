@@ -6377,14 +6377,35 @@ function calcMaxLots() {
   const stopOut=parseFloat(document.getElementById('calc-stopout').value)||50;
   const res=document.getElementById('calc-margin-result');
   if(isNaN(equity)||isNaN(usedMargin)||isNaN(marginPerLot)||marginPerLot===0){res.style.display='none';return;}
-  const safeLevel=stopOut*2.5;
-  const maxTotalMargin=equity/safeLevel*100;
-  const availableMargin=maxTotalMargin-usedMargin;
-  const maxCentiLots=Math.floor(availableMargin/marginPerLot);
-  const maxLots=Math.max(0,maxCentiLots/100);
-  const currentLevel=usedMargin>0?(equity/usedMargin*100):999;
+
+  // Safe threshold = 3× stop out level (e.g. stop out 50% → stay above 150%)
+  // This gives a comfortable buffer above the danger zone
+  const safeThreshold = stopOut * 3;
+
+  // Max total margin where margin level stays at safeThreshold
+  // marginLevel = equity / totalMargin × 100 = safeThreshold
+  // → totalMargin = equity / safeThreshold × 100
+  const maxTotalMargin = equity / safeThreshold * 100;
+
+  // Available margin for new trades
+  const availableMargin = Math.max(0, maxTotalMargin - usedMargin);
+
+  // Max lots (marginPerLot is per 0.01 lot)
+  const maxCentiLots = Math.floor(availableMargin / marginPerLot);
+  const maxLots = Math.max(0, maxCentiLots / 100);
+
+  // Current margin level
+  const currentLevel = usedMargin > 0 ? (equity / usedMargin * 100) : 999;
+
+  // Absolute max (at stop out, no buffer) — for reference
+  const absMaxTotalMargin = equity / stopOut * 100;
+  const absAvailable = Math.max(0, absMaxTotalMargin - usedMargin);
+  const absMaxLots = Math.max(0, Math.floor(absAvailable / marginPerLot) / 100);
   document.getElementById('calc-max-lots').textContent=maxLots.toFixed(2);
   document.getElementById('calc-margin-buffer').textContent=currentLevel.toFixed(0)+'%';
+  // Show sub label with context
+  const subEl=document.getElementById('calc-safety-sub');
+  if(subEl) subEl.textContent='Current '+currentLevel.toFixed(0)+'% · Safe max '+maxLots.toFixed(2)+' lots · Absolute max '+absMaxLots.toFixed(2)+' lots';
   const bar=document.getElementById('calc-safety-bar');
   const icon=document.getElementById('calc-safety-icon');
   const text=document.getElementById('calc-safety-text');
