@@ -2327,8 +2327,12 @@ body:not(.light){
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
             <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
-            <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 1.08500" oninput="ztAutoInvert();ztCalcBasis()">
-            <div id="zt-inverted-note" style="display:none;font-family:'DM Mono';font-size:.58rem;color:var(--bear);margin-top:4px">⚠ Inverted pair — 1/price used</div>
+            <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 0.006302" oninput="ztAutoInvert();ztCalcBasis()">
+            <div id="zt-inverted-note" style="display:none;margin-top:6px">
+              <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:3px">1 ÷ Futures price</div>
+              <div id="zt-inv-price" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--accent);letter-spacing:.04em">—</div>
+              <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2)">equivalent CFD price</div>
+            </div>
           </div>
           <div class="ig">
             <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(your broker)</span></label>
@@ -5873,11 +5877,17 @@ function ztCalcBasis() {
   const cfd=parseFloat(document.getElementById('zt-cfd-price').value);
   const dispEl=document.getElementById('zt-basis-display'),valEl=document.getElementById('zt-basis-val'),noteEl=document.getElementById('zt-basis-note');
   if(isNaN(fut)||isNaN(cfd)){if(dispEl)dispEl.style.display='none';ztCurrentBasis=null;return;}
-  ztCurrentBasis=parseFloat((cfd-fut).toFixed(8));
+  // For inverted pairs (6J, 6S, 6C) use 1/futures as the comparison price
+  const sym = document.getElementById('zt-sym')?.value;
+  const isInv = sym && ZT_MAP[sym] && ZT_MAP[sym].inv;
+  const futComp = isInv ? (1/fut) : fut;
+  ztCurrentBasis=parseFloat((cfd-futComp).toFixed(8));
   if(dispEl)dispEl.style.display='block';
-  const dp=Math.abs(fut)>100?2:5;
+  const dp = Math.abs(futComp)>100 ? 3 : 5;
   if(valEl)valEl.textContent=(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp);
-  if(noteEl)noteEl.textContent='CFD = Futures + ('+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp)+')';
+  if(noteEl)noteEl.textContent = isInv
+    ? 'Basis = CFD − (1/Futures) = '+cfd.toFixed(dp)+' − '+futComp.toFixed(dp)+' = '+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp)
+    : 'CFD = Futures + ('+(ztCurrentBasis>=0?'+':'')+ztCurrentBasis.toFixed(dp)+')';
 }
 
 async function ztSaveBasisForSymbol() {
@@ -6258,17 +6268,24 @@ function ztAutoFillCFD() {
 }
 
 function ztAutoInvert() {
-  const sym = document.getElementById('zt-sym').value;
-  if(!sym || !ZT_MAP[sym] || !ZT_MAP[sym].inv) return;
-  const futEl = document.getElementById('zt-fut-price');
-  const futVal = parseFloat(futEl.value);
+  const sym    = document.getElementById('zt-sym').value;
+  const noteEl = document.getElementById('zt-inverted-note');
+  const invEl  = document.getElementById('zt-inv-price');
+  if(!sym || !ZT_MAP[sym] || !ZT_MAP[sym].inv) {
+    if(noteEl) noteEl.style.display = 'none';
+    return;
+  }
+  if(noteEl) noteEl.style.display = 'block';
+  const futVal = parseFloat(document.getElementById('zt-fut-price').value);
   if(!isNaN(futVal) && futVal > 0) {
-    // Show inverted price as placeholder in CFD price field hint
-    const inv = (1 / futVal).toFixed(5);
+    const inv = (1 / futVal);
+    const dp  = inv > 100 ? 3 : 5;
+    if(invEl) invEl.textContent = inv.toFixed(dp);
+    // Also update CFD placeholder
     const cfdEl = document.getElementById('zt-cfd-price');
-    if(cfdEl && !cfdEl.value) {
-      cfdEl.placeholder = 'e.g. ' + inv + ' (1/fut)';
-    }
+    if(cfdEl) cfdEl.placeholder = inv.toFixed(dp) + ' (1/fut)';
+  } else {
+    if(invEl) invEl.textContent = '—';
   }
 }
 
