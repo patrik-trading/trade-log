@@ -1750,7 +1750,8 @@ body:not(.light){
 
       <div class="g2">
         <div class="ig"><label>Date</label><div class="date-wrap"><input type="date" id="eDate"></div></div>
-        <div class="ig"><label>Futures</label><input type="text" id="eAsset" placeholder="e.g. 6E"></div>
+        <div class="ig"><label>Futures</label><select id="eAsset"><option value="">— Select —</option>
+<option value="6E">6E</option><option value="6B">6B</option><option value="6J">6J</option><option value="6S">6S</option><option value="6A">6A</option><option value="6C">6C</option><option value="6N">6N</option><option value="GC">GC</option><option value="SI">SI</option><option value="CL">CL</option><option value="HG">HG</option></select></div>
       </div>
       <div class="g2" style="margin-bottom:6px">
         <div class="ig"><label>COT % — Col B</label><div class="num-wrap"><input type="number" id="cotIn" min="0" max="100" placeholder="0–100" oninput="clamp(this);detect()"><span class="num-sfx">%</span></div></div>
@@ -2082,7 +2083,8 @@ body:not(.light){
           <div class="ig"><label>Open / Close</label><select id="tl-oc"><option value="Close">Close</option><option value="Open">Open</option></select></div>
           <div class="ig"><label>Direction</label><select id="tl-dir"><option>Buy</option><option>Sell</option></select></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="tl-size" placeholder="0.00" step="0.01" min="0"></div>
-          <div class="ig"><label>Symbol</label><input type="text" id="tl-symbol" placeholder="EUR/USD"></div>
+          <div class="ig"><label>Symbol</label><select id="tl-symbol"><option value="">— Select —</option>
+<option value="EUR/USD">EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="USD/JPY">USD/JPY</option><option value="USD/CHF">USD/CHF</option><option value="AUD/USD">AUD/USD</option><option value="USD/CAD">USD/CAD</option><option value="NZD/USD">NZD/USD</option><option value="XAU/USD">XAU/USD</option><option value="XAG/USD">XAG/USD</option><option value="USOil">USOil</option><option value="HG/USD">HG/USD</option></select></div>
         </div>
         <div class="g3">
           <div class="ig"><label>Type</label><select id="tl-type"><option>Forex</option><option>Futures</option><option>CFD</option></select></div>
@@ -2969,7 +2971,8 @@ body:not(.light){
     <div class="ptitle">Edit Signal Entry</div>
     <div class="g2" style="margin-bottom:11px">
       <div class="ig"><label>Date</label><div class="date-wrap"><input type="date" id="se-date"></div></div>
-      <div class="ig"><label>Futures</label><input type="text" id="se-asset" placeholder="e.g. 6E"></div>
+      <div class="ig"><label>Futures</label><select id="se-asset"><option value="">— Select —</option>
+<option value="6E">6E</option><option value="6B">6B</option><option value="6J">6J</option><option value="6S">6S</option><option value="6A">6A</option><option value="6C">6C</option><option value="6N">6N</option><option value="GC">GC</option><option value="SI">SI</option><option value="CL">CL</option><option value="HG">HG</option></select></div>
     </div>
     <div class="g2" style="margin-bottom:6px">
       <div class="ig">
@@ -3078,7 +3081,8 @@ body:not(.light){
       <div class="ig"><label>Open / Close</label><select id="edit-oc"><option value="Close">Close</option><option value="Open">Open</option></select></div>
       <div class="ig"><label>Direction</label><select id="edit-dir"><option>Buy</option><option>Sell</option></select></div>
       <div class="ig"><label>Size</label><input type="number" id="edit-size" step="0.01"></div>
-      <div class="ig"><label>Symbol</label><input type="text" id="edit-symbol"></div>
+      <div class="ig"><label>Symbol</label><select id="edit-symbol"><option value="">— Select —</option>
+<option value="EUR/USD">EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="USD/JPY">USD/JPY</option><option value="USD/CHF">USD/CHF</option><option value="AUD/USD">AUD/USD</option><option value="USD/CAD">USD/CAD</option><option value="NZD/USD">NZD/USD</option><option value="XAU/USD">XAU/USD</option><option value="XAG/USD">XAG/USD</option><option value="USOil">USOil</option><option value="HG/USD">HG/USD</option></select></div>
     </div>
     <div class="g3">
       <div class="ig"><label>Type</label><select id="edit-type"><option>Forex</option><option>Futures</option><option>CFD</option></select></div>
