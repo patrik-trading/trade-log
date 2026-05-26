@@ -6350,5 +6350,18 @@ function switchConvTab(tab) {
 // ══════════════════════════════════════
 // TRADE CALCULATOR
 // ══════════════════════════════════════
+// ── AUTO-CONNECT if credentials saved ──
+(function(){
+  const url=localStorage.getItem('sb_url'),key=localStorage.getItem('sb_key');
+  if(localStorage.getItem('theme')==='light'){
+    document.body.classList.add('light');
+    const btn=document.getElementById('theme-btn');
+    if(btn) btn.textContent='🌙 Dark';
+  }
+  if(url&&key){SB_URL=url;SB_KEY=key;launch();}
+})();
 
 
+</script>
+</body>
+</html>
