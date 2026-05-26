@@ -3160,14 +3160,19 @@ async function connectSupabase(){
   err.textContent='';
   if(!url||!key){err.textContent='Both fields are required.';return;}
   if(!url.startsWith('https://')){err.textContent='URL must start with https://';return;}
-  err.textContent='Testing connection…';
+  err.textContent='Connecting…';
+  // Save credentials
+  try{ localStorage.setItem('sb_url',url); localStorage.setItem('sb_key',key); }catch(e){}
+  SB_URL=url; SB_KEY=key;
+  // Test connection
   try{
-    const r=await fetch(`${url}/rest/v1/trades?limit=1`,{headers:{'apikey':key,'Authorization':'Bearer '+key}});
-    if(!r.ok){err.textContent='Connection failed — check your URL and key, and confirm you ran the SQL setup script.';return;}
-  }catch(e){err.textContent='Could not reach Supabase — check the Project URL.';return;}
-  SB_URL=url;SB_KEY=key;
-  localStorage.setItem('sb_url',url);localStorage.setItem('sb_key',key);
-  launch();
+    const r=await fetch(url+'/rest/v1/trades?limit=1',{headers:{'apikey':key,'Authorization':'Bearer '+key}});
+    if(!r.ok){ err.textContent='Connected but DB error ('+r.status+') — check SQL setup was run.'; }
+  }catch(e){
+    err.textContent='Warning: could not verify connection (CORS/network). Launching anyway…';
+  }
+  // Launch regardless — let it fail gracefully inside the app
+  setTimeout(launch, 800);
 }
 function disconnectDB(){if(!confirm('Reset connection? Your cloud data stays safe.'))return;localStorage.removeItem('sb_url');localStorage.removeItem('sb_key');location.reload();}
 
