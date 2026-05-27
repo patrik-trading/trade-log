@@ -84,7 +84,7 @@ textarea{resize:vertical;min-height:52px;}
 .pill.ok{border-color:var(--mega-bull);color:var(--mega-bull);background:rgba(34,197,94,.08);}
 .pill.warn{border-color:var(--bear);color:var(--bear);background:rgba(249,115,22,.08);}
 .pill.off{border-color:var(--muted);color:var(--muted);}
-.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:7px;margin-bottom:22px;}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;margin-bottom:22px;}
 .legend-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sig-color);border-radius:6px;padding:9px 11px;}
 .legend-sig{font-family:'DM Mono';font-size:.65rem;color:var(--sig-color);font-weight:500;}
 .legend-rule{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
@@ -858,7 +858,7 @@ textarea{resize:vertical;min-height:52px;}
 .pill.ok{border-color:var(--mega-bull);color:var(--mega-bull);background:rgba(34,197,94,.08);}
 .pill.warn{border-color:var(--bear);color:var(--bear);background:rgba(249,115,22,.08);}
 .pill.off{border-color:var(--muted);color:var(--muted);}
-.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:7px;margin-bottom:22px;}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;margin-bottom:22px;}
 .legend-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sig-color);border-radius:6px;padding:9px 11px;}
 .legend-sig{font-family:'DM Mono';font-size:.65rem;color:var(--sig-color);font-weight:500;}
 .legend-rule{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
@@ -1638,6 +1638,143 @@ body:not(.light){
   justify-content:flex-end;
 }
 
+
+/* ══ DESKTOP MODAL FORMS ══ */
+.desk-trigger { display:flex; }
+@media(max-width:700px) { .desk-trigger { display:none !important; } }
+
+/* Hide inline forms on desktop */
+@media(min-width:701px) {
+  .desktop-hide-form { display:none !important; }
+
+  /* sig-main: form in modal, right sidebar fills full width */
+  .sig-main { grid-template-columns:1fr !important; }
+  .sig-main > div:first-child { display:none !important; }
+
+  /* tl-layout becomes full width */
+  .tl-layout { grid-template-columns:1fr !important; }
+}
+
+/* Desktop modal overlay */
+.desk-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9500;
+  align-items: center;
+  justify-content: center;
+}
+.desk-modal-overlay.open {
+  display: flex;
+}
+
+/* Desktop modal box */
+.desk-modal-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 24px 32px;
+  width: 90%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  position: relative;
+  animation: slideUp .25s cubic-bezier(.32,.72,0,1);
+}
+
+.desk-modal-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+
+.desk-modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: var(--surface2);
+  border: none;
+  color: var(--muted2);
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ── Signal sidebar — layout grid on desktop ── */
+.sig-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+@media(min-width:701px) {
+  .sig-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  /* Row 1: Stats bar full width */
+  .sig-sidebar #sig-stats-bar { grid-column: 1 / -1; grid-row: 1; }
+  /* Row 2: Distribution | Correlation Risk */
+  .sig-sidebar #dist-panel  { grid-column: 1; grid-row: 2; }
+  .sig-sidebar #corr-panel  { grid-column: 2; grid-row: 2; }
+  /* Row 3: Focus of Week full width (includes On Watch) */
+  .sig-sidebar #focus-panel { grid-column: 1 / -1; grid-row: 3; }
+}
+
+
+/* ── Signal bottom row: DXY full width ── */
+.sig-bottom-row {
+  display: block;
+  margin-top: 14px;
+}
+.sig-history-panel { margin-top: 14px; }
+
+
+/* ── Signal two-column layout ── */
+.sig-two-col {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.sig-left-col,
+.sig-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+@media(min-width:701px) {
+  .sig-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 16px;
+  }
+  .sig-left-col,
+  .sig-right-col {
+    display: contents;
+  }
+  /* Row 1: Stats (full width) */
+  .sig-left-col .stats       { grid-column:1 / -1; grid-row:1; }
+  /* Row 2: Distribution (left) | DXY (right) — same row height */
+  .sig-left-col #dist-panel  { grid-column:1; grid-row:2; align-self:stretch; }
+  .sig-right-col #dxy-panel  { grid-column:2; grid-row:2; align-self:stretch; }
+  /* Row 3: Focus of Week (left) | On Watch + Corr stacked (right) */
+  .sig-left-col #focus-panel       { grid-column:1; grid-row:3; }
+  .sig-right-col .watch-corr-stack { grid-column:2; grid-row:3; display:flex; flex-direction:column; gap:13px; }
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
@@ -1726,6 +1863,11 @@ body:not(.light){
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
 
+  <!-- DESKTOP: Log Signal button -->
+  <div class="desk-trigger" style="margin-bottom:14px">
+    <button class="btn-log" onclick="openDeskModal('desk-signal-modal')" style="max-width:220px">+ Log Signal</button>
+  </div>
+
   <!-- MOBILE: Log Signal button at top -->
   <div class="sheet-trigger" style="margin-bottom:12px">
     <button class="btn-log" onclick="openSheet('signal-sheet')">+ Log Signal</button>
@@ -1745,7 +1887,7 @@ body:not(.light){
   </div>
   <!-- TOP ROW: form + stats + distribution side by side -->
   <div class="sig-main" style="margin-bottom:16px">
-    <div class="panel">
+    <div class="panel desktop-hide-form">
       <div class="ptitle">New Signal Entry</div>
 
       <div class="g2">
@@ -1858,34 +2000,27 @@ body:not(.light){
         <div class="ig"><label>Futures Bias</label><select id="eBias"><option value="">—</option><option>Long</option><option>Short</option><option>Flat / Watching</option></select></div>
       </div>
       <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="eNotes" placeholder="Observations, confluence, levels..."></textarea></div>
-      <button class="btn-log" id="btn-sig" onclick="addSignalEntry()">+ LOG SIGNAL</button>
+      <button class="btn-log" id="btn-sig" onclick="addSignalEntry();setTimeout(()=>closeDeskModal('desk-signal-modal'),1000)">+ LOG SIGNAL</button>
     </div>
-    <div style="display:flex;flex-direction:column;gap:13px">
+    <div class="sig-two-col">
+
+    <!-- LEFT: Stats | Distribution | Focus of Week -->
+    <div class="sig-left-col">
       <div class="stats">
         <div class="stat"><div class="stat-n" id="sTot">0</div><div class="stat-l">Signals</div></div>
         <div class="stat"><div class="stat-n" id="sDom" style="font-size:.85rem;padding-top:7px">—</div><div class="stat-l">Most Frequent</div></div>
         <div class="stat"><div class="stat-n" id="sLast">—</div><div class="stat-l">Last Entry</div></div>
       </div>
       <div class="panel"><div class="ptitle">Distribution</div><div class="freq" id="freqChart"><div class="empty">No signals yet</div></div></div>
-
-      <!-- FOCUS OF THE WEEK -->
       <div class="panel" id="focus-panel">
-        <div class="ptitle">Focus of the Week</div>
-        <div id="focus-list"><div class="empty">No signals logged yet</div></div>
-      </div>
-
-      <!-- CORRELATED PAIRS RISK -->
-      <div class="panel" id="corr-panel">
-        <div class="ptitle">Correlation Risk</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:10px;line-height:1.6">Active bullish signals on correlated pairs stack your dollar exposure. Each group below counts as <b style="color:var(--accent)">1 risk unit</b> — not multiple.</div>
-        <div id="corr-list"><div class="empty">No signals to analyse</div></div>
-      </div>
-
+          <div class="ptitle">Focus of the Week</div>
+          <div id="focus-list"><div class="empty">No signals logged yet</div></div>
+        </div>
     </div>
-  </div>
 
-  <!-- DXY REGIME OVERLAY — desktop, below trade log -->
-  <div class="panel" id="dxy-panel" style="margin-top:14px">
+    <!-- RIGHT: DXY | On Watch | Correlation Risk -->
+    <div class="sig-right-col">
+      <div class="panel" id="dxy-panel">
     <div class="ptitle">DXY Regime Overlay</div>
     <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Enter your current DXY COT % and Yield Spread % to get the dollar regime. All FX signals are filtered against this.</div>
     <div class="g2" style="margin-bottom:10px">
@@ -1907,8 +2042,22 @@ body:not(.light){
       <div id="dxy-filter-impact" style="font-family:'DM Mono';font-size:.63rem;line-height:1.8"></div>
     </div>
   </div>
+      <div class="panel" id="watch-panel">
+          <div class="ptitle">On Watch <span style="font-size:.6rem;color:var(--muted2);font-family:'DM Mono'">— Developing</span></div>
+          <div id="watch-list"><div class="empty">No developing setups</div></div>
+        </div>
+      <div class="panel" id="corr-panel">
+        <div class="ptitle">Correlation Risk</div>
+        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:10px;line-height:1.6">Active bullish signals on correlated pairs stack your dollar exposure. Each group below counts as <b style="color:var(--accent)">1 risk unit</b> — not multiple.</div>
+        <div id="corr-list"><div class="empty">No signals to analyse</div></div>
+      </div>
 
-  <!-- FULL WIDTH: Signal History with filters -->
+    </div>
+    </div>
+
+  </div>
+
+  <!-- Signal History — full width -->
   <div class="panel">
     <!-- Filter + sort bar -->
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
@@ -2002,6 +2151,11 @@ body:not(.light){
 <!-- TAB TRADE LOG -->
 <div class="tab-pane" id="tab-tradelog">
 
+  <!-- DESKTOP: Log Trade button -->
+  <div class="desk-trigger" style="margin-bottom:14px">
+    <button class="btn-log" onclick="openDeskModal('desk-trade-modal')" style="max-width:220px">+ Log New Trade</button>
+  </div>
+
   <!-- MOBILE: Log Trade button at top -->
   <div class="sheet-trigger" style="margin-bottom:12px">
     <button class="btn-log" onclick="openSheet('trade-sheet')">+ Log New Trade</button>
@@ -2072,7 +2226,7 @@ body:not(.light){
   <div class="tl-layout">
     <!-- LEFT: log form -->
     <div>
-      <div class="panel" id="log-form-panel" style="padding:16px">
+      <div class="panel desktop-hide-form" id="log-form-panel" style="padding:16px">
         <div class="ptitle">Log New Trade</div>
         <div class="g4 tl-g4-top">
           <div class="ig"><label>Transaction Date</label><div class="date-wrap"><input type="date" id="tl-date" oninput="autoMonth()"></div></div>
@@ -2502,9 +2656,9 @@ body:not(.light){
         <div class="ig"><label>Used Margin (€)</label><input type="number" id="calc-used-margin" placeholder="e.g. 344.45" step="any" oninput="calcMaxLots()"></div>
         <div class="ig"><label>Margin per 0.01 lot (€)</label><input type="number" id="calc-margin-per-lot" placeholder="e.g. 20" step="any" oninput="calcMaxLots()"></div>
         <div class="ig"><label>Stop Out Level (%)</label><input type="number" id="calc-stopout" placeholder="50" value="50" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig" style="grid-column:1/-1">
-          <label>Total Risk at SL (€) <span style="font-size:.55rem;color:var(--muted2)">sum of all open trade SL losses incl. new trade</span></label>
-          <input type="number" id="calc-sl-risk" placeholder="e.g. 90 (2 × €45 trades)" step="any" oninput="calcMaxLots()">
+        <div class="ig" style="grid-column:1/-1;background:var(--surface2);border-radius:10px;padding:10px 12px">
+          <label style="color:var(--muted2)">Total SL Risk (auto) <span style="font-size:.52rem">(sum of Trade 1+2+3)</span></label>
+          <input type="number" id="calc-sl-risk" readonly style="background:transparent;border:none;font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);padding:2px 0;pointer-events:none" placeholder="—">
         </div>
       </div>
       <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);letter-spacing:.08em;margin-bottom:8px">WORST CASE — IF ALL TRADES HIT SL (€)</div>
@@ -2535,6 +2689,9 @@ body:not(.light){
 
     <button class="btn-sm" onclick="clearCalc()" style="margin-top:16px;width:100%">⌫ Clear All</button>
   </div>
+
+  </div><!-- /conv-panel-calc -->
+
 </div><!-- /tab-converter -->
 
 <!-- TAB TRADING RULES -->
@@ -4128,9 +4285,10 @@ function renderFocusOfWeek(entries) {
       +(e.inst_tag?'<span style="font-family:DM Mono,monospace;font-size:.55rem;background:'+ic+'22;color:'+ic+';padding:1px 6px;border-radius:3px">'+e.inst_tag+'</span>':'')
       +(sc!=null?'<span style="font-family:DM Mono,monospace;font-size:.55rem;color:'+scol+'">'+arr+' '+sc+' — '+lbl+'</span>':'')+'</div>'
       +sb+'</div>';
-  }).join('') + (onWatch.length > 0 ? (
-    '<div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.15em;color:var(--muted2);margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border)">◎ ON WATCH — Developing Setups</div>'
-    + onWatch.map(e => {
+  }).join('');
+  const owEl = document.getElementById('watch-list');
+  if(owEl) owEl.innerHTML = (onWatch.length > 0 ? (
+    onWatch.map(e => {
       const isLong  = e.watchDir === 'Long';
       const wCol    = isLong ? 'var(--mega-bull)' : 'var(--mega-bear)';
       const wBg     = isLong ? 'rgba(34,197,94,.06)' : 'rgba(239,68,68,.06)';
@@ -4152,7 +4310,7 @@ function renderFocusOfWeek(entries) {
         +'<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2)">Score <b style="color:'+scol+'">'+(sc!=null?sc:'?')+'</b></div>'
         +'</div></div>';
     }).join('')
-  ) : '');
+  ) : '<div class="empty" style="padding:12px;text-align:center">No developing setups</div>');
 }
 
 // ══════════════════════════════════════════
@@ -5984,7 +6142,17 @@ function ztTranslate() {
   for(let n=1;n<=3;n++){
     const top=parseFloat(document.getElementById('zt-z'+n+'-top')?.value),bot=parseFloat(document.getElementById('zt-z'+n+'-bot')?.value),type=document.getElementById('zt-type-'+n)?.value||'demand';
     if(isNaN(top)&&isNaN(bot))continue;
-    zones.push({n,type,futTop:isNaN(top)?null:top,futBot:isNaN(bot)?null:bot,cfdTop:isNaN(top)?null:parseFloat((top+ztCurrentBasis).toFixed(dp)),cfdBot:isNaN(bot)?null:parseFloat((bot+ztCurrentBasis).toFixed(dp))});
+    // For inverted pairs (6J, 6S, 6C): user enters futures price → invert to get equivalent CFD price
+    const sym = document.getElementById('zt-zone-sym')?.value || document.getElementById('zt-sym')?.value || '';
+    const isInvZ = sym && ZT_MAP[sym] && ZT_MAP[sym].inv;
+    const convTop = isNaN(top) ? null : (isInvZ ? 1/top : top);
+    const convBot = isNaN(bot) ? null : (isInvZ ? 1/bot : bot);
+    zones.push({n,type,
+      futTop: isNaN(top)?null:top, futBot: isNaN(bot)?null:bot,
+      cfdTop: convTop===null?null:parseFloat((convTop+ztCurrentBasis).toFixed(dp)),
+      cfdBot: convBot===null?null:parseFloat((convBot+ztCurrentBasis).toFixed(dp)),
+      isInv:  isInvZ
+    });
   }
   const el=document.getElementById('zt-results');
   if(!zones.length){el.innerHTML='<div class="empty">Enter zone levels above</div>';return;}
@@ -6300,6 +6468,64 @@ function ztAutoInvert() {
 }
 
 
+
+// ══════════════════════════════════════
+// DESKTOP MODAL FORMS
+// ══════════════════════════════════════
+
+function openDeskModal(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  if(id === 'desk-signal-modal') {
+    const target = document.getElementById('desk-signal-content');
+    const source = document.querySelector('.sig-main .desktop-hide-form');
+    if(source && target && !target.hasChildNodes()) {
+      // Move children into modal
+      while(source.firstChild) target.appendChild(source.firstChild);
+    }
+    const d = document.getElementById('eDate');
+    if(d && !d.value) d.value = new Date().toISOString().slice(0,10);
+  }
+
+  if(id === 'desk-trade-modal') {
+    const target = document.getElementById('desk-trade-content');
+    const source = document.getElementById('log-form-panel');
+    if(source && target && !target.hasChildNodes()) {
+      while(source.firstChild) target.appendChild(source.firstChild);
+    }
+    const d = document.getElementById('tl-date');
+    if(d && !d.value) { d.value = new Date().toISOString().slice(0,10); autoMonth(); }
+  }
+
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDeskModal(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  // Move content back to original location
+  if(id === 'desk-signal-modal') {
+    const target = document.querySelector('.sig-main .desktop-hide-form');
+    const source = document.getElementById('desk-signal-content');
+    if(target && source) {
+      while(source.firstChild) target.appendChild(source.firstChild);
+    }
+  }
+  if(id === 'desk-trade-modal') {
+    const target = document.getElementById('log-form-panel');
+    const source = document.getElementById('desk-trade-content');
+    if(target && source) {
+      while(source.firstChild) target.appendChild(source.firstChild);
+    }
+  }
+
+  el.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 // ── TABS ──
 
 
@@ -6396,6 +6622,9 @@ function calcMaxLots() {
   const sl2 = parseFloat(document.getElementById('calc-sl2')?.value) || 0;
   const sl3 = parseFloat(document.getElementById('calc-sl3')?.value) || 0;
   const totalSLRisk = sl1 + sl2 + sl3;
+  // Auto-update the total field for visibility
+  const slTotalEl = document.getElementById('calc-sl-risk');
+  if(slTotalEl && (sl1||sl2||sl3)) slTotalEl.value = totalSLRisk;
   const worstCaseEquity = equity - totalSLRisk;
 
   // Safe threshold = stop out + 100% buffer
@@ -6465,6 +6694,12 @@ function switchConvTab(tab) {
 // TRADE CALCULATOR
 // ══════════════════════════════════════
 
+
+// ══════════════════════════════════════
+// DESKTOP MODAL FORMS
+// ══════════════════════════════════════
+
+
 // ── TABS ──
 function switchTab(n){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -6525,6 +6760,23 @@ function updateBottomBar(tab) {
       <button onclick="closeSheet('trade-sheet')" style="background:var(--surface2);border:none;color:var(--muted2);width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
     </div>
     <div id="trade-sheet-content"></div>
+  </div>
+</div>
+
+
+<!-- ══ DESKTOP SIGNAL MODAL ══ -->
+<div class="desk-modal-overlay" id="desk-signal-modal" onclick="if(event.target===this)closeDeskModal('desk-signal-modal')">
+  <div class="desk-modal-box">
+    <button class="desk-modal-close" onclick="closeDeskModal('desk-signal-modal')">✕</button>
+    <div id="desk-signal-content" style="overflow-y:auto;max-height:75vh"></div>
+  </div>
+</div>
+
+<!-- ══ DESKTOP TRADE MODAL ══ -->
+<div class="desk-modal-overlay" id="desk-trade-modal" onclick="if(event.target===this)closeDeskModal('desk-trade-modal')">
+  <div class="desk-modal-box" style="max-width:700px">
+    <button class="desk-modal-close" onclick="closeDeskModal('desk-trade-modal')">✕</button>
+    <div id="desk-trade-content" style="overflow-y:auto;max-height:80vh"></div>
   </div>
 </div>
 
