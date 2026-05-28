@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fundamental Trade Log</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
 body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;}
@@ -18,17 +18,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
-.setup-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--accent);letter-spacing:.08em;margin-bottom:6px;}
+.setup-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--accent);letter-spacing:.25em;margin-bottom:6px;}
 .setup-sub{font-family:'DM Mono';font-size:.68rem;color:var(--muted2);margin-bottom:18px;line-height:1.8;}
 .setup-steps{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2.2;}
 .setup-steps b{color:var(--accent);}
 .setup-steps code{background:rgba(200,169,110,.1);color:var(--accent);padding:1px 5px;border-radius:3px;}
 .setup-ig{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
-.setup-ig label{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.12em;}
+.setup-ig label{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
 .setup-err{font-family:'DM Mono';font-size:.63rem;color:var(--mega-bear);margin-top:6px;min-height:15px;}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
-.logo{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.08em;color:var(--accent);line-height:1;}
-.logo small{display:block;font-family:'DM Mono';font-size:.72rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:2px;}
+.logo{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.25em;color:var(--accent);line-height:1;}
+.logo small{display:block;font-family:'DM Mono';font-size:.72rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:2px;}
 .badge{font-family:'DM Mono';font-size:.78rem;color:var(--muted2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:4px;}
 .sync-bar{display:flex;align-items:center;gap:7px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s;}
@@ -37,7 +37,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .sync-dot.busy{background:var(--accent);animation:pulse .8s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
-.tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
+.tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
 .tab-btns-desktop{display:flex;}
@@ -51,13 +51,13 @@ body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!im
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.1);}
-.ptitle{font-family:'Inter','DM Mono';font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ptitle{font-family:'Bebas Neue','DM Mono';font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .ptitle::after{content:'';flex:1;height:1px;background:var(--border);min-width:10px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .ig{display:flex;flex-direction:column;gap:5px;}
-.ig label{font-size:.75rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.1em;}
+.ig label{font-size:.75rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;}
 input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:'DM Mono';font-size:.82rem;outline:none;transition:border-color .2s;width:100%;
   box-sizing:border-box;}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);}
@@ -74,8 +74,8 @@ textarea{resize:vertical;min-height:52px;}
 .dir-btn.sel-fl{background:rgba(107,114,128,.15);border-color:var(--neutral);color:var(--neutral);}
 .result-box{border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0;background:var(--bg);transition:all .35s;overflow:hidden;}
 .result-box.lit{border-color:var(--sig-color);box-shadow:0 0 24px -10px var(--sig-color);}
-.result-label{font-family:'DM Mono';font-size:.6rem;letter-spacing:.2em;color:var(--muted2);margin-bottom:6px;}
-.result-sig{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.06em;line-height:1;transition:color .3s;}
+.result-label{font-family:'DM Mono';font-size:.6rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:6px;}
+.result-sig{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.25em;line-height:1;transition:color .3s;}
 .result-phase{font-family:'DM Mono';font-size:.75rem;color:var(--muted2);margin-top:3px;}
 .result-cond{font-size:.7rem;color:var(--muted2);margin-top:8px;line-height:1.55;border-top:1px solid var(--border);padding-top:8px;}
 .result-icon{font-size:1.5rem;float:right;margin-left:10px;}
@@ -92,7 +92,7 @@ textarea{resize:vertical;min-height:52px;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
 .stat-n{font-family:'Bebas Neue';font-size:1.8rem;color:var(--accent);line-height:1;}
-.stat-l{font-size:.6rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.14em;margin-top:3px;}
+.stat-l{font-size:.6rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;margin-top:3px;}
 .freq{display:flex;flex-direction:column;gap:6px;}
 .f-row{display:flex;align-items:center;gap:8px;}
 .f-lbl{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -113,14 +113,14 @@ textarea{resize:vertical;min-height:52px;}
 .h-del:hover{color:#ef4444;}
 .empty{text-align:center;padding:26px;color:var(--muted2);font-family:'DM Mono';font-size:.7rem;line-height:1.8;}
 .tl-topbar{display:flex;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
-.tl-lbl{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.12em;}
+.tl-lbl{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
 .tl-stats{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin-bottom:16px;}
 .tl-stat{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:11px 8px;text-align:center;}
 .tl-stat-n{font-family:'Bebas Neue';font-size:1.8rem;line-height:1;}
-.tl-stat-l{font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.08em;margin-top:3px;}
+.tl-stat-l{font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-top:3px;}
 .tl-layout{display:flex;flex-direction:column;gap:16px;}
 .r-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px;}
-.r-box-title{font-family:'DM Mono';font-size:.58rem;letter-spacing:.15em;color:var(--accent);margin-bottom:10px;}
+.r-box-title{font-family:'DM Mono';font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px;}
 .r-hint{font-family:'DM Mono';font-size:.6rem;min-height:14px;margin-top:6px;}
 .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;}
 .tag-btn{font-family:'DM Mono';font-size:.6rem;padding:4px 11px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
@@ -129,10 +129,10 @@ textarea{resize:vertical;min-height:52px;}
 .cur-toggle{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;}
 .cur-btn{font-family:'DM Mono';font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
 .cur-btn.active{background:var(--accent);color:#ffffff;}
-.btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:6px;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.1em;cursor:pointer;transition:opacity .2s;}
+.btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:6px;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.25em;cursor:pointer;transition:opacity .2s;}
 .btn-log:hover{opacity:.82;}
 .btn-log:disabled{opacity:.4;cursor:not-allowed;}
-.btn-sm{font-family:'DM Mono';font-size:.62rem;letter-spacing:.1em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
+.btn-sm{font-family:'DM Mono';font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
 .btn-sm:hover{border-color:var(--accent);color:var(--accent);}
 .tl-wrap{overflow-x:auto;overflow-y:auto;margin-top:0;}
 .tl-wrap::-webkit-scrollbar{height:7px;width:7px;}
@@ -253,13 +253,13 @@ body.light #sig-filter-futures-dd * {
 .rules-row{transition:background .15s;}
 .rules-row:hover td{background:var(--surface2);}
 .rules-row td{border-bottom:1px solid var(--border);}
-.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:'DM Mono';font-size:.68rem;letter-spacing:.06em;white-space:nowrap;}
+.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:'DM Mono';font-size:.68rem;letter-spacing:.25em;white-space:nowrap;}
 .rules-cell{padding:10px 13px;color:var(--muted2);font-family:'DM Mono';font-size:.73rem;vertical-align:top;line-height:1.55;}
 .rules-scenario{padding:10px 13px;font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:.05em;white-space:nowrap;vertical-align:middle;}
 .rules-strategy{color:var(--text);}
 .rules-psych{color:var(--accent);font-style:italic;}
 .rules-tag{display:inline-block;font-size:.58rem;color:var(--muted2);background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:middle;}
-.rules-bias{display:inline-block;font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.08em;padding:2px 10px;border-radius:4px;}
+.rules-bias{display:inline-block;font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.25em;padding:2px 10px;border-radius:4px;}
 .rules-mega-bull{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);}
 .rules-mega-bear{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);}
 .rules-bull{background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);}
@@ -779,7 +779,7 @@ tml lang="en">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fundamental Trade Log</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
 body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;}
@@ -792,17 +792,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
-.setup-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--accent);letter-spacing:.08em;margin-bottom:6px;}
+.setup-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--accent);letter-spacing:.25em;margin-bottom:6px;}
 .setup-sub{font-family:'DM Mono';font-size:.68rem;color:var(--muted2);margin-bottom:18px;line-height:1.8;}
 .setup-steps{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2.2;}
 .setup-steps b{color:var(--accent);}
 .setup-steps code{background:rgba(200,169,110,.1);color:var(--accent);padding:1px 5px;border-radius:3px;}
 .setup-ig{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
-.setup-ig label{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.12em;}
+.setup-ig label{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
 .setup-err{font-family:'DM Mono';font-size:.63rem;color:var(--mega-bear);margin-top:6px;min-height:15px;}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
-.logo{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.08em;color:var(--accent);line-height:1;}
-.logo small{display:block;font-family:'DM Mono';font-size:.72rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:2px;}
+.logo{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.25em;color:var(--accent);line-height:1;}
+.logo small{display:block;font-family:'DM Mono';font-size:.72rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:2px;}
 .badge{font-family:'DM Mono';font-size:.78rem;color:var(--muted2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:4px;}
 .sync-bar{display:flex;align-items:center;gap:7px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s;}
@@ -811,7 +811,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .sync-dot.busy{background:var(--accent);animation:pulse .8s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
-.tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
+.tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
 .tab-btns-desktop{display:flex;}
@@ -825,13 +825,13 @@ body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!im
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.1);}
-.ptitle{font-family:'Inter','DM Mono';font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ptitle{font-family:'Bebas Neue','DM Mono';font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .ptitle::after{content:'';flex:1;height:1px;background:var(--border);min-width:10px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .ig{display:flex;flex-direction:column;gap:5px;}
-.ig label{font-size:.75rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.1em;}
+.ig label{font-size:.75rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;}
 input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:'DM Mono';font-size:.82rem;outline:none;transition:border-color .2s;width:100%;
   box-sizing:border-box;}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);}
@@ -848,8 +848,8 @@ textarea{resize:vertical;min-height:52px;}
 .dir-btn.sel-fl{background:rgba(107,114,128,.15);border-color:var(--neutral);color:var(--neutral);}
 .result-box{border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0;background:var(--bg);transition:all .35s;overflow:hidden;}
 .result-box.lit{border-color:var(--sig-color);box-shadow:0 0 24px -10px var(--sig-color);}
-.result-label{font-family:'DM Mono';font-size:.6rem;letter-spacing:.2em;color:var(--muted2);margin-bottom:6px;}
-.result-sig{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.06em;line-height:1;transition:color .3s;}
+.result-label{font-family:'DM Mono';font-size:.6rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:6px;}
+.result-sig{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.25em;line-height:1;transition:color .3s;}
 .result-phase{font-family:'DM Mono';font-size:.75rem;color:var(--muted2);margin-top:3px;}
 .result-cond{font-size:.7rem;color:var(--muted2);margin-top:8px;line-height:1.55;border-top:1px solid var(--border);padding-top:8px;}
 .result-icon{font-size:1.5rem;float:right;margin-left:10px;}
@@ -866,7 +866,7 @@ textarea{resize:vertical;min-height:52px;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
 .stat-n{font-family:'Bebas Neue';font-size:1.8rem;color:var(--accent);line-height:1;}
-.stat-l{font-size:.6rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.14em;margin-top:3px;}
+.stat-l{font-size:.6rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;margin-top:3px;}
 .freq{display:flex;flex-direction:column;gap:6px;}
 .f-row{display:flex;align-items:center;gap:8px;}
 .f-lbl{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -887,14 +887,14 @@ textarea{resize:vertical;min-height:52px;}
 .h-del:hover{color:#ef4444;}
 .empty{text-align:center;padding:26px;color:var(--muted2);font-family:'DM Mono';font-size:.7rem;line-height:1.8;}
 .tl-topbar{display:flex;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
-.tl-lbl{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.12em;}
+.tl-lbl{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
 .tl-stats{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin-bottom:16px;}
 .tl-stat{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:11px 8px;text-align:center;}
 .tl-stat-n{font-family:'Bebas Neue';font-size:1.8rem;line-height:1;}
-.tl-stat-l{font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.08em;margin-top:3px;}
+.tl-stat-l{font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-top:3px;}
 .tl-layout{display:flex;flex-direction:column;gap:16px;}
 .r-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px;}
-.r-box-title{font-family:'DM Mono';font-size:.58rem;letter-spacing:.15em;color:var(--accent);margin-bottom:10px;}
+.r-box-title{font-family:'DM Mono';font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px;}
 .r-hint{font-family:'DM Mono';font-size:.6rem;min-height:14px;margin-top:6px;}
 .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;}
 .tag-btn{font-family:'DM Mono';font-size:.6rem;padding:4px 11px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
@@ -903,10 +903,10 @@ textarea{resize:vertical;min-height:52px;}
 .cur-toggle{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;}
 .cur-btn{font-family:'DM Mono';font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
 .cur-btn.active{background:var(--accent);color:#ffffff;}
-.btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:6px;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.1em;cursor:pointer;transition:opacity .2s;}
+.btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:6px;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.25em;cursor:pointer;transition:opacity .2s;}
 .btn-log:hover{opacity:.82;}
 .btn-log:disabled{opacity:.4;cursor:not-allowed;}
-.btn-sm{font-family:'DM Mono';font-size:.62rem;letter-spacing:.1em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
+.btn-sm{font-family:'DM Mono';font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
 .btn-sm:hover{border-color:var(--accent);color:var(--accent);}
 .tl-wrap{overflow-x:auto;overflow-y:auto;margin-top:0;}
 .tl-wrap::-webkit-scrollbar{height:7px;width:7px;}
@@ -1027,13 +1027,13 @@ body.light #sig-filter-futures-dd * {
 .rules-row{transition:background .15s;}
 .rules-row:hover td{background:var(--surface2);}
 .rules-row td{border-bottom:1px solid var(--border);}
-.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:'DM Mono';font-size:.68rem;letter-spacing:.06em;white-space:nowrap;}
+.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:'DM Mono';font-size:.68rem;letter-spacing:.25em;white-space:nowrap;}
 .rules-cell{padding:10px 13px;color:var(--muted2);font-family:'DM Mono';font-size:.73rem;vertical-align:top;line-height:1.55;}
 .rules-scenario{padding:10px 13px;font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:.05em;white-space:nowrap;vertical-align:middle;}
 .rules-strategy{color:var(--text);}
 .rules-psych{color:var(--accent);font-style:italic;}
 .rules-tag{display:inline-block;font-size:.58rem;color:var(--muted2);background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:middle;}
-.rules-bias{display:inline-block;font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.08em;padding:2px 10px;border-radius:4px;}
+.rules-bias{display:inline-block;font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.25em;padding:2px 10px;border-radius:4px;}
 .rules-mega-bull{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);}
 .rules-mega-bear{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);}
 .rules-bull{background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);}
@@ -1913,7 +1913,7 @@ body:not(.light){
       </div>
       <!-- TIER 1 INSTITUTIONAL INPUTS -->
       <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:12px">≠ INSTITUTIONAL FILTERS (TIER 1)</div>
+        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:12px">≠ INSTITUTIONAL FILTERS (TIER 1)</div>
         <div class="g2" style="margin-bottom:11px">
           <div class="ig">
             <label>Commercial COT % <span style="font-size:.55rem;color:var(--muted2)">(Hedgers — Col F)</span></label>
@@ -1984,7 +1984,7 @@ body:not(.light){
       <!-- INSTITUTIONAL SCORE BOX -->
       <div id="inst-score-box" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--muted2)">INSTITUTIONAL SCORE</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.12em;color:var(--muted2)">INSTITUTIONAL SCORE</div>
           <div id="inst-score-val" style="font-family:'Bebas Neue';font-size:2rem;line-height:1;color:var(--accent)">—</div>
         </div>
         <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px">
@@ -2033,6 +2033,18 @@ body:not(.light){
     <div class="num-wrap"><input type="number" id="dxy-yield" min="0" max="100" step="any" placeholder="0–100" oninput="calcDXYRegime()"><span class="num-sfx">%</span></div>
       </div>
     </div>
+
+    <!-- COT Direction -->
+    <div class="ig" style="margin-bottom:10px">
+      <label>DXY COT Direction <span style="font-size:.55rem;color:var(--muted2)">(Col C)</span></label>
+      <select id="dxy-cot-dir" onchange="calcDXYRegime()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:8px;font-family:'DM Mono',monospace;font-size:.72rem;width:100%;outline:none">
+        <option value="">— Select —</option>
+        <option value="rising">▲ Rising</option>
+        <option value="falling">▼ Falling</option>
+        <option value="flat">→ Flat</option>
+      </select>
+    </div>
+
     <div id="dxy-result" style="display:none;border-radius:7px;padding:12px;border:1px solid var(--border)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
     <div id="dxy-label" style="font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.06em"></div>
@@ -2203,7 +2215,7 @@ body:not(.light){
     <div class="ptitle">Performance Analytics</div>
     <div style="display:flex;gap:24px;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap">
       <div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);letter-spacing:.12em;margin-bottom:8px">GROUP BY</div>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">GROUP BY</div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
           <button class="analytics-dim-btn active" data-dim="symbol" onclick="toggleDim('symbol',this)">Symbol</button>
           <button class="analytics-dim-btn" data-dim="phase" onclick="toggleDim('phase',this)">Phase</button>
@@ -2212,7 +2224,7 @@ body:not(.light){
         </div>
       </div>
       <div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);letter-spacing:.12em;margin-bottom:8px">SORT BY</div>
+        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">SORT BY</div>
         <div style="display:flex;gap:7px">
           <button class="analytics-sort-btn active" data-sort="r" onclick="setSort('r',this)">Net R</button>
           <button class="analytics-sort-btn" data-sort="wr" onclick="setSort('wr',this)">Win Rate</button>
@@ -2341,7 +2353,7 @@ body:not(.light){
   <!-- Date filter bar -->
   <div class="panel" style="margin-bottom:16px">
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.15em;margin-bottom:8px">REVIEW PERIOD</div>
+      <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.25em;margin-bottom:8px">REVIEW PERIOD</div>
       <select id="rv-account" onchange="renderReview()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none;width:100%;margin-bottom:10px;box-sizing:border-box">
         <option value="ALL">All Accounts</option>
       </select>
@@ -2523,7 +2535,7 @@ body:not(.light){
           No saved basis for this symbol. Switch to Weekend mode to save one first.
         </div>
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px">
-          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
           <div style="margin-bottom:10px">
             <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
               ZONE 1 <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
@@ -2597,7 +2609,7 @@ body:not(.light){
 
     <!-- SECTION 1: Weighted Average Entry -->
     <div style="margin-bottom:20px">
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
         <div style="width:3px;height:12px;background:var(--accent);border-radius:2px"></div>
         Weighted Average Entry
       </div>
@@ -2646,7 +2658,7 @@ body:not(.light){
 
     <!-- SECTION 2: Margin Safety — Max Lot Size -->
     <div>
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
         <div style="width:3px;height:12px;background:var(--mega-bear);border-radius:2px"></div>
         Max Safe Lot Size
       </div>
@@ -2661,7 +2673,7 @@ body:not(.light){
           <input type="number" id="calc-sl-risk" readonly style="background:transparent;border:none;font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);padding:2px 0;pointer-events:none" placeholder="—">
         </div>
       </div>
-      <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);letter-spacing:.08em;margin-bottom:8px">WORST CASE — IF ALL TRADES HIT SL (€)</div>
+      <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">WORST CASE — IF ALL TRADES HIT SL (€)</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
         <div class="ig"><label>Trade 1 SL risk</label><input type="number" id="calc-sl1" placeholder="e.g. 45" step="any" oninput="calcMaxLots()"></div>
         <div class="ig"><label>Trade 2 SL risk</label><input type="number" id="calc-sl2" placeholder="e.g. 45" step="any" oninput="calcMaxLots()"></div>
@@ -2815,7 +2827,7 @@ body:not(.light){
       <div class="ptitle">Position Sizing by Setup</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:14px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);letter-spacing:.12em;margin-bottom:10px">BULLISH SETUPS</div>
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);letter-spacing:.25em;margin-bottom:10px">BULLISH SETUPS</div>
           <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
             <div><b style="color:var(--mega-bull)">Spring</b> — phase + score 70+ → 1R</div>
             <div><b style="color:var(--bull)">Recovery</b> — phase confirmed → 0.75R</div>
@@ -2824,7 +2836,7 @@ body:not(.light){
           </div>
         </div>
         <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:14px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);letter-spacing:.12em;margin-bottom:10px">BEARISH SETUPS</div>
+          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);letter-spacing:.25em;margin-bottom:10px">BEARISH SETUPS</div>
           <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
             <div><b style="color:var(--mega-bear)">Cliff</b> — phase + score 0-30 → 1R short</div>
             <div><b style="color:var(--bear)">Trap</b> — distribution phase → 0.5R short</div>
@@ -2834,7 +2846,7 @@ body:not(.light){
         </div>
       </div>
       <div style="background:rgba(107,114,128,.1);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.12em;margin-bottom:6px">SKIP — NO TRADE</div>
+        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:6px">SKIP — NO TRADE</div>
         <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2">
           <div>Conflict phase — regardless of inst score</div>
           <div>Neutral + inst score 30–70 — no directional edge</div>
@@ -2878,7 +2890,7 @@ body:not(.light){
       <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">Weekly bias determines direction and size. The daily chart determines <b style="color:var(--text)">when</b> to enter. Two valid entry types — usable on any weekly setup regardless of phase.</div>
       <div class="rp-entry-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.25);border-left:3px solid var(--accent);border-radius:7px;padding:14px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--accent);letter-spacing:.06em;margin-bottom:8px">Type 1 &mdash; Extreme Reversal</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--accent);letter-spacing:.25em;margin-bottom:8px">Type 1 &mdash; Extreme Reversal</div>
           <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
             <div><b style="color:var(--text)">Indicator:</b> 21,3 Tactical</div>
             <div><b style="color:var(--text)">Trigger:</b> Raw below 10% (long) or above 90% (short) + hook forming</div>
@@ -2891,7 +2903,7 @@ body:not(.light){
           </div>
         </div>
         <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:14px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--bull);letter-spacing:.06em;margin-bottom:8px">Type 2 &mdash; Momentum Confirmation</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--bull);letter-spacing:.25em;margin-bottom:8px">Type 2 &mdash; Momentum Confirmation</div>
           <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
             <div><b style="color:var(--text)">Indicator:</b> 65,5 Strategic</div>
             <div><b style="color:var(--text)">Trigger:</b> Crosses above 65 (long) or below 35 (short)</div>
@@ -2913,7 +2925,7 @@ body:not(.light){
       <div class="ptitle">Execution Rules</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bull);letter-spacing:.12em;margin-bottom:8px">DO</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bull);letter-spacing:.25em;margin-bottom:8px">DO</div>
           <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
             <div>Place limit orders at the zone — wait</div>
             <div>Use previous week high/low as reference</div>
@@ -2925,7 +2937,7 @@ body:not(.light){
           </div>
         </div>
         <div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bear);letter-spacing:.12em;margin-bottom:8px">DON'T</div>
+          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bear);letter-spacing:.25em;margin-bottom:8px">DON'T</div>
           <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
             <div>Chase entry after hook fires — wait for retest</div>
             <div>Move stop closer during the trade</div>
@@ -2956,11 +2968,11 @@ body:not(.light){
       .rp-card.rp-bear::before{background:linear-gradient(90deg,var(--mega-bear),transparent)}
       .rp-card.rp-neut::before{background:linear-gradient(90deg,var(--accent),transparent)}
       .rp-rank{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;position:absolute;top:8px;right:12px;opacity:.07;color:var(--text);line-height:1}
-      .rp-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;margin-bottom:2px}
+      .rp-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.25em;margin-bottom:2px}
       .rp-card.rp-bull .rp-name{color:var(--mega-bull)}
       .rp-card.rp-bear .rp-name{color:var(--mega-bear)}
       .rp-card.rp-neut .rp-name{color:var(--accent)}
-      .rp-dir{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:9px}
+      .rp-dir{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:9px}
       .rp-svg-wrap{display:flex;justify-content:center;background:var(--bg);border-radius:5px;padding:8px 4px;border:1px solid var(--border);margin-bottom:9px}
       .rp-desc{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);line-height:1.7}
       .rp-desc b{color:var(--text)}
@@ -3189,7 +3201,7 @@ body:not(.light){
 
     <!-- TIER 1 fields in edit modal -->
     <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:13px;margin-bottom:13px">
-      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.18em;color:var(--accent);margin-bottom:10px">≠ INSTITUTIONAL FILTERS</div>
+      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">≠ INSTITUTIONAL FILTERS</div>
       <div class="g2" style="margin-bottom:10px">
         <div class="ig"><label>Commercial COT %</label>
           <div class="num-wrap"><input type="number" id="se-comm" min="0" max="100" step="any" placeholder="0–100"><span class="num-sfx">%</span></div>
@@ -3276,7 +3288,7 @@ body:not(.light){
       </div>
     </div>
     <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px">
-      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.15em;color:var(--accent);margin-bottom:10px">≠ R CALCULATION</div>
+      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px">≠ R CALCULATION</div>
       <div class="g3" style="margin-bottom:8px">
         <div class="ig"><label>1R Value</label><input type="number" id="edit-rvalue" step="any" oninput="editAutoCalcR()"></div>
         <div class="ig"><label>Risked (<span id="edit-risk-cur">$</span>) <span style="font-size:.52rem;background:rgba(200,169,110,.15);color:var(--accent);padding:1px 5px;border-radius:3px">AUTO</span></label>
@@ -3815,7 +3827,23 @@ function renderSignals(){
   else{document.getElementById('sDom').textContent='—';document.getElementById('sLast').textContent='—';}
   const fc=document.getElementById('freqChart');
   if(!entries.length){fc.innerHTML='<div class="empty">No signals yet</div>';}
-  else{const cnt={};SORD.forEach(k=>cnt[k]=0);entries.forEach(e=>{if(cnt[e.signal_key]!==undefined)cnt[e.signal_key]++;});const mx=Math.max(...Object.values(cnt),1);fc.innerHTML=SORD.filter(k=>k!=='NE'||cnt[k]>0).map(k=>{const s=SIGS[k];return`<div class="f-row"><div class="f-lbl">${s.i} ${s.p.split('—')[0].trim().substring(0,9)}</div><div class="f-track"><div class="f-fill" style="width:${Math.round(cnt[k]/mx*100)}%;background:${s.c}"></div></div><div class="f-n">${cnt[k]}</div></div>`;}).join('');}
+  else{
+    // Count by signal_key
+    const raw={};SORD.forEach(k=>raw[k]=0);
+    entries.forEach(e=>{if(raw[e.signal_key]!==undefined)raw[e.signal_key]++;});
+    // Merge SC+SW → Spring, CC+CW → Cliff
+    const merged=[
+      {k:'SP', i:'🌱', label:'Spring',   c:'#22c55e', v:raw['SC']+(raw['SW']||0)},
+      {k:'RC', i:'♻️', label:'Recovery', c:'#34d399', v:raw['RC']},
+      {k:'SU', i:'🚀', label:'Surge',    c:'#3b82f6', v:raw['SU']},
+      {k:'CL', i:'🪨', label:'Cliff',    c:'#9ca3af', v:raw['CC']+(raw['CW']||0)},
+      {k:'TR', i:'🪤', label:'Trap',     c:'#a855f7', v:raw['TR']},
+      {k:'SL', i:'📉', label:'Slide',    c:'#f97316', v:raw['SL']},
+      {k:'CF', i:'⚡', label:'The Confl',c:'#475569', v:raw['CF']},
+      {k:'NE', i:'⏸', label:'Wait',     c:'#64748b', v:raw['NE']},
+    ];
+    const mx=Math.max(...merged.map(x=>x.v),1);
+    fc.innerHTML=merged.filter(x=>x.k!=='NE'||x.v>0).map(x=>`<div class="f-row"><div class="f-lbl">${x.i} ${x.label}</div><div class="f-track"><div class="f-fill" style="width:${Math.round(x.v/mx*100)}%;background:${x.c}"></div></div><div class="f-n">${x.v}</div></div>`).join('');}
   // Refresh futures dropdowns (both toolbar and inline)
   refreshSigFuturesDropdown();
   // Apply filters
@@ -4411,8 +4439,9 @@ function renderCorrRisk(entries) {
 // DXY REGIME OVERLAY
 // ══════════════════════════════════════════
 function calcDXYRegime() {
-  const cot   = parseFloat(document.getElementById('dxy-cot').value);
-  const yield_ = parseFloat(document.getElementById('dxy-yield').value);
+  const cot     = parseFloat(document.getElementById('dxy-cot').value);
+  const yield_  = parseFloat(document.getElementById('dxy-yield').value);
+  const cotDirEl = document.getElementById('dxy-cot-dir'); const cotDir = cotDirEl ? cotDirEl.value : '';
   const res   = document.getElementById('dxy-result');
   const lbl   = document.getElementById('dxy-label');
   const badge = document.getElementById('dxy-badge');
@@ -4425,35 +4454,56 @@ function calcDXYRegime() {
   // Save to localStorage so it persists
   localStorage.setItem('dxy_cot', cot);
   localStorage.setItem('dxy_yield', yield_);
+  localStorage.setItem('dxy_cot_dir', cotDir);
+  if(SB_URL&&SB_KEY){fetch(SB_URL+'/rest/v1/dxy_settings',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({id:1,cot_pct:cot,yield_pct:yield_,cot_dir:cotDir||null})}).catch(()=>{});}
 
   let regime, color, bgColor, description, filterMsg;
 
-  if (cot > 60 && yield_ > 55) {
+  // Yield percentile logic (from Macro Yield Valuation indicator):
+  // High yield % (>65) = USD overvalued = bearish USD (dollar will weaken)
+  // Low yield % (<35)  = USD undervalued = bullish USD (dollar carry support)
+  // COT: high (>60) = specs long USD = bullish positioning
+  //      low (<40)  = specs short USD = bearish positioning
+
+  if (cot < 40 && yield_ > 65) {
+    // Specs SHORT + yield OVERVALUED → strong dollar BEARISH
+    const dirNote = cotDir === 'falling' ? ' COT actively falling - conviction high.' : cotDir === 'rising' ? ' COT rising - watch for spec reversal (caution).' : '';
+    regime = 'DXY BEARISH REGIME';
+    color  = '#22c55e';
+    bgColor= 'rgba(34,197,94,.08)';
+    description = `Specs are bearish USD (COT ${cot}%) and USD yield is overvalued (${yield_}%). Dollar has positioning and valuation headwind — expect dollar weakness.${dirNote}`;
+    filterMsg = cotDir === 'rising'
+      ? `<span style="color:var(--mega-bull)">✓ USD short bias</span> — EUR, GBP, AUD, NZD, CAD longs have tailwind. <b>Caution: COT rising</b> — specs may be covering shorts. Wait for confirmation.`
+      : `<span style="color:var(--mega-bull)">✓ USD short bias</span> — EUR, GBP, AUD, NZD, CAD longs have a macro tailwind. Spring and Recovery signals in these pairs are high probability.`;
+  } else if (cot > 60 && yield_ < 35) {
+    // Specs LONG + yield UNDERVALUED → strong dollar BULLISH
+    const dirNote = cotDir === 'rising' ? ' COT actively rising - conviction high.' : cotDir === 'falling' ? ' COT falling - watch for spec unwind (caution).' : '';
     regime = '◈ DXY BULLISH REGIME';
     color  = '#ef4444';
     bgColor= 'rgba(239,68,68,.08)';
-    description = `Specs are bullish USD (COT ${cot}%) and yield spread supports USD (${yield_}%). Dollar has institutional backing and carry tailwind.`;
-    filterMsg = `<span style="color:var(--mega-bear)">⚠ USD long bias</span> — Be cautious on EUR, GBP, AUD, NZD, CAD longs. The dollar tailwind works against these setups. Only take the highest conviction Spring signals (Score 75+).`;
-  } else if (cot < 40 && yield_ < 45) {
-    regime = '⏸ DXY BEARISH REGIME';
-    color  = '#22c55e';
-    bgColor= 'rgba(34,197,94,.08)';
-    description = `Specs are bearish USD (COT ${cot}%) and yield spread is weak for USD (${yield_}%). Dollar has positioning and carry headwind.`;
-    filterMsg = `<span style="color:var(--mega-bull)">✓ USD short bias</span> — EUR, GBP, AUD, NZD, CAD longs have a macro tailwind. Spring and Recovery signals in these pairs are high probability.`;
-  } else if (cot > 70 && yield_ < 35) {
+    description = `Specs are bullish USD (COT ${cot}%) and USD yield is undervalued (${yield_}%). Dollar has institutional backing and carry tailwind.${dirNote}`;
+    filterMsg = cotDir === 'falling'
+      ? `<span style="color:var(--mega-bear)">⚠ USD long bias</span> — Be cautious on EUR, GBP, AUD, NZD, CAD longs. <b>Caution: COT falling</b> — specs unwinding, dollar rally may fade.`
+      : `<span style="color:var(--mega-bear)">⚠ USD long bias</span> — Be cautious on EUR, GBP, AUD, NZD, CAD longs. Only take the highest conviction Spring signals (Score 75+).`;
+  } else if (cot > 60 && yield_ > 65) {
+    // Specs LONG but yield OVERVALUED → conflict
+    const dirNote = cotDir === 'falling' ? ' COT falling - specs already unwinding, resolution likely soon.' : cotDir === 'rising' ? ' COT still rising - specs not yet aware of overvaluation.' : '';
     regime = '≠ DXY CONFLICT';
-    color  = '#6b7280';
-    bgColor= 'rgba(107,114,128,.08)';
-    description = `DXY specs bullish but yield spread doesn't support it (COT ${cot}%, Yield ${yield_}%). Dollar positioning and carry are diverging.`;
-    filterMsg = `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY itself is in a Conflict phase. FX signals unreliable — reduce all position sizes by 50% until DXY resolves.`;
-  } else if (cot < 30 && yield_ > 65) {
+    color  = '#f97316';
+    bgColor= 'rgba(249,115,22,.08)';
+    description = `Specs bullish USD (COT ${cot}%) but yield is overvalued (${yield_}%) — dollar due for mean reversion.${dirNote}`;
+    filterMsg = cotDir === 'falling'
+      ? `<span style="color:var(--accent)">⚠ Conflict resolving bearish</span> — COT falling confirms unwind. Reduce sizes but EUR/JPY/CHF longs can be considered with caution.`
+      : `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY Conflict phase. Reduce all position sizes by 50% until resolved.`;
+  } else if (cot < 40 && yield_ < 35) {
+    // Specs SHORT but yield UNDERVALUED → conflict
     regime = '≠ DXY CONFLICT';
-    color  = '#6b7280';
-    bgColor= 'rgba(107,114,128,.08)';
-    description = `DXY specs bearish but yield spread supports USD (COT ${cot}%, Yield ${yield_}%). Positioning and carry diverging.`;
-    filterMsg = `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY itself is in a Conflict phase. Reduce all position sizes by 50% until resolved.`;
+    color  = '#f97316';
+    bgColor= 'rgba(249,115,22,.08)';
+    description = `Specs bearish USD (COT ${cot}%) but yield is undervalued (${yield_}%) — dollar has carry support despite weak positioning.`;
+    filterMsg = `<span style="color:var(--accent)">⚠ Mixed signals</span> — DXY Conflict phase. Reduce all position sizes by 50% until resolved.`;
   } else {
-    regime = '⏸ DXY NEUTRAL';
+    regime = 'DXY NEUTRAL';
     color  = '#6b7280';
     bgColor= 'rgba(107,114,128,.08)';
     description = `DXY COT ${cot}%, Yield ${yield_}% — no strong dollar directional bias either way.`;
@@ -4473,11 +4523,16 @@ function calcDXYRegime() {
 
 // Load saved DXY values on startup
 function loadDXYValues() {
+  // First apply localStorage values immediately (fast)
   const c = localStorage.getItem('dxy_cot');
   const y = localStorage.getItem('dxy_yield');
-  if (c) { document.getElementById('dxy-cot').value = c; }
-  if (y) { document.getElementById('dxy-yield').value = y; }
-  if (c && y) calcDXYRegime();
+  const d = localStorage.getItem('dxy_cot_dir');
+  if(c) document.getElementById('dxy-cot').value = c;
+  if(y) document.getElementById('dxy-yield').value = y;
+  const dirSelEl = document.getElementById('dxy-cot-dir'); if(d && dirSelEl) dirSelEl.value = d;
+  if(c && y) calcDXYRegime();
+  // Then fetch from Supabase (overwrites if newer)
+  loadDXYSettings();
 }
 
 
@@ -6524,6 +6579,25 @@ function closeDeskModal(id) {
 
   el.classList.remove('open');
   document.body.style.overflow = '';
+}
+
+// ── LOAD DXY SETTINGS FROM SUPABASE ──
+async function loadDXYSettings() {
+  if(!SB_URL||!SB_KEY) return;
+  try {
+    const r=await fetch(SB_URL+'/rest/v1/dxy_settings?id=eq.1&limit=1',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+    if(!r.ok) return;
+    const data=await r.json();
+    if(!data.length) return;
+    const d=data[0];
+    const ce=document.getElementById('dxy-cot');
+    const ye=document.getElementById('dxy-yield');
+    const de=document.getElementById('dxy-cot-dir');
+    if(ce&&d.cot_pct!=null){ce.value=d.cot_pct;localStorage.setItem('dxy_cot',d.cot_pct);}
+    if(ye&&d.yield_pct!=null){ye.value=d.yield_pct;localStorage.setItem('dxy_yield',d.yield_pct);}
+    if(de&&d.cot_dir){de.value=d.cot_dir;localStorage.setItem('dxy_cot_dir',d.cot_dir);}
+    if(d.cot_pct!=null||d.yield_pct!=null) calcDXYRegime();
+  } catch(e){}
 }
 
 // ── TABS ──
