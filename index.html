@@ -2249,8 +2249,10 @@ body:not(.light){
           <div class="ig"><label>Open / Close</label><select id="tl-oc"><option value="Close">Close</option><option value="Open">Open</option></select></div>
           <div class="ig"><label>Direction</label><select id="tl-dir"><option>Buy</option><option>Sell</option></select></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="tl-size" placeholder="0.00" step="0.01" min="0"></div>
-          <div class="ig"><label>Symbol</label><select id="tl-symbol"><option value="">— Select —</option>
-<option value="EUR/USD">EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="USD/JPY">USD/JPY</option><option value="USD/CHF">USD/CHF</option><option value="AUD/USD">AUD/USD</option><option value="USD/CAD">USD/CAD</option><option value="NZD/USD">NZD/USD</option><option value="XAU/USD">XAU/USD</option><option value="XAG/USD">XAG/USD</option><option value="USOil">USOil</option><option value="HG/USD">HG/USD</option></select></div>
+          <div class="ig"><label>Symbol</label><select id="tl-symbol" onchange="tlAutoFillFromSignal()"><option value="">— Select —</option>
+<option value="EUR/USD">EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="USD/JPY">USD/JPY</option><option value="USD/CHF">USD/CHF</option><option value="AUD/USD">AUD/USD</option><option value="USD/CAD">USD/CAD</option><option value="NZD/USD">NZD/USD</option><option value="XAU/USD">XAU/USD</option><option value="XAG/USD">XAG/USD</option><option value="USOil">USOil</option><option value="HG/USD">HG/USD</option></select>
+<div id="tl-autofill-note" style="display:none;font-family:'DM Mono',monospace;font-size:.58rem;color:var(--accent);margin-top:5px;padding:4px 8px;background:rgba(53,79,82,.08);border-radius:6px;border-left:2px solid var(--accent)"></div>
+</div>
         </div>
         <div class="g3">
           <div class="ig"><label>Type</label><select id="tl-type"><option>Forex</option><option>Futures</option><option>CFD</option></select></div>
@@ -6616,11 +6618,12 @@ function tlAutoFillFromSignal() {
   if(!futures) { note.style.display='none'; return; }
 
   // Find latest signal entry for this futures
-  const latest = (entries||[])
-    .filter(e => e.asset === futures)
-    .sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
+  const allForFutures = (entries||[]).filter(e => e.asset === futures);
+  console.log('tlAutoFill: sym='+sym+' futures='+futures+' entries.length='+(entries||[]).length+' matching='+allForFutures.length);
+  if(allForFutures.length) console.log('latest phase:', allForFutures[0].phase, 'inst_tag:', allForFutures[0].inst_tag);
+  const latest = allForFutures.sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
 
-  if(!latest) { note.style.display='none'; return; }
+  if(!latest) { note.textContent='No signal found for '+futures; note.style.display='block'; return; }
 
   // Normalize phase — strip " — CONFIRMED", " — Waiting" etc
   const normPhase = latest.phase
@@ -6639,14 +6642,14 @@ function tlAutoFillFromSignal() {
   // Auto-fill Phase tag — only if empty
   const currentPhase = getSelTag('phase-tags');
   if(!currentPhase && phaseVal) {
-    const phaseBtn = document.querySelector(`#phase-tags .tag-btn[data-val="${phaseVal}"]`);
+    const phaseBtn = document.querySelector(`[id="phase-tags"] .tag-btn[data-val="${phaseVal}"]`) || document.querySelector(`.tag-btn[data-val="${phaseVal}"]`);
     if(phaseBtn) { selTag('phase-tags', phaseBtn); filled.push('Phase: '+phaseVal); }
   }
 
   // Auto-fill Inst Signal tag — only if empty
   const currentInst = getSelTag('inst-tags');
   if(!currentInst && latest.inst_tag) {
-    const instBtn = document.querySelector(`#inst-tags .tag-btn[data-val="${latest.inst_tag}"]`);
+    const instBtn = document.querySelector(`[id="inst-tags"] .tag-btn[data-val="${latest.inst_tag}"]`) || document.querySelector(`#inst-tags .tag-btn[data-val="${latest.inst_tag}"]`);
     if(instBtn) { selTag('inst-tags', instBtn); filled.push('Signal: '+latest.inst_tag); }
   }
 
