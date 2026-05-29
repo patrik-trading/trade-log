@@ -6600,6 +6600,53 @@ async function loadDXYSettings() {
   } catch(e){}
 }
 
+// ── TRADE LOG: Auto-fill phase + inst signal from latest signal entry ──
+const CFD_TO_FUTURES = {
+  'EUR/USD':'6E','GBP/USD':'6B','USD/JPY':'6J','USD/CHF':'6S',
+  'AUD/USD':'6A','USD/CAD':'6C','NZD/USD':'6N',
+  'XAU/USD':'GC','XAG/USD':'SI','USOil':'CL','HG/USD':'HG'
+};
+
+function tlAutoFillFromSignal() {
+  const sym = document.getElementById('tl-symbol').value;
+  const note = document.getElementById('tl-autofill-note');
+  if(!sym || !note) return;
+
+  const futures = CFD_TO_FUTURES[sym];
+  if(!futures) { note.style.display='none'; return; }
+
+  // Find latest signal entry for this futures
+  const latest = entries
+    .filter(e => e.asset === futures)
+    .sort((a,b) => b.date.localeCompare(a.date))[0];
+
+  if(!latest) { note.style.display='none'; return; }
+
+  let filled = [];
+
+  // Auto-fill Phase tag — only if empty
+  const currentPhase = getSelTag('phase-tags');
+  if(!currentPhase && latest.phase) {
+    const phaseBtn = document.querySelector(`#phase-tags .tag-btn[data-val="${latest.phase}"]`);
+    if(phaseBtn) { selTag('phase-tags', phaseBtn); filled.push('Phase: '+latest.phase); }
+  }
+
+  // Auto-fill Inst Signal tag — only if empty
+  const currentInst = getSelTag('inst-tags');
+  if(!currentInst && latest.inst_tag) {
+    const instBtn = document.querySelector(`#inst-tags .tag-btn[data-val="${latest.inst_tag}"]`);
+    if(instBtn) { selTag('inst-tags', instBtn); filled.push('Signal: '+latest.inst_tag); }
+  }
+
+  // Show note
+  if(filled.length > 0) {
+    note.textContent = 'Auto from ' + futures + ' (' + latest.date + '): ' + filled.join(' · ');
+    note.style.display = 'block';
+  } else {
+    note.style.display = 'none';
+  }
+}
+
 // ── TABS ──
 
 
