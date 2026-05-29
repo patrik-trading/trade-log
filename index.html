@@ -6616,19 +6616,31 @@ function tlAutoFillFromSignal() {
   if(!futures) { note.style.display='none'; return; }
 
   // Find latest signal entry for this futures
-  const latest = entries
+  const latest = (entries||[])
     .filter(e => e.asset === futures)
-    .sort((a,b) => b.date.localeCompare(a.date))[0];
+    .sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
 
   if(!latest) { note.style.display='none'; return; }
+
+  // Normalize phase — strip " — CONFIRMED", " — Waiting" etc
+  const normPhase = latest.phase
+    ? latest.phase.replace(/\s*[—–-]+\s*(CONFIRMED|Waiting for Turn|Watching|Waiting|Wait).*$/i,'').trim()
+    : null;
+
+  // Map phase to button data-val
+  const phaseMap = {
+    'Spring':'Spring','Recovery':'Recovery','Surge':'Surge',
+    'Cliff':'Cliff','Trap':'Trap','Slide':'Slide','Neutral':'Recovery'
+  };
+  const phaseVal = normPhase ? (phaseMap[normPhase] || normPhase) : null;
 
   let filled = [];
 
   // Auto-fill Phase tag — only if empty
   const currentPhase = getSelTag('phase-tags');
-  if(!currentPhase && latest.phase) {
-    const phaseBtn = document.querySelector(`#phase-tags .tag-btn[data-val="${latest.phase}"]`);
-    if(phaseBtn) { selTag('phase-tags', phaseBtn); filled.push('Phase: '+latest.phase); }
+  if(!currentPhase && phaseVal) {
+    const phaseBtn = document.querySelector(`#phase-tags .tag-btn[data-val="${phaseVal}"]`);
+    if(phaseBtn) { selTag('phase-tags', phaseBtn); filled.push('Phase: '+phaseVal); }
   }
 
   // Auto-fill Inst Signal tag — only if empty
@@ -6640,7 +6652,10 @@ function tlAutoFillFromSignal() {
 
   // Show note
   if(filled.length > 0) {
-    note.textContent = 'Auto from ' + futures + ' (' + latest.date + '): ' + filled.join(' · ');
+    note.textContent = 'Auto from ' + futures + ' (' + (latest.date||'') + '): ' + filled.join(' · ');
+    note.style.display = 'block';
+  } else if(latest) {
+    note.textContent = 'Found ' + futures + ' signal (' + (latest.date||'') + ') — fields already filled';
     note.style.display = 'block';
   } else {
     note.style.display = 'none';
