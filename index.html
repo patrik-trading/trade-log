@@ -6660,7 +6660,14 @@ function tlAutoFillFromSignal() {
     CC:'Cliff',  CW:'Cliff',  TR:'Trap',    SL:'Slide',
     CF:'The Conflict', NE:'Neutral'
   };
-  const phaseVal = normPhase || SK_PHASE[latest.signal_key] || null;
+  // Map any stored phase string to button data-val
+  const PHASE_NORM = {
+    'Spring':'Spring','Recovery':'Recovery','Surge':'Surge',
+    'Cliff':'Cliff','Trap':'Trap','Slide':'Slide',
+    'The Conflict':'The Conflict','Neutral':'Neutral',
+    'Wait':'Neutral','NEUTRAL':'Neutral','Conflict':'The Conflict'
+  };
+  const phaseVal = PHASE_NORM[normPhase] || SK_PHASE[latest.signal_key] || null;
   if(phaseVal) {
     if(forceSelTag('phase-tags', phaseVal)) filled.push('Phase: '+phaseVal);
   }
