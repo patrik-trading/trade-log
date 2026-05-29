@@ -6655,24 +6655,35 @@ function tlAutoFillFromSignal() {
     }
   }
 
-  // Derive inst_tag from inst_score + bias
-  let derivedTag = null;
+  // Derive inst_tag from signal_key + inst_score
+  const BULLISH_KEYS = ['SC','SW','RC','SU'];
+  const BEARISH_KEYS = ['CC','CW','TR','SL'];
+  const sk    = latest.signal_key || '';
   const score = parseFloat(latest.inst_score);
+  // Also check bias field as fallback
   const bias  = (latest.bias||'').toLowerCase();
-  const isLong  = bias.includes('long')  || bias === 'long';
-  const isShort = bias.includes('short') || bias === 'short';
-  if(!isNaN(score)) {
-    if(score >= 75 && isLong)  derivedTag = 'High Conviction Long';
-    else if(score >= 60 && isLong)  derivedTag = 'Bullish';
-    else if(score >= 75 && isShort) derivedTag = 'High Conviction Short';
-    else if(score >= 60 && isShort) derivedTag = 'Bearish';
-    else if(score >= 40 && score < 60) derivedTag = 'Neutral';
-    else if(isLong)  derivedTag = 'Bullish';
-    else if(isShort) derivedTag = 'Bearish';
-    else derivedTag = 'Neutral';
-  }
-  if(derivedTag) {
-    document.querySelectorAll('#inst-tags .tag-btn, [id="inst-tags"] .tag-btn').forEach(btn => {
+  const isBullKey  = BULLISH_KEYS.includes(sk) || bias === 'long';
+  const isBearKey  = BEARISH_KEYS.includes(sk) || bias === 'short';
+
+  let derivedTag = 'Neutral';
+  if(!isNaN(score) && score >= 0) {
+    if(isBullKey)       derivedTag = score >= 75 ? 'High Conviction Long'  : score >= 50 ? 'Bullish' : 'Neutral';
+    else if(isBearKey)  derivedTag = score >= 75 ? 'High Conviction Short' : score >= 50 ? 'Bearish' : 'Neutral';
+  } else if(isBullKey)  derivedTag = 'Bullish';
+  else if(isBearKey)    derivedTag = 'Bearish';
+
+  // Always overwrite — find and click the button
+  let instFilled = false;
+  document.querySelectorAll('.tag-btn').forEach(btn => {
+    if(btn.getAttribute('data-val') === derivedTag && btn.closest('#inst-tags, [id="inst-tags"]')) {
+      selTag('inst-tags', btn);
+      filled.push('Signal: '+derivedTag);
+      instFilled = true;
+    }
+  });
+  // Fallback: find by any matching tag-btn with data-val
+  if(!instFilled) {
+    document.querySelectorAll('#inst-tags .tag-btn').forEach(btn => {
       if(btn.getAttribute('data-val') === derivedTag) {
         selTag('inst-tags', btn);
         filled.push('Signal: '+derivedTag);
