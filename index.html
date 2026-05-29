@@ -6655,32 +6655,39 @@ function tlAutoFillFromSignal() {
   const normPhase = raw.replace(/\s*[—–-]+\s*(CONFIRMED|Waiting for Turn|Watching|Waiting|Wait).*$/i,'').trim();
   // Map signal_key to phase if phase field is empty
   const SK_PHASE = {
-    SC:'Spring',SW:'Spring',RC:'Recovery',SU:'Surge',
-    CC:'Cliff',CW:'Cliff',TR:'Trap',SL:'Slide',
-    CF:'Neutral',NE:'Neutral'
+    SC:'Spring', SW:'Spring', RC:'Recovery', SU:'Surge',
+    CC:'Cliff',  CW:'Cliff',  TR:'Trap',    SL:'Slide',
+    CF:'Neutral', NE:'Neutral'
   };
   const phaseVal = normPhase || SK_PHASE[latest.signal_key] || null;
   if(phaseVal) {
     if(forceSelTag('phase-tags', phaseVal)) filled.push('Phase: '+phaseVal);
   }
 
-  // ── INST SIGNAL ──
+  // ── INST SIGNAL — always from inst_score + bias, never forced by phase ──
   const BULL_KEYS = ['SC','SW','RC','SU'];
   const BEAR_KEYS = ['CC','CW','TR','SL'];
-  const NEUT_KEYS = ['CF','NE'];
   const sk    = latest.signal_key || '';
   const score = parseFloat(latest.inst_score);
   const bias  = (latest.bias||'').toLowerCase();
+  // Direction from signal_key first, then bias field as fallback
   const isBull = BULL_KEYS.includes(sk) || bias === 'long';
-  const isBear = BEAR_KEYS.includes(sk) || bias === 'short';
-  const isNeut = NEUT_KEYS.includes(sk);
+  const isBear = BEAR_KEYS.includes(sk) || bias === 'short' || bias.includes('short');
+  // For CF/NE: use bias field to determine direction
+  const isBullBias = bias === 'long';
+  const isBearBias = bias === 'short' || bias.includes('short');
 
   let derivedTag = 'Neutral';
-  if(isNeut) {
-    derivedTag = 'Neutral';
-  } else if(!isNaN(score)) {
-    if(isBull) derivedTag = score>=70?'High Conviction Long':score>=55?'Bullish':'Neutral';
-    else if(isBear) derivedTag = score<=30?'High Conviction Short':score<=45?'Bearish':'Neutral';
+  if(!isNaN(score)) {
+    const effectiveBull = isBull || isBullBias;
+    const effectiveBear = isBear || isBearBias;
+    if(effectiveBull && !effectiveBear)
+      derivedTag = score>=70?'High Conviction Long':score>=55?'Bullish':'Neutral';
+    else if(effectiveBear && !effectiveBull)
+      derivedTag = score<=30?'High Conviction Short':score<=45?'Bearish':'Neutral';
+    else
+      // Both or neither — use score magnitude from 50
+      derivedTag = score>=70?'High Conviction Long':score>=55?'Bullish':score<=30?'High Conviction Short':score<=45?'Bearish':'Neutral';
   } else {
     if(isBull) derivedTag = 'Bullish';
     else if(isBear) derivedTag = 'Bearish';
