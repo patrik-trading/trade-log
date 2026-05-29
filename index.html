@@ -2298,6 +2298,7 @@ body:not(.light){
           <button class="tag-btn" data-val="Trap" onclick="selTag('phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
           <button class="tag-btn" data-val="Recovery" onclick="selTag('phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
           <button class="tag-btn" data-val="Neutral" onclick="selTag('phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
+          <button class="tag-btn" data-val="The Conflict" onclick="selTag('phase-tags',this)" style="--tc:#f59e0b">⚡ The Conflict</button>
         </div></div>
         <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
           <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
@@ -6657,7 +6658,7 @@ function tlAutoFillFromSignal() {
   const SK_PHASE = {
     SC:'Spring', SW:'Spring', RC:'Recovery', SU:'Surge',
     CC:'Cliff',  CW:'Cliff',  TR:'Trap',    SL:'Slide',
-    CF:'Neutral', NE:'Neutral'
+    CF:'The Conflict', NE:'Neutral'
   };
   const phaseVal = normPhase || SK_PHASE[latest.signal_key] || null;
   if(phaseVal) {
