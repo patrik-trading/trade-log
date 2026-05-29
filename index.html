@@ -6610,91 +6610,91 @@ const CFD_TO_FUTURES = {
 };
 
 function tlAutoFillFromSignal() {
-  const sym = document.getElementById('tl-symbol').value;
+  const sym  = document.getElementById('tl-symbol').value;
   const note = document.getElementById('tl-autofill-note');
-  if(!sym || !note) return;
+
+  // Helper: deselect all in a tag group then select matching
+  function forceSelTag(groupId, val) {
+    const group = document.getElementById(groupId);
+    if(!group) return false;
+    // Deselect all first
+    group.querySelectorAll('.tag-btn').forEach(b => {
+      b.classList.remove('sel');
+      b.style.background = '';
+      b.style.color = '';
+    });
+    // Select matching
+    const btn = group.querySelector('.tag-btn[data-val="'+val+'"]');
+    if(btn) { selTag(groupId, btn); return true; }
+    return false;
+  }
+
+  if(!sym) {
+    if(note) note.style.display = 'none';
+    return;
+  }
 
   const futures = CFD_TO_FUTURES[sym];
-  if(!futures) { note.style.display='none'; return; }
+  if(!futures) { if(note) note.style.display='none'; return; }
 
   // Find latest signal entry for this futures
-  const allForFutures = (entries||[]).filter(e => e.asset === futures);
-  const latest = allForFutures.sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
-  if(!latest) { note.textContent='No '+futures+' signal found'; note.style.display='block'; return; }
+  const latest = (entries||[])
+    .filter(e => e.asset === futures)
+    .sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
 
-  // Normalize phase — strip " — CONFIRMED", " — Waiting" etc
-  const normPhase = latest.phase
-    ? latest.phase.replace(/\s*[—–-]+\s*(CONFIRMED|Waiting for Turn|Watching|Waiting|Wait).*$/i,'').trim()
-    : null;
-
-  // Map phase to button data-val
-  const phaseMap = {
-    'Spring':'Spring','Recovery':'Recovery','Surge':'Surge',
-    'Cliff':'Cliff','Trap':'Trap','Slide':'Slide','Neutral':'Recovery'
-  };
-  const phaseVal = normPhase ? (phaseMap[normPhase] || normPhase) : null;
+  if(!latest) {
+    if(note) { note.textContent = 'No '+futures+' signal found'; note.style.display='block'; }
+    return;
+  }
 
   let filled = [];
 
-  // Auto-fill Phase tag — iterate all buttons to find match
+  // ── PHASE ──
+  // Normalize phase — strip suffixes
+  const raw = latest.phase || '';
+  const normPhase = raw.replace(/\s*[—–-]+\s*(CONFIRMED|Waiting for Turn|Watching|Waiting|Wait).*$/i,'').trim();
+  // Map signal_key to phase if phase field is empty
+  const SK_PHASE = {
+    SC:'Spring',SW:'Spring',RC:'Recovery',SU:'Surge',
+    CC:'Cliff',CW:'Cliff',TR:'Trap',SL:'Slide',
+    CF:'Neutral',NE:'Neutral'
+  };
+  const phaseVal = normPhase || SK_PHASE[latest.signal_key] || null;
   if(phaseVal) {
-    document.querySelectorAll('.tag-btn').forEach(btn => {
-      if(btn.getAttribute('data-val') === phaseVal && btn.closest('#phase-tags, [id="phase-tags"]')) {
-        selTag('phase-tags', btn);
-        filled.push('Phase: '+phaseVal);
-      }
-    });
-    // Fallback: find any tag-btn with matching data-val near phase section
-    if(!filled.includes('Phase: '+phaseVal)) {
-      document.querySelectorAll('#phase-tags .tag-btn, [id="phase-tags"] .tag-btn').forEach(btn => {
-        if(btn.getAttribute('data-val') === phaseVal) {
-          btn.click();
-          filled.push('Phase: '+phaseVal);
-        }
-      });
-    }
+    if(forceSelTag('phase-tags', phaseVal)) filled.push('Phase: '+phaseVal);
   }
 
-  // Derive inst_tag from signal_key + inst_score
-  const BULLISH_KEYS = ['SC','SW','RC','SU'];
-  const BEARISH_KEYS = ['CC','CW','TR','SL'];
+  // ── INST SIGNAL ──
+  const BULL_KEYS = ['SC','SW','RC','SU'];
+  const BEAR_KEYS = ['CC','CW','TR','SL'];
+  const NEUT_KEYS = ['CF','NE'];
   const sk    = latest.signal_key || '';
   const score = parseFloat(latest.inst_score);
-  // Also check bias field as fallback
   const bias  = (latest.bias||'').toLowerCase();
-  const isBullKey  = BULLISH_KEYS.includes(sk) || bias === 'long';
-  const isBearKey  = BEARISH_KEYS.includes(sk) || bias === 'short';
+  const isBull = BULL_KEYS.includes(sk) || bias === 'long';
+  const isBear = BEAR_KEYS.includes(sk) || bias === 'short';
+  const isNeut = NEUT_KEYS.includes(sk);
 
   let derivedTag = 'Neutral';
-  if(!isNaN(score) && score >= 0) {
-    if(isBullKey)       derivedTag = score >= 75 ? 'High Conviction Long'  : score >= 50 ? 'Bullish' : 'Neutral';
-    else if(isBearKey)  derivedTag = score >= 75 ? 'High Conviction Short' : score >= 50 ? 'Bearish' : 'Neutral';
-  } else if(isBullKey)  derivedTag = 'Bullish';
-  else if(isBearKey)    derivedTag = 'Bearish';
-
-  // Always overwrite — find and click the button
-  let instFilled = false;
-  document.querySelectorAll('.tag-btn').forEach(btn => {
-    if(btn.getAttribute('data-val') === derivedTag && btn.closest('#inst-tags, [id="inst-tags"]')) {
-      selTag('inst-tags', btn);
-      filled.push('Signal: '+derivedTag);
-      instFilled = true;
-    }
-  });
-  // Fallback: find by any matching tag-btn with data-val
-  if(!instFilled) {
-    document.querySelectorAll('#inst-tags .tag-btn').forEach(btn => {
-      if(btn.getAttribute('data-val') === derivedTag) {
-        selTag('inst-tags', btn);
-        filled.push('Signal: '+derivedTag);
-      }
-    });
+  if(isNeut) {
+    derivedTag = 'Neutral';
+  } else if(!isNaN(score)) {
+    if(isBull) derivedTag = score>=70?'High Conviction Long':score>=55?'Bullish':'Neutral';
+    else if(isBear) derivedTag = score<=30?'High Conviction Short':score<=45?'Bearish':'Neutral';
+  } else {
+    if(isBull) derivedTag = 'Bullish';
+    else if(isBear) derivedTag = 'Bearish';
   }
 
-  note.textContent = filled.length > 0
-    ? 'Auto from ' + futures + ' (' + (latest.date||'') + '): ' + filled.join(' · ')
-    : 'Found ' + futures + ' (' + (latest.date||'') + ') — score: ' + (latest.inst_score||'?') + ', bias: ' + (latest.bias||'?');
-  note.style.display = 'block';
+  if(forceSelTag('inst-tags', derivedTag)) filled.push('Signal: '+derivedTag);
+
+  // Show note
+  if(note) {
+    note.textContent = filled.length > 0
+      ? 'Auto from '+futures+' ('+latest.date+'): '+filled.join(' · ')
+      : 'Found '+futures+' but could not select tags';
+    note.style.display = 'block';
+  }
 }
 
 // ── TABS ──
