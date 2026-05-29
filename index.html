@@ -6619,11 +6619,8 @@ function tlAutoFillFromSignal() {
 
   // Find latest signal entry for this futures
   const allForFutures = (entries||[]).filter(e => e.asset === futures);
-  console.log('tlAutoFill: sym='+sym+' futures='+futures+' entries.length='+(entries||[]).length+' matching='+allForFutures.length);
-  if(allForFutures.length) console.log('latest phase:', allForFutures[0].phase, 'inst_tag:', allForFutures[0].inst_tag);
   const latest = allForFutures.sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
-
-  if(!latest) { note.textContent='No signal found for '+futures; note.style.display='block'; return; }
+  if(!latest) { note.textContent='No '+futures+' signal found'; note.style.display='block'; return; }
 
   // Normalize phase — strip " — CONFIRMED", " — Waiting" etc
   const normPhase = latest.phase
@@ -6639,30 +6636,39 @@ function tlAutoFillFromSignal() {
 
   let filled = [];
 
-  // Auto-fill Phase tag — only if empty
-  const currentPhase = getSelTag('phase-tags');
-  if(!currentPhase && phaseVal) {
-    const phaseBtn = document.querySelector(`[id="phase-tags"] .tag-btn[data-val="${phaseVal}"]`) || document.querySelector(`.tag-btn[data-val="${phaseVal}"]`);
-    if(phaseBtn) { selTag('phase-tags', phaseBtn); filled.push('Phase: '+phaseVal); }
+  // Auto-fill Phase tag — iterate all buttons to find match
+  if(phaseVal) {
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+      if(btn.getAttribute('data-val') === phaseVal && btn.closest('#phase-tags, [id="phase-tags"]')) {
+        selTag('phase-tags', btn);
+        filled.push('Phase: '+phaseVal);
+      }
+    });
+    // Fallback: find any tag-btn with matching data-val near phase section
+    if(!filled.includes('Phase: '+phaseVal)) {
+      document.querySelectorAll('#phase-tags .tag-btn, [id="phase-tags"] .tag-btn').forEach(btn => {
+        if(btn.getAttribute('data-val') === phaseVal) {
+          btn.click();
+          filled.push('Phase: '+phaseVal);
+        }
+      });
+    }
   }
 
-  // Auto-fill Inst Signal tag — only if empty
-  const currentInst = getSelTag('inst-tags');
-  if(!currentInst && latest.inst_tag) {
-    const instBtn = document.querySelector(`[id="inst-tags"] .tag-btn[data-val="${latest.inst_tag}"]`) || document.querySelector(`#inst-tags .tag-btn[data-val="${latest.inst_tag}"]`);
-    if(instBtn) { selTag('inst-tags', instBtn); filled.push('Signal: '+latest.inst_tag); }
+  // Auto-fill Inst Signal tag
+  if(latest.inst_tag) {
+    document.querySelectorAll('#inst-tags .tag-btn, [id="inst-tags"] .tag-btn').forEach(btn => {
+      if(btn.getAttribute('data-val') === latest.inst_tag) {
+        selTag('inst-tags', btn);
+        filled.push('Signal: '+latest.inst_tag);
+      }
+    });
   }
 
-  // Show note
-  if(filled.length > 0) {
-    note.textContent = 'Auto from ' + futures + ' (' + (latest.date||'') + '): ' + filled.join(' · ');
-    note.style.display = 'block';
-  } else if(latest) {
-    note.textContent = 'Found ' + futures + ' signal (' + (latest.date||'') + ') — fields already filled';
-    note.style.display = 'block';
-  } else {
-    note.style.display = 'none';
-  }
+  note.textContent = filled.length > 0
+    ? 'Auto from ' + futures + ' (' + (latest.date||'') + '): ' + filled.join(' · ')
+    : 'Found ' + futures + ' (' + (latest.date||'') + ') — phase: ' + (phaseVal||'none') + ', signal: ' + (latest.inst_tag||'none');
+  note.style.display = 'block';
 }
 
 // ── TABS ──
