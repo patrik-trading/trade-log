@@ -6899,6 +6899,7 @@ function switchTab(n){
   if(n==='review'){setTimeout(renderReview,50);}
   if(n==='converter'){setTimeout(async()=>{await ztLoadBasisFromSupabase();ztInit();},50);}
   updateBottomBar(n);
+  localStorage.setItem('active_tab', n);
 }
 
 // ── MOBILE BOTTOM TAB BAR ──
@@ -6920,6 +6921,9 @@ function updateBottomBar(tab) {
     if(btn) btn.textContent='🌙 Dark';
   }
   if(url&&key){SB_URL=url;SB_KEY=key;launch();}
+  // Restore last active tab
+  const lastTab=localStorage.getItem('active_tab');
+  if(lastTab) switchTab(lastTab);
 })();
 
 
