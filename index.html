@@ -9,7 +9,7 @@
 <style>
 :root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
 body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;}
-.theme-toggle{font-family:'DM Mono';font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
+.theme-toggle{font-family:DM Mono;font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
@@ -19,25 +19,25 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
 .setup-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--accent);letter-spacing:.25em;margin-bottom:6px;}
-.setup-sub{font-family:'DM Mono';font-size:.68rem;color:var(--muted2);margin-bottom:18px;line-height:1.8;}
-.setup-steps{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2.2;}
+.setup-sub{font-family:DM Mono;font-size:.68rem;color:var(--muted2);margin-bottom:18px;line-height:1.8;}
+.setup-steps{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;font-family:DM Mono;font-size:.62rem;color:var(--muted2);line-height:2.2;}
 .setup-steps b{color:var(--accent);}
 .setup-steps code{background:rgba(200,169,110,.1);color:var(--accent);padding:1px 5px;border-radius:3px;}
 .setup-ig{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
-.setup-ig label{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
-.setup-err{font-family:'DM Mono';font-size:.63rem;color:var(--mega-bear);margin-top:6px;min-height:15px;}
+.setup-ig label{font-family:DM Mono;font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
+.setup-err{font-family:DM Mono;font-size:.63rem;color:var(--mega-bear);margin-top:6px;min-height:15px;}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
 .logo{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.25em;color:var(--accent);line-height:1;}
-.logo small{display:block;font-family:'DM Mono';font-size:.72rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:2px;}
-.badge{font-family:'DM Mono';font-size:.78rem;color:var(--muted2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:4px;}
-.sync-bar{display:flex;align-items:center;gap:7px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);}
+.logo small{display:block;font-family:DM Mono;font-size:.72rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:2px;}
+.badge{font-family:DM Mono;font-size:.78rem;color:var(--muted2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:4px;}
+.sync-bar{display:flex;align-items:center;gap:7px;font-family:DM Mono;font-size:.62rem;color:var(--muted2);}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s;}
 .sync-dot.ok{background:var(--mega-bull);}
 .sync-dot.err{background:var(--mega-bear);}
 .sync-dot.busy{background:var(--accent);animation:pulse .8s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
-.tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
+.tab-btn{font-family:DM Mono;font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
 .tab-btns-desktop{display:flex;}
@@ -57,82 +57,82 @@ body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!im
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .ig{display:flex;flex-direction:column;gap:5px;}
-.ig label{font-size:.75rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;}
-input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:'DM Mono';font-size:.82rem;outline:none;transition:border-color .2s;width:100%;
+.ig label{font-size:.75rem;color:var(--muted2);font-family:DM Mono;letter-spacing:.25em;}
+input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:DM Mono;font-size:.82rem;outline:none;transition:border-color .2s;width:100%;
   box-sizing:border-box;}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);}
 select option{background:#12151e;}
 textarea{resize:vertical;min-height:52px;}
 .num-wrap{position:relative;}
 .num-wrap input{padding-right:26px;}
-.num-sfx{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:'DM Mono';font-size:.68rem;color:var(--muted2);pointer-events:none;}
+.num-sfx{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:DM Mono;font-size:.68rem;color:var(--muted2);pointer-events:none;}
 .dir-btns{display:flex;gap:5px;margin-top:2px;}
-.dir-btn{flex:1;padding:7px 3px;font-family:'DM Mono';font-size:.67rem;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--muted2);cursor:pointer;transition:all .2s;text-align:center;}
+.dir-btn{flex:1;padding:7px 3px;font-family:DM Mono;font-size:.67rem;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--muted2);cursor:pointer;transition:all .2s;text-align:center;}
 .dir-btn:hover{border-color:var(--muted2);color:var(--text);}
 .dir-btn.sel-up{background:rgba(34,197,94,.15);border-color:var(--mega-bull);color:var(--mega-bull);}
 .dir-btn.sel-dn{background:rgba(239,68,68,.15);border-color:var(--mega-bear);color:var(--mega-bear);}
 .dir-btn.sel-fl{background:rgba(107,114,128,.15);border-color:var(--neutral);color:var(--neutral);}
 .result-box{border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0;background:var(--bg);transition:all .35s;overflow:hidden;}
 .result-box.lit{border-color:var(--sig-color);box-shadow:0 0 24px -10px var(--sig-color);}
-.result-label{font-family:'DM Mono';font-size:.6rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:6px;}
+.result-label{font-family:DM Mono;font-size:.6rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:6px;}
 .result-sig{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.25em;line-height:1;transition:color .3s;}
-.result-phase{font-family:'DM Mono';font-size:.75rem;color:var(--muted2);margin-top:3px;}
+.result-phase{font-family:DM Mono;font-size:.75rem;color:var(--muted2);margin-top:3px;}
 .result-cond{font-size:.7rem;color:var(--muted2);margin-top:8px;line-height:1.55;border-top:1px solid var(--border);padding-top:8px;}
 .result-icon{font-size:1.5rem;float:right;margin-left:10px;}
 .pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
-.pill{font-family:'DM Mono';font-size:.58rem;padding:2px 8px;border-radius:99px;border:1px solid;}
+.pill{font-family:DM Mono;font-size:.58rem;padding:2px 8px;border-radius:99px;border:1px solid;}
 .pill.ok{border-color:var(--mega-bull);color:var(--mega-bull);background:rgba(34,197,94,.08);}
 .pill.warn{border-color:var(--bear);color:var(--bear);background:rgba(249,115,22,.08);}
 .pill.off{border-color:var(--muted);color:var(--muted);}
 .legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;margin-bottom:22px;}
 .legend-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sig-color);border-radius:6px;padding:9px 11px;}
-.legend-sig{font-family:'DM Mono';font-size:.65rem;color:var(--sig-color);font-weight:500;}
-.legend-rule{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
+.legend-sig{font-family:DM Mono;font-size:.65rem;color:var(--sig-color);font-weight:500;}
+.legend-rule{font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
 .sig-main{display:grid;grid-template-columns:1fr 340px;gap:16px;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
 .stat-n{font-family:'Bebas Neue';font-size:1.8rem;color:var(--accent);line-height:1;}
-.stat-l{font-size:.6rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;margin-top:3px;}
+.stat-l{font-size:.6rem;color:var(--muted2);font-family:DM Mono;letter-spacing:.25em;margin-top:3px;}
 .freq{display:flex;flex-direction:column;gap:6px;}
 .f-row{display:flex;align-items:center;gap:8px;}
-.f-lbl{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.f-lbl{font-family:DM Mono;font-size:.58rem;color:var(--muted2);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .f-track{flex:1;background:var(--bg);border-radius:3px;height:7px;overflow:hidden;}
 .f-fill{height:100%;border-radius:3px;transition:width .5s;}
-.f-n{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);width:16px;flex-shrink:0;}
+.f-n{font-family:DM Mono;font-size:.58rem;color:var(--muted2);width:16px;flex-shrink:0;}
 .hist-list{display:flex;flex-direction:column;gap:7px;max-height:460px;overflow-y:auto;}
 .hist-list::-webkit-scrollbar{width:3px;}
 .hist-list::-webkit-scrollbar-thumb{background:var(--border);}
 .h-item{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--sig-color,var(--muted));border-radius:6px;padding:9px 11px;display:flex;align-items:flex-start;gap:9px;}
 .h-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
 .h-body{flex:1;min-width:0;}
-.h-sig{font-family:'DM Mono';font-size:.7rem;font-weight:500;}
-.h-meta{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:2px;}
-.h-vals{font-family:'DM Mono';font-size:.56rem;color:var(--muted);margin-top:2px;}
+.h-sig{font-family:DM Mono;font-size:.7rem;font-weight:500;}
+.h-meta{font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:2px;}
+.h-vals{font-family:DM Mono;font-size:.56rem;color:var(--muted);margin-top:2px;}
 .h-note{font-family:'DM Sans';font-size:.6rem;color:var(--muted2);margin-top:2px;font-style:italic;}
 .h-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.75rem;padding:2px 4px;transition:color .2s;flex-shrink:0;}
 .h-del:hover{color:#ef4444;}
-.empty{text-align:center;padding:26px;color:var(--muted2);font-family:'DM Mono';font-size:.7rem;line-height:1.8;}
+.empty{text-align:center;padding:26px;color:var(--muted2);font-family:DM Mono;font-size:.7rem;line-height:1.8;}
 .tl-topbar{display:flex;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
-.tl-lbl{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
+.tl-lbl{font-family:DM Mono;font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
 .tl-stats{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin-bottom:16px;}
 .tl-stat{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:11px 8px;text-align:center;}
 .tl-stat-n{font-family:'Bebas Neue';font-size:1.8rem;line-height:1;}
-.tl-stat-l{font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-top:3px;}
+.tl-stat-l{font-family:DM Mono;font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-top:3px;}
 .tl-layout{display:flex;flex-direction:column;gap:16px;}
 .r-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px;}
-.r-box-title{font-family:'DM Mono';font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px;}
-.r-hint{font-family:'DM Mono';font-size:.6rem;min-height:14px;margin-top:6px;}
+.r-box-title{font-family:DM Mono;font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px;}
+.r-hint{font-family:DM Mono;font-size:.6rem;min-height:14px;margin-top:6px;}
 .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;}
-.tag-btn{font-family:'DM Mono';font-size:.6rem;padding:4px 11px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
+.tag-btn{font-family:DM Mono;font-size:.6rem;padding:4px 11px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .tag-btn:hover{border-color:var(--muted2);color:var(--text);}
 .tag-btn.sel{color:#ffffff;border-color:transparent;}
 .cur-toggle{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;}
-.cur-btn{font-family:'DM Mono';font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
+.cur-btn{font-family:DM Mono;font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
 .cur-btn.active{background:var(--accent);color:#ffffff;}
 .btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:6px;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.25em;cursor:pointer;transition:opacity .2s;}
 .btn-log:hover{opacity:.82;}
 .btn-log:disabled{opacity:.4;cursor:not-allowed;}
-.btn-sm{font-family:'DM Mono';font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
+.btn-sm{font-family:DM Mono;font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
 .btn-sm:hover{border-color:var(--accent);color:var(--accent);}
 .tl-wrap{overflow-x:auto;overflow-y:auto;margin-top:0;}
 .tl-wrap::-webkit-scrollbar{height:7px;width:7px;}
@@ -140,14 +140,14 @@ textarea{resize:vertical;min-height:52px;}
 .tl-wrap::-webkit-scrollbar-thumb{background:var(--muted);border-radius:4px;transition:background .2s;}
 .tl-wrap::-webkit-scrollbar-thumb:hover{background:var(--accent);}
 .tl-wrap::-webkit-scrollbar-corner{background:var(--surface2);}
-table.tl{width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.65rem;min-width:800px;}
+table.tl{width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.65rem;min-width:800px;}
 table.tl th{background:var(--surface2);color:var(--muted2);font-weight:500;padding:7px 9px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1;}
 table.tl td{padding:7px 9px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap;}
 table.tl tr:hover td{background:var(--surface2);}
 .td-pos{color:var(--mega-bull);}.td-neg{color:var(--mega-bear);}.td-zero{color:var(--muted2);}
 .td-buy{color:var(--mega-bull);}.td-sell{color:var(--mega-bear);}
-.chip{display:inline-block;font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:99px;border:1px solid;}
-.etype{font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;}
+.chip{display:inline-block;font-family:DM Mono;font-size:.54rem;padding:2px 7px;border-radius:99px;border:1px solid;}
+.etype{font-family:DM Mono;font-size:.54rem;padding:2px 7px;border-radius:3px;}
 .etype-ext{background:rgba(239,68,68,.12);color:#ef4444;}
 .etype-mom{background:rgba(59,130,246,.12);color:#3b82f6;}
 .tl-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.72rem;padding:2px 4px;transition:color .2s;}
@@ -155,8 +155,8 @@ table.tl tr:hover td{background:var(--surface2);}
 .sym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px;margin-top:10px;}
 .sym-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 11px;}
 .sym-name{font-family:'Bebas Neue';font-size:.95rem;color:var(--accent);letter-spacing:.05em;}
-.sym-r{font-family:'DM Mono';font-size:.72rem;margin-top:2px;}
-.sym-meta{font-family:'DM Mono';font-size:.56rem;color:var(--muted2);margin-top:2px;}
+.sym-r{font-family:DM Mono;font-size:.72rem;margin-top:2px;}
+.sym-meta{font-family:DM Mono;font-size:.56rem;color:var(--muted2);margin-top:2px;}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;}
 .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;width:320px;max-width:95vw;}
 .edit-modal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;}
@@ -178,7 +178,7 @@ table.tl tr:hover td{background:var(--surface2);}
 .sig-chk-row {
   display:flex;align-items:center;gap:8px;
   padding:4px 12px;cursor:pointer;
-  font-family:'DM Mono';font-size:.65rem;
+  font-family:DM Mono;font-size:.65rem;
   color:var(--text);
   transition:background .1s;
 }
@@ -233,13 +233,13 @@ body.light #sig-filter-futures-dd * {
 }
 
 /* ANALYTICS PANEL */
-.analytics-dim-btn{font-family:'DM Mono';font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
+.analytics-dim-btn{font-family:DM Mono;font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-dim-btn:hover{border-color:var(--muted2);color:var(--text);}
 .analytics-dim-btn.active{background:var(--accent);color:#ffffff;border-color:var(--accent);}
-.analytics-sort-btn{font-family:'DM Mono';font-size:.62rem;padding:4px 11px;border-radius:5px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
+.analytics-sort-btn{font-family:DM Mono;font-size:.62rem;padding:4px 11px;border-radius:5px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-sort-btn:hover{border-color:var(--muted2);color:var(--text);}
 .analytics-sort-btn.active{background:var(--surface2);color:var(--accent);border-color:var(--accent);}
-.analytics-table{width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.7rem;}
+.analytics-table{width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.7rem;}
 .analytics-table th{background:var(--surface2);color:var(--muted2);padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.05em;white-space:nowrap;}
 .analytics-table th.sortable{cursor:pointer;user-select:none;}
 .analytics-table th.sortable:hover{color:var(--accent);}
@@ -253,8 +253,8 @@ body.light #sig-filter-futures-dd * {
 .rules-row{transition:background .15s;}
 .rules-row:hover td{background:var(--surface2);}
 .rules-row td{border-bottom:1px solid var(--border);}
-.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:'DM Mono';font-size:.68rem;letter-spacing:.25em;white-space:nowrap;}
-.rules-cell{padding:10px 13px;color:var(--muted2);font-family:'DM Mono';font-size:.73rem;vertical-align:top;line-height:1.55;}
+.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:DM Mono;font-size:.68rem;letter-spacing:.25em;white-space:nowrap;}
+.rules-cell{padding:10px 13px;color:var(--muted2);font-family:DM Mono;font-size:.73rem;vertical-align:top;line-height:1.55;}
 .rules-scenario{padding:10px 13px;font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:.05em;white-space:nowrap;vertical-align:middle;}
 .rules-strategy{color:var(--text);}
 .rules-psych{color:var(--accent);font-style:italic;}
@@ -783,7 +783,7 @@ tml lang="en">
 <style>
 :root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;--mega-bull:#16a34a;--mega-bear:#dc2626;--bull:#2563eb;--bear:#ea580c;--trap:#7c3aed;--neutral:#64748b;--recovery:#059669;}
 body.light{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;--text:#0f172a;--muted:#cbd5e1;--muted2:#94a3b8;--accent:#354F52;}
-.theme-toggle{font-family:'DM Mono';font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
+.theme-toggle{font-family:DM Mono;font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
@@ -793,25 +793,25 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
 .setup-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--accent);letter-spacing:.25em;margin-bottom:6px;}
-.setup-sub{font-family:'DM Mono';font-size:.68rem;color:var(--muted2);margin-bottom:18px;line-height:1.8;}
-.setup-steps{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2.2;}
+.setup-sub{font-family:DM Mono;font-size:.68rem;color:var(--muted2);margin-bottom:18px;line-height:1.8;}
+.setup-steps{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:18px;font-family:DM Mono;font-size:.62rem;color:var(--muted2);line-height:2.2;}
 .setup-steps b{color:var(--accent);}
 .setup-steps code{background:rgba(200,169,110,.1);color:var(--accent);padding:1px 5px;border-radius:3px;}
 .setup-ig{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
-.setup-ig label{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
-.setup-err{font-family:'DM Mono';font-size:.63rem;color:var(--mega-bear);margin-top:6px;min-height:15px;}
+.setup-ig label{font-family:DM Mono;font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
+.setup-err{font-family:DM Mono;font-size:.63rem;color:var(--mega-bear);margin-top:6px;min-height:15px;}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
 .logo{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.25em;color:var(--accent);line-height:1;}
-.logo small{display:block;font-family:'DM Mono';font-size:.72rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:2px;}
-.badge{font-family:'DM Mono';font-size:.78rem;color:var(--muted2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:4px;}
-.sync-bar{display:flex;align-items:center;gap:7px;font-family:'DM Mono';font-size:.62rem;color:var(--muted2);}
+.logo small{display:block;font-family:DM Mono;font-size:.72rem;letter-spacing:.12em;color:var(--muted2);margin-bottom:2px;}
+.badge{font-family:DM Mono;font-size:.78rem;color:var(--muted2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:4px;}
+.sync-bar{display:flex;align-items:center;gap:7px;font-family:DM Mono;font-size:.62rem;color:var(--muted2);}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s;}
 .sync-dot.ok{background:var(--mega-bull);}
 .sync-dot.err{background:var(--mega-bear);}
 .sync-dot.busy{background:var(--accent);animation:pulse .8s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
-.tab-btn{font-family:'DM Mono';font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
+.tab-btn{font-family:DM Mono;font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
 .tab-btns-desktop{display:flex;}
@@ -831,82 +831,82 @@ body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!im
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
 .ig{display:flex;flex-direction:column;gap:5px;}
-.ig label{font-size:.75rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;}
-input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:'DM Mono';font-size:.82rem;outline:none;transition:border-color .2s;width:100%;
+.ig label{font-size:.75rem;color:var(--muted2);font-family:DM Mono;letter-spacing:.25em;}
+input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:DM Mono;font-size:.82rem;outline:none;transition:border-color .2s;width:100%;
   box-sizing:border-box;}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);}
 select option{background:#12151e;}
 textarea{resize:vertical;min-height:52px;}
 .num-wrap{position:relative;}
 .num-wrap input{padding-right:26px;}
-.num-sfx{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:'DM Mono';font-size:.68rem;color:var(--muted2);pointer-events:none;}
+.num-sfx{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:DM Mono;font-size:.68rem;color:var(--muted2);pointer-events:none;}
 .dir-btns{display:flex;gap:5px;margin-top:2px;}
-.dir-btn{flex:1;padding:7px 3px;font-family:'DM Mono';font-size:.67rem;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--muted2);cursor:pointer;transition:all .2s;text-align:center;}
+.dir-btn{flex:1;padding:7px 3px;font-family:DM Mono;font-size:.67rem;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--muted2);cursor:pointer;transition:all .2s;text-align:center;}
 .dir-btn:hover{border-color:var(--muted2);color:var(--text);}
 .dir-btn.sel-up{background:rgba(34,197,94,.15);border-color:var(--mega-bull);color:var(--mega-bull);}
 .dir-btn.sel-dn{background:rgba(239,68,68,.15);border-color:var(--mega-bear);color:var(--mega-bear);}
 .dir-btn.sel-fl{background:rgba(107,114,128,.15);border-color:var(--neutral);color:var(--neutral);}
 .result-box{border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0;background:var(--bg);transition:all .35s;overflow:hidden;}
 .result-box.lit{border-color:var(--sig-color);box-shadow:0 0 24px -10px var(--sig-color);}
-.result-label{font-family:'DM Mono';font-size:.6rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:6px;}
+.result-label{font-family:DM Mono;font-size:.6rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:6px;}
 .result-sig{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.25em;line-height:1;transition:color .3s;}
-.result-phase{font-family:'DM Mono';font-size:.75rem;color:var(--muted2);margin-top:3px;}
+.result-phase{font-family:DM Mono;font-size:.75rem;color:var(--muted2);margin-top:3px;}
 .result-cond{font-size:.7rem;color:var(--muted2);margin-top:8px;line-height:1.55;border-top:1px solid var(--border);padding-top:8px;}
 .result-icon{font-size:1.5rem;float:right;margin-left:10px;}
 .pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
-.pill{font-family:'DM Mono';font-size:.58rem;padding:2px 8px;border-radius:99px;border:1px solid;}
+.pill{font-family:DM Mono;font-size:.58rem;padding:2px 8px;border-radius:99px;border:1px solid;}
 .pill.ok{border-color:var(--mega-bull);color:var(--mega-bull);background:rgba(34,197,94,.08);}
 .pill.warn{border-color:var(--bear);color:var(--bear);background:rgba(249,115,22,.08);}
 .pill.off{border-color:var(--muted);color:var(--muted);}
 .legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;margin-bottom:22px;}
 .legend-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sig-color);border-radius:6px;padding:9px 11px;}
-.legend-sig{font-family:'DM Mono';font-size:.65rem;color:var(--sig-color);font-weight:500;}
-.legend-rule{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
+.legend-sig{font-family:DM Mono;font-size:.65rem;color:var(--sig-color);font-weight:500;}
+.legend-rule{font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
 .sig-main{display:grid;grid-template-columns:1fr 340px;gap:16px;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
 .stat-n{font-family:'Bebas Neue';font-size:1.8rem;color:var(--accent);line-height:1;}
-.stat-l{font-size:.6rem;color:var(--muted2);font-family:'DM Mono';letter-spacing:.25em;margin-top:3px;}
+.stat-l{font-size:.6rem;color:var(--muted2);font-family:DM Mono;letter-spacing:.25em;margin-top:3px;}
 .freq{display:flex;flex-direction:column;gap:6px;}
 .f-row{display:flex;align-items:center;gap:8px;}
-.f-lbl{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.f-lbl{font-family:DM Mono;font-size:.58rem;color:var(--muted2);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .f-track{flex:1;background:var(--bg);border-radius:3px;height:7px;overflow:hidden;}
 .f-fill{height:100%;border-radius:3px;transition:width .5s;}
-.f-n{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);width:16px;flex-shrink:0;}
+.f-n{font-family:DM Mono;font-size:.58rem;color:var(--muted2);width:16px;flex-shrink:0;}
 .hist-list{display:flex;flex-direction:column;gap:7px;max-height:460px;overflow-y:auto;}
 .hist-list::-webkit-scrollbar{width:3px;}
 .hist-list::-webkit-scrollbar-thumb{background:var(--border);}
 .h-item{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--sig-color,var(--muted));border-radius:6px;padding:9px 11px;display:flex;align-items:flex-start;gap:9px;}
 .h-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
 .h-body{flex:1;min-width:0;}
-.h-sig{font-family:'DM Mono';font-size:.7rem;font-weight:500;}
-.h-meta{font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:2px;}
-.h-vals{font-family:'DM Mono';font-size:.56rem;color:var(--muted);margin-top:2px;}
+.h-sig{font-family:DM Mono;font-size:.7rem;font-weight:500;}
+.h-meta{font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:2px;}
+.h-vals{font-family:DM Mono;font-size:.56rem;color:var(--muted);margin-top:2px;}
 .h-note{font-family:'DM Sans';font-size:.6rem;color:var(--muted2);margin-top:2px;font-style:italic;}
 .h-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.75rem;padding:2px 4px;transition:color .2s;flex-shrink:0;}
 .h-del:hover{color:#ef4444;}
-.empty{text-align:center;padding:26px;color:var(--muted2);font-family:'DM Mono';font-size:.7rem;line-height:1.8;}
+.empty{text-align:center;padding:26px;color:var(--muted2);font-family:DM Mono;font-size:.7rem;line-height:1.8;}
 .tl-topbar{display:flex;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
-.tl-lbl{font-family:'DM Mono';font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
+.tl-lbl{font-family:DM Mono;font-size:.63rem;color:var(--muted2);letter-spacing:.25em;}
 .tl-stats{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin-bottom:16px;}
 .tl-stat{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:11px 8px;text-align:center;}
 .tl-stat-n{font-family:'Bebas Neue';font-size:1.8rem;line-height:1;}
-.tl-stat-l{font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-top:3px;}
+.tl-stat-l{font-family:DM Mono;font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-top:3px;}
 .tl-layout{display:flex;flex-direction:column;gap:16px;}
 .r-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px;}
-.r-box-title{font-family:'DM Mono';font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px;}
-.r-hint{font-family:'DM Mono';font-size:.6rem;min-height:14px;margin-top:6px;}
+.r-box-title{font-family:DM Mono;font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px;}
+.r-hint{font-family:DM Mono;font-size:.6rem;min-height:14px;margin-top:6px;}
 .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;}
-.tag-btn{font-family:'DM Mono';font-size:.6rem;padding:4px 11px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
+.tag-btn{font-family:DM Mono;font-size:.6rem;padding:4px 11px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .tag-btn:hover{border-color:var(--muted2);color:var(--text);}
 .tag-btn.sel{color:#ffffff;border-color:transparent;}
 .cur-toggle{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;}
-.cur-btn{font-family:'DM Mono';font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
+.cur-btn{font-family:DM Mono;font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
 .cur-btn.active{background:var(--accent);color:#ffffff;}
 .btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:6px;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.25em;cursor:pointer;transition:opacity .2s;}
 .btn-log:hover{opacity:.82;}
 .btn-log:disabled{opacity:.4;cursor:not-allowed;}
-.btn-sm{font-family:'DM Mono';font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
+.btn-sm{font-family:DM Mono;font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
 .btn-sm:hover{border-color:var(--accent);color:var(--accent);}
 .tl-wrap{overflow-x:auto;overflow-y:auto;margin-top:0;}
 .tl-wrap::-webkit-scrollbar{height:7px;width:7px;}
@@ -914,14 +914,14 @@ textarea{resize:vertical;min-height:52px;}
 .tl-wrap::-webkit-scrollbar-thumb{background:var(--muted);border-radius:4px;transition:background .2s;}
 .tl-wrap::-webkit-scrollbar-thumb:hover{background:var(--accent);}
 .tl-wrap::-webkit-scrollbar-corner{background:var(--surface2);}
-table.tl{width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.65rem;min-width:800px;}
+table.tl{width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.65rem;min-width:800px;}
 table.tl th{background:var(--surface2);color:var(--muted2);font-weight:500;padding:7px 9px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1;}
 table.tl td{padding:7px 9px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap;}
 table.tl tr:hover td{background:var(--surface2);}
 .td-pos{color:var(--mega-bull);}.td-neg{color:var(--mega-bear);}.td-zero{color:var(--muted2);}
 .td-buy{color:var(--mega-bull);}.td-sell{color:var(--mega-bear);}
-.chip{display:inline-block;font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:99px;border:1px solid;}
-.etype{font-family:'DM Mono';font-size:.54rem;padding:2px 7px;border-radius:3px;}
+.chip{display:inline-block;font-family:DM Mono;font-size:.54rem;padding:2px 7px;border-radius:99px;border:1px solid;}
+.etype{font-family:DM Mono;font-size:.54rem;padding:2px 7px;border-radius:3px;}
 .etype-ext{background:rgba(239,68,68,.12);color:#ef4444;}
 .etype-mom{background:rgba(59,130,246,.12);color:#3b82f6;}
 .tl-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.72rem;padding:2px 4px;transition:color .2s;}
@@ -929,8 +929,8 @@ table.tl tr:hover td{background:var(--surface2);}
 .sym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px;margin-top:10px;}
 .sym-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 11px;}
 .sym-name{font-family:'Bebas Neue';font-size:.95rem;color:var(--accent);letter-spacing:.05em;}
-.sym-r{font-family:'DM Mono';font-size:.72rem;margin-top:2px;}
-.sym-meta{font-family:'DM Mono';font-size:.56rem;color:var(--muted2);margin-top:2px;}
+.sym-r{font-family:DM Mono;font-size:.72rem;margin-top:2px;}
+.sym-meta{font-family:DM Mono;font-size:.56rem;color:var(--muted2);margin-top:2px;}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;}
 .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;width:320px;max-width:95vw;}
 .edit-modal-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;}
@@ -952,7 +952,7 @@ table.tl tr:hover td{background:var(--surface2);}
 .sig-chk-row {
   display:flex;align-items:center;gap:8px;
   padding:4px 12px;cursor:pointer;
-  font-family:'DM Mono';font-size:.65rem;
+  font-family:DM Mono;font-size:.65rem;
   color:var(--text);
   transition:background .1s;
 }
@@ -1007,13 +1007,13 @@ body.light #sig-filter-futures-dd * {
 }
 
 /* ANALYTICS PANEL */
-.analytics-dim-btn{font-family:'DM Mono';font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
+.analytics-dim-btn{font-family:DM Mono;font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-dim-btn:hover{border-color:var(--muted2);color:var(--text);}
 .analytics-dim-btn.active{background:var(--accent);color:#ffffff;border-color:var(--accent);}
-.analytics-sort-btn{font-family:'DM Mono';font-size:.62rem;padding:4px 11px;border-radius:5px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
+.analytics-sort-btn{font-family:DM Mono;font-size:.62rem;padding:4px 11px;border-radius:5px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-sort-btn:hover{border-color:var(--muted2);color:var(--text);}
 .analytics-sort-btn.active{background:var(--surface2);color:var(--accent);border-color:var(--accent);}
-.analytics-table{width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.7rem;}
+.analytics-table{width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.7rem;}
 .analytics-table th{background:var(--surface2);color:var(--muted2);padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.05em;white-space:nowrap;}
 .analytics-table th.sortable{cursor:pointer;user-select:none;}
 .analytics-table th.sortable:hover{color:var(--accent);}
@@ -1027,8 +1027,8 @@ body.light #sig-filter-futures-dd * {
 .rules-row{transition:background .15s;}
 .rules-row:hover td{background:var(--surface2);}
 .rules-row td{border-bottom:1px solid var(--border);}
-.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:'DM Mono';font-size:.68rem;letter-spacing:.25em;white-space:nowrap;}
-.rules-cell{padding:10px 13px;color:var(--muted2);font-family:'DM Mono';font-size:.73rem;vertical-align:top;line-height:1.55;}
+.rules-th{background:var(--surface2);color:var(--muted2);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;font-family:DM Mono;font-size:.68rem;letter-spacing:.25em;white-space:nowrap;}
+.rules-cell{padding:10px 13px;color:var(--muted2);font-family:DM Mono;font-size:.73rem;vertical-align:top;line-height:1.55;}
 .rules-scenario{padding:10px 13px;font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:.05em;white-space:nowrap;vertical-align:middle;}
 .rules-strategy{color:var(--text);}
 .rules-psych{color:var(--accent);font-style:italic;}
@@ -1827,7 +1827,7 @@ body:not(.light){
   </div>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
-    <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:'DM Mono';font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer;display:none">
+    <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:DM Mono;font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer;display:none">
       <option value="signals">📡 Signal Dashboard</option>
       <option value="tradelog">📒 Trade Log</option>
       <option value="review">📊 Performance Review</option>
@@ -1913,7 +1913,7 @@ body:not(.light){
       </div>
       <!-- TIER 1 INSTITUTIONAL INPUTS -->
       <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:12px">≠ INSTITUTIONAL FILTERS (TIER 1)</div>
+        <div style="font-family:DM Mono;font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:12px">≠ INSTITUTIONAL FILTERS (TIER 1)</div>
         <div class="g2" style="margin-bottom:11px">
           <div class="ig">
             <label>Commercial COT % <span style="font-size:.55rem;color:var(--muted2)">(Hedgers — Col F)</span></label>
@@ -1963,18 +1963,18 @@ body:not(.light){
           <!-- Auto-calculated result -->
           <div id="ysm-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-              <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">MOMENTUM SCORE</div>
+              <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">MOMENTUM SCORE</div>
               <div id="ysMomentumVal" style="font-family:'Bebas Neue';font-size:1.8rem;line-height:1;color:var(--accent)">0</div>
             </div>
             <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px">
               <div id="ysm-bar" style="height:100%;border-radius:3px;transition:width .3s,background .3s;width:50%"></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-family:'DM Mono';font-size:.6rem">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-family:DM Mono;font-size:.6rem">
               <div style="color:var(--muted2)">Change: <span id="ysm-change" style="color:var(--text)">—</span></div>
               <div style="color:var(--muted2)">RoC: <span id="ysm-roc" style="color:var(--text)">—</span></div>
               <div style="color:var(--muted2)">Level: <span id="ysm-level" style="color:var(--text)">—</span></div>
             </div>
-            <div id="ysMomentumLabel" style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-top:6px">—</div>
+            <div id="ysMomentumLabel" style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);margin-top:6px">—</div>
           </div>
           <!-- Hidden slider still used by detect() internally -->
           <input type="hidden" id="ysMomentum" value="0">
@@ -1984,7 +1984,7 @@ body:not(.light){
       <!-- INSTITUTIONAL SCORE BOX -->
       <div id="inst-score-box" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.12em;color:var(--muted2)">INSTITUTIONAL SCORE</div>
+          <div style="font-family:DM Mono;font-size:.6rem;letter-spacing:.12em;color:var(--muted2)">INSTITUTIONAL SCORE</div>
           <div id="inst-score-val" style="font-family:'Bebas Neue';font-size:2rem;line-height:1;color:var(--accent)">—</div>
         </div>
         <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px">
@@ -1992,7 +1992,7 @@ body:not(.light){
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="inst-score-breakdown"></div>
         <!-- OI Conviction Signal -->
-        <div id="oi-conviction" style="display:none;margin-top:10px;padding:8px 10px;border-radius:6px;font-family:'DM Mono';font-size:.65rem;line-height:1.6"></div>
+        <div id="oi-conviction" style="display:none;margin-top:10px;padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.65rem;line-height:1.6"></div>
       </div>
 
       <div class="g2" style="margin-bottom:11px">
@@ -2022,7 +2022,7 @@ body:not(.light){
     <div class="sig-right-col">
       <div class="panel" id="dxy-panel">
     <div class="ptitle">DXY Regime Overlay</div>
-    <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Enter your current DXY COT % and Yield Spread % to get the dollar regime. All FX signals are filtered against this.</div>
+    <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Enter your current DXY COT % and Yield Spread % to get the dollar regime. All FX signals are filtered against this.</div>
     <div class="g2" style="margin-bottom:10px">
       <div class="ig">
     <label>DXY COT % <span style="font-size:.55rem;color:var(--muted2)">(Spec, Col B)</span></label>
@@ -2037,7 +2037,7 @@ body:not(.light){
     <!-- COT Direction -->
     <div class="ig" style="margin-bottom:10px">
       <label>DXY COT Direction <span style="font-size:.55rem;color:var(--muted2)">(Col C)</span></label>
-      <select id="dxy-cot-dir" onchange="calcDXYRegime()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:8px;font-family:'DM Mono',monospace;font-size:.72rem;width:100%;outline:none">
+      <select id="dxy-cot-dir" onchange="calcDXYRegime()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:8px;font-family:DM Mono,monospace;font-size:.72rem;width:100%;outline:none">
         <option value="">— Select —</option>
         <option value="rising">▲ Rising</option>
         <option value="falling">▼ Falling</option>
@@ -2048,19 +2048,19 @@ body:not(.light){
     <div id="dxy-result" style="display:none;border-radius:7px;padding:12px;border:1px solid var(--border)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
     <div id="dxy-label" style="font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.06em"></div>
-    <div id="dxy-badge" style="font-family:'DM Mono';font-size:.62rem;padding:3px 9px;border-radius:4px"></div>
+    <div id="dxy-badge" style="font-family:DM Mono;font-size:.62rem;padding:3px 9px;border-radius:4px"></div>
       </div>
-      <div id="dxy-desc" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);line-height:1.7;margin-bottom:8px"></div>
-      <div id="dxy-filter-impact" style="font-family:'DM Mono';font-size:.63rem;line-height:1.8"></div>
+      <div id="dxy-desc" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);line-height:1.7;margin-bottom:8px"></div>
+      <div id="dxy-filter-impact" style="font-family:DM Mono;font-size:.63rem;line-height:1.8"></div>
     </div>
   </div>
       <div class="panel" id="watch-panel">
-          <div class="ptitle">On Watch <span style="font-size:.6rem;color:var(--muted2);font-family:'DM Mono'">— Developing</span></div>
+          <div class="ptitle">On Watch <span style="font-size:.6rem;color:var(--muted2);font-family:DM Mono">— Developing</span></div>
           <div id="watch-list"><div class="empty">No developing setups</div></div>
         </div>
       <div class="panel" id="corr-panel">
         <div class="ptitle">Correlation Risk</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:10px;line-height:1.6">Active bullish signals on correlated pairs stack your dollar exposure. Each group below counts as <b style="color:var(--accent)">1 risk unit</b> — not multiple.</div>
+        <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:10px;line-height:1.6">Active bullish signals on correlated pairs stack your dollar exposure. Each group below counts as <b style="color:var(--accent)">1 risk unit</b> — not multiple.<br><span style="color:var(--mega-bear);font-weight:600">Hard cap: max 2 correlated pairs open simultaneously. Combined exposure never exceeds 2R total.</span></div>
         <div id="corr-list"><div class="empty">No signals to analyse</div></div>
       </div>
 
@@ -2077,9 +2077,9 @@ body:not(.light){
       <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-left:0">
         <!-- Signal multi-select -->
         <div style="position:relative;display:inline-block">
-          <button id="sig-filter-signal-btn" onclick="sigToggleDropdown('signal')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Signals &#9660;</button>
+          <button id="sig-filter-signal-btn" onclick="sigToggleDropdown('signal')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:DM Mono;font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Signals &#9660;</button>
           <div id="sig-filter-signal-dd" style="display:none;position:absolute;top:110%;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:6px;z-index:200;min-width:180px;box-shadow:0 4px 16px rgba(0,0,0,.3);padding:6px 0">
-            <div onclick="sigSelectAll('signal')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">◻ All / None</div>
+            <div onclick="sigSelectAll('signal')" style="padding:5px 12px;font-family:DM Mono;font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">◻ All / None</div>
             <label class="sig-chk-row"><input type="checkbox" value="SC" onchange="renderSignals()"> Spring CONFIRMED</label>
             <label class="sig-chk-row"><input type="checkbox" value="SW" onchange="renderSignals()"> Spring Waiting</label>
             <label class="sig-chk-row"><input type="checkbox" value="RC" onchange="renderSignals()"> Recovery</label>
@@ -2094,13 +2094,13 @@ body:not(.light){
         </div>
         <!-- Futures multi-select -->
         <div style="position:relative;display:inline-block">
-          <button id="sig-filter-futures-btn" onclick="sigToggleDropdown('futures')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Futures &#9660;</button>
+          <button id="sig-filter-futures-btn" onclick="sigToggleDropdown('futures')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:DM Mono;font-size:.7rem;cursor:pointer;outline:none;min-width:110px;text-align:left">Futures &#9660;</button>
           <div id="sig-filter-futures-dd" style="display:none;position:absolute;top:110%;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:6px;z-index:200;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.3);padding:6px 0" id="sig-filter-futures-list">
-            <div onclick="sigSelectAll('futures')" style="padding:5px 12px;font-family:'DM Mono';font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">◻ All / None</div>
+            <div onclick="sigSelectAll('futures')" style="padding:5px 12px;font-family:DM Mono;font-size:.65rem;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--border);margin-bottom:4px">◻ All / None</div>
             <div id="sig-futures-options"></div>
           </div>
         </div>
-        <select id="sig-sort" onchange="renderSignals();localStorage.setItem('sig_sort',this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;outline:none">
+        <select id="sig-sort" onchange="renderSignals();localStorage.setItem('sig_sort',this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:DM Mono;font-size:.7rem;outline:none">
           <option value="date_desc">↓ Date (Newest)</option>
           <option value="date_asc">↑ Date (Oldest)</option>
           <option value="signal">Signal A–Z</option>
@@ -2113,20 +2113,20 @@ body:not(.light){
           <option value="score_asc">↑ Score (Low first)</option>
         </select>
         <div style="display:flex;align-items:center;gap:4px">
-          <input type="date" id="sig-from-date" style="width:100%;box-sizing:border-box" onchange="renderSignals()" title="From date" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 7px;border-radius:5px;font-family:'DM Mono';font-size:.68rem;outline:none">
-          <span style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">&#8211;</span>
-          <input type="date" id="sig-to-date" style="width:100%;box-sizing:border-box" onchange="renderSignals()" title="To date" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 7px;border-radius:5px;font-family:'DM Mono';font-size:.68rem;outline:none">
+          <input type="date" id="sig-from-date" style="width:100%;box-sizing:border-box" onchange="renderSignals()" title="From date" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 7px;border-radius:5px;font-family:DM Mono;font-size:.68rem;outline:none">
+          <span style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">&#8211;</span>
+          <input type="date" id="sig-to-date" style="width:100%;box-sizing:border-box" onchange="renderSignals()" title="To date" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 7px;border-radius:5px;font-family:DM Mono;font-size:.68rem;outline:none">
         </div>
         <div style="display:flex;align-items:center;gap:4px">
-          <span style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Score</span>
-          <input type="number" id="sig-score-min" min="0" max="100" placeholder="0" onchange="renderSignals()" title="Min score" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:5px;font-family:'DM Mono';font-size:.68rem;outline:none;width:50px">
-          <span style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">&#8211;</span>
-          <input type="number" id="sig-score-max" min="0" max="100" placeholder="100" onchange="renderSignals()" title="Max score" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:5px;font-family:'DM Mono';font-size:.68rem;outline:none;width:50px">
+          <span style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">Score</span>
+          <input type="number" id="sig-score-min" min="0" max="100" placeholder="0" onchange="renderSignals()" title="Min score" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:5px;font-family:DM Mono;font-size:.68rem;outline:none;width:50px">
+          <span style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">&#8211;</span>
+          <input type="number" id="sig-score-max" min="0" max="100" placeholder="100" onchange="renderSignals()" title="Max score" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:5px;font-family:DM Mono;font-size:.68rem;outline:none;width:50px">
         </div>
         <button class="btn-sm" onclick="clearSigFilters()">🗑️ Clear</button>
         <button class="btn-sm" onclick="recalcAllScores()" style="background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)" title="Recalculate all historical institutional scores using current formula">↺ Recalc Scores</button>
       </div>
-      <div style="margin-left:auto;font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">
+      <div style="margin-left:auto;font-family:DM Mono;font-size:.6rem;color:var(--muted2)">
         <span>← scroll →</span>
         &nbsp;
         <span id="sig-count-label">0 signals</span>
@@ -2175,7 +2175,7 @@ body:not(.light){
 
   <div class="tl-topbar">
     <span class="tl-lbl">ACCOUNT</span>
-    <select id="tl-acct-filter" onchange="renderTrades();localStorage.setItem('tl_acct_filter',this.value)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none">
+    <select id="tl-acct-filter" onchange="renderTrades();localStorage.setItem('tl_acct_filter',this.value)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:DM Mono;font-size:.72rem;outline:none">
       <option value="ALL">All Accounts</option>
     </select>
     <button class="btn-sm" onclick="openAcctModal()">⚙ Manage Accounts</button>
@@ -2215,7 +2215,7 @@ body:not(.light){
     <div class="ptitle">Performance Analytics</div>
     <div style="display:flex;gap:24px;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap">
       <div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">GROUP BY</div>
+        <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">GROUP BY</div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
           <button class="analytics-dim-btn active" data-dim="symbol" onclick="toggleDim('symbol',this)">Symbol</button>
           <button class="analytics-dim-btn" data-dim="phase" onclick="toggleDim('phase',this)">Phase</button>
@@ -2224,7 +2224,7 @@ body:not(.light){
         </div>
       </div>
       <div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">SORT BY</div>
+        <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">SORT BY</div>
         <div style="display:flex;gap:7px">
           <button class="analytics-sort-btn active" data-sort="r" onclick="setSort('r',this)">Net R</button>
           <button class="analytics-sort-btn" data-sort="wr" onclick="setSort('wr',this)">Win Rate</button>
@@ -2243,7 +2243,7 @@ body:not(.light){
         <div class="g4 tl-g4-top">
           <div class="ig"><label>Transaction Date</label><div class="date-wrap"><input type="date" id="tl-date" oninput="autoMonth()"></div></div>
           <div class="ig"><label>Month (auto)</label><input type="text" id="tl-month" readonly style="color:var(--muted2)"></div>
-          <div class="ig"><label>Account</label><select id="tl-acct-sel" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:'DM Mono';font-size:.8rem;outline:none;width:100%"><option>Default</option></select></div>
+          <div class="ig"><label>Account</label><select id="tl-acct-sel" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.8rem;outline:none;width:100%"><option>Default</option></select></div>
         </div>
         <div class="g4 tl-g4-mid">
           <div class="ig"><label>Open / Close</label><select id="tl-oc"><option value="Close">Close</option><option value="Open">Open</option></select></div>
@@ -2251,7 +2251,7 @@ body:not(.light){
           <div class="ig"><label>Size (lots)</label><input type="number" id="tl-size" placeholder="0.00" step="0.01" min="0"></div>
           <div class="ig"><label>Symbol</label><select id="tl-symbol" onchange="tlAutoFillFromSignal()"><option value="">— Select —</option>
 <option value="EUR/USD">EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="USD/JPY">USD/JPY</option><option value="USD/CHF">USD/CHF</option><option value="AUD/USD">AUD/USD</option><option value="USD/CAD">USD/CAD</option><option value="NZD/USD">NZD/USD</option><option value="XAU/USD">XAU/USD</option><option value="XAG/USD">XAG/USD</option><option value="USOil">USOil</option><option value="HG/USD">HG/USD</option></select>
-<div id="tl-autofill-note" style="display:none;font-family:'DM Mono',monospace;font-size:.58rem;color:var(--accent);margin-top:5px;padding:4px 8px;background:rgba(53,79,82,.08);border-radius:6px;border-left:2px solid var(--accent)"></div>
+<div id="tl-autofill-note" style="display:none;font-family:DM Mono,monospace;font-size:.58rem;color:var(--accent);margin-top:5px;padding:4px 8px;background:rgba(53,79,82,.08);border-radius:6px;border-left:2px solid var(--accent)"></div>
 </div>
         </div>
         <div class="g3">
@@ -2305,7 +2305,7 @@ body:not(.light){
           <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
         </div></div>
         <div class="ig" style="margin-bottom:11px"><label>Institutional Signal Tag
-          <span style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2);margin-left:4px">— from your Institutional Score</span>
+          <span style="font-family:DM Mono;font-size:.55rem;color:var(--muted2);margin-left:4px">— from your Institutional Score</span>
         </label><div class="tag-row" id="inst-tags">
           <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
           <button class="tag-btn" data-val="Bullish"               onclick="selTag('inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
@@ -2314,7 +2314,7 @@ body:not(.light){
           <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
         </div></div>
         <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><input type="checkbox" id="tl-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="tl-addon" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><input type="checkbox" id="tl-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="tl-addon" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
         <button class="btn-log" id="btn-trade" onclick="addTrade()">+ LOG TRADE</button>
       </div>
     </div>
@@ -2332,12 +2332,12 @@ body:not(.light){
           </div>
         </div>
         <!-- Scroll hint -->
-        <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:8px;display:flex;align-items:center;gap:6px">
           <span style="opacity:.6">← scroll →</span>
           <div style="flex:1;height:1px;background:var(--border)"></div>
           <span id="trade-count-label" style="opacity:.6">0 trades</span>
         </div>
-        <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between"><span>← scroll sideways · scroll down ↕</span><span id="trade-count-label"></span></div>
+        <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between"><span>← scroll sideways · scroll down ↕</span><span id="trade-count-label"></span></div>
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
             <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Add-on</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
@@ -2356,17 +2356,17 @@ body:not(.light){
   <!-- Date filter bar -->
   <div class="panel" style="margin-bottom:16px">
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.25em;margin-bottom:8px">REVIEW PERIOD</div>
-      <select id="rv-account" onchange="renderReview();localStorage.setItem('rv_account',this.value)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none;width:100%;margin-bottom:10px;box-sizing:border-box">
+      <div style="font-family:DM Mono;font-size:.65rem;color:var(--accent);letter-spacing:.25em;margin-bottom:8px">REVIEW PERIOD</div>
+      <select id="rv-account" onchange="renderReview();localStorage.setItem('rv_account',this.value)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:DM Mono;font-size:.72rem;outline:none;width:100%;margin-bottom:10px;box-sizing:border-box">
         <option value="ALL">All Accounts</option>
       </select>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;width:100%;box-sizing:border-box">
         <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
-          <label style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">From</label>
+          <label style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">From</label>
           <div class="date-wrap"><input type="date" id="rv-from" onchange="renderReview()"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
-          <label style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">To</label>
+          <label style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">To</label>
           <div class="date-wrap"><input type="date" id="rv-to" onchange="renderReview()"></div>
         </div>
       </div>
@@ -2426,19 +2426,28 @@ body:not(.light){
       <div style="margin-bottom:14px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
           <div style="width:3px;height:12px;background:var(--mega-bull);border-radius:2px;flex-shrink:0"></div>
-          <span style="font-family:'DM Mono';font-size:.58rem;color:var(--mega-bull);letter-spacing:.18em">TOP 3 WINNERS</span>
+          <span style="font-family:DM Mono;font-size:.58rem;color:var(--mega-bull);letter-spacing:.18em">TOP 3 WINNERS</span>
         </div>
         <div id="best-trades" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
       <div style="border-top:1px solid var(--border);padding-top:14px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
           <div style="width:3px;height:12px;background:var(--mega-bear);border-radius:2px;flex-shrink:0"></div>
-          <span style="font-family:'DM Mono';font-size:.58rem;color:var(--mega-bear);letter-spacing:.18em">TOP 3 LOSERS</span>
+          <span style="font-family:DM Mono;font-size:.58rem;color:var(--mega-bear);letter-spacing:.18em">TOP 3 LOSERS</span>
         </div>
         <div id="worst-trades" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
     </div>
   </div><!-- /review-grid -->
+
+  <!-- Phase Win Rate Breakdown -->
+  <div class="panel" style="margin-top:14px">
+    <div class="ptitle">Win Rate by Phase & Score</div>
+    <div id="phase-winrate-container" style="margin-top:8px">
+      <div class="empty">No closed trades yet</div>
+    </div>
+  </div>
+
   </div><!-- /tab-review -->
 
 
@@ -2462,14 +2471,14 @@ body:not(.light){
 
       <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">🗓 Weekend &mdash; Save Basis</button>
-        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📐 Weekday &mdash; Translate Zones</button>
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">🗓 Weekend &mdash; Save Basis</button>
+        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:6px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📐 Weekday &mdash; Translate Zones</button>
       </div>
 
       <!-- WEEKEND: Save basis per symbol -->
       <div id="zt-panel-basis" class="panel">
         <div class="ptitle">Save Basis Per Symbol</div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.7">Saturday morning &mdash; open both charts simultaneously and read the current price at the same moment for an accurate basis.</div>
+        <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.7">Saturday morning &mdash; open both charts simultaneously and read the current price at the same moment for an accurate basis.</div>
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
             <label>Symbol <span style="font-size:.55rem;color:var(--muted2)">(6E, GC etc.)</span></label>
@@ -2498,9 +2507,9 @@ body:not(.light){
             <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
             <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 0.006302" oninput="ztAutoInvert();ztCalcBasis()">
             <div id="zt-inverted-note" style="display:none;margin-top:6px">
-              <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:3px">1 ÷ Futures price</div>
+              <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:3px">1 ÷ Futures price</div>
               <div id="zt-inv-price" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--accent);letter-spacing:.04em">—</div>
-              <div style="font-family:'DM Mono';font-size:.55rem;color:var(--muted2)">equivalent CFD price</div>
+              <div style="font-family:DM Mono;font-size:.55rem;color:var(--muted2)">equivalent CFD price</div>
             </div>
           </div>
           <div class="ig">
@@ -2510,10 +2519,10 @@ body:not(.light){
         </div>
         <div id="zt-basis-display" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px;margin-bottom:10px">
           <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2)">Basis (CFD &minus; Futures)</div>
+            <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2)">Basis (CFD &minus; Futures)</div>
             <div id="zt-basis-val" style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent)">&mdash;</div>
           </div>
-          <div id="zt-basis-note" style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:4px"></div>
+          <div id="zt-basis-note" style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-top:4px"></div>
         </div>
         <button class="btn-log" onclick="ztSaveBasisForSymbol()" style="width:100%">💾 Save Basis for This Symbol</button>
       </div>
@@ -2528,20 +2537,20 @@ body:not(.light){
           </select>
         </div>
         <div id="zt-active-basis" style="display:none;background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;font-family:'DM Mono';font-size:.6rem">
+          <div style="display:flex;justify-content:space-between;font-family:DM Mono;font-size:.6rem">
             <span style="color:var(--muted2)">Active basis</span>
             <span id="zt-active-basis-val" style="color:var(--accent)"></span>
           </div>
-          <div id="zt-active-basis-date" style="font-family:'DM Mono';color:var(--muted2);font-size:.55rem;margin-top:2px"></div>
+          <div id="zt-active-basis-date" style="font-family:DM Mono;color:var(--muted2);font-size:.55rem;margin-top:2px"></div>
         </div>
-        <div id="zt-no-basis-warn" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-family:'DM Mono';font-size:.6rem;color:#ef4444">
+        <div id="zt-no-basis-warn" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-family:DM Mono;font-size:.6rem;color:#ef4444">
           No saved basis for this symbol. Switch to Weekend mode to save one first.
         </div>
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px">
-          <div style="font-family:'DM Mono';font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
+          <div style="font-family:DM Mono;font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
           <div style="margin-bottom:10px">
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 1 <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
+            <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
+              ZONE 1 <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:DM Mono;font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
             </div>
             <div class="g2" style="margin-bottom:0">
               <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z1-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
@@ -2549,8 +2558,8 @@ body:not(.light){
             </div>
           </div>
           <div style="border-top:1px solid var(--border);padding-top:10px;margin-bottom:10px">
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 2 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-2" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
+            <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
+              ZONE 2 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-2" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:DM Mono;font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
             </div>
             <div class="g2" style="margin-bottom:0">
               <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z2-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
@@ -2558,8 +2567,8 @@ body:not(.light){
             </div>
           </div>
           <div style="border-top:1px solid var(--border);padding-top:10px">
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 3 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-3" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:'DM Mono';font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
+            <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
+              ZONE 3 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-3" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:DM Mono;font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
             </div>
             <div class="g2" style="margin-bottom:0">
               <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z3-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
@@ -2582,7 +2591,7 @@ body:not(.light){
       </div>
       <div class="panel" id="zt-saved-basis-panel">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="ptitle" style="margin:0">Saved Basis Values</div><button class="btn-sm" onclick="ztLoadBasisFromSupabase().then(()=>ztPopulateSymSelector())" style="font-size:.6rem">↺ Sync</button></div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
+        <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
         <div id="zt-basis-history"></div>
       </div>
       <div class="panel">
@@ -2591,7 +2600,7 @@ body:not(.light){
       </div>
       <div class="panel">
         <div class="ptitle">How It Works</div>
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);line-height:2">
+        <div style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);line-height:2">
           <div><b style="color:var(--accent)">Weekend:</b> Save basis once per symbol. Open both charts at same moment.</div>
           <div><b style="color:var(--accent)">Weekday:</b> Select symbol, enter futures zone &rarr; CFD zone instantly.</div>
           <div><b style="color:var(--accent)">Formula:</b> CFD = Futures + Basis</div>
@@ -2612,7 +2621,7 @@ body:not(.light){
 
     <!-- SECTION 1: Weighted Average Entry -->
     <div style="margin-bottom:20px">
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
         <div style="width:3px;height:12px;background:var(--accent);border-radius:2px"></div>
         Weighted Average Entry
       </div>
@@ -2620,19 +2629,19 @@ body:not(.light){
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px" id="calc-positions-grid">
         <!-- Position 1 -->
         <div class="panel" style="padding:12px;background:var(--surface2)">
-          <div style="font-family:'DM Mono';font-size:.58rem;color:var(--accent);margin-bottom:8px;font-weight:600">POSITION 1</div>
+          <div style="font-family:DM Mono;font-size:.58rem;color:var(--accent);margin-bottom:8px;font-weight:600">POSITION 1</div>
           <div class="ig" style="margin-bottom:8px"><label>Entry Price</label><input type="number" id="calc-p1-price" placeholder="e.g. 0.78820" step="any" oninput="calcWeightedEntry()"></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="calc-p1-lots" placeholder="e.g. 0.09" step="any" oninput="calcWeightedEntry()"></div>
         </div>
         <!-- Position 2 -->
         <div class="panel" style="padding:12px;background:var(--surface2)">
-          <div style="font-family:'DM Mono';font-size:.58rem;color:var(--accent);margin-bottom:8px;font-weight:600">POSITION 2</div>
+          <div style="font-family:DM Mono;font-size:.58rem;color:var(--accent);margin-bottom:8px;font-weight:600">POSITION 2</div>
           <div class="ig" style="margin-bottom:8px"><label>Entry Price</label><input type="number" id="calc-p2-price" placeholder="e.g. 0.78568" step="any" oninput="calcWeightedEntry()"></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="calc-p2-lots" placeholder="e.g. 0.03" step="any" oninput="calcWeightedEntry()"></div>
         </div>
         <!-- Position 3 -->
         <div class="panel" style="padding:12px;background:var(--surface2)">
-          <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:8px;font-weight:600">POSITION 3 <span style="font-size:.52rem;opacity:.6">(optional)</span></div>
+          <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:8px;font-weight:600">POSITION 3 <span style="font-size:.52rem;opacity:.6">(optional)</span></div>
           <div class="ig" style="margin-bottom:8px"><label>Entry Price</label><input type="number" id="calc-p3-price" placeholder="optional" step="any" oninput="calcWeightedEntry()"></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="calc-p3-lots" placeholder="optional" step="any" oninput="calcWeightedEntry()"></div>
         </div>
@@ -2642,15 +2651,15 @@ body:not(.light){
       <div id="calc-entry-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;text-align:center">
           <div>
-            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">WEIGHTED ENTRY</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">WEIGHTED ENTRY</div>
             <div id="calc-we-price" style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--accent);letter-spacing:.04em">—</div>
           </div>
           <div>
-            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">TOTAL LOTS</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">TOTAL LOTS</div>
             <div id="calc-we-lots" style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--text);letter-spacing:.04em">—</div>
           </div>
           <div>
-            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">POSITIONS</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">POSITIONS</div>
             <div id="calc-we-count" style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--text);letter-spacing:.04em">—</div>
           </div>
         </div>
@@ -2661,7 +2670,7 @@ body:not(.light){
 
     <!-- SECTION 2: Margin Safety — Max Lot Size -->
     <div>
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px">
         <div style="width:3px;height:12px;background:var(--mega-bear);border-radius:2px"></div>
         Max Safe Lot Size
       </div>
@@ -2676,7 +2685,7 @@ body:not(.light){
           <input type="number" id="calc-sl-risk" readonly style="background:transparent;border:none;font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);padding:2px 0;pointer-events:none" placeholder="—">
         </div>
       </div>
-      <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">WORST CASE — IF ALL TRADES HIT SL (€)</div>
+      <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">WORST CASE — IF ALL TRADES HIT SL (€)</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
         <div class="ig"><label>Trade 1 SL risk</label><input type="number" id="calc-sl1" placeholder="e.g. 45" step="any" oninput="calcMaxLots()"></div>
         <div class="ig"><label>Trade 2 SL risk</label><input type="number" id="calc-sl2" placeholder="e.g. 45" step="any" oninput="calcMaxLots()"></div>
@@ -2686,18 +2695,18 @@ body:not(.light){
       <div id="calc-margin-result" style="display:none;border-radius:10px;padding:14px;border:2px solid var(--border)">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;margin-bottom:12px">
           <div>
-            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">MAX SAFE LOTS</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">MAX SAFE LOTS</div>
             <div id="calc-max-lots" style="font-family:'Bebas Neue';font-size:2rem;color:var(--mega-bull);letter-spacing:.04em">—</div>
           </div>
           <div>
-            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:4px">WORST CASE %</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">WORST CASE %</div>
             <div id="calc-margin-buffer" style="font-family:'Bebas Neue';font-size:2rem;color:var(--accent);letter-spacing:.04em">—</div>
           </div>
         </div>
         <div id="calc-safety-bar" style="border-radius:8px;padding:10px 14px;text-align:center">
           <div id="calc-safety-icon" style="font-size:1.4rem;margin-bottom:4px">—</div>
-          <div id="calc-safety-text" style="font-family:'DM Mono';font-size:.65rem;font-weight:600"></div>
-          <div id="calc-safety-sub" style="font-family:'DM Mono';font-size:.58rem;opacity:.7;margin-top:3px"></div>
+          <div id="calc-safety-text" style="font-family:DM Mono;font-size:.65rem;font-weight:600"></div>
+          <div id="calc-safety-sub" style="font-family:DM Mono;font-size:.58rem;opacity:.7;margin-top:3px"></div>
         </div>
       </div>
     </div>
@@ -2714,9 +2723,9 @@ body:not(.light){
 
   <!-- Category tabs -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;max-width:520px">
-    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
-    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📅 Weekly Bias</button>
-    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:'DM Mono';font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">⚡ Daily Trigger</button>
+    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
+    <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📅 Weekly Bias</button>
+    <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:6px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">⚡ Daily Trigger</button>
   </div>
 
   <!-- ══ INDICATOR SETUP ══ -->
@@ -2727,14 +2736,14 @@ body:not(.light){
       <!-- Weekly settings -->
       <div class="panel">
         <div class="ptitle">Weekly Chart Settings (13,3)</div>
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:420px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:420px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.75rem">
           <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">COT Engine</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Positioning filter — who is positioned where</td></tr>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Yield Valuation</td><td class="rules-cell">13 weeks</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Carry filter — is the macro environment supportive</td></tr>
           </tbody>
         </table></div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:10px;line-height:1.7;word-break:break-word">
+        <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-top:10px;line-height:1.7;word-break:break-word">
           <b style="color:var(--text)">Read Monday morning</b> before market open.<br>
           Use <b style="color:var(--accent)">last closed bar</b> values (white rows) from the yield table to log COT, yield, OI and price direction.
         </div>
@@ -2743,14 +2752,14 @@ body:not(.light){
       <!-- Daily settings -->
       <div class="panel">
         <div class="ptitle">Daily Chart Settings (21,3)</div>
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:420px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:420px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.75rem">
           <thead><tr><th class="rules-th">Timeframe</th><th class="rules-th">Lookback</th><th class="rules-th">Smoothing</th><th class="rules-th">Role</th></tr></thead>
           <tbody>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Tactical (fast)</td><td class="rules-cell">21 days</td><td class="rules-cell">3 EMA</td><td class="rules-cell">Entry trigger — finds the hook below 10 or above 90</td></tr>
             <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Strategic (slow)</td><td class="rules-cell">65 days</td><td class="rules-cell">5 EMA</td><td class="rules-cell">Regime — above 50 bullish, below 50 bearish</td></tr>
           </tbody>
         </table></div>
-        <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);margin-top:10px;line-height:1.7;word-break:break-word">
+        <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-top:10px;line-height:1.7;word-break:break-word">
           <b style="color:var(--text)">Monitor daily until order is placed.</b><br>
           Tactical below 10% = entry window open. Hook = raw crosses above smoothed from below 10. Once filled — no need to monitor daily.
         </div>
@@ -2760,7 +2769,7 @@ body:not(.light){
     <!-- COT Engine columns -->
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">COT Engine — Column Guide</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:380px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.73rem">
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:380px;font-size:.62rem" style="width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.73rem">
         <thead><tr><th class="rules-th">Column</th><th class="rules-th">What It Shows</th><th class="rules-th">What You Enter in Dashboard</th></tr></thead>
         <tbody>
           <tr class="rules-row"><td class="rules-cell" style="color:var(--accent)">Col B — Spec COT %</td><td class="rules-cell">Speculative positioning percentile (0–100) vs 13-week history</td><td class="rules-cell">COT % field. Below 15 = contrarian bullish. Above 85 = contrarian bearish.</td></tr>
@@ -2777,20 +2786,20 @@ body:not(.light){
       <div class="ptitle">Open Interest Quick Reference</div>
       <div class="oi-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
         <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px 12px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);font-weight:500;margin-bottom:4px">Accumulation</div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25B2; + OI &#x25B2;<br>New longs entering. Strong. +20 pts.</div>
+          <div style="font-family:DM Mono;font-size:.65rem;color:var(--mega-bull);font-weight:500;margin-bottom:4px">Accumulation</div>
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25B2; + OI &#x25B2;<br>New longs entering. Strong. +20 pts.</div>
         </div>
         <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:10px 12px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);font-weight:500;margin-bottom:4px">Distribution</div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25BC; + OI &#x25B2;<br>New shorts entering. Strong. -20 pts.</div>
+          <div style="font-family:DM Mono;font-size:.65rem;color:var(--mega-bear);font-weight:500;margin-bottom:4px">Distribution</div>
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25BC; + OI &#x25B2;<br>New shorts entering. Strong. -20 pts.</div>
         </div>
         <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);border-radius:6px;padding:10px 12px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--bear);font-weight:500;margin-bottom:4px">Short Covering</div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25B2; + OI &#x25BC;<br>Shorts exiting. Weak rally. +5 pts.</div>
+          <div style="font-family:DM Mono;font-size:.65rem;color:var(--bear);font-weight:500;margin-bottom:4px">Short Covering</div>
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25B2; + OI &#x25BC;<br>Shorts exiting. Weak rally. +5 pts.</div>
         </div>
         <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.2);border-radius:6px;padding:10px 12px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);font-weight:500;margin-bottom:4px">Long Liquidation</div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25BC; + OI &#x25BC;<br>Longs exiting. Possible reversal. +5 pts.</div>
+          <div style="font-family:DM Mono;font-size:.65rem;color:var(--accent);font-weight:500;margin-bottom:4px">Long Liquidation</div>
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.6">Price &#x25BC; + OI &#x25BC;<br>Longs exiting. Possible reversal. +5 pts.</div>
         </div>
       </div>
     </div>
@@ -2804,7 +2813,7 @@ body:not(.light){
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">Weekly Bias — Scenario Map</div>
       <div style="overflow-x:auto">
-        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono';font-size:.75rem;min-width:600px">
+        <table style="width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.75rem;min-width:600px">
           <thead><tr>
             <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">Scenario</th>
             <th style="background:var(--surface2);color:var(--muted2);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.06em">COT Index</th>
@@ -2817,7 +2826,7 @@ body:not(.light){
             <tr class="rules-row"><td class="rules-scenario" style="color:#34d399">♻️ Recovery</td><td class="rules-cell">15–40 <span class="rules-tag">Covering &#x25B2;</span></td><td class="rules-cell">40–65 <span class="rules-tag">Improving</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Institutions rebuilding. 0.75R long.</td></tr>
             <tr class="rules-row"><td class="rules-scenario" style="color:#3b82f6">🚀 Surge</td><td class="rules-cell">60–85 <span class="rules-tag">Buying &#x25B2;</span></td><td class="rules-cell">60–85 <span class="rules-tag">Strong</span></td><td class="rules-cell"><span class="rules-bias rules-bull">BULLISH</span></td><td class="rules-cell rules-strategy">Full expansion. Trend follow only. 0.75R long.</td></tr>
             <tr class="rules-row"><td class="rules-scenario" style="color:#ef4444">🪨 Cliff</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">&gt;80 <span class="rules-tag">Expensive &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-mega-bear">MEGA BEAR</span></td><td class="rules-cell rules-strategy">Crowded. Hook from daily above 90. 1R short.</td></tr>
-            <tr class="rules-row"><td class="rules-scenario" style="color:#a855f7">🪤 Trap</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">50–80 <span class="rules-tag">Falling</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Distribution phase. Supply zone shorts. 0.5R short.</td></tr>
+            <tr class="rules-row"><td class="rules-scenario" style="color:#a855f7">🪤 Trap</td><td class="rules-cell">&gt;85 <span class="rules-tag">Max Long &#x25BC;</span></td><td class="rules-cell">50–80 <span class="rules-tag">Falling</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Distribution phase. Sell bounces into supply. 0.5R short. Wait for Type 2 (65,5 cross below 35) — do NOT use Type 1 extreme reversal here.</td></tr>
             <tr class="rules-row"><td class="rules-scenario" style="color:#f97316">📉 Slide</td><td class="rules-cell">20–45 <span class="rules-tag">Distributing &#x25BC;</span></td><td class="rules-cell">&lt;45 <span class="rules-tag">Weak &#x25BC;</span></td><td class="rules-cell"><span class="rules-bias rules-bear">BEARISH</span></td><td class="rules-cell rules-strategy">Persistent bearish. Sell rallies. 0.75R short.</td></tr>
             <tr class="rules-row"><td class="rules-scenario" style="color:#6b7280">⊘ Conflict</td><td class="rules-cell">Extreme</td><td class="rules-cell">Opposite extreme</td><td class="rules-cell"><span class="rules-bias rules-neutral">NEUTRAL</span></td><td class="rules-cell rules-strategy">STAY FLAT. No edge — skip regardless of inst score.</td></tr>
           </tbody>
@@ -2826,15 +2835,36 @@ body:not(.light){
     </div>
 
     <!-- Decision grid -->
-    <!-- Inst score guide -->
+        <!-- Trap Phase Entry Note -->
+    <div class="panel" style="margin-bottom:18px;border-left:3px solid #a855f7">
+      <div class="ptitle">⚠ Trap Phase — Entry Notes</div>
+      <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);line-height:1.9;margin-top:6px">
+        <div style="margin-bottom:8px;color:var(--text)">Trap is <b>not</b> a classic reversal — it is a distribution continuation. The entry approach differs from Cliff:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);border-radius:8px;padding:12px">
+            <div style="font-family:'Bebas Neue';font-size:.9rem;color:var(--mega-bear);letter-spacing:.15em;margin-bottom:6px">CLIFF — TYPE 1</div>
+            <div style="line-height:1.8">COT extreme (&gt;85%) + yield expensive<br>Daily raw above 90 → hook down<br>Enter at supply zone on the hook<br><b style="color:var(--mega-bear)">Catches the top — high conviction short</b></div>
+          </div>
+          <div style="background:rgba(168,85,247,.07);border:1px solid rgba(168,85,247,.2);border-radius:8px;padding:12px">
+            <div style="font-family:'Bebas Neue';font-size:.9rem;color:#a855f7;letter-spacing:.15em;margin-bottom:6px">TRAP — TYPE 2 ONLY</div>
+            <div style="line-height:1.8">COT extreme but yield still mid-range<br>Wait for 65,5 to cross below 35<br>Sell the bounce — not the top<br><b style="color:#a855f7">Confirms direction before entry</b></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:var(--surface2);border-radius:6px">
+          Never use Type 1 (extreme reversal) on a Trap setup — price often makes a new high before reversing. Type 2 waits for confirmation.
+        </div>
+      </div>
+    </div>
+
+<!-- Inst score guide -->
     <div class="panel">
       <div class="ptitle">Institutional Score Interpretation</div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-left:3px solid var(--mega-bull);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--mega-bull);margin-bottom:4px">70–100 — HIGH CONVICTION LONG</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">Spec COT &lt;15 + Comm &gt;75 + Z &lt;-2 + OI Accumulation + Yield Expanding → Full 1R with phase, 0.5R without.</div></div>
-        <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--bull);margin-bottom:4px">55–70 — BULLISH</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">3–4 filters bullish → Standard position with phase confirmation.</div></div>
-        <div style="background:rgba(107,114,128,.07);border:1px solid rgba(107,114,128,.2);border-left:3px solid var(--neutral);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--neutral);margin-bottom:4px">45–55 — NEUTRAL</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">Filters mixed → Wait. No edge.</div></div>
-        <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-left:3px solid var(--bear);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--bear);margin-bottom:4px">30–45 — BEARISH</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">3–4 filters bearish → Standard short with phase confirmation.</div></div>
-        <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-left:3px solid var(--mega-bear);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--mega-bear);margin-bottom:4px">0–30 — HIGH CONVICTION SHORT</div><div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">Spec COT &gt;85 + Comm &lt;25 + Z &gt;+2 + OI Distribution + Yield Contracting → 1R short with phase, 0.5R without.</div></div>
+        <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-left:3px solid var(--mega-bull);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--mega-bull);margin-bottom:4px">70–100 — HIGH CONVICTION LONG</div><div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">Spec COT &lt;15 + Comm &gt;75 + Z &lt;-2 + OI Accumulation + Yield Expanding → Full 1R with phase, 0.5R without.</div></div>
+        <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--bull);margin-bottom:4px">55–70 — BULLISH</div><div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">3–4 filters bullish → Standard position with phase confirmation.</div></div>
+        <div style="background:rgba(107,114,128,.07);border:1px solid rgba(107,114,128,.2);border-left:3px solid var(--neutral);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--neutral);margin-bottom:4px">45–55 — NEUTRAL</div><div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">Filters mixed → Wait. No edge.</div></div>
+        <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-left:3px solid var(--bear);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--bear);margin-bottom:4px">30–45 — BEARISH</div><div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">3–4 filters bearish → Standard short with phase confirmation.</div></div>
+        <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-left:3px solid var(--mega-bear);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:.95rem;color:var(--mega-bear);margin-bottom:4px">0–30 — HIGH CONVICTION SHORT</div><div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">Spec COT &gt;85 + Comm &lt;25 + Z &gt;+2 + OI Distribution + Yield Contracting → 1R short with phase, 0.5R without.</div></div>
       </div>
     </div>
 
@@ -2852,14 +2882,14 @@ body:not(.light){
         <div style="display:flex;gap:12px;align-items:flex-start;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:14px">
           <div style="font-family:'Bebas Neue';font-size:2rem;color:#22c55e;min-width:48px;line-height:1;letter-spacing:.04em">1R</div>
           <div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Full size — Phase + Inst Score confirmed</div>
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.7">
+            <div style="font-family:DM Mono;font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Full size — Phase + Inst Score confirmed</div>
+            <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.7">
               Weekly phase logged (Spring / Recovery / Surge / Slide) <span style="color:var(--accent)">+</span><br>
               Inst score aligned (HC Long ≥70 / HC Short ≤30) <span style="color:var(--accent)">+</span><br>
               Daily trigger fires (21,3 cross or extreme entry)<br>
               <span style="color:#22c55e;margin-top:4px;display:inline-block">All three layers = full conviction = full risk.</span>
             </div>
-            <div style="margin-top:8px;font-family:'DM Mono';font-size:.58rem;color:var(--muted2);background:var(--surface2);border-radius:6px;padding:6px 10px">
+            <div style="margin-top:8px;font-family:DM Mono;font-size:.58rem;color:var(--muted2);background:var(--surface2);border-radius:6px;padding:6px 10px">
               Example: 6J — Spring phase · score 72 · daily yield undervalued + 21,3 hook
             </div>
           </div>
@@ -2869,8 +2899,8 @@ body:not(.light){
         <div style="display:flex;gap:12px;align-items:flex-start;background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:10px;padding:14px">
           <div style="font-family:'Bebas Neue';font-size:2rem;color:#f97316;min-width:48px;line-height:1;letter-spacing:.04em">0.5R</div>
           <div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Half size — Daily trigger only</div>
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.7">
+            <div style="font-family:DM Mono;font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Half size — Daily trigger only</div>
+            <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.7">
               No weekly phase logged <span style="color:var(--accent)">or</span><br>
               Signal is Neutral / Conflict / Wait <span style="color:var(--accent)">or</span><br>
               Inst score is in middle zone (45–69)<br>
@@ -2882,26 +2912,54 @@ body:not(.light){
       </div>
     </div>
 
+
+    <!-- Drawdown Rule -->
+    <div class="panel" style="margin-bottom:18px;border-left:3px solid var(--mega-bear)">
+      <div class="ptitle">Drawdown Rule — Protect the Account</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px">
+        <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);line-height:1.8">
+          After <b style="color:var(--mega-bear)">3 consecutive losses</b> — mandatory step-down:
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--mega-bear);line-height:1">3 LOSSES</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:4px">Drop to 0.5R<br>mandatory</div>
+          </div>
+          <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-family:'Bebas Neue';font-size:1.6rem;color:#f97316;line-height:1">NEXT 5</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:4px">Max 0.5R<br>per trade</div>
+          </div>
+          <div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--mega-bull);line-height:1">2 WINS</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:4px">Return to<br>full size</div>
+          </div>
+        </div>
+        <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.7;background:var(--surface2);border-radius:7px;padding:10px">
+          Why: after 3 losses your judgment is compromised without you noticing. Smaller size forces discipline and protects equity while you recalibrate. 
+          The 2-win condition to return to full size prevents the ego from rushing back.
+        </div>
+      </div>
+    </div>
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">Daily Trigger — Entry Sequence</div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">1</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Weekly bias confirmed Saturday — COT, yield, inst score all checked</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">The decision is made on Saturday. Monday is just execution.</div></div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">2</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Daily raw percentile below 10% (long) or above 90% (short)</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Entry timing window open. Not a trigger — just permission to look for entry.</div></div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">3</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Identify 4H demand (long) or supply (short) zone on unadjusted futures chart</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Where did price spend least time before moving away aggressively? Mark top and bottom.</div></div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">4</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Translate zone to CFD using saved basis in Zone Translator tab</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Use Weekday mode. Enter futures zone levels → CFD levels calculated instantly.</div></div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">5</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Place limit order inside CFD zone — let price come to you</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Stop below zone bottom (long) or above zone top (short). Zone defines the stop.</div></div></div>
-        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">6</div><div><div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);margin-bottom:3px">Daily 21,3 hook confirms (optional but preferred)</div><div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)">Hook = raw crosses above smoothed from below 10. If it fired Friday, enter Monday open.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">1</div><div><div style="font-family:DM Mono;font-size:.68rem;color:var(--text);margin-bottom:3px">Weekly bias confirmed Saturday — COT, yield, inst score all checked</div><div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">The decision is made on Saturday. Monday is just execution.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">2</div><div><div style="font-family:DM Mono;font-size:.68rem;color:var(--text);margin-bottom:3px">Daily raw percentile below 10% (long) or above 90% (short)</div><div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">Entry timing window open. Not a trigger — just permission to look for entry.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">3</div><div><div style="font-family:DM Mono;font-size:.68rem;color:var(--text);margin-bottom:3px">Identify 4H demand (long) or supply (short) zone on unadjusted futures chart</div><div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">Where did price spend least time before moving away aggressively? Mark top and bottom.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">4</div><div><div style="font-family:DM Mono;font-size:.68rem;color:var(--text);margin-bottom:3px">Translate zone to CFD using saved basis in Zone Translator tab</div><div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">Use Weekday mode. Enter futures zone levels → CFD levels calculated instantly.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">5</div><div><div style="font-family:DM Mono;font-size:.68rem;color:var(--text);margin-bottom:3px">Place limit order inside CFD zone — let price come to you</div><div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">Stop below zone bottom (long) or above zone top (short). Zone defines the stop.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--surface2);border-radius:7px;padding:12px"><div style="font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);min-width:28px;line-height:1">6</div><div><div style="font-family:DM Mono;font-size:.68rem;color:var(--text);margin-bottom:3px">Daily 21,3 hook confirms (optional but preferred)</div><div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)">Hook = raw crosses above smoothed from below 10. If it fired Friday, enter Monday open.</div></div></div>
       </div>
     </div>
 
     <!-- Entry Types -->
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">Daily Entry Types</div>
-      <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">Weekly bias determines direction and size. The daily chart determines <b style="color:var(--text)">when</b> to enter. Two valid entry types — usable on any weekly setup regardless of phase.</div>
+      <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">Weekly bias determines direction and size. The daily chart determines <b style="color:var(--text)">when</b> to enter. Two valid entry types — usable on any weekly setup regardless of phase.</div>
       <div class="rp-entry-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div style="background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.25);border-left:3px solid var(--accent);border-radius:7px;padding:14px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--accent);letter-spacing:.25em;margin-bottom:8px">Type 1 &mdash; Extreme Reversal</div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:2">
             <div><b style="color:var(--text)">Indicator:</b> 21,3 Tactical</div>
             <div><b style="color:var(--text)">Trigger:</b> Raw below 10% (long) or above 90% (short) + hook forming</div>
             <div><b style="color:var(--text)">Entry:</b> At 4H demand / supply zone</div>
@@ -2914,7 +2972,7 @@ body:not(.light){
         </div>
         <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-left:3px solid var(--bull);border-radius:7px;padding:14px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--bull);letter-spacing:.25em;margin-bottom:8px">Type 2 &mdash; Momentum Confirmation</div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:2">
             <div><b style="color:var(--text)">Indicator:</b> 65,5 Strategic</div>
             <div><b style="color:var(--text)">Trigger:</b> Crosses above 65 (long) or below 35 (short)</div>
             <div><b style="color:var(--text)">Entry:</b> On the cross or first pullback after</div>
@@ -2926,7 +2984,7 @@ body:not(.light){
           </div>
         </div>
       </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px;margin-top:12px;font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:2">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 13px;margin-top:12px;font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:2">
         <b style="color:var(--accent)">How to choose:</b> Price at zone + 21,3 extreme &rarr; Type 1. Price bounced but 65,5 not yet crossed &rarr; wait for Type 2. Never force both on the same pair at the same time.
       </div>
     </div>
@@ -2935,8 +2993,8 @@ body:not(.light){
       <div class="ptitle">Execution Rules</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bull);letter-spacing:.25em;margin-bottom:8px">DO</div>
-          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--mega-bull);letter-spacing:.25em;margin-bottom:8px">DO</div>
+          <div style="font-family:DM Mono;font-size:.62rem;color:var(--text);line-height:2.2">
             <div>Place limit orders at the zone — wait</div>
             <div>Use previous week high/low as reference</div>
             <div>Enter at London open for best fills</div>
@@ -2947,8 +3005,8 @@ body:not(.light){
           </div>
         </div>
         <div>
-          <div style="font-family:'DM Mono';font-size:.6rem;color:var(--mega-bear);letter-spacing:.25em;margin-bottom:8px">DON'T</div>
-          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
+          <div style="font-family:DM Mono;font-size:.6rem;color:var(--mega-bear);letter-spacing:.25em;margin-bottom:8px">DON'T</div>
+          <div style="font-family:DM Mono;font-size:.62rem;color:var(--text);line-height:2.2">
             <div>Chase entry after hook fires — wait for retest</div>
             <div>Move stop closer during the trade</div>
             <div>Add filters at execution time</div>
@@ -2956,6 +3014,8 @@ body:not(.light){
             <div>Size up beyond 1R on any single trade</div>
             <div>Overtrade — one clean setup beats three mediocre</div>
             <div>Use EMA on price for entry — that's retail bias</div>
+            <div style="color:var(--mega-bear);font-weight:600">Trade full 1R after 3 consecutive losses — drop to 0.5R for next 5 trades until 2 wins</div>
+            <div style="color:var(--mega-bear);font-weight:600">Open more than 2 correlated pairs simultaneously — max 2R combined on correlated groups</div>
           </div>
         </div>
       </div>
@@ -2965,7 +3025,7 @@ body:not(.light){
   <!-- Reversal Pattern Reference -->
   <div class="panel" style="margin-top:18px" id="rules-patterns-panel">
     <div class="ptitle">Reversal Confirmation Patterns — Visual Reference</div>
-    <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">
+    <div style="font-family:DM Mono;font-size:.62rem;color:var(--muted2);margin-bottom:14px;line-height:1.8">
       Look for these patterns forming <b style="color:var(--text)">at your 4H demand or supply zone</b> after the daily raw percentile enters the trigger window.
     </div>
     <style>
@@ -2982,12 +3042,12 @@ body:not(.light){
       .rp-card.rp-bull .rp-name{color:var(--mega-bull)}
       .rp-card.rp-bear .rp-name{color:var(--mega-bear)}
       .rp-card.rp-neut .rp-name{color:var(--accent)}
-      .rp-dir{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:9px}
+      .rp-dir{font-family:DM Mono,monospace;font-size:.54rem;letter-spacing:.25em;color:var(--muted2);margin-bottom:9px}
       .rp-svg-wrap{display:flex;justify-content:center;background:var(--bg);border-radius:5px;padding:8px 4px;border:1px solid var(--border);margin-bottom:9px}
-      .rp-desc{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);line-height:1.7}
+      .rp-desc{font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);line-height:1.7}
       .rp-desc b{color:var(--text)}
       .rp-stars{font-size:.65rem;margin-top:7px;color:var(--accent)}
-      .rp-footer2{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 13px;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted2);line-height:1.9}
+      .rp-footer2{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 13px;font-family:DM Mono,monospace;font-size:.6rem;color:var(--muted2);line-height:1.9}
       .rp-footer2 b{color:var(--accent)}
       .rp-zone{stroke:var(--accent);stroke-dasharray:4 3;stroke-width:1;opacity:.5}
     </style>
@@ -3206,13 +3266,13 @@ body:not(.light){
         </div>
       </div>
     </div>
-    <div id="se-result" style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:12px;margin-bottom:14px;font-family:'DM Mono';font-size:.75rem;color:var(--muted2)">
+    <div id="se-result" style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:12px;margin-bottom:14px;font-family:DM Mono;font-size:.75rem;color:var(--muted2)">
       Adjust inputs above to update signal detection.
     </div>
 
     <!-- TIER 1 fields in edit modal -->
     <div style="background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:8px;padding:13px;margin-bottom:13px">
-      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">≠ INSTITUTIONAL FILTERS</div>
+      <div style="font-family:DM Mono;font-size:.58rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">≠ INSTITUTIONAL FILTERS</div>
       <div class="g2" style="margin-bottom:10px">
         <div class="ig"><label>Commercial COT %</label>
           <div class="num-wrap"><input type="number" id="se-comm" min="0" max="100" step="any" placeholder="0–100"><span class="num-sfx">%</span></div>
@@ -3246,13 +3306,13 @@ body:not(.light){
         <!-- YSM result display for edit modal -->
         <div id="se-ysm-result" style="display:none;margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-            <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2)">YS MOMENTUM SCORE</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2)">YS MOMENTUM SCORE</div>
             <div id="se-ysm-val" style="font-family:'Bebas Neue';font-size:1.5rem;line-height:1;color:var(--accent)">0</div>
           </div>
           <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px">
             <div id="se-ysm-bar" style="height:100%;border-radius:3px;transition:width .3s,background .3s;width:50%"></div>
           </div>
-          <div id="se-ysm-lbl" style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2)"></div>
+          <div id="se-ysm-lbl" style="font-family:DM Mono;font-size:.6rem;color:var(--muted2)"></div>
         </div>
       </div>
     </div>
@@ -3260,7 +3320,7 @@ body:not(.light){
     <div class="g2" style="margin-bottom:11px">
       <div class="ig"><label>Price at Signal</label><input type="number" id="se-price" step="any" placeholder="0.0000"></div>
       <div class="ig"><label>Futures Bias</label>
-        <select id="se-bias" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:'DM Mono';font-size:.8rem;outline:none;width:100%">
+        <select id="se-bias" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.8rem;outline:none;width:100%">
           <option value="">—</option><option>Long</option><option>Short</option><option>Flat / Watching</option>
         </select>
       </div>
@@ -3279,7 +3339,7 @@ body:not(.light){
     <div class="g3">
       <div class="ig"><label>Date</label><input type="date" id="edit-date"></div>
       <div class="ig"><label>Month</label><input type="text" id="edit-month" readonly style="color:var(--muted2)"></div>
-      <div class="ig"><label>Account</label><select id="edit-account" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:'DM Mono';font-size:.8rem;outline:none;width:100%"></select></div>
+      <div class="ig"><label>Account</label><select id="edit-account" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.8rem;outline:none;width:100%"></select></div>
     </div>
     <div class="g4">
       <div class="ig"><label>Open / Close</label><select id="edit-oc"><option value="Close">Close</option><option value="Open">Open</option></select></div>
@@ -3299,7 +3359,7 @@ body:not(.light){
       </div>
     </div>
     <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:11px">
-      <div style="font-family:'DM Mono';font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px">≠ R CALCULATION</div>
+      <div style="font-family:DM Mono;font-size:.58rem;letter-spacing:.25em;color:var(--accent);margin-bottom:10px">≠ R CALCULATION</div>
       <div class="g3" style="margin-bottom:8px">
         <div class="ig"><label>1R Value</label><input type="number" id="edit-rvalue" step="any" oninput="editAutoCalcR()"></div>
         <div class="ig"><label>Risked (<span id="edit-risk-cur">$</span>) <span style="font-size:.52rem;background:rgba(200,169,110,.15);color:var(--accent);padding:1px 5px;border-radius:3px">AUTO</span></label>
@@ -3336,7 +3396,7 @@ body:not(.light){
       <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('edit-inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
     </div></div>
     <div class="ig" style="margin-bottom:16px"><label>Notes</label><textarea id="edit-notes"></textarea></div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="edit-addon" style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="edit-addon" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
     <div style="display:flex;gap:8px">
       <button class="btn-log" id="btn-save-edit" onclick="saveEdit()" style="flex:1">💾 Save Changes</button>
       <button class="btn-sm" onclick="closeEditModal()" style="flex-shrink:0;padding:12px 18px">Cancel</button>
@@ -3753,7 +3813,7 @@ function calcInstitutionalScore(){
   if(barEl){barEl.style.width=totalScore+'%';barEl.style.background=scoreColor;}
 
   const bkEl=document.getElementById('inst-score-breakdown');
-  if(bkEl) bkEl.innerHTML=breakdown.map(b=>`<div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:7px 10px"><div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:2px">${b.label}</div><div style="font-family:'DM Mono';font-size:.65rem;color:${b.color}">${b.detail}</div><div style="font-family:'DM Mono';font-size:.6rem;color:${b.score>=0?'var(--mega-bull)':'var(--mega-bear)'};margin-top:2px">${b.score>=0?'+':''}${b.score} pts</div></div>`).join('');
+  if(bkEl) bkEl.innerHTML=breakdown.map(b=>`<div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:7px 10px"><div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:2px">${b.label}</div><div style="font-family:DM Mono;font-size:.65rem;color:${b.color}">${b.detail}</div><div style="font-family:DM Mono;font-size:.6rem;color:${b.score>=0?'var(--mega-bull)':'var(--mega-bear)'};margin-top:2px">${b.score>=0?'+':''}${b.score} pts</div></div>`).join('');
 
   const oiEl=document.getElementById('oi-conviction');
   if(oiEl&&oiConv){oiEl.style.display='block';oiEl.style.background=oiConv.bullish===true?'rgba(34,197,94,.08)':oiConv.bullish===false?'rgba(239,68,68,.08)':'rgba(107,114,128,.08)';oiEl.style.border=`1px solid ${oiConv.color}`;oiEl.innerHTML=`<span style="color:${oiConv.color};font-weight:600">${oiConv.label}</span><br><span style="color:var(--muted2)">${oiConv.desc}</span>`;}
@@ -3908,8 +3968,8 @@ function renderSignals(){
     const vdirCol  = vdirLbl.includes('▲')?'var(--mega-bull)':vdirLbl.includes('▼')?'var(--mega-bear)':'var(--muted2)';
     return `<tr>
       <td style="color:var(--muted2)">${e.date}</td>
-      <td><span style="font-family:'DM Mono';font-size:.68rem;color:${sigColor}">${e.icon||''} ${e.label||''}</span></td>
-      <td><span style="font-family:'DM Mono';font-size:.65rem;color:${sigColor}">${(e.phase||'').split('—')[0].trim()}</span></td>
+      <td><span style="font-family:DM Mono;font-size:.68rem;color:${sigColor}">${e.icon||''} ${e.label||''}</span></td>
+      <td><span style="font-family:DM Mono;font-size:.65rem;color:${sigColor}">${(e.phase||'').split('—')[0].trim()}</span></td>
       <td style="font-weight:500;color:var(--accent)">${e.asset||'—'}</td>
       <td class="${biasCls}">${e.bias||'—'}</td>
       <td style="color:var(--muted2)">${e.price&&e.price!=='—'?e.price:'—'}</td>
@@ -4412,13 +4472,13 @@ function renderCorrRisk(entries) {
     const riskColor = bullAssets.length >= 3 ? 'var(--mega-bear)' : 'var(--bear)';
     html += `<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:7px;padding:11px 13px;margin-bottom:8px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">USD Short Exposure</div>
-        <span style="font-family:'DM Mono';font-size:.58rem;background:${riskColor}22;color:${riskColor};padding:2px 7px;border-radius:3px">${riskLevel} — ${bullAssets.length} signals</span>
+        <div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">USD Short Exposure</div>
+        <span style="font-family:DM Mono;font-size:.58rem;background:${riskColor}22;color:${riskColor};padding:2px 7px;border-radius:3px">${riskLevel} — ${bullAssets.length} signals</span>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">
         ${bullAssets.map(e=>`<span style="font-family:'Bebas Neue';font-size:.9rem;color:var(--mega-bull);background:rgba(34,197,94,.1);padding:2px 8px;border-radius:3px">${e.asset}</span>`).join('')}
       </div>
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">These signals represent <b style="color:var(--mega-bear)">${bullAssets.length}x</b> USD short exposure. Treat as <b style="color:var(--accent)">1 risk unit</b> — size accordingly.</div>
+      <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.6">These signals represent <b style="color:var(--mega-bear)">${bullAssets.length}x</b> USD short exposure. Treat as <b style="color:var(--accent)">1 risk unit</b> — size accordingly.</div>
     </div>`;
   }
 
@@ -4429,13 +4489,13 @@ function renderCorrRisk(entries) {
     const riskColor = bearAssets.length >= 3 ? 'var(--mega-bear)' : 'var(--bear)';
     html += `<div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:7px;padding:11px 13px;margin-bottom:8px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--text)">USD Long Exposure</div>
-        <span style="font-family:'DM Mono';font-size:.58rem;background:${riskColor}22;color:${riskColor};padding:2px 7px;border-radius:3px">${riskLevel} — ${bearAssets.length} signals</span>
+        <div style="font-family:DM Mono;font-size:.65rem;color:var(--text)">USD Long Exposure</div>
+        <span style="font-family:DM Mono;font-size:.58rem;background:${riskColor}22;color:${riskColor};padding:2px 7px;border-radius:3px">${riskLevel} — ${bearAssets.length} signals</span>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">
         ${bearAssets.map(e=>`<span style="font-family:'Bebas Neue';font-size:.9rem;color:var(--mega-bear);background:rgba(239,68,68,.1);padding:2px 8px;border-radius:3px">${e.asset}</span>`).join('')}
       </div>
-      <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.6">These signals represent <b style="color:var(--mega-bear)">${bearAssets.length}x</b> USD long exposure. Treat as <b style="color:var(--accent)">1 risk unit</b> — size accordingly.</div>
+      <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);line-height:1.6">These signals represent <b style="color:var(--mega-bear)">${bearAssets.length}x</b> USD long exposure. Treat as <b style="color:var(--accent)">1 risk unit</b> — size accordingly.</div>
     </div>`;
   }
 
@@ -4569,9 +4629,9 @@ function renderStaleness(entries) {
     `<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
       <div>
         <span style="font-family:'Bebas Neue';font-size:.95rem;color:var(--accent)">${e.asset}</span>
-        <span style="font-family:'DM Mono';font-size:.6rem;color:${e.color||'var(--muted2)'};margin-left:6px">${e.icon||''} ${(e.label||'').split(' ')[0]}</span>
+        <span style="font-family:DM Mono;font-size:.6rem;color:${e.color||'var(--muted2)'};margin-left:6px">${e.icon||''} ${(e.label||'').split(' ')[0]}</span>
       </div>
-      <span style="font-family:'DM Mono';font-size:.62rem;color:${color}">${daysOld}d old${stale?' ⚠ STALE':''}</span>
+      <span style="font-family:DM Mono;font-size:.62rem;color:${color}">${daysOld}d old${stale?' ⚠ STALE':''}</span>
     </div>`
   ).join('');
 }
@@ -4903,19 +4963,19 @@ function renderTrades(){
     const ph=t.phase?`<span class="chip" style="color:${pc};border-color:${pc}">${t.phase}</span>`:'—';
     const ec = t.entry==='Extreme'?'#ef4444':t.entry==='Momentum'?'#3b82f6':'#6b7280';
     const en = t.entry
-      ? `<span style="display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono';font-size:.62rem;color:${ec};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ec};flex-shrink:0;display:inline-block"></span>${t.entry}</span>`
+      ? `<span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ec};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ec};flex-shrink:0;display:inline-block"></span>${t.entry}</span>`
       : '—';
     const acTag=t.account&&t.account!=='Default'?` <span style="font-size:.5rem;color:var(--muted2)">[${t.account}]</span>`:'';
     const riskedCell=t.risked!=null?`<td style="color:var(--accent)">${ts}${t.risked.toFixed(2)}</td>`:'<td style="color:var(--muted2)">—</td>';
     const riskedRCell=t.risked_r!=null?`<td style="color:var(--accent)">${t.risked_r.toFixed(2)}R</td>`:'<td style="color:var(--muted2)">—</td>';
     const rrVal = (t.r!=null && t.risked_r!=null && t.risked_r!==0) ? t.r/t.risked_r : null;
     const rrCol = rrVal==null?'var(--muted2)':rrVal>=2?'var(--mega-bull)':rrVal>=1?'var(--bull)':rrVal>0?'var(--muted2)':rrVal>-1?'var(--bear)':'var(--mega-bear)';
-    const rrCell = rrVal!=null ? `<td style="color:${rrCol};font-family:'DM Mono'">${rrVal>=0?'+':''}${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
+    const rrCell = rrVal!=null ? `<td style="color:${rrCol};font-family:DM Mono">${rrVal>=0?'+':''}${rrVal.toFixed(2)}</td>` : '<td style="color:var(--muted2)">—</td>';
     const ic2 = INST_COLORS[t.inst_tag]||'#6b7280';
     const instCell = t.inst_tag
-      ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono';font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
+      ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:\'DM Mono\';font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
   }).join('');
 
 
@@ -5366,11 +5426,11 @@ function renderAnalytics(ft) {
     }
     if (activeDims.has('phase')) {
       const pc = PC[g.phase] || '#6b7280';
-      labelCells.push(`<td><span style="font-family:'DM Mono';font-size:.72rem;color:${pc}">${g.phase}</span></td>`);
+      labelCells.push(`<td><span style="font-family:DM Mono;font-size:.72rem;color:${pc}">${g.phase}</span></td>`);
     }
     if (activeDims.has('entry')) {
       const ec = entryColors[g.entry] || '#6b7280';
-      labelCells.push(`<td><span style="background:${ec}22;color:${ec};padding:2px 8px;border-radius:3px;font-family:'DM Mono';font-size:.68rem">${g.entry}</span></td>`);
+      labelCells.push(`<td><span style="background:${ec}22;color:${ec};padding:2px 8px;border-radius:3px;font-family:DM Mono;font-size:.68rem">${g.entry}</span></td>`);
     }
     const rPct   = Math.round(Math.abs(g.r) / maxAbsR * 100);
     const rColor = g.r >= 0 ? 'var(--mega-bull)' : 'var(--mega-bear)';
@@ -5392,7 +5452,7 @@ function renderAnalytics(ft) {
     </tr></thead>
     <tbody>${rowsHtml}</tbody>
   </table>
-  <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-top:8px" id="analytics-footnote">* Win Rate = Wins ÷ (Wins + Losses) — Break Even trades excluded from WR & Expectancy<br><span id="analytics-sample-note" style="color:var(--accent)"></span></div>
+  <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:8px" id="analytics-footnote">* Win Rate = Wins ÷ (Wins + Losses) — Break Even trades excluded from WR & Expectancy<br><span id="analytics-sample-note" style="color:var(--accent)"></span></div>
   </div>`;
 }
 
@@ -5534,7 +5594,7 @@ function renderReview(){
       const rCls = m.r>0?'monthly-pos':m.r<0?'monthly-neg':'monthly-zero';
       const eCls = parseFloat(exp)>0?'monthly-pos':parseFloat(exp)<0?'monthly-neg':'monthly-zero';
       return `<tr>
-        <td style="font-family:'DM Mono';font-size:.75rem;color:var(--accent)">${mo}</td>
+        <td style="font-family:DM Mono;font-size:.75rem;color:var(--accent)">${mo}</td>
         <td style="color:var(--muted2)">${m.W+m.BE+m.L}</td>
         <td style="color:var(--muted2)">${m.W}W · ${m.BE}BE · ${m.L}L</td>
         <td style="color:${m.W/(wl||1)>=0.5?'var(--mega-bull)':'var(--mega-bear)'}">${wr}</td>
@@ -5557,19 +5617,19 @@ function renderReview(){
     const dirCol = t.dir==='Buy'?'var(--mega-bull)':'var(--mega-bear)';
     const rr  = (t.r!=null&&t.risked_r&&t.risked_r!==0)?(t.r/t.risked_r).toFixed(2):null;
     return `<div style="background:${bg};border:1px solid ${col}33;border-left:3px solid ${col};border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:12px">
-      <div style="font-family:'Bebas Neue';font-size:1.6rem;color:${col};line-height:1;min-width:44px;text-align:center">${t.r>=0?'+':''}${t.r.toFixed(1)}<div style="font-family:'DM Mono';font-size:.5rem;color:${col};opacity:.7;letter-spacing:.08em">R</div></div>
+      <div style="font-family:'Bebas Neue';font-size:1.6rem;color:${col};line-height:1;min-width:44px;text-align:center">${t.r>=0?'+':''}${t.r.toFixed(1)}<div style="font-family:DM Mono;font-size:.5rem;color:${col};opacity:.7;letter-spacing:.08em">R</div></div>
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
           <span style="font-family:'Bebas Neue';font-size:1.05rem;color:var(--text);letter-spacing:.04em">${t.symbol}</span>
-          <span style="font-family:'DM Mono';font-size:.58rem;color:${dirCol}">● ${t.dir}</span>
-          ${t.phase?`<span style="font-family:'DM Mono';font-size:.55rem;color:${pc};background:${pc}18;padding:1px 5px;border-radius:3px">${t.phase}</span>`:''}
+          <span style="font-family:DM Mono;font-size:.58rem;color:${dirCol}">● ${t.dir}</span>
+          ${t.phase?`<span style="font-family:DM Mono;font-size:.55rem;color:${pc};background:${pc}18;padding:1px 5px;border-radius:3px">${t.phase}</span>`:''}
         </div>
-        <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);display:flex;gap:10px;flex-wrap:wrap">
+        <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);display:flex;gap:10px;flex-wrap:wrap">
           <span>${t.date}</span>
           ${t.entry?`<span style="color:var(--muted3)">${t.entry}</span>`:''}
           ${rr?`<span style="color:${col};opacity:.8">RR ${rr}</span>`:''}
         </div>
-        ${t.notes?`<div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);font-style:italic;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.notes.substring(0,55)}${t.notes.length>55?'…':''}</div>`:''}
+        ${t.notes?`<div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);font-style:italic;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.notes.substring(0,55)}${t.notes.length>55?'…':''}</div>`:''}
       </div>
     </div>`;
   }
@@ -5578,6 +5638,88 @@ function renderReview(){
   if(bestEl)  bestEl.innerHTML  = top3.length  ? top3.map(t=>tradeCard(t,true)).join('')  : '<div class="empty" style="padding:12px">No winning trades yet</div>';
   if(worstEl) worstEl.innerHTML = bot3.length  ? bot3.map(t=>tradeCard(t,false)).join('') : '<div class="empty" style="padding:12px">No losing trades yet</div>';
 
+
+  // ── PHASE WIN RATE ──
+  const phaseEl = document.getElementById('phase-winrate-container');
+  if(phaseEl) {
+    const closed = ft.filter(t => t.oc === 'Close' && t.settled_r != null);
+    if(!closed.length) {
+      phaseEl.innerHTML = '<div class="empty">No closed trades yet</div>';
+    } else {
+      // Group by phase_tag
+      const phases = ['Spring','Recovery','Surge','Cliff','Trap','Slide','The Conflict','Neutral'];
+      const phaseColors = {
+        'Spring':'#22c55e','Recovery':'#34d399','Surge':'#3b82f6',
+        'Cliff':'#ef4444','Trap':'#a855f7','Slide':'#f97316',
+        'The Conflict':'#f59e0b','Neutral':'#6b7280'
+      };
+      // Score buckets
+      const scoreBuckets = [
+        {label:'HC (≥70 / ≤30)', test: t => t.inst_score != null && (t.inst_score >= 70 || t.inst_score <= 30)},
+        {label:'Mid (45–69)', test: t => t.inst_score != null && t.inst_score > 30 && t.inst_score < 70},
+        {label:'No score', test: t => t.inst_score == null}
+      ];
+
+      // Build phase stats
+      const phaseStats = phases.map(phase => {
+        const pTrades = closed.filter(t => t.phase_tag === phase);
+        if(!pTrades.length) return null;
+        const wins = pTrades.filter(t => parseFloat(t.settled_r) > 0).length;
+        const losses = pTrades.filter(t => parseFloat(t.settled_r) < 0).length;
+        const be = pTrades.length - wins - losses;
+        const wr = pTrades.length > 0 ? Math.round(wins/pTrades.length*100) : 0;
+        const avgR = pTrades.reduce((s,t) => s + (parseFloat(t.settled_r)||0), 0) / pTrades.length;
+        return {phase, color: phaseColors[phase]||'#6b7280', total:pTrades.length, wins, losses, be, wr, avgR};
+      }).filter(Boolean);
+
+      if(!phaseStats.length) {
+        phaseEl.innerHTML = '<div class="empty">No closed trades with phase tags yet</div>';
+      } else {
+        // Phase table
+        let html = '<div style="overflow-x:auto">';
+        html += '<table style="width:100%;border-collapse:collapse;font-family:DM Mono,monospace;font-size:.62rem">';
+        html += '<thead><tr style="border-bottom:2px solid var(--border)">';
+        ['Phase','Trades','Win%','Avg R','W','L','BE'].forEach(h => {
+          html += `<th style="text-align:left;padding:6px 10px;color:var(--muted2);font-weight:400;letter-spacing:.08em">${h}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+
+        phaseStats.sort((a,b) => b.wr - a.wr).forEach(s => {
+          const wrColor = s.wr >= 60 ? 'var(--mega-bull)' : s.wr >= 45 ? 'var(--text)' : 'var(--mega-bear)';
+          const avgRColor = s.avgR > 0 ? 'var(--mega-bull)' : s.avgR < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
+          html += `<tr style="border-bottom:1px solid var(--border)">`;
+          html += `<td style="padding:8px 10px;color:${s.color};font-weight:600">${s.phase}</td>`;
+          html += `<td style="padding:8px 10px;color:var(--muted2)">${s.total}</td>`;
+          html += `<td style="padding:8px 10px;color:${wrColor};font-weight:600">${s.wr}%</td>`;
+          html += `<td style="padding:8px 10px;color:${avgRColor};font-weight:600">${s.avgR>=0?'+':''}${s.avgR.toFixed(2)}R</td>`;
+          html += `<td style="padding:8px 10px;color:var(--mega-bull)">${s.wins}</td>`;
+          html += `<td style="padding:8px 10px;color:var(--mega-bear)">${s.losses}</td>`;
+          html += `<td style="padding:8px 10px;color:var(--muted2)">${s.be}</td>`;
+          html += '</tr>';
+        });
+        html += '</tbody></table></div>';
+
+        // Score bucket breakdown
+        html += '<div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+        scoreBuckets.forEach(bucket => {
+          const bTrades = closed.filter(bucket.test);
+          if(!bTrades.length) { html += `<div></div>`; return; }
+          const bWins = bTrades.filter(t => parseFloat(t.settled_r) > 0).length;
+          const bWr = Math.round(bWins/bTrades.length*100);
+          const bAvgR = bTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/bTrades.length;
+          const bWrColor = bWr >= 60 ? 'var(--mega-bull)' : bWr >= 45 ? 'var(--text)' : 'var(--mega-bear)';
+          html += `<div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-family:DM Mono;font-size:.55rem;color:var(--muted2);margin-bottom:6px;letter-spacing:.08em">${bucket.label}</div>
+            <div style="font-family:'Bebas Neue';font-size:1.6rem;color:${bWrColor};line-height:1">${bWr}%</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:2px">${bTrades.length} trades · ${bAvgR>=0?'+':''}${bAvgR.toFixed(2)}R avg</div>
+          </div>`;
+        });
+        html += '</div>';
+
+        phaseEl.innerHTML = html;
+      }
+    }
+  }
 }
 
 // ── OPEN TRADES ──
@@ -5723,7 +5865,7 @@ function renderOpenTrades(){
   }).join('');
 
   el.innerHTML = `
-    <div style="font-family:'DM Mono';font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between">
+    <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between">
       <span>← scroll sideways · scroll down ↕</span>
       <span>${openList.length} open trade${openList.length!==1?'s':''}</span>
     </div>
@@ -6005,7 +6147,7 @@ function cvRenderTable(){
     const sCol = spread>=0?'color:var(--mega-bull)':'color:var(--mega-bear)';
     const ic2 = INST_COLORS[t.inst_tag]||'#6b7280';
     const instCell = t.inst_tag
-      ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono';font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
+      ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
     return`<tr>
       <td style="color:var(--muted2)">${i+1}</td>
@@ -6291,7 +6433,7 @@ async function addAccount(){const name=document.getElementById('acct-new').value
 async function deleteAccount(name){if(name==='Default'){alert('Cannot delete Default.');return;}if(!confirm(`Delete "${name}"?`))return;try{await sbDelName('accounts',name);accounts=accounts.filter(a=>a!==name);refreshAcctDDs();renderAcctList();renderTrades();}catch(e){alert('Error: '+e.message);}}
 function refreshAcctDDs(){
   refreshReviewDD();const fs=document.getElementById('tl-acct-filter'),ss=document.getElementById('tl-acct-sel'),cur=fs.value;fs.innerHTML='<option value="ALL">All Accounts</option>'+accounts.map(a=>`<option value="${a}"${cur===a?' selected':''}>${a}</option>`).join('');ss.innerHTML=accounts.map(a=>`<option value="${a}">${a}</option>`).join('');}
-function renderAcctList(){document.getElementById('acct-list').innerHTML=accounts.map(a=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 9px;background:var(--surface2);border-radius:5px;font-family:'DM Mono';font-size:.7rem"><span style="flex:1">${a}</span>${a!=='Default'?`<button class="tl-del" onclick="deleteAccount('${a}')">✕</button>`:'<span style="color:var(--muted);font-size:.58rem">default</span>'}</div>`).join('');}
+function renderAcctList(){document.getElementById('acct-list').innerHTML=accounts.map(a=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 9px;background:var(--surface2);border-radius:5px;font-family:DM Mono;font-size:.7rem"><span style="flex:1">${a}</span>${a!=='Default'?`<button class="tl-del" onclick="deleteAccount('${a}')">✕</button>`:'<span style="color:var(--muted);font-size:.58rem">default</span>'}</div>`).join('');}
 function openAcctModal(){renderAcctList();document.getElementById('acct-modal').style.display='flex';}
 function closeAcctModal(){document.getElementById('acct-modal').style.display='none';}
 
