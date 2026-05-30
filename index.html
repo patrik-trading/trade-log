@@ -2826,38 +2826,6 @@ body:not(.light){
     </div>
 
     <!-- Decision grid -->
-    <div class="panel" style="margin-bottom:18px">
-      <div class="ptitle">Position Sizing by Setup</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:14px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bull);letter-spacing:.25em;margin-bottom:10px">BULLISH SETUPS</div>
-          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
-            <div><b style="color:var(--mega-bull)">Spring</b> — phase + score 70+ → 1R</div>
-            <div><b style="color:var(--bull)">Recovery</b> — phase confirmed → 0.75R</div>
-            <div><b style="color:var(--bull)">Surge</b> — trend following → 0.75R</div>
-            <div><b style="color:var(--accent)">Just Inst Filter</b> — score 70+, no phase → 0.5R max</div>
-          </div>
-        </div>
-        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:14px">
-          <div style="font-family:'DM Mono';font-size:.65rem;color:var(--mega-bear);letter-spacing:.25em;margin-bottom:10px">BEARISH SETUPS</div>
-          <div style="font-family:'DM Mono';font-size:.62rem;color:var(--text);line-height:2.2">
-            <div><b style="color:var(--mega-bear)">Cliff</b> — phase + score 0-30 → 1R short</div>
-            <div><b style="color:var(--bear)">Trap</b> — distribution phase → 0.5R short</div>
-            <div><b style="color:var(--bear)">Slide</b> — persistent bearish → 0.75R short</div>
-            <div><b style="color:var(--accent)">Just Inst Filter</b> — score 0-30, no phase → 0.5R short max</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:rgba(107,114,128,.1);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px">
-        <div style="font-family:'DM Mono';font-size:.65rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:6px">SKIP — NO TRADE</div>
-        <div style="font-family:'DM Mono';font-size:.62rem;color:var(--muted2);line-height:2">
-          <div>Conflict phase — regardless of inst score</div>
-          <div>Neutral + inst score 30–70 — no directional edge</div>
-          <div>Score below 40 on any phase signal</div>
-        </div>
-      </div>
-    </div>
-
     <!-- Inst score guide -->
     <div class="panel">
       <div class="ptitle">Institutional Score Interpretation</div>
@@ -2874,6 +2842,45 @@ body:not(.light){
 
   <!-- ══ DAILY TRIGGER ══ -->
   <div id="rules-cat-trigger" style="display:none">
+
+    <!-- Position Sizing by Setup -->
+    <div class="panel" style="margin-bottom:18px">
+      <div class="ptitle">Position Sizing by Setup</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+
+        <!-- 1R row -->
+        <div style="display:flex;gap:12px;align-items:flex-start;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:14px">
+          <div style="font-family:'Bebas Neue';font-size:2rem;color:#22c55e;min-width:48px;line-height:1;letter-spacing:.04em">1R</div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Full size — Phase + Inst Score confirmed</div>
+            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.7">
+              Weekly phase logged (Spring / Recovery / Surge / Slide) <span style="color:var(--accent)">+</span><br>
+              Inst score aligned (HC Long ≥70 / HC Short ≤30) <span style="color:var(--accent)">+</span><br>
+              Daily trigger fires (21,3 cross or extreme entry)<br>
+              <span style="color:#22c55e;margin-top:4px;display:inline-block">All three layers = full conviction = full risk.</span>
+            </div>
+            <div style="margin-top:8px;font-family:'DM Mono';font-size:.58rem;color:var(--muted2);background:var(--surface2);border-radius:6px;padding:6px 10px">
+              Example: 6J — Spring phase · score 72 · daily yield undervalued + 21,3 hook
+            </div>
+          </div>
+        </div>
+
+        <!-- 0.5R row -->
+        <div style="display:flex;gap:12px;align-items:flex-start;background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:10px;padding:14px">
+          <div style="font-family:'Bebas Neue';font-size:2rem;color:#f97316;min-width:48px;line-height:1;letter-spacing:.04em">0.5R</div>
+          <div>
+            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Half size — Daily trigger only</div>
+            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.7">
+              No weekly phase logged <span style="color:var(--accent)">or</span><br>
+              Signal is Neutral / Conflict / Wait <span style="color:var(--accent)">or</span><br>
+              Inst score is in middle zone (45–69)<br>
+              <span style="color:#f97316;margin-top:4px;display:inline-block">Technical trigger without macro backing = half the risk.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <div class="panel" style="margin-bottom:18px">
       <div class="ptitle">Daily Trigger — Entry Sequence</div>
@@ -3158,44 +3165,6 @@ body:not(.light){
     </div>
   </div>
 
-    <!-- Position Sizing by Setup -->
-    <div class="panel" style="margin-top:18px">
-      <div class="ptitle">Position Sizing by Setup</div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-
-        <!-- 1R row -->
-        <div style="display:flex;gap:12px;align-items:flex-start;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:14px">
-          <div style="font-family:'Bebas Neue';font-size:2rem;color:#22c55e;min-width:48px;line-height:1;letter-spacing:.04em">1R</div>
-          <div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Full size — Phase + Inst Score confirmed</div>
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.7">
-              Weekly phase logged (Spring / Recovery / Surge / Slide) <span style="color:var(--accent)">+</span><br>
-              Inst score aligned (HC Long ≥70 / HC Short ≤30) <span style="color:var(--accent)">+</span><br>
-              Daily trigger fires (21,3 cross or extreme entry)<br>
-              <span style="color:#22c55e;margin-top:4px;display:inline-block">All three layers = full conviction = full risk.</span>
-            </div>
-            <div style="margin-top:8px;font-family:'DM Mono';font-size:.58rem;color:var(--muted2);background:var(--surface2);border-radius:6px;padding:6px 10px">
-              Example: 6J — Spring phase · score 72 · daily yield undervalued + 21,3 hook
-            </div>
-          </div>
-        </div>
-
-        <!-- 0.5R row -->
-        <div style="display:flex;gap:12px;align-items:flex-start;background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:10px;padding:14px">
-          <div style="font-family:'Bebas Neue';font-size:2rem;color:#f97316;min-width:48px;line-height:1;letter-spacing:.04em">0.5R</div>
-          <div>
-            <div style="font-family:'DM Mono';font-size:.68rem;color:var(--text);font-weight:600;margin-bottom:4px">Half size — Daily trigger only</div>
-            <div style="font-family:'DM Mono';font-size:.6rem;color:var(--muted2);line-height:1.7">
-              No weekly phase logged <span style="color:var(--accent)">or</span><br>
-              Signal is Neutral / Conflict / Wait <span style="color:var(--accent)">or</span><br>
-              Inst score is in middle zone (45–69)<br>
-              <span style="color:#f97316;margin-top:4px;display:inline-block">Technical trigger without macro backing = half the risk.</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
   </div><!-- /rules-cat-trigger -->
 
 </div><!-- /tab-rules -->
