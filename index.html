@@ -2100,7 +2100,7 @@ body:not(.light){
             <div id="sig-futures-options"></div>
           </div>
         </div>
-        <select id="sig-sort" onchange="renderSignals()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;outline:none">
+        <select id="sig-sort" onchange="renderSignals();localStorage.setItem('sig_sort',this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.7rem;outline:none">
           <option value="date_desc">↓ Date (Newest)</option>
           <option value="date_asc">↑ Date (Oldest)</option>
           <option value="signal">Signal A–Z</option>
@@ -2175,7 +2175,7 @@ body:not(.light){
 
   <div class="tl-topbar">
     <span class="tl-lbl">ACCOUNT</span>
-    <select id="tl-acct-filter" onchange="renderTrades()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none">
+    <select id="tl-acct-filter" onchange="renderTrades();localStorage.setItem('tl_acct_filter',this.value)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none">
       <option value="ALL">All Accounts</option>
     </select>
     <button class="btn-sm" onclick="openAcctModal()">⚙ Manage Accounts</button>
@@ -2357,7 +2357,7 @@ body:not(.light){
   <div class="panel" style="margin-bottom:16px">
     <div style="display:flex;flex-direction:column;gap:10px">
       <div style="font-family:'DM Mono';font-size:.65rem;color:var(--accent);letter-spacing:.25em;margin-bottom:8px">REVIEW PERIOD</div>
-      <select id="rv-account" onchange="renderReview()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none;width:100%;margin-bottom:10px;box-sizing:border-box">
+      <select id="rv-account" onchange="renderReview();localStorage.setItem('rv_account',this.value)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;font-family:'DM Mono';font-size:.72rem;outline:none;width:100%;margin-bottom:10px;box-sizing:border-box">
         <option value="ALL">All Accounts</option>
       </select>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;width:100%;box-sizing:border-box">
@@ -6874,6 +6874,7 @@ function switchConvTab(tab) {
       }
     }
   });
+  localStorage.setItem('conv_tab', tab);
 }
 
 // ══════════════════════════════════════
@@ -6924,6 +6925,16 @@ function updateBottomBar(tab) {
   // Restore last active tab
   const lastTab=localStorage.getItem('active_tab');
   if(lastTab) switchTab(lastTab);
+  // Restore sub-tab states
+  const convTab=localStorage.getItem('conv_tab');
+  if(convTab) switchConvTab(convTab);
+  // Restore select states
+  const tlAcct=localStorage.getItem('tl_acct_filter');
+  const sigSort=localStorage.getItem('sig_sort');
+  const rvAcct=localStorage.getItem('rv_account');
+  if(tlAcct){const el=document.getElementById('tl-acct-filter');if(el)el.value=tlAcct;}
+  if(sigSort){const el=document.getElementById('sig-sort');if(el)el.value=sigSort;}
+  if(rvAcct){const el=document.getElementById('rv-account');if(el)el.value=rvAcct;}
 })();
 
 
