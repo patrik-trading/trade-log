@@ -1862,6 +1862,14 @@ body:not(.light){
 </div>
 <!-- TAB SIGNALS -->
 <div class="tab-pane active" id="tab-signals">
+  <!-- Signal sub-tab bar -->
+  <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
+    <button id="sig-btn-fx"  onclick="switchSigTab('fx')"  style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s">📡 FX Signals</button>
+    <button id="sig-btn-btc" onclick="switchSigTab('btc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">₿ BTC Bias</button>
+  </div>
+
+  <!-- FX Signals panel — all existing content -->
+  <div id="sig-panel-fx">
 
   <!-- DESKTOP: Log Signal button -->
   <div class="desk-trigger" style="margin-bottom:14px">
@@ -2002,19 +2010,7 @@ body:not(.light){
       <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="eNotes" placeholder="Observations, confluence, levels..."></textarea></div>
       <button class="btn-log" id="btn-sig" onclick="addSignalEntry();setTimeout(()=>closeDeskModal('desk-signal-modal'),1000)">+ LOG SIGNAL</button>
     </div>
-      <!-- Signal sub-tab bar -->
-  <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
-    <button id="sig-btn-fx" onclick="switchSigTab('fx')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s">
-      📡 FX Signals
-    </button>
-    <button id="sig-btn-btc" onclick="switchSigTab('btc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">
-      ₿ BTC Bias
-    </button>
-  </div>
-
-  <!-- FX Signals panel -->
-  <div id="sig-panel-fx">
-<div class="sig-two-col">
+    <div class="sig-two-col">
 
     <!-- LEFT: Stats | Distribution | Focus of Week -->
     <div class="sig-left-col">
@@ -2170,21 +2166,17 @@ body:not(.light){
           </table>
         </div>
       </div>
-
-  </div><!-- /sig-panel-fx -->
+</div><!-- /sig-panel-fx -->
 
   <!-- BTC Bias panel -->
   <div id="sig-panel-btc" style="display:none">
-
     <!-- Fetch bar -->
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <button onclick="fetchBTCData()" id="btc-fetch-btn" style="flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;cursor:pointer">
-        ⬇ Fetch Live BTC Data
-      </button>
+      <button onclick="fetchBTCData()" id="btc-fetch-btn" style="flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;cursor:pointer">⬇ Fetch Live BTC Data</button>
       <div id="btc-last-fetch" style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Not fetched yet</div>
     </div>
 
-    <!-- BTC Signal card -->
+    <!-- Signal card -->
     <div id="btc-signal-card" style="border-radius:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface2);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
       <div>
         <div id="btc-signal-label" style="font-family:'Bebas Neue',display;font-size:1.4rem;letter-spacing:.08em;color:var(--muted2)">₿ NO DATA</div>
@@ -2199,121 +2191,58 @@ body:not(.light){
     <!-- Score bar -->
     <div class="panel" style="margin-bottom:14px">
       <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);letter-spacing:.08em;margin-bottom:8px">SIGNAL STRENGTH</div>
-      <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px">
-        <div id="btc-score-bar" style="height:100%;border-radius:4px;width:0%;transition:width .6s,background .6s"></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="btc-score-breakdown">
-        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center">
-          <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Fear & Greed</div>
-          <div id="btc-score-fg" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div>
-        </div>
-        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center">
-          <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Funding Rate</div>
-          <div id="btc-score-fund" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div>
-        </div>
-        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center">
-          <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Long/Short</div>
-          <div id="btc-score-ls" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div>
-        </div>
-        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center">
-          <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Halving Cycle</div>
-          <div id="btc-score-cycle" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div>
-        </div>
+      <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px"><div id="btc-score-bar" style="height:100%;border-radius:4px;width:0%;transition:width .6s,background .6s"></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Fear & Greed</div><div id="btc-score-fg" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
+        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Funding Rate</div><div id="btc-score-fund" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
+        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Long/Short</div><div id="btc-score-ls" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
+        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Halving Cycle</div><div id="btc-score-cycle" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
       </div>
     </div>
 
-    <!-- Metrics grid -->
+    <!-- Metrics -->
     <div class="g2" style="margin-bottom:14px">
-
-      <!-- Sentiment panel -->
       <div class="panel">
         <div class="ptitle">Sentiment</div>
         <div style="display:flex;flex-direction:column;gap:8px">
-
           <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:7px">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">FEAR & GREED</div>
-              <div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2);margin-top:1px">&lt;25 Accumulate · &gt;75 Distribute</div>
-            </div>
-            <div style="text-align:right">
-              <div id="btc-fg-val" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--muted2)">—</div>
-              <div id="btc-fg-label" style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">—</div>
-            </div>
+            <div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">FEAR & GREED</div><div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">&lt;25 Accumulate · &gt;75 Distribute</div></div>
+            <div style="text-align:right"><div id="btc-fg-val" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--muted2)">—</div><div id="btc-fg-label" style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">—</div></div>
           </div>
-
           <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:7px">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">FUNDING RATE</div>
-              <div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2);margin-top:1px">Negative = bullish contrarian</div>
-            </div>
-            <div style="text-align:right">
-              <div id="btc-fund-val" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--muted2)">—</div>
-              <div id="btc-fund-label" style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">—</div>
-            </div>
+            <div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">FUNDING RATE</div><div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">Negative = bullish contrarian</div></div>
+            <div style="text-align:right"><div id="btc-fund-val" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--muted2)">—</div><div id="btc-fund-label" style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">—</div></div>
           </div>
-
           <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:7px">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">LONG / SHORT</div>
-              <div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2);margin-top:1px">&lt;45% long = contrarian bull</div>
-            </div>
-            <div style="text-align:right">
-              <div id="btc-ls-val" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--muted2)">—</div>
-              <div id="btc-ls-label" style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">—</div>
-            </div>
+            <div><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">LONG / SHORT</div><div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">&lt;45% long = contrarian bull</div></div>
+            <div style="text-align:right"><div id="btc-ls-val" style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--muted2)">—</div><div id="btc-ls-label" style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">—</div></div>
           </div>
-
         </div>
       </div>
-
-      <!-- Cycle + Price panel -->
       <div style="display:flex;flex-direction:column;gap:14px">
-
         <div class="panel">
           <div class="ptitle">Halving Cycle</div>
           <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);margin-bottom:8px">Last halving: Apr 2024</div>
-          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px">
-            <div id="btc-cycle-bar" style="height:100%;border-radius:3px;background:var(--accent);transition:width .6s;width:29%"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)">
-            <span>Apr 2024</span><span id="btc-cycle-pos" style="color:var(--accent)">Month 14</span><span>Apr 2028</span>
-          </div>
-          <div id="btc-cycle-label" style="margin-top:8px;padding:6px 10px;background:rgba(53,79,82,.15);border-radius:6px;border-left:2px solid var(--accent);font-family:'DM Mono',monospace;font-size:.58rem;color:var(--accent)">
-            Post-halving surge phase — historically strongest period
-          </div>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px"><div id="btc-cycle-bar" style="height:100%;border-radius:3px;background:var(--accent);transition:width .6s;width:29%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2)"><span>Apr 2024</span><span id="btc-cycle-pos" style="color:var(--accent)">Month 14</span><span>Apr 2028</span></div>
+          <div id="btc-cycle-label" style="margin-top:8px;padding:6px 10px;background:rgba(53,79,82,.15);border-radius:6px;border-left:2px solid var(--accent);font-family:'DM Mono',monospace;font-size:.58rem;color:var(--accent)">Post-halving surge phase</div>
         </div>
-
         <div class="panel">
           <div class="ptitle">Price Context</div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:7px">
-              <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">BTC / USD</div>
-              <div id="btc-price" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--accent)">—</div>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:7px">
-              <div>
-                <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">MACRO REGIME</div>
-                <div style="font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted2);margin-top:1px">From DXY overlay</div>
-              </div>
-              <div id="btc-macro" style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted2)">—</div>
-            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:7px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">BTC / USD</div><div id="btc-price" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--accent)">—</div></div>
           </div>
         </div>
-
       </div>
     </div>
 
     <!-- Glassnode placeholder -->
     <div class="panel" style="opacity:.5;border-style:dashed">
       <div class="ptitle">On-Chain — Glassnode</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted2);line-height:1.8">
-        MVRV Z-Score · Exchange Netflow · SOPR<br>
-        <span style="color:var(--accent)">Add Glassnode API key in Settings to unlock</span>
-      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted2);line-height:1.8">MVRV Z-Score · Exchange Netflow · SOPR<br><span style="color:var(--accent)">Add Glassnode API key in Settings to unlock</span></div>
     </div>
 
   </div><!-- /sig-panel-btc -->
-
 </div><!-- /tab-signals -->
 
 <!-- TAB TRADE LOG -->
@@ -2598,15 +2527,8 @@ body:not(.light){
 
   <!-- Phase Win Rate Breakdown -->
   <div class="panel" style="margin-top:14px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div class="ptitle" style="margin-bottom:0">Win Rate by Phase & Score</div>
-      <div style="display:flex;gap:6px">
-        <button id="wr-btn-both"  onclick="setWRView('both')"  style="font-family:'DM Mono',monospace;font-size:.58rem;padding:4px 10px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer">Both</button>
-        <button id="wr-btn-phase" onclick="setWRView('phase')" style="font-family:'DM Mono',monospace;font-size:.58rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer">Phase</button>
-        <button id="wr-btn-score" onclick="setWRView('score')" style="font-family:'DM Mono',monospace;font-size:.58rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer">Score</button>
-      </div>
-    </div>
-    <div id="phase-winrate-container">
+    <div class="ptitle">Win Rate by Phase & Score</div>
+    <div id="phase-winrate-container" style="margin-top:8px">
       <div class="empty">No closed trades yet</div>
     </div>
   </div>
@@ -2878,7 +2800,6 @@ body:not(.light){
   </div>
 
   </div><!-- /conv-panel-calc -->
-
 
 </div><!-- /tab-converter -->
 
@@ -5806,109 +5727,82 @@ function renderReview(){
   // ── PHASE WIN RATE ──
   const phaseEl = document.getElementById('phase-winrate-container');
   if(phaseEl) {
-    // Sync toggle button states
-    const curView = wrView || 'both';
-    ['both','phase','score'].forEach(v => {
-      const btn = document.getElementById('wr-btn-'+v);
-      if(!btn) return;
-      if(v === curView) {
-        btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; btn.style.borderColor = 'var(--accent)';
-      } else {
-        btn.style.background = 'transparent'; btn.style.color = 'var(--muted2)'; btn.style.borderColor = 'var(--border)';
-      }
-    });
-
     const closed = ft.filter(t => t.oc === 'Close' && t.settled_r != null);
-    if(!closed.length) { phaseEl.innerHTML = '<div class="empty">No closed trades yet</div>'; }
-    else {
+    if(!closed.length) {
+      phaseEl.innerHTML = '<div class="empty">No closed trades yet</div>';
+    } else {
+      // Group by phase_tag
       const phases = ['Spring','Recovery','Surge','Cliff','Trap','Slide','The Conflict','Neutral'];
       const phaseColors = {
         'Spring':'#22c55e','Recovery':'#34d399','Surge':'#3b82f6',
         'Cliff':'#ef4444','Trap':'#a855f7','Slide':'#f97316',
         'The Conflict':'#f59e0b','Neutral':'#6b7280'
       };
+      // Score buckets
       const scoreBuckets = [
-        {label:'HC Long (score 70+)',   test: t => t.inst_score != null && t.inst_score >= 70, color:'#22c55e'},
-        {label:'Bullish (55-69)',        test: t => t.inst_score != null && t.inst_score >= 55 && t.inst_score < 70, color:'#3b82f6'},
-        {label:'Neutral (45-54)',        test: t => t.inst_score != null && t.inst_score > 45 && t.inst_score < 55, color:'#6b7280'},
-        {label:'Bearish (31-45)',        test: t => t.inst_score != null && t.inst_score > 30 && t.inst_score <= 45, color:'#f97316'},
-        {label:'HC Short (score 0-30)', test: t => t.inst_score != null && t.inst_score <= 30, color:'#ef4444'},
-        {label:'No score',              test: t => t.inst_score == null, color:'#6b7280'},
+        {label:'HC (≥70 / ≤30)', test: t => t.inst_score != null && (t.inst_score >= 70 || t.inst_score <= 30)},
+        {label:'Mid (45–69)', test: t => t.inst_score != null && t.inst_score > 30 && t.inst_score < 70},
+        {label:'No score', test: t => t.inst_score == null}
       ];
 
-      let html = '';
+      // Build phase stats
+      const phaseStats = phases.map(phase => {
+        const pTrades = closed.filter(t => t.phase_tag === phase);
+        if(!pTrades.length) return null;
+        const wins = pTrades.filter(t => parseFloat(t.settled_r) > 0).length;
+        const losses = pTrades.filter(t => parseFloat(t.settled_r) < 0).length;
+        const be = pTrades.length - wins - losses;
+        const wr = pTrades.length > 0 ? Math.round(wins/pTrades.length*100) : 0;
+        const avgR = pTrades.reduce((s,t) => s + (parseFloat(t.settled_r)||0), 0) / pTrades.length;
+        return {phase, color: phaseColors[phase]||'#6b7280', total:pTrades.length, wins, losses, be, wr, avgR};
+      }).filter(Boolean);
 
-      // ── PHASE TABLE ──
-      if(curView === 'both' || curView === 'phase') {
-        const phaseStats = phases.map(phase => {
-          // Normalize phase_tag to match variants like 'Trap - CONFIRMED'
-          const pTrades = closed.filter(t => {
-            const pt = (t.phase_tag||'').replace(/\s*[-—–]+\s*(CONFIRMED|Waiting|Watching|Wait).*$/i,'').trim();
-            return pt === phase || t.phase_tag === phase;
-          });
-          if(!pTrades.length) return null;
-          const wins = pTrades.filter(t => parseFloat(t.settled_r) > 0).length;
-          const losses = pTrades.filter(t => parseFloat(t.settled_r) < 0).length;
-          const be = pTrades.length - wins - losses;
-          const wr = Math.round(wins/pTrades.length*100);
-          const avgR = pTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/pTrades.length;
-          return {phase, color:phaseColors[phase]||'#6b7280', total:pTrades.length, wins, losses, be, wr, avgR};
-        }).filter(Boolean);
+      if(!phaseStats.length) {
+        phaseEl.innerHTML = '<div class="empty">No closed trades with phase tags yet</div>';
+      } else {
+        // Phase table
+        let html = '<div style="overflow-x:auto">';
+        html += '<table style="width:100%;border-collapse:collapse;font-family:DM Mono,monospace;font-size:.62rem">';
+        html += '<thead><tr style="border-bottom:2px solid var(--border)">';
+        ['Phase','Trades','Win%','Avg R','W','L','BE'].forEach(h => {
+          html += `<th style="text-align:left;padding:6px 10px;color:var(--muted2);font-weight:400;letter-spacing:.08em">${h}</th>`;
+        });
+        html += '</tr></thead><tbody>';
 
-        if(phaseStats.length) {
-          if(curView === 'both') html += '<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);letter-spacing:.1em;margin-bottom:8px">BY PHASE</div>';
-          html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:DM Mono,monospace;font-size:.62rem">';
-          html += '<thead><tr style="border-bottom:2px solid var(--border)">';
-          ['Phase','Trades','Win%','Avg R','W','L','BE'].forEach(h => {
-            html += `<th style="text-align:left;padding:6px 10px;color:var(--muted2);font-weight:400;letter-spacing:.08em">${h}</th>`;
-          });
-          html += '</tr></thead><tbody>';
-          phaseStats.sort((a,b) => b.wr-a.wr).forEach(s => {
-            const wrColor = s.wr>=60?'var(--mega-bull)':s.wr>=45?'var(--text)':'var(--mega-bear)';
-            const avgRColor = s.avgR>0?'var(--mega-bull)':s.avgR<0?'var(--mega-bear)':'var(--muted2)';
-            html += `<tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:8px 10px;color:${s.color};font-weight:600">${s.phase}</td>
-              <td style="padding:8px 10px;color:var(--muted2)">${s.total}</td>
-              <td style="padding:8px 10px;color:${wrColor};font-weight:600">${s.wr}%</td>
-              <td style="padding:8px 10px;color:${avgRColor};font-weight:600">${s.avgR>=0?'+':''}${s.avgR.toFixed(2)}R</td>
-              <td style="padding:8px 10px;color:var(--mega-bull)">${s.wins}</td>
-              <td style="padding:8px 10px;color:var(--mega-bear)">${s.losses}</td>
-              <td style="padding:8px 10px;color:var(--muted2)">${s.be}</td>
-            </tr>`;
-          });
-          html += '</tbody></table></div>';
-        } else {
-          html += '<div class="empty" style="margin-bottom:12px">No closed trades with phase tags yet</div>';
-        }
+        phaseStats.sort((a,b) => b.wr - a.wr).forEach(s => {
+          const wrColor = s.wr >= 60 ? 'var(--mega-bull)' : s.wr >= 45 ? 'var(--text)' : 'var(--mega-bear)';
+          const avgRColor = s.avgR > 0 ? 'var(--mega-bull)' : s.avgR < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
+          html += `<tr style="border-bottom:1px solid var(--border)">`;
+          html += `<td style="padding:8px 10px;color:${s.color};font-weight:600">${s.phase}</td>`;
+          html += `<td style="padding:8px 10px;color:var(--muted2)">${s.total}</td>`;
+          html += `<td style="padding:8px 10px;color:${wrColor};font-weight:600">${s.wr}%</td>`;
+          html += `<td style="padding:8px 10px;color:${avgRColor};font-weight:600">${s.avgR>=0?'+':''}${s.avgR.toFixed(2)}R</td>`;
+          html += `<td style="padding:8px 10px;color:var(--mega-bull)">${s.wins}</td>`;
+          html += `<td style="padding:8px 10px;color:var(--mega-bear)">${s.losses}</td>`;
+          html += `<td style="padding:8px 10px;color:var(--muted2)">${s.be}</td>`;
+          html += '</tr>';
+        });
+        html += '</tbody></table></div>';
+
+        // Score bucket breakdown
+        html += '<div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+        scoreBuckets.forEach(bucket => {
+          const bTrades = closed.filter(bucket.test);
+          if(!bTrades.length) { html += `<div></div>`; return; }
+          const bWins = bTrades.filter(t => parseFloat(t.settled_r) > 0).length;
+          const bWr = Math.round(bWins/bTrades.length*100);
+          const bAvgR = bTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/bTrades.length;
+          const bWrColor = bWr >= 60 ? 'var(--mega-bull)' : bWr >= 45 ? 'var(--text)' : 'var(--mega-bear)';
+          html += `<div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center">
+            <div style="font-family:DM Mono;font-size:.55rem;color:var(--muted2);margin-bottom:6px;letter-spacing:.08em">${bucket.label}</div>
+            <div style="font-family:'Bebas Neue';font-size:1.6rem;color:${bWrColor};line-height:1">${bWr}%</div>
+            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:2px">${bTrades.length} trades · ${bAvgR>=0?'+':''}${bAvgR.toFixed(2)}R avg</div>
+          </div>`;
+        });
+        html += '</div>';
+
+        phaseEl.innerHTML = html;
       }
-
-      // ── SCORE BUCKETS ──
-      if(curView === 'both' || curView === 'score') {
-        if(curView === 'both') html += '<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);letter-spacing:.1em;margin:16px 0 8px">BY INST SCORE</div>';
-        const activeBuckets = scoreBuckets.filter(b => closed.filter(b.test).length > 0);
-        if(activeBuckets.length) {
-          html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">';
-          scoreBuckets.forEach(bucket => {
-            const bTrades = closed.filter(bucket.test);
-            if(!bTrades.length) return;
-            const bWins = bTrades.filter(t => parseFloat(t.settled_r) > 0).length;
-            const bWr = Math.round(bWins/bTrades.length*100);
-            const bAvgR = bTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/bTrades.length;
-            const bWrColor = bWr>=60?'var(--mega-bull)':bWr>=45?'var(--text)':'var(--mega-bear)';
-            html += `<div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center;border-top:2px solid ${bucket.color}">
-              <div style="font-family:DM Mono;font-size:.52rem;color:var(--muted2);margin-bottom:6px;line-height:1.4">${bucket.label}</div>
-              <div style="font-family:'Bebas Neue';font-size:1.8rem;color:${bWrColor};line-height:1">${bWr}%</div>
-              <div style="font-family:DM Mono;font-size:.55rem;color:var(--muted2);margin-top:4px">${bTrades.length} trades</div>
-              <div style="font-family:DM Mono;font-size:.55rem;color:${bAvgR>=0?'var(--mega-bull)':'var(--mega-bear)'}">${bAvgR>=0?'+':''}${bAvgR.toFixed(2)}R avg</div>
-            </div>`;
-          });
-          html += '</div>';
-        } else {
-          html += '<div class="empty">No score data yet</div>';
-        }
-      }
-
-      phaseEl.innerHTML = html || '<div class="empty">No data</div>';
     }
   }
 }
@@ -7053,159 +6947,74 @@ function tlAutoFillFromSignal() {
   }
 }
 
-// ── WIN RATE VIEW TOGGLE ──
-let wrView = localStorage.getItem('wr_view') || 'both';
-
-function setWRView(view) {
-  wrView = view;
-  localStorage.setItem('wr_view', view);
-  // Update button styles
-  ['both','phase','score'].forEach(v => {
-    const btn = document.getElementById('wr-btn-'+v);
-    if(!btn) return;
-    if(v === view) {
-      btn.style.background = 'var(--accent)';
-      btn.style.color = '#fff';
-      btn.style.borderColor = 'var(--accent)';
-    } else {
-      btn.style.background = 'transparent';
-      btn.style.color = 'var(--muted2)';
-      btn.style.borderColor = 'var(--border)';
-    }
-  });
-  renderReview();
-}
-
-// ── BTC BIAS — Live data fetch ──
-
-
-// Restore cached BTC data on load
-
-
-// ── BTC BIAS — Live data fetch ──
-async function fetchBTCData() {
-  const btn    = document.getElementById('btc-fetch-btn');
-  const lastEl = document.getElementById('btc-last-fetch');
-  if(btn) { btn.disabled = true; btn.textContent = 'Fetching...'; }
-  try {
-    // Fear & Greed
-    const fgRes  = await fetch('https://api.alternative.me/fng/?limit=1');
-    const fgJson = await fgRes.json();
-    const fg     = parseInt(fgJson.data[0].value);
-    const fgTxt  = fgJson.data[0].value_classification;
-
-    // BTC Price (CoinGecko)
-    const priceRes  = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
-    const priceJson = await priceRes.json();
-    const btcPrice  = priceJson.bitcoin?.usd;
-
-    // Funding + Long/Short (Coinglass — may need proxy)
-    let avgFunding = null, lsRatio = null;
-    try {
-      const cgRes  = await fetch('https://open-api.coinglass.com/public/v2/funding?symbol=BTC');
-      const cgJson = await cgRes.json();
-      let rates = [];
-      if(cgJson.data) cgJson.data.forEach(ex => { if(ex.fundingRate!=null) rates.push(parseFloat(ex.fundingRate)); });
-      if(rates.length) avgFunding = rates.reduce((a,b)=>a+b,0)/rates.length;
-    } catch(e) {}
-    try {
-      const lsRes  = await fetch('https://open-api.coinglass.com/public/v2/indicator/long_short?symbol=BTC&interval=4h&limit=1');
-      const lsJson = await lsRes.json();
-      if(lsJson.data?.[0]?.longAccount) lsRatio = parseFloat(lsJson.data[0].longAccount)*100;
-    } catch(e) {}
-
-    // Halving cycle
-    const halvingDate = new Date('2024-04-19');
-    const nextHalving = new Date('2028-04-01');
-    const now         = new Date();
-    const totalDays   = (nextHalving - halvingDate) / 86400000;
-    const elapsed     = (now - halvingDate) / 86400000;
-    const cycleMonth  = Math.floor(elapsed / 30.4);
-    const cyclePct    = Math.min(100, Math.round(elapsed / totalDays * 100));
-
-    // Score
-    const fgScore    = fg<=20?25:fg<=35?20:fg<=50?13:fg<=65?8:fg<=80?3:0;
-    const fundScore  = avgFunding===null?13:avgFunding<-0.02?25:avgFunding<-0.01?20:avgFunding<0?15:avgFunding<0.01?10:avgFunding<0.02?5:0;
-    const lsScore    = lsRatio===null?13:lsRatio<35?25:lsRatio<42?20:lsRatio<48?13:lsRatio<55?8:lsRatio<65?4:0;
-    const cycleScore = cycleMonth>=6&&cycleMonth<=20?25:cycleMonth>=3&&cycleMonth<=24?18:cycleMonth>=1&&cycleMonth<=30?12:5;
-    const totalScore = fgScore + fundScore + lsScore + cycleScore;
-
-    // Signal
-    const sigLabel = totalScore>=75?'🌱 BTC ACCUMULATION':totalScore>=55?'📈 BTC BULLISH BIAS':totalScore>=40?'⚡ BTC NEUTRAL':totalScore>=25?'📉 BTC BEARISH BIAS':'🪨 BTC DISTRIBUTION';
-    const sigDesc  = totalScore>=75?'Sentiment depressed + funding negative + smart money positioning':totalScore>=55?'More bullish than bearish — conditions favour longs':totalScore>=40?'No clear directional edge — wait for confirmation':totalScore>=25?'Conditions favour caution — avoid new longs':'Greed extreme + funding high + longs crowded';
-    const sigColor = totalScore>=75?'var(--mega-bull)':totalScore>=55?'var(--bull)':totalScore>=40?'var(--muted2)':totalScore>=25?'var(--bear)':'var(--mega-bear)';
-
-    // Update DOM
-    const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-    const col = (id,c) => { const el=document.getElementById(id); if(el) el.style.color=c; };
-    set('btc-signal-label',sigLabel); col('btc-signal-label',sigColor);
-    set('btc-signal-desc',sigDesc);
-    set('btc-score-num',totalScore); col('btc-score-num',sigColor);
-    const bar=document.getElementById('btc-score-bar');
-    if(bar){bar.style.width=totalScore+'%';bar.style.background=sigColor;}
-    const sc=(s)=>s>=18?'var(--mega-bull)':s>=10?'var(--muted2)':'var(--mega-bear)';
-    set('btc-score-fg',fgScore+'/25');    col('btc-score-fg',sc(fgScore));
-    set('btc-score-fund',fundScore+'/25');col('btc-score-fund',sc(fundScore));
-    set('btc-score-ls',lsScore+'/25');    col('btc-score-ls',sc(lsScore));
-    set('btc-score-cycle',cycleScore+'/25');col('btc-score-cycle',sc(cycleScore));
-    const fgCol=fg<=25?'var(--mega-bull)':fg<=45?'var(--bull)':fg<=55?'var(--muted2)':fg<=75?'var(--bear)':'var(--mega-bear)';
-    set('btc-fg-val',fg); col('btc-fg-val',fgCol); set('btc-fg-label',fgTxt);
-    if(avgFunding!==null){
-      const fCol=avgFunding<0?'var(--mega-bull)':avgFunding>0.02?'var(--mega-bear)':'var(--muted2)';
-      set('btc-fund-val',(avgFunding*100).toFixed(4)+'%'); col('btc-fund-val',fCol);
-      set('btc-fund-label',avgFunding<0?'Negative - bullish':avgFunding>0.02?'High - crowded':'Neutral');
-    }
-    if(lsRatio!==null){
-      const lCol=lsRatio<42?'var(--mega-bull)':lsRatio<48?'var(--bull)':lsRatio<55?'var(--muted2)':'var(--mega-bear)';
-      set('btc-ls-val',lsRatio.toFixed(1)+'% long'); col('btc-ls-val',lCol);
-      set('btc-ls-label',lsRatio<42?'Contrarian bull':lsRatio>60?'Contrarian bear':'Neutral');
-    }
-    const cycBar=document.getElementById('btc-cycle-bar');
-    if(cycBar) cycBar.style.width=cyclePct+'%';
-    set('btc-cycle-pos','Month '+cycleMonth+' / 48');
-    set('btc-cycle-label',cycleMonth<=6?'Early post-halving — accumulation':cycleMonth<=18?'Post-halving surge — historically strongest':cycleMonth<=30?'Mid-cycle — trend continuation':cycleMonth<=42?'Late cycle — watch for distribution':'Pre-halving — final accumulation');
-    if(btcPrice) set('btc-price','$'+btcPrice.toLocaleString());
-    if(lastEl) lastEl.textContent='Updated: '+new Date().toUTCString().slice(0,25);
-    localStorage.setItem('btc_data',JSON.stringify({totalScore,fg,avgFunding,lsRatio,cycleMonth,btcPrice,sigLabel,fetchedAt:Date.now()}));
-  } catch(err) {
-    if(lastEl) lastEl.textContent='Error: '+err.message;
-  } finally {
-    if(btn){btn.disabled=false;btn.textContent='⬇ Fetch Live BTC Data';}
-  }
-}
-
-function restoreBTCData() {
-  const cached = localStorage.getItem('btc_data');
-  if(!cached) return;
-  try {
-    const d = JSON.parse(cached);
-    if((Date.now()-d.fetchedAt)/3600000>6) return;
-    const el=document.getElementById('btc-last-fetch');
-    if(el) el.textContent='Cached: '+new Date(d.fetchedAt).toUTCString().slice(0,25);
-  } catch(e) {}
-}
-
-
-// ── SIGNAL TAB — FX / BTC switcher ──
+// ── SIGNAL TAB sub-tabs ──
 function switchSigTab(tab) {
   ['fx','btc'].forEach(p => {
     const panel = document.getElementById('sig-panel-'+p);
     const btn   = document.getElementById('sig-btn-'+p);
-    if(panel) panel.style.display = p === tab ? 'block' : 'none';
+    if(panel) panel.style.display = p===tab?'block':'none';
     if(btn) {
-      if(p === tab) {
-        btn.style.background = 'var(--accent)';
-        btn.style.color      = '#fff';
-        btn.style.fontWeight = '600';
-      } else {
-        btn.style.background = 'transparent';
-        btn.style.color      = 'var(--muted2)';
-        btn.style.fontWeight = '500';
-      }
+      btn.style.background = p===tab?'var(--accent)':'transparent';
+      btn.style.color      = p===tab?'#fff':'var(--muted2)';
+      btn.style.fontWeight = p===tab?'600':'500';
     }
   });
   localStorage.setItem('sig_tab', tab);
-  if(tab === 'btc') fetchBTCData();
+  if(tab==='btc') fetchBTCData();
+}
+
+// ── BTC BIAS fetch ──
+async function fetchBTCData() {
+  const btn=document.getElementById('btc-fetch-btn');
+  const lastEl=document.getElementById('btc-last-fetch');
+  if(btn){btn.disabled=true;btn.textContent='Fetching...';}
+  try {
+    const fgRes=await fetch('https://api.alternative.me/fng/?limit=1');
+    const fgJson=await fgRes.json();
+    const fg=parseInt(fgJson.data[0].value);
+    const fgTxt=fgJson.data[0].value_classification;
+    let avgFunding=null,lsRatio=null;
+    try{const r=await fetch('https://open-api.coinglass.com/public/v2/funding?symbol=BTC');const j=await r.json();let rates=[];if(j.data)j.data.forEach(e=>{if(e.fundingRate!=null)rates.push(parseFloat(e.fundingRate));});if(rates.length)avgFunding=rates.reduce((a,b)=>a+b,0)/rates.length;}catch(e){}
+    try{const r=await fetch('https://open-api.coinglass.com/public/v2/indicator/long_short?symbol=BTC&interval=4h&limit=1');const j=await r.json();if(j.data?.[0]?.longAccount)lsRatio=parseFloat(j.data[0].longAccount)*100;}catch(e){}
+    let btcPrice=null;
+    try{const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');const j=await r.json();btcPrice=j.bitcoin?.usd;}catch(e){}
+    const halvingDate=new Date('2024-04-19');const nextHalving=new Date('2028-04-01');const now=new Date();
+    const elapsed=(now-halvingDate)/86400000;const totalDays=(nextHalving-halvingDate)/86400000;
+    const cycleMonth=Math.floor(elapsed/30.4);const cyclePct=Math.min(100,Math.round(elapsed/totalDays*100));
+    const fgScore=fg<=20?25:fg<=35?20:fg<=50?13:fg<=65?8:fg<=80?3:0;
+    const fundScore=avgFunding===null?13:avgFunding<-0.02?25:avgFunding<-0.01?20:avgFunding<0?15:avgFunding<0.01?10:avgFunding<0.02?5:0;
+    const lsScore=lsRatio===null?13:lsRatio<35?25:lsRatio<42?20:lsRatio<48?13:lsRatio<55?8:lsRatio<65?4:0;
+    const cycleScore=cycleMonth>=6&&cycleMonth<=20?25:cycleMonth>=3&&cycleMonth<=24?18:cycleMonth>=1&&cycleMonth<=30?12:5;
+    const total=fgScore+fundScore+lsScore+cycleScore;
+    const sigLabel=total>=75?'🌱 BTC ACCUMULATION':total>=55?'📈 BTC BULLISH BIAS':total>=40?'⚡ BTC NEUTRAL':total>=25?'📉 BTC BEARISH BIAS':'🪨 BTC DISTRIBUTION';
+    const sigDesc=total>=75?'Sentiment depressed + funding negative':total>=55?'Conditions favour longs':total>=40?'No clear directional edge':total>=25?'Caution — avoid new longs':'Greed extreme + longs crowded';
+    const sigColor=total>=75?'var(--mega-bull)':total>=55?'var(--bull)':total>=40?'var(--muted2)':total>=25?'var(--bear)':'var(--mega-bear)';
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    const col=(id,c)=>{const el=document.getElementById(id);if(el)el.style.color=c;};
+    set('btc-signal-label',sigLabel);col('btc-signal-label',sigColor);
+    set('btc-signal-desc',sigDesc);
+    set('btc-score-num',total);col('btc-score-num',sigColor);
+    const bar=document.getElementById('btc-score-bar');if(bar){bar.style.width=total+'%';bar.style.background=sigColor;}
+    const sc=s=>s>=18?'var(--mega-bull)':s>=10?'var(--muted2)':'var(--mega-bear)';
+    set('btc-score-fg',fgScore+'/25');col('btc-score-fg',sc(fgScore));
+    set('btc-score-fund',fundScore+'/25');col('btc-score-fund',sc(fundScore));
+    set('btc-score-ls',lsScore+'/25');col('btc-score-ls',sc(lsScore));
+    set('btc-score-cycle',cycleScore+'/25');col('btc-score-cycle',sc(cycleScore));
+    const fgCol=fg<=25?'var(--mega-bull)':fg<=45?'var(--bull)':fg<=55?'var(--muted2)':fg<=75?'var(--bear)':'var(--mega-bear)';
+    set('btc-fg-val',fg);col('btc-fg-val',fgCol);set('btc-fg-label',fgTxt);
+    if(avgFunding!==null){const fCol=avgFunding<0?'var(--mega-bull)':avgFunding>0.02?'var(--mega-bear)':'var(--muted2)';set('btc-fund-val',(avgFunding*100).toFixed(4)+'%');col('btc-fund-val',fCol);set('btc-fund-label',avgFunding<0?'Negative - bullish':avgFunding>0.02?'High - crowded':'Neutral');}
+    if(lsRatio!==null){const lCol=lsRatio<42?'var(--mega-bull)':lsRatio<48?'var(--bull)':lsRatio<55?'var(--muted2)':'var(--mega-bear)';set('btc-ls-val',lsRatio.toFixed(1)+'% long');col('btc-ls-val',lCol);set('btc-ls-label',lsRatio<42?'Contrarian bull':lsRatio>60?'Contrarian bear':'Neutral');}
+    const cycBar=document.getElementById('btc-cycle-bar');if(cycBar)cycBar.style.width=cyclePct+'%';
+    set('btc-cycle-pos','Month '+cycleMonth+' / 48');
+    set('btc-cycle-label',cycleMonth<=6?'Early post-halving':cycleMonth<=18?'Post-halving surge — historically strongest':cycleMonth<=30?'Mid-cycle — trend continuation':cycleMonth<=42?'Late cycle — watch for distribution':'Pre-halving accumulation');
+    if(btcPrice)set('btc-price','$'+btcPrice.toLocaleString());
+    if(lastEl)lastEl.textContent='Updated: '+new Date().toUTCString().slice(0,25);
+    localStorage.setItem('btc_data',JSON.stringify({total,fg,avgFunding,lsRatio,cycleMonth,btcPrice,sigLabel,fetchedAt:Date.now()}));
+  } catch(err) {
+    if(lastEl)lastEl.textContent='Error: '+err.message;
+  } finally {
+    if(btn){btn.disabled=false;btn.textContent='⬇ Fetch Live BTC Data';}
+  }
 }
 
 // ── TABS ──
@@ -7381,9 +7190,6 @@ function switchConvTab(tab) {
 // ══════════════════════════════════════
 // DESKTOP MODAL FORMS
 // ══════════════════════════════════════
-
-
-// ── WIN RATE VIEW TOGGLE ──
 
 
 // ── TABS ──
