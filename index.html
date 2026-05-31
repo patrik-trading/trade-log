@@ -3604,13 +3604,13 @@ const SIGS={
   // Weak macro spread with declining institutional participation. Persistent bearish.
   SL:{l:'BEARISH',p:'Slide',i:'📉',c:'var(--bear)',
     d:'Weak macro spread with declining institutional participation. Persistent bearish environment — sell 20 SMA rallies when Daily hooks down. Do not buy this market.',
-    t:(c,cd,v,vd)=>c>=20&&c<=45&&cd==='falling'&&v<45&&vd==='falling',
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}% (20–45)`,ok:1},{t:'COT ▼',ok:1},{t:`Yield ${v}%<45`,ok:1},{t:'Yield ▼',ok:1}]},
+    t:(c,cd,v,vd)=>c>=20&&c<=45&&cd==='falling'&&v>=15&&v<45&&vd==='falling',
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}% (20–45)`,ok:1},{t:'COT ▼',ok:1},{t:`Yield ${v}% (15–45)`,ok:1},{t:'Yield ▼',ok:1}]},
   // CONFLICT: Extreme disagreement between COT and Yield direction
   // Transitional/choppy regime — false moves and unstable flows.
   CF:{l:'NEUTRAL',p:'The Conflict',i:'⚡',c:'var(--neutral)',
-    d:'Positioning and macro spreads completely disagree. Transitional choppy regime with unstable flows and false moves. STAY FLAT — wait for resolution before committing any capital.',
-    t:(c,cd,v,vd)=>(c>80&&v<20)||(c<20&&v>80)||(cd==='rising'&&vd==='falling'&&(c>70||c<30))||(cd==='falling'&&vd==='rising'&&(c>70||c<30)),
+    d:'Positioning and macro spreads completely disagree — including cases where yield is at extreme lows during a bearish phase, or extreme highs during a bullish phase. Transitional choppy regime with unstable flows and false moves. STAY FLAT — wait for resolution before committing any capital.',
+    t:(c,cd,v,vd)=>(c>80&&v<20)||(c<20&&v>80)||(c>=20&&c<=45&&cd==='falling'&&v<15&&vd==='falling')||(c>85&&v<20)||(cd==='rising'&&vd==='falling'&&(c>70||c<30))||(cd==='falling'&&vd==='rising'&&(c>70||c<30)),
     pl:(c,cd,v,vd)=>[{t:'COT & Yield Diverging',ok:1}]},
   NE:{l:'NEUTRAL',p:'Wait',i:'⏸',c:'var(--neutral)',
     d:'No clear alignment between institutional positioning and yield spread direction. No edge — preserve capital and wait.',
