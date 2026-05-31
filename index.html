@@ -2442,8 +2442,15 @@ body:not(.light){
 
   <!-- Phase Win Rate Breakdown -->
   <div class="panel" style="margin-top:14px">
-    <div class="ptitle">Win Rate by Phase & Score</div>
-    <div id="phase-winrate-container" style="margin-top:8px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ptitle" style="margin-bottom:0">Win Rate by Phase & Score</div>
+      <div style="display:flex;gap:6px">
+        <button id="wr-btn-both"  onclick="setWRView('both')"  style="font-family:'DM Mono',monospace;font-size:.58rem;padding:4px 10px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer">Both</button>
+        <button id="wr-btn-phase" onclick="setWRView('phase')" style="font-family:'DM Mono',monospace;font-size:.58rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer">Phase</button>
+        <button id="wr-btn-score" onclick="setWRView('score')" style="font-family:'DM Mono',monospace;font-size:.58rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer">Score</button>
+      </div>
+    </div>
+    <div id="phase-winrate-container">
       <div class="empty">No closed trades yet</div>
     </div>
   </div>
@@ -5642,82 +5649,105 @@ function renderReview(){
   // ── PHASE WIN RATE ──
   const phaseEl = document.getElementById('phase-winrate-container');
   if(phaseEl) {
+    // Sync toggle button states
+    const curView = wrView || 'both';
+    ['both','phase','score'].forEach(v => {
+      const btn = document.getElementById('wr-btn-'+v);
+      if(!btn) return;
+      if(v === curView) {
+        btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; btn.style.borderColor = 'var(--accent)';
+      } else {
+        btn.style.background = 'transparent'; btn.style.color = 'var(--muted2)'; btn.style.borderColor = 'var(--border)';
+      }
+    });
+
     const closed = ft.filter(t => t.oc === 'Close' && t.settled_r != null);
-    if(!closed.length) {
-      phaseEl.innerHTML = '<div class="empty">No closed trades yet</div>';
-    } else {
-      // Group by phase_tag
+    if(!closed.length) { phaseEl.innerHTML = '<div class="empty">No closed trades yet</div>'; }
+    else {
       const phases = ['Spring','Recovery','Surge','Cliff','Trap','Slide','The Conflict','Neutral'];
       const phaseColors = {
         'Spring':'#22c55e','Recovery':'#34d399','Surge':'#3b82f6',
         'Cliff':'#ef4444','Trap':'#a855f7','Slide':'#f97316',
         'The Conflict':'#f59e0b','Neutral':'#6b7280'
       };
-      // Score buckets
       const scoreBuckets = [
-        {label:'HC (≥70 / ≤30)', test: t => t.inst_score != null && (t.inst_score >= 70 || t.inst_score <= 30)},
-        {label:'Mid (45–69)', test: t => t.inst_score != null && t.inst_score > 30 && t.inst_score < 70},
-        {label:'No score', test: t => t.inst_score == null}
+        {label:'HC Long (score 70+)',   test: t => t.inst_score != null && t.inst_score >= 70, color:'#22c55e'},
+        {label:'Bullish (55-69)',        test: t => t.inst_score != null && t.inst_score >= 55 && t.inst_score < 70, color:'#3b82f6'},
+        {label:'Neutral (45-54)',        test: t => t.inst_score != null && t.inst_score > 45 && t.inst_score < 55, color:'#6b7280'},
+        {label:'Bearish (31-45)',        test: t => t.inst_score != null && t.inst_score > 30 && t.inst_score <= 45, color:'#f97316'},
+        {label:'HC Short (score 0-30)', test: t => t.inst_score != null && t.inst_score <= 30, color:'#ef4444'},
+        {label:'No score',              test: t => t.inst_score == null, color:'#6b7280'},
       ];
 
-      // Build phase stats
-      const phaseStats = phases.map(phase => {
-        const pTrades = closed.filter(t => t.phase_tag === phase);
-        if(!pTrades.length) return null;
-        const wins = pTrades.filter(t => parseFloat(t.settled_r) > 0).length;
-        const losses = pTrades.filter(t => parseFloat(t.settled_r) < 0).length;
-        const be = pTrades.length - wins - losses;
-        const wr = pTrades.length > 0 ? Math.round(wins/pTrades.length*100) : 0;
-        const avgR = pTrades.reduce((s,t) => s + (parseFloat(t.settled_r)||0), 0) / pTrades.length;
-        return {phase, color: phaseColors[phase]||'#6b7280', total:pTrades.length, wins, losses, be, wr, avgR};
-      }).filter(Boolean);
+      let html = '';
 
-      if(!phaseStats.length) {
-        phaseEl.innerHTML = '<div class="empty">No closed trades with phase tags yet</div>';
-      } else {
-        // Phase table
-        let html = '<div style="overflow-x:auto">';
-        html += '<table style="width:100%;border-collapse:collapse;font-family:DM Mono,monospace;font-size:.62rem">';
-        html += '<thead><tr style="border-bottom:2px solid var(--border)">';
-        ['Phase','Trades','Win%','Avg R','W','L','BE'].forEach(h => {
-          html += `<th style="text-align:left;padding:6px 10px;color:var(--muted2);font-weight:400;letter-spacing:.08em">${h}</th>`;
-        });
-        html += '</tr></thead><tbody>';
+      // ── PHASE TABLE ──
+      if(curView === 'both' || curView === 'phase') {
+        const phaseStats = phases.map(phase => {
+          const pTrades = closed.filter(t => t.phase_tag === phase);
+          if(!pTrades.length) return null;
+          const wins = pTrades.filter(t => parseFloat(t.settled_r) > 0).length;
+          const losses = pTrades.filter(t => parseFloat(t.settled_r) < 0).length;
+          const be = pTrades.length - wins - losses;
+          const wr = Math.round(wins/pTrades.length*100);
+          const avgR = pTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/pTrades.length;
+          return {phase, color:phaseColors[phase]||'#6b7280', total:pTrades.length, wins, losses, be, wr, avgR};
+        }).filter(Boolean);
 
-        phaseStats.sort((a,b) => b.wr - a.wr).forEach(s => {
-          const wrColor = s.wr >= 60 ? 'var(--mega-bull)' : s.wr >= 45 ? 'var(--text)' : 'var(--mega-bear)';
-          const avgRColor = s.avgR > 0 ? 'var(--mega-bull)' : s.avgR < 0 ? 'var(--mega-bear)' : 'var(--muted2)';
-          html += `<tr style="border-bottom:1px solid var(--border)">`;
-          html += `<td style="padding:8px 10px;color:${s.color};font-weight:600">${s.phase}</td>`;
-          html += `<td style="padding:8px 10px;color:var(--muted2)">${s.total}</td>`;
-          html += `<td style="padding:8px 10px;color:${wrColor};font-weight:600">${s.wr}%</td>`;
-          html += `<td style="padding:8px 10px;color:${avgRColor};font-weight:600">${s.avgR>=0?'+':''}${s.avgR.toFixed(2)}R</td>`;
-          html += `<td style="padding:8px 10px;color:var(--mega-bull)">${s.wins}</td>`;
-          html += `<td style="padding:8px 10px;color:var(--mega-bear)">${s.losses}</td>`;
-          html += `<td style="padding:8px 10px;color:var(--muted2)">${s.be}</td>`;
-          html += '</tr>';
-        });
-        html += '</tbody></table></div>';
-
-        // Score bucket breakdown
-        html += '<div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
-        scoreBuckets.forEach(bucket => {
-          const bTrades = closed.filter(bucket.test);
-          if(!bTrades.length) { html += `<div></div>`; return; }
-          const bWins = bTrades.filter(t => parseFloat(t.settled_r) > 0).length;
-          const bWr = Math.round(bWins/bTrades.length*100);
-          const bAvgR = bTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/bTrades.length;
-          const bWrColor = bWr >= 60 ? 'var(--mega-bull)' : bWr >= 45 ? 'var(--text)' : 'var(--mega-bear)';
-          html += `<div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center">
-            <div style="font-family:DM Mono;font-size:.55rem;color:var(--muted2);margin-bottom:6px;letter-spacing:.08em">${bucket.label}</div>
-            <div style="font-family:'Bebas Neue';font-size:1.6rem;color:${bWrColor};line-height:1">${bWr}%</div>
-            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-top:2px">${bTrades.length} trades · ${bAvgR>=0?'+':''}${bAvgR.toFixed(2)}R avg</div>
-          </div>`;
-        });
-        html += '</div>';
-
-        phaseEl.innerHTML = html;
+        if(phaseStats.length) {
+          if(curView === 'both') html += '<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);letter-spacing:.1em;margin-bottom:8px">BY PHASE</div>';
+          html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:DM Mono,monospace;font-size:.62rem">';
+          html += '<thead><tr style="border-bottom:2px solid var(--border)">';
+          ['Phase','Trades','Win%','Avg R','W','L','BE'].forEach(h => {
+            html += `<th style="text-align:left;padding:6px 10px;color:var(--muted2);font-weight:400;letter-spacing:.08em">${h}</th>`;
+          });
+          html += '</tr></thead><tbody>';
+          phaseStats.sort((a,b) => b.wr-a.wr).forEach(s => {
+            const wrColor = s.wr>=60?'var(--mega-bull)':s.wr>=45?'var(--text)':'var(--mega-bear)';
+            const avgRColor = s.avgR>0?'var(--mega-bull)':s.avgR<0?'var(--mega-bear)':'var(--muted2)';
+            html += `<tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:8px 10px;color:${s.color};font-weight:600">${s.phase}</td>
+              <td style="padding:8px 10px;color:var(--muted2)">${s.total}</td>
+              <td style="padding:8px 10px;color:${wrColor};font-weight:600">${s.wr}%</td>
+              <td style="padding:8px 10px;color:${avgRColor};font-weight:600">${s.avgR>=0?'+':''}${s.avgR.toFixed(2)}R</td>
+              <td style="padding:8px 10px;color:var(--mega-bull)">${s.wins}</td>
+              <td style="padding:8px 10px;color:var(--mega-bear)">${s.losses}</td>
+              <td style="padding:8px 10px;color:var(--muted2)">${s.be}</td>
+            </tr>`;
+          });
+          html += '</tbody></table></div>';
+        } else {
+          html += '<div class="empty" style="margin-bottom:12px">No closed trades with phase tags yet</div>';
+        }
       }
+
+      // ── SCORE BUCKETS ──
+      if(curView === 'both' || curView === 'score') {
+        if(curView === 'both') html += '<div style="font-family:DM Mono,monospace;font-size:.58rem;color:var(--muted2);letter-spacing:.1em;margin:16px 0 8px">BY INST SCORE</div>';
+        const activeBuckets = scoreBuckets.filter(b => closed.filter(b.test).length > 0);
+        if(activeBuckets.length) {
+          html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">';
+          scoreBuckets.forEach(bucket => {
+            const bTrades = closed.filter(bucket.test);
+            if(!bTrades.length) return;
+            const bWins = bTrades.filter(t => parseFloat(t.settled_r) > 0).length;
+            const bWr = Math.round(bWins/bTrades.length*100);
+            const bAvgR = bTrades.reduce((s,t) => s+(parseFloat(t.settled_r)||0),0)/bTrades.length;
+            const bWrColor = bWr>=60?'var(--mega-bull)':bWr>=45?'var(--text)':'var(--mega-bear)';
+            html += `<div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center;border-top:2px solid ${bucket.color}">
+              <div style="font-family:DM Mono;font-size:.52rem;color:var(--muted2);margin-bottom:6px;line-height:1.4">${bucket.label}</div>
+              <div style="font-family:'Bebas Neue';font-size:1.8rem;color:${bWrColor};line-height:1">${bWr}%</div>
+              <div style="font-family:DM Mono;font-size:.55rem;color:var(--muted2);margin-top:4px">${bTrades.length} trades</div>
+              <div style="font-family:DM Mono;font-size:.55rem;color:${bAvgR>=0?'var(--mega-bull)':'var(--mega-bear)'}">${bAvgR>=0?'+':''}${bAvgR.toFixed(2)}R avg</div>
+            </div>`;
+          });
+          html += '</div>';
+        } else {
+          html += '<div class="empty">No score data yet</div>';
+        }
+      }
+
+      phaseEl.innerHTML = html || '<div class="empty">No data</div>';
     }
   }
 }
@@ -6862,6 +6892,29 @@ function tlAutoFillFromSignal() {
   }
 }
 
+// ── WIN RATE VIEW TOGGLE ──
+let wrView = localStorage.getItem('wr_view') || 'both';
+
+function setWRView(view) {
+  wrView = view;
+  localStorage.setItem('wr_view', view);
+  // Update button styles
+  ['both','phase','score'].forEach(v => {
+    const btn = document.getElementById('wr-btn-'+v);
+    if(!btn) return;
+    if(v === view) {
+      btn.style.background = 'var(--accent)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = 'var(--accent)';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--muted2)';
+      btn.style.borderColor = 'var(--border)';
+    }
+  });
+  renderReview();
+}
+
 // ── TABS ──
 
 
@@ -7035,6 +7088,9 @@ function switchConvTab(tab) {
 // ══════════════════════════════════════
 // DESKTOP MODAL FORMS
 // ══════════════════════════════════════
+
+
+// ── WIN RATE VIEW TOGGLE ──
 
 
 // ── TABS ──
