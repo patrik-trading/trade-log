@@ -2197,6 +2197,7 @@ body:not(.light){
         <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Funding Rate</div><div id="btc-score-fund" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
         <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Long/Short</div><div id="btc-score-ls" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
         <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Halving Cycle</div><div id="btc-score-cycle" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
+        <div style="background:var(--surface2);border-radius:7px;padding:8px 10px;text-align:center;grid-column:1/-1"><div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">DXY Macro</div><div id="btc-score-dxy" style="font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted2)">—</div></div>
       </div>
     </div>
 
@@ -6994,7 +6995,23 @@ async function fetchBTCData() {
     const fundScore=avgFunding===null?13:avgFunding<-0.02?25:avgFunding<-0.01?20:avgFunding<0?15:avgFunding<0.01?10:avgFunding<0.02?5:0;
     const lsScore=lsRatio===null?13:lsRatio<35?25:lsRatio<42?20:lsRatio<48?13:lsRatio<55?8:lsRatio<65?4:0;
     const cycleScore=cycleMonth>=6&&cycleMonth<=20?25:cycleMonth>=3&&cycleMonth<=24?18:cycleMonth>=1&&cycleMonth<=30?12:5;
-    const total=fgScore+fundScore+lsScore+cycleScore;
+    // DXY macro adjustment — read from dashboard DXY inputs
+    let dxyAdj = 0;
+    const dxyCot   = parseFloat(document.getElementById('dxy-cot')?.value);
+    const dxyYield = parseFloat(document.getElementById('dxy-yield')?.value);
+    const dxyDir   = (document.getElementById('dxy-cot-dir')?.value||'');
+    if(!isNaN(dxyCot) && !isNaN(dxyYield)) {
+      // DXY bearish = tailwind for BTC (+10)
+      // DXY bullish = headwind for BTC (-10)
+      // DXY conflict = slight headwind (-5)
+      const dxyBearish = dxyCot < 40 && dxyYield > 65;
+      const dxyBullish = dxyCot > 60 && dxyYield < 35;
+      const dxyConflict= (dxyCot > 60 && dxyYield > 65) || (dxyCot < 40 && dxyYield < 35);
+      if(dxyBearish)       dxyAdj = dxyDir==='falling' ? +15 : +10;
+      else if(dxyBullish)  dxyAdj = dxyDir==='rising'  ? -15 : -10;
+      else if(dxyConflict) dxyAdj = -5;
+    }
+    const total = Math.min(100, Math.max(0, fgScore+fundScore+lsScore+cycleScore+dxyAdj));
     const sigLabel=total>=75?'🌱 BTC ACCUMULATION':total>=55?'📈 BTC BULLISH BIAS':total>=40?'⚡ BTC NEUTRAL':total>=25?'📉 BTC BEARISH BIAS':'🪨 BTC DISTRIBUTION';
     const sigDesc=total>=75?'Sentiment depressed + funding negative':total>=55?'Conditions favour longs':total>=40?'No clear directional edge':total>=25?'Caution — avoid new longs':'Greed extreme + longs crowded';
     const sigColor=total>=75?'var(--mega-bull)':total>=55?'var(--bull)':total>=40?'var(--muted2)':total>=25?'var(--bear)':'var(--mega-bear)';
@@ -7009,6 +7026,11 @@ async function fetchBTCData() {
     set('btc-score-fund',fundScore+'/25');col('btc-score-fund',sc(fundScore));
     set('btc-score-ls',lsScore+'/25');col('btc-score-ls',sc(lsScore));
     set('btc-score-cycle',cycleScore+'/25');col('btc-score-cycle',sc(cycleScore));
+    const dxyEl=document.getElementById('btc-score-dxy');
+    if(dxyEl){
+      dxyEl.textContent = dxyAdj===0?'No data':(dxyAdj>0?'+':'')+dxyAdj+' pts';
+      dxyEl.style.color = dxyAdj>0?'var(--mega-bull)':dxyAdj<0?'var(--mega-bear)':'var(--muted2)';
+    }
     const fgCol=fg<=25?'var(--mega-bull)':fg<=45?'var(--bull)':fg<=55?'var(--muted2)':fg<=75?'var(--bear)':'var(--mega-bear)';
     set('btc-fg-val',fg);col('btc-fg-val',fgCol);set('btc-fg-label',fgTxt);
     if(avgFunding!==null){const fCol=avgFunding<0?'var(--mega-bull)':avgFunding>0.02?'var(--mega-bear)':'var(--muted2)';set('btc-fund-val',(avgFunding*100).toFixed(4)+'%');col('btc-fund-val',fCol);set('btc-fund-label',avgFunding<0?'Negative - bullish':avgFunding>0.02?'High - crowded':'Neutral');}
