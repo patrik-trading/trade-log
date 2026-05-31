@@ -6974,8 +6974,17 @@ async function fetchBTCData() {
     const fg=parseInt(fgJson.data[0].value);
     const fgTxt=fgJson.data[0].value_classification;
     let avgFunding=null,lsRatio=null;
-    try{const r=await fetch('https://open-api.coinglass.com/public/v2/funding?symbol=BTC');const j=await r.json();let rates=[];if(j.data)j.data.forEach(e=>{if(e.fundingRate!=null)rates.push(parseFloat(e.fundingRate));});if(rates.length)avgFunding=rates.reduce((a,b)=>a+b,0)/rates.length;}catch(e){}
-    try{const r=await fetch('https://open-api.coinglass.com/public/v2/indicator/long_short?symbol=BTC&interval=4h&limit=1');const j=await r.json();if(j.data?.[0]?.longAccount)lsRatio=parseFloat(j.data[0].longAccount)*100;}catch(e){}
+    // Binance futures — CORS open, no key needed
+    try{
+      const r=await fetch('https://fapi.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT');
+      const j=await r.json();
+      if(j.lastFundingRate!=null) avgFunding=parseFloat(j.lastFundingRate);
+    }catch(e){}
+    try{
+      const r=await fetch('https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=4h&limit=1');
+      const j=await r.json();
+      if(j[0]?.longAccount) lsRatio=parseFloat(j[0].longAccount)*100;
+    }catch(e){}
     let btcPrice=null;
     try{const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');const j=await r.json();btcPrice=j.bitcoin?.usd;}catch(e){}
     const halvingDate=new Date('2024-04-19');const nextHalving=new Date('2028-04-01');const now=new Date();
