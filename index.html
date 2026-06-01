@@ -2023,9 +2023,8 @@ body:not(.light){
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px">
           <div class="ptitle" style="margin-bottom:0">Signal Timeline</div>
           <select id="timeline-asset" onchange="renderTimeline()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:6px;font-family:'DM Mono',monospace;font-size:.58rem;outline:none">
-            <option value="ALL">All Pairs</option>
             <option value="6E">6E — EUR</option>
-            <option value="6J">6J — JPY</option>
+            <option value="6J" selected>6J — JPY</option>
             <option value="6S">6S — CHF</option>
             <option value="6B">6B — GBP</option>
             <option value="6A">6A — AUD</option>
@@ -7053,7 +7052,7 @@ function renderTimeline() {
   if(!el) return;
   if(!entries.length) { el.innerHTML = '<div class="empty">No signals yet</div>'; return; }
 
-  const asset = document.getElementById('timeline-asset')?.value || 'ALL';
+  const asset = document.getElementById('timeline-asset')?.value || '6J';
 
   // Phase Y-value: bullish on top (positive), bearish on bottom (negative)
   // Scale: 1.0 = max bullish, -1.0 = max bearish
@@ -7084,21 +7083,17 @@ function renderTimeline() {
     'The Conflict':'Conflict','Wait':'Wait',
   };
 
-  // Build chart for single asset or ALL (one mini chart per asset)
-  const assets = asset === 'ALL'
-    ? [...new Set(entries.map(e=>e.asset))].filter(Boolean).sort()
-    : [asset];
-
+  const assets = [asset];
   el.innerHTML = assets.map(ast => {
     const astEntries = [...entries]
       .filter(e => e.asset === ast)
       .sort((a,b) => a.date.localeCompare(b.date));
-    if(!astEntries.length) return '';
+    if(!astEntries.length) return '<div class=\"empty\">No signals for ' + ast + '</div>';
 
     // SVG dimensions
-    const W = 280, H = asset === 'ALL' ? 48 : 120;
-    const padL = asset === 'ALL' ? 4 : 36;
-    const padR = 8, padT = 8, padB = asset === 'ALL' ? 8 : 20;
+    const W = 500, H = 130;
+    const padL = 40;
+    const padR = 12, padT = 10, padB = 22;
     const chartW = W - padL - padR;
     const chartH = H - padT - padB;
     const midY   = padT + chartH / 2;
@@ -7135,14 +7130,11 @@ function renderTimeline() {
       .map(p => `<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#475569" font-size="7" font-family="DM Mono,monospace">${p.date.slice(5)}</text>`)
       .join('') : '';
 
-    // Asset label for ALL view
-    const assetLabel = asset === 'ALL'
-      ? `<text x="2" y="${midY+4}" fill="var(--accent)" font-size="8" font-family="DM Mono,monospace" font-weight="600">${ast}</text>`
-      : '';
+    const assetLabel = '';
 
     // Dot tooltips
     const dots = pts.map(p => `
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${asset==='ALL'?3:4}"
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4"
         fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
         <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
       </circle>`).join('');
@@ -7163,7 +7155,7 @@ function renderTimeline() {
       <!-- Asset label -->
       ${assetLabel}
       <!-- Line -->
-      <path d="${polyline}" fill="none" stroke="#354F52" stroke-width="${asset==='ALL'?1.5:2}" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
+      <path d="${polyline}" fill="none" stroke="#354F52" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
       <!-- Dots -->
       ${dots}
       <!-- Last phase label -->
@@ -7172,11 +7164,7 @@ function renderTimeline() {
       ${xLabels}
     </svg>`;
 
-    const wrapper = asset === 'ALL'
-      ? `<div style="border-bottom:1px solid var(--border);padding:2px 0">${svg}</div>`
-      : svg;
-
-    return wrapper;
+    return svg;
   }).join('');
 }
 
