@@ -7084,12 +7084,12 @@ function renderTimeline() {
     if(!astEntries.length) return '<div class=\"empty\">No signals for ' + ast + '</div>';
 
     // SVG dimensions
-    const W = 500, H = 180;
+    const W = 500, H = 140;
     const padL = 40, padR = 12, padT = 10, padB = 30;
     const chartH = H - padT - padB;
 
     // Phase track: top 55% of chartH
-    const phaseH      = chartH * 0.55;
+    const phaseH      = chartH * 0.85;
     const gapH        = 10;
     const scoreTrackH = chartH * 0.35;
     const midY        = padT + phaseH / 2;          // phase centre
@@ -7121,7 +7121,7 @@ function renderTimeline() {
       <text x="${padL-3}" y="${padT+8}"           text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲ Bull</text>
       <text x="${padL-3}" y="${phaseBottom-2}"     text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼ Bear</text>
       <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
-      <text x="${padL-3}" y="${(scoreMidY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="6.5" font-family="DM Mono,monospace">INST</text>
+
     `;
 
     // X-axis date labels
@@ -7137,16 +7137,20 @@ function renderTimeline() {
         <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
       </circle>`).join('');
 
-    // Score dots (separate track)
+    // Score dots — placed in same zone areas as phase line
+    // score 70-100 → bullish zone (top), 50 → neutral line, 0-30 → bearish zone (bottom)
+    // offset slightly to the right of phase dot so both are visible
     const scoreDots = pts.map(p => {
       if(p.score == null) return '';
       const sc = p.score;
-      const yFrac = (sc - 50) / 50;
-      const sy = scoreMidY - yFrac * (scoreTrackH/2 - 2);
-      const scColor = sc>=70?'var(--mega-bull)':sc>=55?'var(--bull)':sc<=30?'var(--mega-bear)':sc<=45?'var(--bear)':'#6b7280';
-      return `<circle cx="${p.x.toFixed(1)}" cy="${sy.toFixed(1)}" r="3"
-        fill="${scColor}" stroke="var(--bg)" stroke-width="1">
-        <title>Score: ${sc}</title>
+      // Map score to Y using same scale as phase line
+      const yFrac = (sc - 50) / 50;  // -1 to +1
+      const sy = midY - yFrac * (phaseH/2 - 4);
+      const scColor = sc>=70?'#22c55e':sc>=55?'#34d399':sc<=30?'#ef4444':sc<=45?'#f97316':'#6b7280';
+      const ox = 8; // horizontal offset from phase dot
+      return `<circle cx="${(p.x + ox).toFixed(1)}" cy="${sy.toFixed(1)}" r="3.5"
+        fill="${scColor}" stroke="var(--bg)" stroke-width="1" stroke-dasharray="none" opacity="0.85">
+        <title>Inst Score: ${sc}</title>
       </circle>`;
     }).join('');
 
@@ -7159,7 +7163,7 @@ function renderTimeline() {
       <path d="${bullZone}" fill="rgba(34,197,94,.04)"/>
       <path d="${bearZone}" fill="rgba(239,68,68,.04)"/>
       <line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
-      <line x1="${padL}" y1="${scoreMidY}" x2="${W-padR}" y2="${scoreMidY}" stroke="var(--border)" stroke-width="0.8" stroke-dasharray="2,3"/>
+
       ${yLabels}
       <path d="${polyline}" fill="none" stroke="#354F52" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
       ${dots}
