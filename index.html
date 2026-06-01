@@ -7132,12 +7132,32 @@ function renderTimeline() {
 
     const assetLabel = '';
 
-    // Dot tooltips
-    const dots = pts.map(p => `
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4"
-        fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
-        <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
-      </circle>`).join('');
+    // Dots with inst score
+    const dots = pts.map(p => {
+      // Dot size based on score conviction
+      const sc = p.score;
+      const r = sc != null
+        ? (sc >= 70 || sc <= 30 ? 7 : sc >= 55 || sc <= 45 ? 5.5 : 4)
+        : 4;
+      // Score text inside dot — only for HC signals
+      const showScore = sc != null && r >= 7;
+      const scoreTxt = showScore
+        ? `<text x="${p.x.toFixed(1)}" y="${(p.y+2.5).toFixed(1)}"
+            text-anchor="middle" font-size="5.5" font-family="DM Mono,monospace"
+            font-weight="700" fill="#fff" pointer-events="none">${sc}</text>`
+        : (sc != null
+            ? `<text x="${p.x.toFixed(1)}" y="${(p.y+2).toFixed(1)}"
+                text-anchor="middle" font-size="4.5" font-family="DM Mono,monospace"
+                fill="rgba(255,255,255,.85)" pointer-events="none">${sc}</text>`
+            : '');
+      return `<g>
+        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r}"
+          fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
+          <title>${p.date}: ${p.label}${sc!=null?' · Score '+sc:''}</title>
+        </circle>
+        ${scoreTxt}
+      </g>`;
+    }).join('');
 
     // Phase label — to the LEFT of last dot
     const lastLabel = pts.length > 0 ? `
