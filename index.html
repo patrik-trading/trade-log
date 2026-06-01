@@ -7046,7 +7046,7 @@ async function fetchBTCData() {
   }
 }
 
-// ── SIGNAL TIMELINE — line chart, bullish top / bearish bottom ──
+// ── SIGNAL TIMELINE — dual line: solid phase + dashed score ──
 function renderTimeline() {
   const el = document.getElementById('timeline-chart');
   if(!el) return;
@@ -7076,102 +7076,124 @@ function renderTimeline() {
     'The Conflict':'Conflict','Wait':'Wait',
   };
 
-  const assets = [asset];
-  el.innerHTML = assets.map(ast => {
-    const astEntries = [...entries]
-      .filter(e => e.asset === ast)
-      .sort((a,b) => a.date.localeCompare(b.date));
-    if(!astEntries.length) return '<div class=\"empty\">No signals for ' + ast + '</div>';
+  const astEntries = [...entries]
+    .filter(e => e.asset === asset)
+    .sort((a,b) => a.date.localeCompare(b.date));
 
-    // SVG dimensions
-    const W = 500, H = 140;
-    const padL = 40, padR = 12, padT = 10, padB = 30;
-    const chartH = H - padT - padB;
+  if(!astEntries.length) {
+    el.innerHTML = '<div class="empty">No signals for ' + asset + '</div>';
+    return;
+  }
 
-    // Phase track: top 55% of chartH
-    const phaseH      = chartH * 0.85;
-    const gapH        = 10;
-    const scoreTrackH = chartH * 0.35;
-    const midY        = padT + phaseH / 2;          // phase centre
-    const phaseBottom = padT + phaseH;
-    const scoreMidY   = padT + phaseH + gapH + scoreTrackH / 2;  // score centre
+  // SVG dimensions
+  const W = 500, H = 150;
+  const padL = 40, padR = 14, padT = 12, padB = 28;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const midY   = padT + chartH / 2;
 
-    const n = astEntries.length;
-    const xStep = n > 1 ? (W - padL - padR) / (n-1) : (W - padL - padR) / 2;
+  const n = astEntries.length;
+  const xStep = n > 1 ? chartW / (n - 1) : chartW / 2;
 
-    // Build points
-    const pts = astEntries.map((e, i) => {
-      const phase = e.phase || 'Wait';
-      const yVal  = PHASE_Y[phase] ?? 0;
-      const x = padL + (n > 1 ? i * xStep : (W-padL-padR)/2);
-      const y = midY - yVal * (phaseH/2 - 2);
-      return { x, y, phase, color: PHASE_COLOR[phase]||'#6b7280',
-               date: e.date, score: e.inst_score, label: PHASE_SHORT[phase]||phase };
-    });
+  // Build points
+  const pts = astEntries.map((e, i) => {
+    const phase  = e.phase || 'Wait';
+    const yVal   = PHASE_Y[phase] ?? 0;
+    const sc     = e.inst_score;
+    const scYVal = sc != null ? (sc - 50) / 50 : null; // -1 to +1
+    const x = padL + (n > 1 ? i * xStep : chartW / 2);
+    const y = midY - yVal * (chartH / 2 - 4);
+    const sy = sc != null ? midY - scYVal * (chartH / 2 - 4) : null;
+    return {
+      x, y, sy,
+      phase, color: PHASE_COLOR[phase] || '#6b7280',
+      date: e.date, score: sc,
+      label: PHASE_SHORT[phase] || phase
+    };
+  });
 
-    // Polyline
-    const polyline = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
+  // Phase polyline
+  const phaseLine = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
 
-    // Zone fills (phase area only)
-    const bullZone = `M${padL},${midY} L${padL},${padT} L${W-padR},${padT} L${W-padR},${midY} Z`;
-    const bearZone = `M${padL},${midY} L${padL},${phaseBottom} L${W-padR},${phaseBottom} L${W-padR},${midY} Z`;
+  // Score polyline (only connect points that have scores)
+  const scorePts = pts.filter(p => p.sy != null);
+  const scoreLine = scorePts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.sy.toFixed(1)).join(' ');
 
-    // Y-axis labels
-    const yLabels = `
-      <text x="${padL-3}" y="${padT+8}"           text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲ Bull</text>
-      <text x="${padL-3}" y="${phaseBottom-2}"     text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼ Bear</text>
-      <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
+  // Zone fills
+  const bullZone = `M${padL},${midY} L${padL},${padT} L${W-padR},${padT} L${W-padR},${midY} Z`;
+  const bearZone = `M${padL},${midY} L${padL},${H-padB} L${W-padR},${H-padB} L${W-padR},${midY} Z`;
 
-    `;
+  // Y labels
+  const yLabels = `
+    <text x="${padL-3}" y="${padT+8}"    text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲</text>
+    <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
+    <text x="${padL-3}" y="${H-padB-2}"  text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼</text>
+  `;
 
-    // X-axis date labels
-    const xLabels = pts
-      .filter((_,i) => n<=6 || i%(Math.ceil(n/5))===0 || i===n-1)
-      .map(p => `<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#475569" font-size="7" font-family="DM Mono,monospace">${p.date.slice(5)}</text>`)
-      .join('');
+  // X-axis date labels
+  const xLabels = pts
+    .filter((_,i) => n<=6 || i%(Math.ceil(n/5))===0 || i===n-1)
+    .map(p => `<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#475569" font-size="6.5" font-family="DM Mono,monospace">${p.date.slice(5)}</text>`)
+    .join('');
 
-    // Phase dots
-    const dots = pts.map(p => `
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4"
-        fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
-        <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
-      </circle>`).join('');
+  // Phase dots (circles)
+  const phaseDots = pts.map(p => `
+    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5"
+      fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
+      <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
+    </circle>`).join('');
 
-    // Score dots — placed in same zone areas as phase line
-    // score 70-100 → bullish zone (top), 50 → neutral line, 0-30 → bearish zone (bottom)
-    // offset slightly to the right of phase dot so both are visible
-    const scoreDots = pts.map(p => {
-      if(p.score == null) return '';
-      const sc = p.score;
-      // Map score to Y using same scale as phase line
-      const yFrac = (sc - 50) / 50;  // -1 to +1
-      const sy = midY - yFrac * (phaseH/2 - 4);
-      const scColor = sc>=70?'#22c55e':sc>=55?'#34d399':sc<=30?'#ef4444':sc<=45?'#f97316':'#6b7280';
-      const ox = 8; // horizontal offset from phase dot
-      return `<circle cx="${(p.x + ox).toFixed(1)}" cy="${sy.toFixed(1)}" r="3.5"
-        fill="${scColor}" stroke="var(--bg)" stroke-width="1" stroke-dasharray="none" opacity="0.85">
-        <title>Inst Score: ${sc}</title>
-      </circle>`;
-    }).join('');
-
-    // Last label — left of last dot
-    const lastLabel = pts.length > 0 ? `
-      <text x="${(pts[pts.length-1].x-6).toFixed(1)}" y="${(pts[pts.length-1].y-6).toFixed(1)}"
-        text-anchor="end" fill="${pts[pts.length-1].color}" font-size="7.5" font-family="DM Mono,monospace" font-weight="600">${pts[pts.length-1].label}</text>` : '';
-
-    return `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
-      <path d="${bullZone}" fill="rgba(34,197,94,.04)"/>
-      <path d="${bearZone}" fill="rgba(239,68,68,.04)"/>
-      <line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
-
-      ${yLabels}
-      <path d="${polyline}" fill="none" stroke="#354F52" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
-      ${dots}
-      ${lastLabel}
-      ${scoreDots}
-      ${xLabels}
-    </svg>`;
+  // Score dots (squares)
+  const scoreDots = pts.map(p => {
+    if(p.sy == null) return '';
+    const sc = p.score;
+    const scColor = sc>=70?'#22c55e':sc>=55?'#34d399':sc<=30?'#ef4444':sc<=45?'#f97316':'#6b7280';
+    return `<rect x="${(p.x-3.5).toFixed(1)}" y="${(p.sy-3.5).toFixed(1)}" width="7" height="7" rx="1.5"
+      fill="${scColor}" stroke="var(--bg)" stroke-width="1" opacity="0.9">
+      <title>Inst Score: ${sc}</title>
+    </rect>`;
   }).join('');
+
+  // Last phase label — left of dot
+  const last = pts[pts.length-1];
+  const lastLabel = `
+    <text x="${(last.x-8).toFixed(1)}" y="${(last.y-7).toFixed(1)}"
+      text-anchor="end" fill="${last.color}" font-size="7.5"
+      font-family="DM Mono,monospace" font-weight="600">${last.label}</text>`;
+
+  // Legend
+  const legend = `
+    <line x1="${padL}" y1="${H+10}" x2="${padL+14}" y2="${H+10}" stroke="#354F52" stroke-width="2.5"/>
+    <circle cx="${padL+7}" cy="${H+10}" r="3.5" fill="#6b7280" stroke="var(--bg)" stroke-width="1"/>
+    <text x="${padL+18}" y="${H+13}" fill="#475569" font-size="6.5" font-family="DM Mono,monospace">Phase</text>
+    <line x1="${padL+60}" y1="${H+10}" x2="${padL+74}" y2="${H+10}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <rect x="${padL+64}" y="${H+6.5}" width="7" height="7" rx="1.5" fill="#38bdf8" opacity="0.9"/>
+    <text x="${padL+78}" y="${H+13}" fill="#475569" font-size="6.5" font-family="DM Mono,monospace">Inst Score</text>
+  `;
+
+  el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H+20}" style="overflow:visible;display:block">
+    <!-- Zone backgrounds -->
+    <path d="${bullZone}" fill="rgba(34,197,94,.04)"/>
+    <path d="${bearZone}" fill="rgba(239,68,68,.04)"/>
+    <!-- Centre line -->
+    <line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
+    <!-- Y labels -->
+    ${yLabels}
+    <!-- Score dashed line -->
+    ${scoreLine ? `<path d="${scoreLine}" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,3" stroke-linejoin="round" opacity="0.8"/>` : ''}
+    <!-- Phase solid line -->
+    <path d="${phaseLine}" fill="none" stroke="#354F52" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.8"/>
+    <!-- Score squares -->
+    ${scoreDots}
+    <!-- Phase circles -->
+    ${phaseDots}
+    <!-- Last label -->
+    ${lastLabel}
+    <!-- X labels -->
+    ${xLabels}
+    <!-- Legend -->
+    ${legend}
+  </svg>`;
 }
 
 // ── TABS ──
