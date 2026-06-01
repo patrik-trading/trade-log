@@ -7141,7 +7141,7 @@ function renderTimeline() {
 
     // Phase label — to the LEFT of last dot
     const lastLabel = pts.length > 0 ? `
-      <text x="${(pts[pts.length-1].x-6).toFixed(1)}" y="${(pts[pts.length-1].y+3).toFixed(1)}"
+      <text x="${(pts[pts.length-1].x-6).toFixed(1)}" y="${(pts[pts.length-1].y-6).toFixed(1)}"
         text-anchor="end" fill="${pts[pts.length-1].color}" font-size="7.5" font-family="DM Mono,monospace" font-weight="600">${pts[pts.length-1].label}</text>` : '';
 
     const svg = `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
