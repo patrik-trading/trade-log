@@ -7047,84 +7047,137 @@ async function fetchBTCData() {
   }
 }
 
-// ── SIGNAL TIMELINE — week by week evolution per asset ──
+// ── SIGNAL TIMELINE — line chart, bullish top / bearish bottom ──
 function renderTimeline() {
   const el = document.getElementById('timeline-chart');
   if(!el) return;
   if(!entries.length) { el.innerHTML = '<div class="empty">No signals yet</div>'; return; }
 
-  const asset = (document.getElementById('timeline-asset')?.value) || 'ALL';
+  const asset = document.getElementById('timeline-asset')?.value || 'ALL';
 
-  // Phase colors and labels
+  // Phase Y-value: bullish on top (positive), bearish on bottom (negative)
+  // Scale: 1.0 = max bullish, -1.0 = max bearish
+  const PHASE_Y = {
+    'Spring — CONFIRMED': 1.0,
+    'Spring — Waiting for Turn': 0.8,
+    'Recovery': 0.6,
+    'Surge': 0.7,
+    'Cliff — CONFIRMED': -1.0,
+    'Cliff — Watching': -0.8,
+    'Trap — CONFIRMED': -0.6,
+    'Slide': -0.7,
+    'The Conflict': 0.0,
+    'Wait': 0.0,
+  };
   const PHASE_COLOR = {
-    'Spring — CONFIRMED':'#22c55e','Spring — Waiting for Turn':'#22c55e',
+    'Spring — CONFIRMED':'#22c55e','Spring — Waiting for Turn':'#4ade80',
     'Recovery':'#34d399','Surge':'#3b82f6',
-    'Cliff — CONFIRMED':'#ef4444','Cliff — Watching':'#ef4444',
+    'Cliff — CONFIRMED':'#ef4444','Cliff — Watching':'#f87171',
     'Trap — CONFIRMED':'#a855f7','Slide':'#f97316',
-    'The Conflict':'#f59e0b','Wait':'#6b7280'
+    'The Conflict':'#f59e0b','Wait':'#6b7280',
   };
   const PHASE_SHORT = {
-    'Spring — CONFIRMED':'Spring ✓','Spring — Waiting for Turn':'Spring ~',
+    'Spring — CONFIRMED':'Spring ✓','Spring — Waiting for Turn':'Spring~',
     'Recovery':'Recovery','Surge':'Surge',
-    'Cliff — CONFIRMED':'Cliff ✓','Cliff — Watching':'Cliff ~',
+    'Cliff — CONFIRMED':'Cliff ✓','Cliff — Watching':'Cliff~',
     'Trap — CONFIRMED':'Trap','Slide':'Slide',
-    'The Conflict':'Conflict','Wait':'Wait'
+    'The Conflict':'Conflict','Wait':'Wait',
   };
 
-  // Get relevant entries
-  const filtered = asset === 'ALL'
-    ? entries
-    : entries.filter(e => e.asset === asset);
+  // Build chart for single asset or ALL (one mini chart per asset)
+  const assets = asset === 'ALL'
+    ? [...new Set(entries.map(e=>e.asset))].filter(Boolean).sort()
+    : [asset];
 
-  if(!filtered.length) {
-    el.innerHTML = '<div class="empty">No signals for ' + asset + '</div>';
-    return;
-  }
+  el.innerHTML = assets.map(ast => {
+    const astEntries = [...entries]
+      .filter(e => e.asset === ast)
+      .sort((a,b) => a.date.localeCompare(b.date));
+    if(!astEntries.length) return '';
 
-  // Sort oldest first
-  const sorted = [...filtered].sort((a,b) => a.date.localeCompare(b.date));
+    // SVG dimensions
+    const W = 280, H = asset === 'ALL' ? 48 : 120;
+    const padL = asset === 'ALL' ? 4 : 36;
+    const padR = 8, padT = 8, padB = asset === 'ALL' ? 8 : 20;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+    const midY   = padT + chartH / 2;
 
-  // Group by asset for ALL view
-  if(asset === 'ALL') {
-    // Show one row per asset with dots
-    const assets = [...new Set(sorted.map(e => e.asset))].sort();
-    el.innerHTML = assets.map(ast => {
-      const astEntries = sorted.filter(e => e.asset === ast);
-      const dots = astEntries.map(e => {
-        const phase = e.phase || 'Wait';
-        const col = PHASE_COLOR[phase] || '#6b7280';
-        const lbl = PHASE_SHORT[phase] || phase;
-        const score = e.inst_score != null ? e.inst_score : '—';
-        return `<div title="${e.date}: ${lbl} (Score ${score})"
-          style="width:14px;height:14px;border-radius:50%;background:${col};flex-shrink:0;cursor:default;border:1.5px solid rgba(0,0,0,.15)"></div>`;
-      }).join('');
-      return `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)">
-        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--accent);min-width:24px">${ast}</div>
-        <div style="display:flex;gap:3px;flex-wrap:wrap;flex:1">${dots}</div>
-      </div>`;
-    }).join('');
-    return;
-  }
+    const n = astEntries.length;
+    const xStep = n > 1 ? chartW / (n-1) : chartW / 2;
 
-  // Single asset — show timeline with labels
-  const rows = sorted.map((e,i) => {
-    const phase = e.phase || 'Wait';
-    const col   = PHASE_COLOR[phase] || '#6b7280';
-    const lbl   = PHASE_SHORT[phase] || phase;
-    const score = e.inst_score != null ? e.inst_score : '—';
-    const prev  = i > 0 ? sorted[i-1] : null;
-    const prevPhase = prev ? (prev.phase || 'Wait') : null;
-    const changed = prevPhase && prevPhase !== phase;
+    // Build points
+    const pts = astEntries.map((e, i) => {
+      const phase = e.phase || 'Wait';
+      const yVal  = PHASE_Y[phase] ?? 0;
+      const x = padL + (n > 1 ? i * xStep : chartW / 2);
+      const y = midY - yVal * (chartH / 2 - 2);
+      return { x, y, phase, color: PHASE_COLOR[phase]||'#6b7280', date: e.date, score: e.inst_score, label: PHASE_SHORT[phase]||phase };
+    });
 
-    return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)">
-      <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2);min-width:48px">${e.date.slice(5)}</div>
-      <div style="width:10px;height:10px;border-radius:50%;background:${col};flex-shrink:0;border:1.5px solid rgba(0,0,0,.15)"></div>
-      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:${col};font-weight:${changed?'700':'400'};flex:1">${lbl}${changed?' ←':''}  </div>
-      <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">${score}</div>
-    </div>`;
+    // Polyline path
+    const polyline = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
+
+    // Zone fills
+    const bullZone = `M${padL},${midY} L${padL},${padT} L${W-padR},${padT} L${W-padR},${midY} Z`;
+    const bearZone = `M${padL},${midY} L${padL},${H-padB} L${W-padR},${H-padB} L${W-padR},${midY} Z`;
+
+    // Y-axis labels (only for single asset)
+    const yLabels = asset !== 'ALL' ? `
+      <text x="${padL-3}" y="${padT+4}"        text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲ Bull</text>
+      <text x="${padL-3}" y="${H-padB-2}"      text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼ Bear</text>
+      <text x="${padL-3}" y="${midY+3}"        text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
+    ` : '';
+
+    // X-axis date labels (only for single asset, max 6)
+    const xLabels = asset !== 'ALL' ? pts
+      .filter((_,i) => n<=6 || i%(Math.ceil(n/5))===0 || i===n-1)
+      .map(p => `<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#475569" font-size="7" font-family="DM Mono,monospace">${p.date.slice(5)}</text>`)
+      .join('') : '';
+
+    // Asset label for ALL view
+    const assetLabel = asset === 'ALL'
+      ? `<text x="2" y="${midY+4}" fill="var(--accent)" font-size="8" font-family="DM Mono,monospace" font-weight="600">${ast}</text>`
+      : '';
+
+    // Dot tooltips
+    const dots = pts.map(p => `
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${asset==='ALL'?3:4}"
+        fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
+        <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
+      </circle>`).join('');
+
+    // Phase label on last dot (single asset only)
+    const lastLabel = asset !== 'ALL' && pts.length > 0 ? `
+      <text x="${(pts[pts.length-1].x+2).toFixed(1)}" y="${(pts[pts.length-1].y+3).toFixed(1)}"
+        fill="${pts[pts.length-1].color}" font-size="7" font-family="DM Mono,monospace">${pts[pts.length-1].label}</text>` : '';
+
+    const svg = `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
+      <!-- Zone backgrounds -->
+      <path d="${bullZone}" fill="rgba(34,197,94,.04)"/>
+      <path d="${bearZone}" fill="rgba(239,68,68,.04)"/>
+      <!-- Centre line -->
+      <line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Y labels -->
+      ${yLabels}
+      <!-- Asset label -->
+      ${assetLabel}
+      <!-- Line -->
+      <path d="${polyline}" fill="none" stroke="#354F52" stroke-width="${asset==='ALL'?1.5:2}" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
+      <!-- Dots -->
+      ${dots}
+      <!-- Last phase label -->
+      ${lastLabel}
+      <!-- X labels -->
+      ${xLabels}
+    </svg>`;
+
+    const wrapper = asset === 'ALL'
+      ? `<div style="border-bottom:1px solid var(--border);padding:2px 0">${svg}</div>`
+      : svg;
+
+    return wrapper;
   }).join('');
-
-  el.innerHTML = rows || '<div class="empty">No data</div>';
 }
 
 // ── TABS ──
