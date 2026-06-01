@@ -1757,7 +1757,7 @@ body:not(.light){
 @media(min-width:701px) {
   .sig-two-col {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: auto auto auto auto;
     gap: 16px;
   }
@@ -2048,7 +2048,7 @@ body:not(.light){
       <div class="panel" id="dxy-panel">
     <div class="ptitle">DXY Regime Overlay</div>
     <div style="font-family:DM Mono;font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Enter your current DXY COT % and Yield Spread % to get the dollar regime. All FX signals are filtered against this.</div>
-    <div class="g2" style="margin-bottom:10px">
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
       <div class="ig">
     <label>DXY COT % <span style="font-size:.55rem;color:var(--muted2)">(Spec, Col B)</span></label>
     <div class="num-wrap"><input type="number" id="dxy-cot" min="0" max="100" step="any" placeholder="0–100" oninput="calcDXYRegime()"><span class="num-sfx">%</span></div>
