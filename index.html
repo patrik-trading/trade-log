@@ -3982,25 +3982,7 @@ function renderSignals(){
   document.getElementById('sTot').textContent=entries.length;
   if(entries.length>0){const cnt={};entries.forEach(e=>cnt[e.signal_key]=(cnt[e.signal_key]||0)+1);const dom=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];const ds=SIGS[dom];document.getElementById('sDom').textContent=(ds?.i||'')+(ds?.p||'').split('—')[0].trim();document.getElementById('sLast').textContent=entries[0].date.slice(5);}
   else{document.getElementById('sDom').textContent='—';document.getElementById('sLast').textContent='—';}
-  const fc=document.getElementById('freqChart');
-  if(!entries.length){fc.innerHTML='<div class="empty">No signals yet</div>';}
-  else{
-    // Count by signal_key
-    const raw={};SORD.forEach(k=>raw[k]=0);
-    entries.forEach(e=>{if(raw[e.signal_key]!==undefined)raw[e.signal_key]++;});
-    // Merge SC+SW → Spring, CC+CW → Cliff
-    const merged=[
-      {k:'SP', i:'🌱', label:'Spring',   c:'#22c55e', v:raw['SC']+(raw['SW']||0)},
-      {k:'RC', i:'♻️', label:'Recovery', c:'#34d399', v:raw['RC']},
-      {k:'SU', i:'🚀', label:'Surge',    c:'#3b82f6', v:raw['SU']},
-      {k:'CL', i:'🪨', label:'Cliff',    c:'#9ca3af', v:raw['CC']+(raw['CW']||0)},
-      {k:'TR', i:'🪤', label:'Trap',     c:'#a855f7', v:raw['TR']},
-      {k:'SL', i:'📉', label:'Slide',    c:'#f97316', v:raw['SL']},
-      {k:'CF', i:'⚡', label:'The Confl',c:'#475569', v:raw['CF']},
-      {k:'NE', i:'⏸', label:'Wait',     c:'#64748b', v:raw['NE']},
-    ];
-    const mx=Math.max(...merged.map(x=>x.v),1);
-    fc.innerHTML=merged.filter(x=>x.k!=='NE'||x.v>0).map(x=>`<div class="f-row"><div class="f-lbl">${x.i} ${x.label}</div><div class="f-track"><div class="f-fill" style="width:${Math.round(x.v/mx*100)}%;background:${x.c}"></div></div><div class="f-n">${x.v}</div></div>`).join('');}
+  renderTimeline();
   // Refresh futures dropdowns (both toolbar and inline)
   refreshSigFuturesDropdown();
   // Apply filters
@@ -7046,6 +7028,86 @@ async function fetchBTCData() {
   } finally {
     if(btn){btn.disabled=false;btn.textContent='⬇ Fetch Live BTC Data';}
   }
+}
+
+// ── SIGNAL TIMELINE — week by week evolution per asset ──
+function renderTimeline() {
+  const el = document.getElementById('timeline-chart');
+  if(!el) return;
+  if(!entries.length) { el.innerHTML = '<div class="empty">No signals yet</div>'; return; }
+
+  const asset = (document.getElementById('timeline-asset')?.value) || 'ALL';
+
+  // Phase colors and labels
+  const PHASE_COLOR = {
+    'Spring — CONFIRMED':'#22c55e','Spring — Waiting for Turn':'#22c55e',
+    'Recovery':'#34d399','Surge':'#3b82f6',
+    'Cliff — CONFIRMED':'#ef4444','Cliff — Watching':'#ef4444',
+    'Trap — CONFIRMED':'#a855f7','Slide':'#f97316',
+    'The Conflict':'#f59e0b','Wait':'#6b7280'
+  };
+  const PHASE_SHORT = {
+    'Spring — CONFIRMED':'Spring ✓','Spring — Waiting for Turn':'Spring ~',
+    'Recovery':'Recovery','Surge':'Surge',
+    'Cliff — CONFIRMED':'Cliff ✓','Cliff — Watching':'Cliff ~',
+    'Trap — CONFIRMED':'Trap','Slide':'Slide',
+    'The Conflict':'Conflict','Wait':'Wait'
+  };
+
+  // Get relevant entries
+  const filtered = asset === 'ALL'
+    ? entries
+    : entries.filter(e => e.asset === asset);
+
+  if(!filtered.length) {
+    el.innerHTML = '<div class="empty">No signals for ' + asset + '</div>';
+    return;
+  }
+
+  // Sort oldest first
+  const sorted = [...filtered].sort((a,b) => a.date.localeCompare(b.date));
+
+  // Group by asset for ALL view
+  if(asset === 'ALL') {
+    // Show one row per asset with dots
+    const assets = [...new Set(sorted.map(e => e.asset))].sort();
+    el.innerHTML = assets.map(ast => {
+      const astEntries = sorted.filter(e => e.asset === ast);
+      const dots = astEntries.map(e => {
+        const phase = e.phase || 'Wait';
+        const col = PHASE_COLOR[phase] || '#6b7280';
+        const lbl = PHASE_SHORT[phase] || phase;
+        const score = e.inst_score != null ? e.inst_score : '—';
+        return `<div title="${e.date}: ${lbl} (Score ${score})"
+          style="width:14px;height:14px;border-radius:50%;background:${col};flex-shrink:0;cursor:default;border:1.5px solid rgba(0,0,0,.15)"></div>`;
+      }).join('');
+      return `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)">
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--accent);min-width:24px">${ast}</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap;flex:1">${dots}</div>
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  // Single asset — show timeline with labels
+  const rows = sorted.map((e,i) => {
+    const phase = e.phase || 'Wait';
+    const col   = PHASE_COLOR[phase] || '#6b7280';
+    const lbl   = PHASE_SHORT[phase] || phase;
+    const score = e.inst_score != null ? e.inst_score : '—';
+    const prev  = i > 0 ? sorted[i-1] : null;
+    const prevPhase = prev ? (prev.phase || 'Wait') : null;
+    const changed = prevPhase && prevPhase !== phase;
+
+    return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)">
+      <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2);min-width:48px">${e.date.slice(5)}</div>
+      <div style="width:10px;height:10px;border-radius:50%;background:${col};flex-shrink:0;border:1.5px solid rgba(0,0,0,.15)"></div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:${col};font-weight:${changed?'700':'400'};flex:1">${lbl}${changed?' ←':''}  </div>
+      <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">${score}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = rows || '<div class="empty">No data</div>';
 }
 
 // ── TABS ──
