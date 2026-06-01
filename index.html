@@ -7139,10 +7139,10 @@ function renderTimeline() {
         <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
       </circle>`).join('');
 
-    // Phase label on last dot (single asset only)
-    const lastLabel = asset !== 'ALL' && pts.length > 0 ? `
-      <text x="${(pts[pts.length-1].x+2).toFixed(1)}" y="${(pts[pts.length-1].y+3).toFixed(1)}"
-        fill="${pts[pts.length-1].color}" font-size="7" font-family="DM Mono,monospace">${pts[pts.length-1].label}</text>` : '';
+    // Phase label — to the LEFT of last dot
+    const lastLabel = pts.length > 0 ? `
+      <text x="${(pts[pts.length-1].x-6).toFixed(1)}" y="${(pts[pts.length-1].y+3).toFixed(1)}"
+        text-anchor="end" fill="${pts[pts.length-1].color}" font-size="7.5" font-family="DM Mono,monospace" font-weight="600">${pts[pts.length-1].label}</text>` : '';
 
     const svg = `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
       <!-- Zone backgrounds -->
