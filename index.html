@@ -2019,7 +2019,24 @@ body:not(.light){
         <div class="stat"><div class="stat-n" id="sDom" style="font-size:.85rem;padding-top:7px">—</div><div class="stat-l">Most Frequent</div></div>
         <div class="stat"><div class="stat-n" id="sLast">—</div><div class="stat-l">Last Entry</div></div>
       </div>
-      <div class="panel"><div class="ptitle">Distribution</div><div class="freq" id="freqChart"><div class="empty">No signals yet</div></div></div>
+      <div class="panel" id="dist-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px">
+          <div class="ptitle" style="margin-bottom:0">Signal Timeline</div>
+          <select id="timeline-asset" onchange="renderTimeline()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:6px;font-family:'DM Mono',monospace;font-size:.58rem;outline:none">
+            <option value="ALL">All Pairs</option>
+            <option value="6E">6E — EUR</option>
+            <option value="6J">6J — JPY</option>
+            <option value="6S">6S — CHF</option>
+            <option value="6B">6B — GBP</option>
+            <option value="6A">6A — AUD</option>
+            <option value="6C">6C — CAD</option>
+            <option value="6N">6N — NZD</option>
+            <option value="GC">GC — Gold</option>
+            <option value="SI">SI — Silver</option>
+          </select>
+        </div>
+        <div id="timeline-chart"><div class="empty">No signals yet</div></div>
+      </div>
       <div class="panel" id="focus-panel">
           <div class="ptitle">Focus of the Week</div>
           <div id="focus-list"><div class="empty">No signals logged yet</div></div>
