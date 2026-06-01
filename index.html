@@ -7054,19 +7054,12 @@ function renderTimeline() {
 
   const asset = document.getElementById('timeline-asset')?.value || '6J';
 
-  // Phase Y-value: bullish on top (positive), bearish on bottom (negative)
-  // Scale: 1.0 = max bullish, -1.0 = max bearish
   const PHASE_Y = {
-    'Spring — CONFIRMED': 1.0,
-    'Spring — Waiting for Turn': 0.8,
-    'Recovery': 0.6,
-    'Surge': 0.7,
-    'Cliff — CONFIRMED': -1.0,
-    'Cliff — Watching': -0.8,
-    'Trap — CONFIRMED': -0.6,
-    'Slide': -0.7,
-    'The Conflict': 0.0,
-    'Wait': 0.0,
+    'Spring — CONFIRMED': 1.0, 'Spring — Waiting for Turn': 0.8,
+    'Recovery': 0.6, 'Surge': 0.7,
+    'Cliff — CONFIRMED': -1.0, 'Cliff — Watching': -0.8,
+    'Trap — CONFIRMED': -0.6, 'Slide': -0.7,
+    'The Conflict': 0.0, 'Wait': 0.0,
   };
   const PHASE_COLOR = {
     'Spring — CONFIRMED':'#22c55e','Spring — Waiting for Turn':'#4ade80',
@@ -7092,116 +7085,88 @@ function renderTimeline() {
 
     // SVG dimensions
     const W = 500, H = 180;
-    const padL = 40;
-    const padR = 12, padT = 10, padB = 30;
-    const chartW = W - padL - padR;
+    const padL = 40, padR = 12, padT = 10, padB = 30;
     const chartH = H - padT - padB;
-    const midY   = padT + chartH * 0.55 / 2;
+
+    // Phase track: top 55% of chartH
+    const phaseH      = chartH * 0.55;
+    const gapH        = 10;
+    const scoreTrackH = chartH * 0.35;
+    const midY        = padT + phaseH / 2;          // phase centre
+    const phaseBottom = padT + phaseH;
+    const scoreMidY   = padT + phaseH + gapH + scoreTrackH / 2;  // score centre
 
     const n = astEntries.length;
-    const xStep = n > 1 ? chartW / (n-1) : chartW / 2;
+    const xStep = n > 1 ? (W - padL - padR) / (n-1) : (W - padL - padR) / 2;
 
     // Build points
     const pts = astEntries.map((e, i) => {
       const phase = e.phase || 'Wait';
       const yVal  = PHASE_Y[phase] ?? 0;
-      const x = padL + (n > 1 ? i * xStep : chartW / 2);
-      const y = midY - yVal * (chartH * 0.55 / 2 - 2);
-      return { x, y, phase, color: PHASE_COLOR[phase]||'#6b7280', date: e.date, score: e.inst_score, label: PHASE_SHORT[phase]||phase };
+      const x = padL + (n > 1 ? i * xStep : (W-padL-padR)/2);
+      const y = midY - yVal * (phaseH/2 - 2);
+      return { x, y, phase, color: PHASE_COLOR[phase]||'#6b7280',
+               date: e.date, score: e.inst_score, label: PHASE_SHORT[phase]||phase };
     });
 
-    // Polyline path
+    // Polyline
     const polyline = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
 
-    // Zone fills
+    // Zone fills (phase area only)
     const bullZone = `M${padL},${midY} L${padL},${padT} L${W-padR},${padT} L${W-padR},${midY} Z`;
-    const phaseBottom = (padT + chartH*0.55);
     const bearZone = `M${padL},${midY} L${padL},${phaseBottom} L${W-padR},${phaseBottom} L${W-padR},${midY} Z`;
 
-    // Y-axis labels (only for single asset)
-    const yLabels = asset !== 'ALL' ? `
-      <text x="${padL-3}" y="${padT+4}"        text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲ Bull</text>
-      <text x="${padL-3}" y="${(padT+chartH*0.55).toFixed(0)}"  text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼ Bear</text>
-      <text x="${padL-3}" y="${midY+3}"        text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
-      <text x="${padL-3}" y="${(scoreMidY+3).toFixed(0)}"       text-anchor="end" fill="#6b7280" font-size="6.5" font-family="DM Mono,monospace">INST</text>
-    ` : '';
+    // Y-axis labels
+    const yLabels = `
+      <text x="${padL-3}" y="${padT+8}"           text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲ Bull</text>
+      <text x="${padL-3}" y="${phaseBottom-2}"     text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼ Bear</text>
+      <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
+      <text x="${padL-3}" y="${(scoreMidY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="6.5" font-family="DM Mono,monospace">INST</text>
+    `;
 
-    // X-axis date labels (only for single asset, max 6)
-    const xLabels = asset !== 'ALL' ? pts
+    // X-axis date labels
+    const xLabels = pts
       .filter((_,i) => n<=6 || i%(Math.ceil(n/5))===0 || i===n-1)
       .map(p => `<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#475569" font-size="7" font-family="DM Mono,monospace">${p.date.slice(5)}</text>`)
-      .join('') : '';
+      .join('');
 
-    const assetLabel = '';
-
-    // Phase dots — simple fixed size
+    // Phase dots
     const dots = pts.map(p => `
       <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4"
         fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
         <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
       </circle>`).join('');
 
-    // ── INST SCORE TRACK — separate row, inside the SVG box ──
-    // Phase uses top 55% of chartH, score track uses bottom 35%
-    // with a small gap between them
-    const phaseH     = chartH * 0.55;   // phase track height
-    const gapH       = 10;              // gap between tracks
-    const scoreTrackH= chartH * 0.35;  // score track height
-    const phaseMidY  = padT + phaseH / 2;
-    const scoreMidY  = padT + phaseH + gapH + scoreTrackH / 2;
-
-    // Score track label
-    const scoreTrackLabel = '';
-
-    // Score dots
+    // Score dots (separate track)
     const scoreDots = pts.map(p => {
       if(p.score == null) return '';
       const sc = p.score;
-      // Map score to Y in score track
-      // 70-100 → top of track, 30-0 → bottom, 50 → middle
-      const yFrac = (sc - 50) / 50; // -1 to +1
+      const yFrac = (sc - 50) / 50;
       const sy = scoreMidY - yFrac * (scoreTrackH/2 - 2);
-      const scColor = sc >= 70 ? 'var(--mega-bull)' : sc >= 55 ? 'var(--bull)' :
-                      sc <= 30 ? 'var(--mega-bear)' : sc <= 45 ? 'var(--bear)' : '#6b7280';
+      const scColor = sc>=70?'var(--mega-bull)':sc>=55?'var(--bull)':sc<=30?'var(--mega-bear)':sc<=45?'var(--bear)':'#6b7280';
       return `<circle cx="${p.x.toFixed(1)}" cy="${sy.toFixed(1)}" r="3"
         fill="${scColor}" stroke="var(--bg)" stroke-width="1">
         <title>Score: ${sc}</title>
       </circle>`;
     }).join('');
 
-    // ── PHASE DOTS (revert to simple fixed size) ──
-
-    // Phase label — to the LEFT of last dot
+    // Last label — left of last dot
     const lastLabel = pts.length > 0 ? `
       <text x="${(pts[pts.length-1].x-6).toFixed(1)}" y="${(pts[pts.length-1].y-6).toFixed(1)}"
         text-anchor="end" fill="${pts[pts.length-1].color}" font-size="7.5" font-family="DM Mono,monospace" font-weight="600">${pts[pts.length-1].label}</text>` : '';
 
-    const svg = `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
-      <!-- Zone backgrounds -->
+    return `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
       <path d="${bullZone}" fill="rgba(34,197,94,.04)"/>
       <path d="${bearZone}" fill="rgba(239,68,68,.04)"/>
-      <!-- Centre line -->
       <line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
-      <!-- Score track separator -->
       <line x1="${padL}" y1="${scoreMidY}" x2="${W-padR}" y2="${scoreMidY}" stroke="var(--border)" stroke-width="0.8" stroke-dasharray="2,3"/>
-      <!-- Y labels -->
       ${yLabels}
-      <!-- Asset label -->
-      ${assetLabel}
-      <!-- Line -->
       <path d="${polyline}" fill="none" stroke="#354F52" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
-      <!-- Dots -->
       ${dots}
-      <!-- Last phase label -->
       ${lastLabel}
-      <!-- Score track -->
-      ${scoreTrackLabel}
       ${scoreDots}
-      <!-- X labels -->
       ${xLabels}
     </svg>`;
-
-    return svg;
   }).join('');
 }
 
