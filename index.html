@@ -277,179 +277,6 @@ body.light #sig-filter-futures-dd * {
    MOBILE LAYOUT — max-width 700px
    Desktop unchanged above this breakpoint
    ══════════════════════════════════════════ */
-@media(max-width:700px){
-
-  /* ── Wrapper / spacing ── */
-  .wrapper{padding:12px 14px;overflow-x:hidden;max-width:100%;box-sizing:border-box;}
-
-
-  /* Trade calculator — mobile */
-  #calc-positions-grid { grid-template-columns:1fr!important; }
-  #conv-panel-cfd > div:first-child { grid-template-columns:1fr!important; }
-
-  /* ── Trade stats grid — 2 col on mobile ── */
-  .tl-stats { grid-template-columns:repeat(2,1fr)!important; gap:8px!important; }
-  .tl-stat { padding:13px 10px!important; border-radius:12px!important; }
-  .tl-stat-n { font-size:2rem!important; }
-  .tl-stat-l { font-size:.6rem!important; margin-top:4px!important; }
-
-  /* ── Header mobile cleanup ── */
-  header {
-    margin-bottom:10px;
-    gap:6px;
-    align-items:flex-start;
-  }
-
-  /* Title smaller on mobile */
-  .logo {
-    font-size:1.8rem !important;
-    letter-spacing:.04em !important;
-  }
-  .logo small {
-    font-size:.58rem !important;
-    letter-spacing:.15em !important;
-  }
-
-  /* Right side — stack neatly */
-  header > div:last-child {
-    display:flex !important;
-    flex-wrap:wrap !important;
-    align-items:center !important;
-    gap:6px !important;
-  }
-
-  /* Sync bar compact */
-  .sync-bar {
-    font-size:.58rem !important;
-    gap:5px !important;
-  }
-
-  /* Date badge compact */
-  .badge {
-    font-size:.65rem !important;
-    padding:4px 8px !important;
-    max-width:120px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-
-  /* Theme toggle compact */
-  .theme-toggle {
-    font-size:.65rem !important;
-    padding:5px 10px !important;
-  }
-
-  /* Reset DB — very subtle on mobile */
-  header .btn-sm {
-    font-size:.52rem !important;
-    padding:3px 7px !important;
-    opacity:.7;
-  }
-  .logo{font-size:1.8rem;}
-  .logo small{font-size:.58rem;}
-  .badge{font-size:.65rem;padding:4px 10px;}
-  .sync-bar{font-size:.58rem;}
-
-  /* ── Panels ── */
-  .panel{padding:14px 12px;border-radius:8px;}
-  .ptitle{font-size:.62rem;margin-bottom:12px;}
-
-  /* ── Grids → single column on mobile ── */
-  .g2,.g3,.g4{grid-template-columns:1fr;}
-  .sig-main{grid-template-columns:1fr!important;}
-  .tl-layout{grid-template-columns:1fr!important;}
-
-  /* ── Signal Dashboard toolbar ── */
-  .sig-toolbar{flex-direction:column;align-items:stretch!important;gap:8px!important;}
-  .sig-toolbar > div{flex-direction:column;gap:6px!important;width:100%;}
-  .sig-toolbar button,.sig-toolbar input,.sig-toolbar select{width:100%!important;font-size:.75rem!important;}
-  #sig-filter-signal-btn,#sig-filter-futures-btn{width:100%!important;}
-
-  /* ── Signal history table — horizontal scroll ── */
-  .hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  table.hist{min-width:700px;font-size:.6rem;}
-
-  /* ── Form inputs ── */
-  input[type=text],input[type=number],input[type=date],
-  input[type=password],select,textarea{
-    padding:10px 12px;font-size:.85rem;
-  }
-  .ig label{font-size:.7rem;}
-  .dir-btn{padding:9px 3px;font-size:.7rem;}
-
-  /* ── Institutional score box ── */
-  #inst-score-box{margin:12px 0;}
-
-  /* ── Result box ── */
-  .result-box{padding:14px;}
-
-  /* ── Buttons ── */
-  .btn-log{padding:13px;font-size:.85rem;border-radius:8px;}
-  .btn-sm{padding:6px 10px;font-size:.68rem;}
-
-  /* ── Trade log stats ── */
-  .tl-stats{grid-template-columns:repeat(2,1fr)!important;gap:8px;}
-
-  /* ── Analytics ── */
-  #analytics-panel{margin-bottom:10px;}
-  .analytics-dim-btn{padding:5px 10px;font-size:.62rem;}
-
-  /* ── Focus of week cards ── */
-  #focus-list > div{padding:12px;border-radius:10px;}
-
-  /* ── Right sidebar panels — stack below main ── */
-  .sig-sidebar{display:flex;flex-direction:column;gap:12px;}
-
-  /* ── Zone translator ── */
-  #tab-converter > div{grid-template-columns:1fr!important;}
-
-  /* ── Modals ── */
-  .modal-box{width:95vw!important;padding:16px!important;}
-  .edit-modal-box{
-    width:95vw!important;
-    max-width:95vw!important;
-    max-height:85vh!important;
-    padding:16px!important;
-    border-radius:10px;
-  }
-
-  /* ── Performance review ── */
-  .perf-table-wrap{overflow-x:auto;}
-
-  /* ── Tag rows ── */
-  .tag-row{flex-wrap:wrap;gap:5px;}
-  .tag-btn{font-size:.62rem;padding:5px 8px;}
-
-  /* ── DXY overlay inputs ── */
-  #dxy-cot,#dxy-yield{font-size:.8rem;}
-
-  /* ── Dropdown fix on mobile ── */
-  #sig-filter-signal-dd,#sig-filter-futures-dd{
-    position:fixed!important;
-    left:14px!important;
-    right:14px!important;
-    top:120px!important;
-    max-height:60vh!important;
-    overflow-y:auto!important;
-    z-index:9000!important;
-    background:var(--surface2)!important;
-    border:1px solid var(--border)!important;
-    border-radius:8px!important;
-    box-shadow:0 8px 32px rgba(0,0,0,.4)!important;
-  }
-
-  /* ── Correlation risk ── */
-  .corr-grid{grid-template-columns:1fr 1fr!important;}
-
-  /* ── Hide scroll hint on small screens ── */
-  .scroll-hint{display:none;}
-
-  /* ── Setup screen ── */
-  .setup-box{padding:20px 16px;}
-  .setup-title{font-size:1.8rem;}
-  .setup-steps{font-size:.58rem;padding:12px;}
-}
 
 
 /* ── Additional mobile fixes ── */
@@ -1173,7 +1000,6 @@ body.light #sig-filter-futures-dd * {
   #focus-list > div{padding:12px;border-radius:10px;}
 
   /* ── Right sidebar panels — stack below main ── */
-  .sig-sidebar{display:flex;flex-direction:column;gap:12px;}
 
   /* ── Zone translator ── */
   #tab-converter > div{grid-template-columns:1fr!important;}
@@ -1711,27 +1537,7 @@ body:not(.light){
 }
 
 
-/* ── Signal sidebar — layout grid on desktop ── */
-.sig-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-@media(min-width:701px) {
-  .sig-sidebar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    align-items: start;
-  }
-  /* Row 1: Stats bar full width */
-  .sig-sidebar #sig-stats-bar { grid-column: 1 / -1; grid-row: 1; }
-  /* Row 2: Distribution | Correlation Risk */
-  .sig-sidebar #dist-panel  { grid-column: 1; grid-row: 2; }
-  .sig-sidebar #corr-panel  { grid-column: 2; grid-row: 2; }
-  /* Row 3: Focus of Week full width (includes On Watch) */
-  .sig-sidebar #focus-panel { grid-column: 1 / -1; grid-row: 3; }
-}
+
 
 
 /* ── Signal bottom row: DXY full width ── */
@@ -1757,22 +1563,25 @@ body:not(.light){
 @media(min-width:701px) {
   .sig-two-col {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto auto auto auto;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
   .sig-left-col,
-  .sig-right-col {
-    display: contents;
-  }
-  /* Row 1: Stats (full width) */
-  .sig-left-col .stats       { grid-column:1 / -1; grid-row:1; }
-  /* Row 2: Distribution (left) | DXY (right) — same row height */
-  .sig-left-col #dist-panel  { grid-column:1; grid-row:2; align-self:stretch; }
-  .sig-right-col #dxy-panel  { grid-column:2; grid-row:2; align-self:stretch; }
-  /* Row 3: Focus of Week (left) | On Watch + Corr stacked (right) */
-  .sig-left-col #focus-panel       { grid-column:1; grid-row:3; }
-  .sig-right-col .watch-corr-stack { grid-column:2; grid-row:3; display:flex; flex-direction:column; gap:13px; }
+  .sig-right-col { display: contents; }
+
+  /* Row 1: Signal Timeline — full width */
+  .sig-left-col #dist-panel        { grid-column: 1 / -1; grid-row: 1; }
+
+  /* Row 2: Focus of Week 50% | On Watch 50% */
+  .sig-left-col #focus-panel       { grid-column: 1; grid-row: 2; }
+  .sig-right-col #watch-panel      { grid-column: 2; grid-row: 2; }
+
+  /* Row 3: DXY Regime 50% | Correlation Risk 50% */
+  .sig-right-col #dxy-panel        { grid-column: 1; grid-row: 3; }
+  .sig-right-col #corr-panel       { grid-column: 2; grid-row: 3; }
+
+  /* Unwrap stacking wrappers */
+  .sig-right-col .watch-corr-stack { display: contents; }
 }
 
 </style>
@@ -2014,11 +1823,7 @@ body:not(.light){
 
     <!-- LEFT: Stats | Distribution | Focus of Week -->
     <div class="sig-left-col">
-      <div class="stats">
-        <div class="stat"><div class="stat-n" id="sTot">0</div><div class="stat-l">Signals</div></div>
-        <div class="stat"><div class="stat-n" id="sDom" style="font-size:.85rem;padding-top:7px">—</div><div class="stat-l">Most Frequent</div></div>
-        <div class="stat"><div class="stat-n" id="sLast">—</div><div class="stat-l">Last Entry</div></div>
-      </div>
+
       <div class="panel" id="dist-panel">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px">
           <div class="ptitle" style="margin-bottom:0">Signal Timeline</div>
@@ -3995,9 +3800,7 @@ function clearSigFilters(){
 }
 
 function renderSignals(){
-  document.getElementById('sTot').textContent=entries.length;
-  if(entries.length>0){const cnt={};entries.forEach(e=>cnt[e.signal_key]=(cnt[e.signal_key]||0)+1);const dom=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];const ds=SIGS[dom];document.getElementById('sDom').textContent=(ds?.i||'')+(ds?.p||'').split('—')[0].trim();document.getElementById('sLast').textContent=entries[0].date.slice(5);}
-  else{document.getElementById('sDom').textContent='—';document.getElementById('sLast').textContent='—';}
+
   renderTimeline();
   // Refresh futures dropdowns (both toolbar and inline)
   refreshSigFuturesDropdown();
@@ -7125,9 +6928,9 @@ function renderTimeline() {
 
   // Y labels
   const yLabels = `
-    <text x="${padL-3}" y="${padT+8}"    text-anchor="end" fill="#22c55e" font-size="7" font-family="DM Mono,monospace">▲</text>
-    <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="7" font-family="DM Mono,monospace">—</text>
-    <text x="${padL-3}" y="${H-padB-2}"  text-anchor="end" fill="#ef4444" font-size="7" font-family="DM Mono,monospace">▼</text>
+    <text x="${padL-3}" y="${padT+8}"    text-anchor="end" fill="#22c55e" font-size="6.5" font-family="DM Mono,monospace">▲</text>
+    <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="6.5" font-family="DM Mono,monospace">—</text>
+    <text x="${padL-3}" y="${H-padB-2}"  text-anchor="end" fill="#ef4444" font-size="6.5" font-family="DM Mono,monospace">▼</text>
   `;
 
   // X-axis date labels
@@ -7138,7 +6941,7 @@ function renderTimeline() {
 
   // Phase dots (circles)
   const phaseDots = pts.map(p => `
-    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5"
+    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5"
       fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
       <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
     </circle>`).join('');
@@ -7148,7 +6951,7 @@ function renderTimeline() {
     if(p.sy == null) return '';
     const sc = p.score;
     const scColor = sc>=70?'#22c55e':sc>=55?'#34d399':sc<=30?'#ef4444':sc<=45?'#f97316':'#6b7280';
-    return `<rect x="${(p.x-3.5).toFixed(1)}" y="${(p.sy-3.5).toFixed(1)}" width="7" height="7" rx="1.5"
+    return `<rect x="${(p.x-3.5).toFixed(1)}" y="${(p.sy-3.5).toFixed(1)}" width="5.5" height="5.5" rx="1"
       fill="${scColor}" stroke="var(--bg)" stroke-width="1" opacity="0.9">
       <title>Inst Score: ${sc}</title>
     </rect>`;
@@ -7165,10 +6968,10 @@ function renderTimeline() {
   const legend = `
     <line x1="${padL}" y1="${H+10}" x2="${padL+14}" y2="${H+10}" stroke="#354F52" stroke-width="2.5"/>
     <circle cx="${padL+7}" cy="${H+10}" r="3.5" fill="#6b7280" stroke="var(--bg)" stroke-width="1"/>
-    <text x="${padL+18}" y="${H+13}" fill="#475569" font-size="6.5" font-family="DM Mono,monospace">Phase</text>
+    <text x="${padL+18}" y="${H+13}" fill="#475569" font-size="6" font-family="DM Mono,monospace">Phase</text>
     <line x1="${padL+60}" y1="${H+10}" x2="${padL+74}" y2="${H+10}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,3"/>
-    <rect x="${padL+64}" y="${H+6.5}" width="7" height="7" rx="1.5" fill="#38bdf8" opacity="0.9"/>
-    <text x="${padL+78}" y="${H+13}" fill="#475569" font-size="6.5" font-family="DM Mono,monospace">Inst Score</text>
+    <rect x="${padL+64}" y="${H+6.5}" width="5.5" height="5.5" rx="1" fill="#38bdf8" opacity="0.9"/>
+    <text x="${padL+78}" y="${H+13}" fill="#475569" font-size="6" font-family="DM Mono,monospace">Inst Score</text>
   `;
 
   el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H+20}" style="overflow:visible;display:block">
@@ -7180,9 +6983,9 @@ function renderTimeline() {
     <!-- Y labels -->
     ${yLabels}
     <!-- Score dashed line -->
-    ${scoreLine ? `<path d="${scoreLine}" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,3" stroke-linejoin="round" opacity="0.8"/>` : ''}
+    ${scoreLine ? `<path d="${scoreLine}" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4,3" stroke-linejoin="round" opacity="0.7"/>` : ''}
     <!-- Phase solid line -->
-    <path d="${phaseLine}" fill="none" stroke="#354F52" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.8"/>
+    <path d="${phaseLine}" fill="none" stroke="#354F52" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
     <!-- Score squares -->
     ${scoreDots}
     <!-- Phase circles -->
