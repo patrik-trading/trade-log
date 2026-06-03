@@ -7020,13 +7020,14 @@ let chartCurrentSym = '';
 
 // Futures → TradingView symbol map
 const CHART_SYM = {
-  '6E':'CME_MINI:6E1!','6J':'CME:6J1!','6S':'CME:6S1!',
-  '6B':'CME:6B1!','6A':'CME:6A1!','6C':'CME:6C1!',
-  '6N':'CME:6N1!','GC':'COMEX:GC1!','SI':'COMEX:SI1!',
-  // CFD fallbacks
+  // Futures → FX spot equivalent (most reliable in TradingView widget)
+  '6E':'FX:EURUSD','6J':'FX:USDJPY','6S':'FX:USDCHF',
+  '6B':'FX:GBPUSD','6A':'FX:AUDUSD','6C':'FX:USDCAD',
+  '6N':'FX:NZDUSD','GC':'TVC:GOLD','SI':'TVC:SILVER',
+  // CFD pairs (trade log)
   'EUR/USD':'FX:EURUSD','USD/JPY':'FX:USDJPY','USD/CHF':'FX:USDCHF',
   'GBP/USD':'FX:GBPUSD','AUD/USD':'FX:AUDUSD','USD/CAD':'FX:USDCAD',
-  'NZD/USD':'FX:NZDUSD',
+  'NZD/USD':'FX:NZDUSD','XAU/USD':'TVC:GOLD','XAG/USD':'TVC:SILVER',
 };
 
 function openChartModal(sym, date, details, defaultTF) {
@@ -7141,8 +7142,8 @@ function openSignalChart(entry) {
 function openTradeChart(trade) {
   const sym = trade.symbol || trade.asset || '';
   // Map CFD symbol to futures for charting
-  const CFD_TO_FUTURES = {'EUR/USD':'6E','USD/JPY':'6J','USD/CHF':'6S','GBP/USD':'6B','AUD/USD':'6A','USD/CAD':'6C','NZD/USD':'6N'};
-  const chartSym = CFD_TO_FUTURES[sym] || sym;
+  // For trades use the symbol directly — CHART_SYM handles both CFD and futures
+  const chartSym = sym;
   const isWin = parseFloat(trade.settled_r) > 0;
   const resultColor = isWin ? 'var(--mega-bull)' : trade.settled_r ? 'var(--mega-bear)' : 'var(--muted2)';
   const details = [
