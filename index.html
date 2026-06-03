@@ -7020,14 +7020,14 @@ let chartCurrentSym = '';
 
 // Futures → TradingView symbol map
 const CHART_SYM = {
-  // Futures → FX spot equivalent (most reliable in TradingView widget)
-  '6E':'FX:EURUSD','6J':'FX:USDJPY','6S':'FX:USDCHF',
-  '6B':'FX:GBPUSD','6A':'FX:AUDUSD','6C':'FX:USDCAD',
-  '6N':'FX:NZDUSD','GC':'TVC:GOLD','SI':'TVC:SILVER',
+  // Futures → OANDA CFD (works in TradingView widget without account)
+  '6E':'OANDA:EURUSD','6J':'OANDA:USDJPY','6S':'OANDA:USDCHF',
+  '6B':'OANDA:GBPUSD','6A':'OANDA:AUDUSD','6C':'OANDA:USDCAD',
+  '6N':'OANDA:NZDUSD','GC':'OANDA:XAUUSD','SI':'OANDA:XAGUSD',
   // CFD pairs (trade log)
-  'EUR/USD':'FX:EURUSD','USD/JPY':'FX:USDJPY','USD/CHF':'FX:USDCHF',
-  'GBP/USD':'FX:GBPUSD','AUD/USD':'FX:AUDUSD','USD/CAD':'FX:USDCAD',
-  'NZD/USD':'FX:NZDUSD','XAU/USD':'TVC:GOLD','XAG/USD':'TVC:SILVER',
+  'EUR/USD':'OANDA:EURUSD','USD/JPY':'OANDA:USDJPY','USD/CHF':'OANDA:USDCHF',
+  'GBP/USD':'OANDA:GBPUSD','AUD/USD':'OANDA:AUDUSD','USD/CAD':'OANDA:USDCAD',
+  'NZD/USD':'OANDA:NZDUSD','XAU/USD':'OANDA:XAUUSD','XAG/USD':'OANDA:XAGUSD',
 };
 
 function openChartModal(sym, date, details, defaultTF) {
@@ -7146,16 +7146,16 @@ function openTradeChart(trade) {
   const chartSym = sym;
   const isWin = parseFloat(trade.settled_r) > 0;
   const resultColor = isWin ? 'var(--mega-bull)' : trade.settled_r ? 'var(--mega-bear)' : 'var(--muted2)';
+  const dirColor = trade.dir==='Buy'?'var(--mega-bull)':'var(--mega-bear)';
   const details = [
     {label:'DATE',        value: trade.date||'—'},
     {label:'SYMBOL',      value: sym, bold:true},
-    {label:'DIRECTION',   value: trade.direction||'—', color: trade.direction==='Long'?'var(--mega-bull)':'var(--mega-bear)', bold:true},
-    {label:'ENTRY',       value: trade.entry_price!=null?trade.entry_price:'—'},
-    {label:'STOP LOSS',   value: trade.stop_loss!=null?trade.stop_loss:'—', color:'var(--mega-bear)'},
-    {label:'TARGET',      value: trade.take_profit!=null?trade.take_profit:'—', color:'var(--mega-bull)'},
-    {label:'LOTS',        value: trade.lots!=null?trade.lots:'—'},
-    {label:'PHASE',       value: trade.phase_tag||'—'},
-    {label:'RESULT',      value: trade.settled_r!=null?(parseFloat(trade.settled_r)>=0?'+':'')+trade.settled_r+'R':'Open', color:resultColor, bold:true},
+    {label:'DIRECTION',   value: trade.dir||'—', color: dirColor, bold:true},
+    {label:'ENTRY PRICE', value: trade.price!=null?trade.price:'—'},
+    {label:'LOTS',        value: trade.size!=null?trade.size:'—'},
+    {label:'PHASE',       value: trade.phase_tag||trade.ph||'—'},
+    {label:'P&L',         value: trade.pnl!=null?(trade.pnl>=0?'+€':'€')+parseFloat(trade.pnl).toFixed(2):'Open', color: trade.pnl>0?'var(--mega-bull)':trade.pnl<0?'var(--mega-bear)':'var(--muted2)'},
+    {label:'RESULT',      value: trade.r!=null?(parseFloat(trade.r)>=0?'+':'')+trade.r+'R':'Open', color:resultColor, bold:true},
   ];
   openChartModal(chartSym, trade.date, details, 'D');
 }
