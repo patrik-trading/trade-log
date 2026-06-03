@@ -2582,35 +2582,40 @@ body:not(.light){
         Max Safe Lot Size
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-        <div class="ig"><label>Current Equity (€)</label><input type="number" id="calc-equity" placeholder="e.g. 1011.94" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig"><label>Used Margin (€)</label><input type="number" id="calc-used-margin" placeholder="e.g. 344.45" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig"><label>Margin per 0.01 lot (€)</label><input type="number" id="calc-margin-per-lot" placeholder="e.g. 20" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig"><label>Stop Out Level (%)</label><input type="number" id="calc-stopout" placeholder="50" value="50" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig" style="grid-column:1/-1"><label>New Trade Size (lots) <span style="font-size:.52rem;color:var(--muted2)">— to preview margin after adding</span></label><input type="number" id="calc-new-lots" placeholder="e.g. 0.05" step="0.01" min="0" oninput="calcMaxLots()"></div>
-        <div class="ig" style="grid-column:1/-1;background:var(--surface2);border-radius:10px;padding:10px 12px">
-          <label style="color:var(--muted2)">Total SL Risk (auto) <span style="font-size:.52rem">(sum of Trade 1+2+3)</span></label>
-          <input type="number" id="calc-sl-risk" readonly style="background:transparent;border:none;font-family:'Bebas Neue';font-size:1.4rem;color:var(--accent);padding:2px 0;pointer-events:none" placeholder="—">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="ig"><label>Account Balance (€)</label><input type="number" id="calc-equity" placeholder="e.g. 1081" step="any" oninput="calcMaxLots()"></div>
+        <div class="ig"><label>Used Margin (€)</label><input type="number" id="calc-used-margin" placeholder="e.g. 457" step="any" oninput="calcMaxLots()"></div>
+        <div class="ig"><label>Open SL Risk (€)</label><input type="number" id="calc-sl1" placeholder="e.g. 108" step="any" oninput="calcMaxLots()"></div>
+        <div class="ig"><label>Margin per 0.01 lot (€)</label><input type="number" id="calc-margin-per-lot" placeholder="e.g. 31.5" step="any" oninput="calcMaxLots()"></div>
+      </div>
+
+      <!-- Live stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px;padding:12px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
+        <div style="text-align:center">
+          <div style="font-family:DM Mono;font-size:.52rem;color:var(--muted2);margin-bottom:3px">FREE MARGIN</div>
+          <div id="calc-free-margin" style="font-family:'Bebas Neue';font-size:1.2rem;color:var(--accent)">—</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:DM Mono;font-size:.52rem;color:var(--muted2);margin-bottom:3px">MARGIN LEVEL</div>
+          <div id="calc-margin-buffer" style="font-family:'Bebas Neue';font-size:1.2rem;color:var(--accent)">—</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:DM Mono;font-size:.52rem;color:var(--muted2);margin-bottom:3px">AFTER SL HIT</div>
+          <div id="calc-after-sl" style="font-family:'Bebas Neue';font-size:1.2rem;color:var(--muted2)">—</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:DM Mono;font-size:.52rem;color:var(--muted2);margin-bottom:3px">MAX LOTS</div>
+          <div id="calc-max-lots" style="font-family:'Bebas Neue';font-size:1.2rem;color:var(--mega-bull)">—</div>
         </div>
       </div>
-      <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);letter-spacing:.25em;margin-bottom:8px">WORST CASE — IF ALL TRADES HIT SL (€)</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
-        <div class="ig"><label>Trade 1 SL risk</label><input type="number" id="calc-sl1" placeholder="e.g. 45" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig"><label>Trade 2 SL risk</label><input type="number" id="calc-sl2" placeholder="e.g. 45" step="any" oninput="calcMaxLots()"></div>
-        <div class="ig"><label>Trade 3 SL risk</label><input type="number" id="calc-sl3" placeholder="optional" step="any" oninput="calcMaxLots()"></div>
+
+      <!-- New trade SL -->
+      <div class="ig" style="margin-bottom:12px">
+        <label>New Trade SL Risk (€) <span style="font-size:.52rem;color:var(--muted2)">— max lots for this specific trade</span></label>
+        <input type="number" id="calc-sl-new-trade" placeholder="e.g. 108" step="any" oninput="calcMaxLots()">
       </div>
 
       <div id="calc-margin-result" style="display:none;border-radius:10px;padding:14px;border:2px solid var(--border)">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;margin-bottom:12px">
-          <div>
-            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">MAX SAFE LOTS</div>
-            <div id="calc-max-lots" style="font-family:'Bebas Neue';font-size:2rem;color:var(--mega-bull);letter-spacing:.04em">—</div>
-          </div>
-          <div>
-            <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:4px">WORST CASE %</div>
-            <div id="calc-margin-buffer" style="font-family:'Bebas Neue';font-size:2rem;color:var(--accent);letter-spacing:.04em">—</div>
-          </div>
-        </div>
         <div id="calc-safety-bar" style="border-radius:8px;padding:10px 14px;text-align:center">
           <div id="calc-safety-icon" style="font-size:1.4rem;margin-bottom:4px">—</div>
           <div id="calc-safety-text" style="font-family:DM Mono;font-size:.65rem;font-weight:600"></div>
@@ -2618,7 +2623,6 @@ body:not(.light){
         </div>
       </div>
     </div>
-
     <button class="btn-sm" onclick="clearCalc()" style="margin-top:16px;width:100%">⌫ Clear All</button>
   </div>
 
@@ -7088,77 +7092,100 @@ function calcWeightedEntry() {
 }
 
 function calcMaxLots() {
-  const equity=parseFloat(document.getElementById('calc-equity').value);
-  const usedMargin=parseFloat(document.getElementById('calc-used-margin').value);
-  const marginPerLot=parseFloat(document.getElementById('calc-margin-per-lot').value);
-  const stopOut=parseFloat(document.getElementById('calc-stopout').value)||50;
-  const res=document.getElementById('calc-margin-result');
-  if(isNaN(equity)||isNaN(usedMargin)||isNaN(marginPerLot)||marginPerLot===0){res.style.display='none';return;}
+  const balance      = parseFloat(document.getElementById('calc-equity').value);
+  const usedMargin   = parseFloat(document.getElementById('calc-used-margin').value);
+  const openSLRisk   = parseFloat(document.getElementById('calc-sl1')?.value) || 0;
+  const marginPerLot = parseFloat(document.getElementById('calc-margin-per-lot').value);
+  const newTradeSL   = parseFloat(document.getElementById('calc-sl-new-trade')?.value) || 0;
+  const stopOut      = 50; // Pepperstone retail stop out %
+  const res          = document.getElementById('calc-margin-result');
 
-  // Current margin level
-  const currentLevel = usedMargin > 0 ? (equity / usedMargin * 100) : 999;
+  if(isNaN(balance) || isNaN(usedMargin) || isNaN(marginPerLot) || marginPerLot === 0) {
+    res.style.display = 'none';
+    // Clear stats
+    ['calc-free-margin','calc-margin-buffer','calc-after-sl','calc-max-lots'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.textContent = '—';
+    });
+    return;
+  }
 
-  // Worst case: equity after ALL open trades hit SL
-  const sl1 = parseFloat(document.getElementById('calc-sl1')?.value) || 0;
-  const sl2 = parseFloat(document.getElementById('calc-sl2')?.value) || 0;
-  const sl3 = parseFloat(document.getElementById('calc-sl3')?.value) || 0;
-  const totalSLRisk = sl1 + sl2 + sl3;
-  // Auto-update the total field for visibility
-  const slTotalEl = document.getElementById('calc-sl-risk');
-  if(slTotalEl && (sl1||sl2||sl3)) slTotalEl.value = totalSLRisk;
-  const worstCaseEquity = equity - totalSLRisk;
+  // ── Core calculations ──
+  const freeMargin    = balance - usedMargin;
+  const marginLevel   = usedMargin > 0 ? (balance / usedMargin * 100) : 999;
+  const balanceAfterSL= balance - openSLRisk;
+  const marginLevelAfterSL = usedMargin > 0 ? (balanceAfterSL / usedMargin * 100) : 999;
 
-  // Safe threshold = stop out + 100% buffer
-  const safeThreshold = stopOut + 100;
+  // Max margin available before hitting stop out (using worst case equity)
+  const equityForCalc  = openSLRisk > 0 ? balanceAfterSL : balance;
+  const maxTotalMargin = equityForCalc / stopOut * 100;
+  const freeForNew     = Math.max(0, maxTotalMargin - usedMargin);
+  const maxCentiLots   = Math.floor(freeForNew / marginPerLot);
+  const maxLots        = Math.max(0, maxCentiLots / 100);
 
-  // Use WORST CASE equity for max lot calculation
-  // This ensures even if all existing trades hit SL, new trade won't cause stop out
-  const equityForCalc = totalSLRisk > 0 ? worstCaseEquity : equity;
-  const maxTotalMargin = equityForCalc / safeThreshold * 100;
-  const availableMargin = Math.max(0, maxTotalMargin - usedMargin);
-  const maxCentiLots = Math.floor(availableMargin / marginPerLot);
-  const maxLots = Math.max(0, maxCentiLots / 100);
+  // If new trade SL entered — calc max lots for that specific SL amount
+  // Max lots = how many 0.01 lots can we add where new margin doesn't push below stop out
+  const maxLotsForSL = newTradeSL > 0
+    ? Math.floor(freeForNew / marginPerLot) / 100
+    : maxLots;
 
-  // Absolute max (at stop out, worst case equity, no buffer)
-  const absMaxTotalMargin = equityForCalc / stopOut * 100;
-  const absAvailable = Math.max(0, absMaxTotalMargin - usedMargin);
-  const absMaxLots = Math.max(0, Math.floor(absAvailable / marginPerLot) / 100);
-  // Projected margin level after adding new trade
-  const newLots = parseFloat(document.getElementById('calc-new-lots')?.value) || 0;
-  const newMargin = newLots > 0 ? Math.round(newLots / 0.01) * marginPerLot : 0;
-  const projectedUsedMargin = usedMargin + newMargin;
-  const projectedLevel = projectedUsedMargin > 0 ? (equity / projectedUsedMargin * 100) : 999;
-  const projectedWCLevel = projectedUsedMargin > 0 ? (worstCaseEquity / projectedUsedMargin * 100) : 999;
+  // ── Update stats display ──
+  const fmEl = document.getElementById('calc-free-margin');
+  const mlEl = document.getElementById('calc-margin-buffer');
+  const asEl = document.getElementById('calc-after-sl');
+  const mxEl = document.getElementById('calc-max-lots');
 
-  document.getElementById('calc-max-lots').textContent=maxLots.toFixed(2);
-  document.getElementById('calc-margin-buffer').textContent=currentLevel.toFixed(0)+'%';
+  if(fmEl) fmEl.textContent = '€' + freeMargin.toFixed(0);
+  if(mlEl) {
+    mlEl.textContent = marginLevel.toFixed(0) + '%';
+    mlEl.style.color = marginLevel > 200 ? 'var(--mega-bull)' : marginLevel > 100 ? 'var(--accent)' : 'var(--mega-bear)';
+  }
+  if(asEl) {
+    asEl.textContent = marginLevelAfterSL.toFixed(0) + '%';
+    asEl.style.color = marginLevelAfterSL > 150 ? 'var(--mega-bull)' : marginLevelAfterSL > 100 ? 'var(--accent)' : 'var(--mega-bear)';
+  }
+  if(mxEl) mxEl.textContent = maxLots.toFixed(2) + ' lots';
 
-  const subEl=document.getElementById('calc-safety-sub');
-  const bar=document.getElementById('calc-safety-bar');
-  const icon=document.getElementById('calc-safety-icon');
-  const text=document.getElementById('calc-safety-text');
-  const sub=document.getElementById('calc-safety-sub');
+  // ── Safety bar ──
+  const bar  = document.getElementById('calc-safety-bar');
+  const icon = document.getElementById('calc-safety-icon');
+  const text = document.getElementById('calc-safety-text');
+  const sub  = document.getElementById('calc-safety-sub');
 
-  // Use projected level if new trade entered, otherwise current
-  const displayLevel = newLots > 0 ? projectedLevel : currentLevel;
-  const wcNote = newLots > 0
-    ? 'After new trade: '+projectedLevel.toFixed(0)+'% · Worst case: '+projectedWCLevel.toFixed(0)+'%'
-    : (totalSLRisk > 0 ? 'Current: '+currentLevel.toFixed(0)+'% · Worst case equity €'+worstCaseEquity.toFixed(0) : 'Margin level '+currentLevel.toFixed(0)+'%');
+  // Use worst case margin level (after SL hit) for color
+  const levelForColor = openSLRisk > 0 ? marginLevelAfterSL : marginLevel;
 
-  if(subEl) subEl.textContent = wcNote;
-  if(sub) sub.textContent = wcNote;
+  let subText = '';
+  if(newTradeSL > 0) {
+    // How many lots can we take given this specific SL amount
+    // Equity needed to cover SL + keep stopout buffer = openSLRisk + newTradeSL
+    const totalRisk     = openSLRisk + newTradeSL;
+    const equityAfterAll= balance - totalRisk;
+    const projLevel     = usedMargin > 0 ? (equityAfterAll / usedMargin * 100) : 999;
+    subText = 'After new trade SL: ' + projLevel.toFixed(0) + '% · Max: ' + maxLotsForSL.toFixed(2) + ' lots';
+    if(sub) sub.textContent = subText;
+  } else {
+    subText = 'Free margin: €' + freeMargin.toFixed(0) + ' · Worst case: ' + marginLevelAfterSL.toFixed(0) + '%';
+    if(sub) sub.textContent = subText;
+  }
 
-  const levelForColor = newLots > 0 ? projectedWCLevel : currentLevel;
-  if(levelForColor>200){bar.style.background='rgba(34,197,94,.08)';bar.style.border='1px solid rgba(34,197,94,.2)';icon.textContent='🟢';text.textContent=newLots>0?'SAFE AFTER ADD':'SAFE';text.style.color='var(--mega-bull)';}
-  else if(levelForColor>120){bar.style.background='rgba(249,115,22,.08)';bar.style.border='1px solid rgba(249,115,22,.2)';icon.textContent='🟡';text.textContent=newLots>0?'CAUTION AFTER ADD':'CAUTION';text.style.color='var(--bear)';}
-  else{bar.style.background='rgba(239,68,68,.08)';bar.style.border='1px solid rgba(239,68,68,.2)';icon.textContent='🔴';text.textContent=newLots>0?'DANGER AFTER ADD':'DANGER';text.style.color='var(--mega-bear)';}
-  res.style.display='block';
+  if(levelForColor > 200) {
+    bar.style.background='rgba(34,197,94,.08)'; bar.style.border='1px solid rgba(34,197,94,.2)';
+    icon.textContent='🟢'; text.textContent='SAFE'; text.style.color='var(--mega-bull)';
+  } else if(levelForColor > 120) {
+    bar.style.background='rgba(249,115,22,.08)'; bar.style.border='1px solid rgba(249,115,22,.2)';
+    icon.textContent='🟡'; text.textContent='CAUTION'; text.style.color='var(--bear)';
+  } else {
+    bar.style.background='rgba(239,68,68,.08)'; bar.style.border='1px solid rgba(239,68,68,.2)';
+    icon.textContent='🔴'; text.textContent='DANGER'; text.style.color='var(--mega-bear)';
+  }
+
+  res.style.display = 'block';
 }
 
 function clearCalc(){
   ['calc-p1-price','calc-p1-lots','calc-p2-price','calc-p2-lots',
    'calc-p3-price','calc-p3-lots','calc-equity','calc-used-margin',
-   'calc-margin-per-lot','calc-sl-risk','calc-sl1','calc-sl2','calc-sl3','calc-new-lots'
+   'calc-margin-per-lot','calc-sl1','calc-sl-new-trade'
   ].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const so=document.getElementById('calc-stopout');if(so)so.value='50';
   const er=document.getElementById('calc-entry-result');if(er)er.style.display='none';
