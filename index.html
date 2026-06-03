@@ -6507,8 +6507,13 @@ async function saveEdit() {
     phase:    getSelTag('edit-phase-tags'),
     entry:    getSelTag('edit-entry-tags'),
     inst_tag: getSelTag('edit-inst-tags'),
-    notes:    document.getElementById('edit-notes').value,
-    addon:    document.getElementById('edit-addon').checked,
+    notes:        document.getElementById('edit-notes').value,
+    addon:        document.getElementById('edit-addon').checked,
+    sl_price:     document.getElementById('edit-sl')?.value!==''?parseFloat(document.getElementById('edit-sl').value):null,
+    tp_price:     document.getElementById('edit-tp')?.value!==''?parseFloat(document.getElementById('edit-tp').value):null,
+    triggered_at: document.getElementById('edit-triggered-at')?.value?document.getElementById('edit-triggered-at').value+'T00:00:00+00:00':null,
+    opened_at:    document.getElementById('edit-opened-at')?.value?document.getElementById('edit-opened-at').value+'T00:00:00+00:00':null,
+    closed_at:    document.getElementById('edit-closed-at')?.value?document.getElementById('edit-closed-at').value+'T00:00:00+00:00':null,
   };
 
   const btn = document.getElementById('btn-save-edit');
