@@ -2255,7 +2255,7 @@ body:not(.light){
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
             <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Add-on</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
-            <tbody id="tl-tbody"><tr><td colspan="20" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
+            <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -4862,7 +4862,7 @@ function renderTrades(){
   const ex=document.getElementById('tl-expect');ex.textContent=exp;ex.style.color=parseFloat(exp)>=0?'var(--mega-bull)':'var(--mega-bear)';
   const sym=currentCurrency==='EUR'?'€':'$';
   const tb=document.getElementById('tl-tbody');
-  if(!ft.length){tb.innerHTML='<tr><td colspan="20" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
+  if(!ft.length){tb.innerHTML='<tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
   else tb.innerHTML=ft.map(t=>{
     const pc=PC[t.phase]||'#6b7280',ts=t.currency==='EUR'?'€':'$';
     const rC=t.r===null?'td-zero':t.r>0.1?'td-pos':t.r<-0.1?'td-neg':'td-zero';
@@ -4882,7 +4882,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):'—'}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
