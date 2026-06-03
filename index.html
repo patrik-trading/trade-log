@@ -5085,17 +5085,23 @@ function ztSaveZones() {
   const cfdLabel = document.getElementById('zt-cfd-label')?.value?.trim() || '';
   const dp       = Math.abs(parseFloat(document.getElementById('zt-fut-price')?.value)||1) > 100 ? 2 : 5;
 
+  const sym   = document.getElementById('zt-sym')?.value;
+  const isInv = sym && ZT_MAP[sym] && ZT_MAP[sym].inv;
+
   const zones = [1,2,3].map(n => {
     const top  = parseFloat(document.getElementById('zt-z'+n+'-top')?.value);
     const bot  = parseFloat(document.getElementById('zt-z'+n+'-bot')?.value);
     const type = document.getElementById('zt-type-'+n)?.value || 'demand';
     if(isNaN(top) && isNaN(bot)) return null;
+    // For inverse pairs: CFD zone = (1/futures_zone) + basis
+    const cfdTop = isNaN(top) ? null : parseFloat((isInv ? (1/top) + ztCurrentBasis : top + ztCurrentBasis).toFixed(dp));
+    const cfdBot = isNaN(bot) ? null : parseFloat((isInv ? (1/bot) + ztCurrentBasis : bot + ztCurrentBasis).toFixed(dp));
     return {
       type,
       futTop: isNaN(top) ? null : top,
       futBot: isNaN(bot) ? null : bot,
-      cfdTop: isNaN(top) ? null : parseFloat((top + ztCurrentBasis).toFixed(dp)),
-      cfdBot: isNaN(bot) ? null : parseFloat((bot + ztCurrentBasis).toFixed(dp)),
+      cfdTop,
+      cfdBot,
     };
   }).filter(Boolean);
 
