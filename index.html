@@ -3270,6 +3270,8 @@ body:not(.light){
     <div class="g3">
       <div class="ig"><label>Type</label><select id="edit-type"><option>Forex</option><option>Futures</option><option>CFD</option></select></div>
       <div class="ig"><label>Price</label><input type="number" id="edit-price" step="any"></div>
+      <div class="ig"><label>Stop Loss</label><input type="number" id="edit-sl" step="any"></div>
+      <div class="ig"><label>Take Profit</label><input type="number" id="edit-tp" step="any"></div>
       <div class="ig"><label>Currency</label>
         <div class="cur-toggle" style="margin-top:2px">
           <button class="cur-btn" id="edit-cur-usd" onclick="setEditCur('USD')">$ USD</button>
@@ -3314,6 +3316,11 @@ body:not(.light){
       <button class="tag-btn" data-val="Bearish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#f97316">● Bearish</button>
       <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('edit-inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
     </div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="ig"><label>Triggered At</label><input type="datetime-local" id="edit-triggered-at"></div>
+        <div class="ig"><label>Opened At</label><input type="datetime-local" id="edit-opened-at"></div>
+        <div class="ig"><label>Closed At</label><input type="datetime-local" id="edit-closed-at"></div>
+      </div>
     <div class="ig" style="margin-bottom:16px"><label>Notes</label><textarea id="edit-notes"></textarea></div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="edit-addon" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
     <div style="display:flex;gap:8px">
@@ -6385,6 +6392,13 @@ function openEditModal(id) {
   document.getElementById('edit-symbol').value  = t.symbol || '';
   document.getElementById('edit-size').value    = t.size === '—' ? '' : t.size;
   document.getElementById('edit-price').value   = t.price === '—' ? '' : t.price;
+  document.getElementById('edit-sl').value      = t.sl_price != null ? t.sl_price : '';
+  document.getElementById('edit-tp').value      = t.tp_price != null ? t.tp_price : '';
+  // Format timestamps for datetime-local input (needs YYYY-MM-DDTHH:MM)
+  const fmtDT = v => v ? v.slice(0,16) : '';
+  document.getElementById('edit-triggered-at').value = fmtDT(t.triggered_at);
+  document.getElementById('edit-opened-at').value    = fmtDT(t.opened_at);
+  document.getElementById('edit-closed-at').value    = fmtDT(t.closed_at);
   document.getElementById('edit-pnl').value     = t.pnl !== null ? t.pnl : '';
   document.getElementById('edit-r').value       = t.r !== null ? t.r : '';
   document.getElementById('edit-rvalue').value  = t.rvalue  !== null ? t.rvalue  : '';
