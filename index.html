@@ -7097,7 +7097,8 @@ function calcMaxLots() {
   const openSLRisk   = parseFloat(document.getElementById('calc-sl1')?.value) || 0;
   const marginPerLot = parseFloat(document.getElementById('calc-margin-per-lot').value);
   const newTradeSL   = parseFloat(document.getElementById('calc-sl-new-trade')?.value) || 0;
-  const stopOut      = 50; // Pepperstone retail stop out %
+  const stopOut      = 50;  // Pepperstone hard stop out %
+  const safeLevel    = 150; // Recommended safe margin level — conservative buffer
   const res          = document.getElementById('calc-margin-result');
 
   if(isNaN(balance) || isNaN(usedMargin) || isNaN(marginPerLot) || marginPerLot === 0) {
@@ -7115,18 +7116,26 @@ function calcMaxLots() {
   const balanceAfterSL= balance - openSLRisk;
   const marginLevelAfterSL = usedMargin > 0 ? (balanceAfterSL / usedMargin * 100) : 999;
 
-  // Max margin available before hitting stop out (using worst case equity)
-  const equityForCalc  = openSLRisk > 0 ? balanceAfterSL : balance;
-  const maxTotalMargin = equityForCalc / stopOut * 100;
-  const freeForNew     = Math.max(0, maxTotalMargin - usedMargin);
-  const maxCentiLots   = Math.floor(freeForNew / marginPerLot);
+  // ── Max lots calculation ──
+  // Constraint: after adding N lots with their margin, if ALL SL hits,
+  // margin level must stay above stopOut%
+  // Worst case equity = balance - openSLRisk - newTradeSL
+  // Worst case used margin = usedMargin + (N * marginPerLot / 0.01 * 0.01) = usedMargin + newMargin
+  // marginLevel = worstEquity / (usedMargin + newMargin) * 100 >= stopOut
+  // Solve for newMargin: newMargin <= (worstEquity * 100/stopOut) - usedMargin
+  // Then maxLots = floor(newMargin / marginPerLot) / 100
+
+  // Without new trade SL — max lots based on SL risk of existing trades only
+  const worstEquity    = balance - openSLRisk;
+  // Use safeLevel (150%) not hard stop-out (50%) for max lots recommendation
+  const maxNewMargin   = Math.max(0, (worstEquity * 100 / safeLevel) - usedMargin);
+  const maxCentiLots   = Math.floor(maxNewMargin / marginPerLot);
   const maxLots        = Math.max(0, maxCentiLots / 100);
 
-  // If new trade SL entered — calc max lots for that specific SL amount
-  // Max lots = how many 0.01 lots can we add where new margin doesn't push below stop out
-  const maxLotsForSL = newTradeSL > 0
-    ? Math.floor(freeForNew / marginPerLot) / 100
-    : maxLots;
+  // With new trade SL — include new trade's SL in worst case equity
+  const worstEquityAll = balance - openSLRisk - newTradeSL;
+  const maxNewMarginSL = Math.max(0, (worstEquityAll * 100 / safeLevel) - usedMargin);
+  const maxLotsForSL   = Math.max(0, Math.floor(maxNewMarginSL / marginPerLot) / 100);
 
   // ── Update stats display ──
   const fmEl = document.getElementById('calc-free-margin');
@@ -7143,7 +7152,7 @@ function calcMaxLots() {
     asEl.textContent = marginLevelAfterSL.toFixed(0) + '%';
     asEl.style.color = marginLevelAfterSL > 150 ? 'var(--mega-bull)' : marginLevelAfterSL > 100 ? 'var(--accent)' : 'var(--mega-bear)';
   }
-  if(mxEl) mxEl.textContent = maxLots.toFixed(2) + ' lots';
+  if(mxEl) { const display = newTradeSL > 0 ? maxLotsForSL : maxLots; mxEl.textContent = display.toFixed(2) + ' lots'; mxEl.style.color = display > 0 ? 'var(--mega-bull)' : 'var(--mega-bear)'; }
 
   // ── Safety bar ──
   const bar  = document.getElementById('calc-safety-bar');
@@ -7161,7 +7170,8 @@ function calcMaxLots() {
     const totalRisk     = openSLRisk + newTradeSL;
     const equityAfterAll= balance - totalRisk;
     const projLevel     = usedMargin > 0 ? (equityAfterAll / usedMargin * 100) : 999;
-    subText = 'After new trade SL: ' + projLevel.toFixed(0) + '% · Max: ' + maxLotsForSL.toFixed(2) + ' lots';
+    const worstWithNew = usedMargin > 0 ? (equityAfterAll / usedMargin * 100) : 999;
+    subText = 'Worst case margin: ' + worstWithNew.toFixed(0) + '% · Max safe: ' + maxLotsForSL.toFixed(2) + ' lots';
     if(sub) sub.textContent = subText;
   } else {
     subText = 'Free margin: €' + freeMargin.toFixed(0) + ' · Worst case: ' + marginLevelAfterSL.toFixed(0) + '%';
