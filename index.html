@@ -2153,7 +2153,7 @@ body:not(.light){
           <div class="ig"><label>Account</label><select id="tl-acct-sel" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.8rem;outline:none;width:100%"><option>Default</option></select></div>
         </div>
         <div class="g4 tl-g4-mid">
-          <div class="ig"><label>Open / Close</label><select id="tl-oc"><option value="Close">Close</option><option value="Open">Open</option></select></div>
+          <div class="ig"><label>Open / Close</label><select id="tl-oc"><option value="Close">Close</option><option value="Open">Open</option><option value="Triggered">Triggered</option></select></div>
           <div class="ig"><label>Direction</label><select id="tl-dir"><option>Buy</option><option>Sell</option></select></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="tl-size" placeholder="0.00" step="0.01" min="0"></div>
           <div class="ig"><label>Symbol</label><select id="tl-symbol" onchange="tlAutoFillFromSignal()"><option value="">— Select —</option>
@@ -2164,6 +2164,8 @@ body:not(.light){
         <div class="g3">
           <div class="ig"><label>Type</label><select id="tl-type"><option>Forex</option><option>Futures</option><option>CFD</option></select></div>
           <div class="ig"><label>Price</label><input type="number" id="tl-price" placeholder="0.00000" step="any"></div>
+          <div class="ig"><label>Stop Loss</label><input type="number" id="tl-sl" placeholder="0.00000" step="any"></div>
+          <div class="ig"><label>Take Profit</label><input type="number" id="tl-tp" placeholder="0.00000" step="any"></div>
           <div class="ig"></div>
         </div>
         <div class="r-box">
@@ -2220,7 +2222,12 @@ body:not(.light){
           <button class="tag-btn" data-val="Bearish"               onclick="selTag('inst-tags',this)" style="--tc:#f97316">● Bearish</button>
           <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
         </div></div>
-        <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="ig"><label>Triggered At <span style="font-size:.52rem;color:var(--muted2)">(date/time)</span></label><input type="datetime-local" id="tl-triggered-at"></div>
+        <div class="ig"><label>Opened At</label><input type="datetime-local" id="tl-opened-at"></div>
+        <div class="ig"><label>Closed At</label><input type="datetime-local" id="tl-closed-at"></div>
+      </div>
+      <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><input type="checkbox" id="tl-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="tl-addon" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
         <button class="btn-log" id="btn-trade" onclick="addTrade()">+ LOG TRADE</button>
       </div>
@@ -4819,7 +4826,7 @@ async function addTrade(){
   if(!date||!symbol){alert('Date and Symbol are required.');return;}
   const pv=document.getElementById('tl-pnl').value,rv=document.getElementById('tl-r').value,rvv=document.getElementById('tl-rvalue').value;
   const riskedV=document.getElementById('tl-risked').value,riskedRV=document.getElementById('tl-risked-r').value;
-  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value,addon:document.getElementById('tl-addon').checked};
+  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value,addon:document.getElementById('tl-addon').checked,sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,tp_price:document.getElementById('tl-tp')?.value!==''?parseFloat(document.getElementById('tl-tp').value):null,triggered_at:document.getElementById('tl-triggered-at')?.value||null,opened_at:document.getElementById('tl-opened-at')?.value||null,closed_at:document.getElementById('tl-closed-at')?.value||null};
   const btn=document.getElementById('btn-trade');btn.disabled=true;btn.textContent='Saving…';
   try{sync('busy','Saving…');await sbPost('trades',row);trades.unshift(row);renderTrades();resetTradeForm();sync('ok','Saved ✓');}
   catch(e){sync('err','Save failed');alert('Error: '+e.message);}
@@ -7152,7 +7159,12 @@ function openTradeChart(trade) {
     {label:'SYMBOL',      value: sym, bold:true},
     {label:'DIRECTION',   value: trade.dir||'—', color: dirColor, bold:true},
     {label:'ENTRY PRICE', value: trade.price!=null?trade.price:'—'},
+    {label:'STOP LOSS',   value: trade.sl_price!=null?trade.sl_price:'—', color:'var(--mega-bear)'},
+    {label:'TAKE PROFIT', value: trade.tp_price!=null?trade.tp_price:'—', color:'var(--mega-bull)'},
     {label:'LOTS',        value: trade.size!=null?trade.size:'—'},
+    {label:'TRIGGERED',   value: trade.triggered_at?trade.triggered_at.slice(0,16).replace('T',' '):'—'},
+    {label:'OPENED',      value: trade.opened_at?trade.opened_at.slice(0,16).replace('T',' '):'—'},
+    {label:'CLOSED',      value: trade.closed_at?trade.closed_at.slice(0,16).replace('T',' '):'—'},
     {label:'PHASE',       value: trade.phase_tag||trade.ph||'—'},
     {label:'P&L',         value: trade.pnl!=null?(trade.pnl>=0?'+€':'€')+parseFloat(trade.pnl).toFixed(2):'Open', color: trade.pnl>0?'var(--mega-bull)':trade.pnl<0?'var(--mega-bear)':'var(--muted2)'},
     {label:'RESULT',      value: trade.r!=null?(parseFloat(trade.r)>=0?'+':'')+trade.r+'R':'Open', color:resultColor, bold:true},
