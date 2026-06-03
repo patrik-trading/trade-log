@@ -5083,9 +5083,10 @@ function ztSaveZones() {
   if(ztCurrentBasis === null) { alert('Enter prices and calculate basis first.'); return; }
   const label    = document.getElementById('zt-label')?.value?.trim() || 'Zone';
   const cfdLabel = document.getElementById('zt-cfd-label')?.value?.trim() || '';
-  const dp       = Math.abs(parseFloat(document.getElementById('zt-fut-price')?.value)||1) > 100 ? 2 : 5;
+  const activeDp = ztActiveBasis?.dp ?? null;
+  const dp       = activeDp ?? (Math.abs(parseFloat(document.getElementById('zt-fut-price')?.value)||1) > 100 ? 2 : 5);
 
-  const sym   = document.getElementById('zt-sym')?.value;
+  const sym   = document.getElementById('zt-zone-sym')?.value || document.getElementById('zt-sym')?.value;
   const isInv = sym && ZT_MAP[sym] && ZT_MAP[sym].inv;
 
   const zones = [1,2,3].map(n => {
