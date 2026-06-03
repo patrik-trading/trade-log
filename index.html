@@ -3877,6 +3877,7 @@ function renderSignals(){
       <td style="display:flex;gap:2px">
         <button class="tl-edit" onclick="openSigEditModal(${e.id})" title="Edit">✏️</button>
         <button class="tl-del" onclick="deleteEntry(${e.id})" title="Delete">✕</button>
+        <button class="tl-edit" onclick="openSignalChart(entries.find(x=>x.id===${e.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.3)">📈</button>
       </td>
     </tr>`;
   }).join('');
@@ -4867,7 +4868,8 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button></td></tr>`;
+    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+        <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
 
@@ -7011,6 +7013,152 @@ function renderTimeline() {
   </svg>`;
 }
 
+// ── CHART MODAL ──
+let chartWidget = null;
+let chartCurrentTF = 'W';
+let chartCurrentSym = '';
+
+// Futures → TradingView symbol map
+const CHART_SYM = {
+  '6E':'CME_MINI:6E1!','6J':'CME:6J1!','6S':'CME:6S1!',
+  '6B':'CME:6B1!','6A':'CME:6A1!','6C':'CME:6C1!',
+  '6N':'CME:6N1!','GC':'COMEX:GC1!','SI':'COMEX:SI1!',
+  // CFD fallbacks
+  'EUR/USD':'FX:EURUSD','USD/JPY':'FX:USDJPY','USD/CHF':'FX:USDCHF',
+  'GBP/USD':'FX:GBPUSD','AUD/USD':'FX:AUDUSD','USD/CAD':'FX:USDCAD',
+  'NZD/USD':'FX:NZDUSD',
+};
+
+function openChartModal(sym, date, details, defaultTF) {
+  chartCurrentSym = CHART_SYM[sym] || ('FX:'+sym.replace('/',''));
+  chartCurrentTF  = defaultTF || 'W';
+  const overlay   = document.getElementById('chart-modal-overlay');
+  if(!overlay) return;
+  overlay.style.display = 'flex';
+
+  // Title
+  document.getElementById('chart-modal-title').textContent = sym + ' — Price Chart';
+  document.getElementById('chart-modal-sub').textContent = 'From ' + (date||'') + ' · ' + (defaultTF==='D'?'Daily':'Weekly') + ' view';
+
+  // Details panel
+  const detEl = document.getElementById('chart-details-panel');
+  if(detEl && details) {
+    detEl.innerHTML = details.map(row =>
+      `<div style="padding:8px 10px;background:var(--surface2);border-radius:7px">
+        <div style="color:var(--muted2);font-size:.52rem;letter-spacing:.08em;margin-bottom:3px">${row.label}</div>
+        <div style="color:${row.color||'var(--text)'};font-weight:${row.bold?'600':'400'};font-size:.65rem">${row.value}</div>
+      </div>`
+    ).join('');
+  }
+
+  // TF buttons
+  setChartTFButtons(chartCurrentTF);
+
+  // Load TradingView widget
+  loadChartWidget(chartCurrentSym, chartCurrentTF);
+}
+
+function setChartTF(tf) {
+  chartCurrentTF = tf;
+  setChartTFButtons(tf);
+  loadChartWidget(chartCurrentSym, tf);
+}
+
+function setChartTFButtons(tf) {
+  const wBtn = document.getElementById('chart-tf-w');
+  const dBtn = document.getElementById('chart-tf-d');
+  if(wBtn) { wBtn.style.background = tf==='W'?'var(--accent)':'transparent'; wBtn.style.color = tf==='W'?'#fff':'var(--muted2)'; wBtn.style.borderColor = tf==='W'?'var(--accent)':'var(--border)'; }
+  if(dBtn) { dBtn.style.background = tf==='D'?'var(--accent)':'transparent'; dBtn.style.color = tf==='D'?'#fff':'var(--muted2)'; dBtn.style.borderColor = tf==='D'?'var(--accent)':'var(--border)'; }
+}
+
+function loadChartWidget(sym, tf) {
+  const container = document.getElementById('chart-tv-container');
+  if(!container) return;
+  container.innerHTML = '';
+
+  // TradingView widget script
+  const script = document.createElement('script');
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  script.async = true;
+  script.innerHTML = JSON.stringify({
+    autosize: true,
+    symbol: sym,
+    interval: tf,
+    timezone: 'Europe/London',
+    theme: 'dark',
+    style: '1',
+    locale: 'en',
+    backgroundColor: '#0f172a',
+    gridColor: 'rgba(30,41,59,0.8)',
+    hide_top_toolbar: false,
+    hide_legend: false,
+    save_image: false,
+    calendar: false,
+    hide_volume: false,
+    support_host: 'https://www.tradingview.com'
+  });
+
+  const widgetDiv = document.createElement('div');
+  widgetDiv.className = 'tradingview-widget-container__widget';
+  widgetDiv.style.cssText = 'height:100%;width:100%';
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'tradingview-widget-container';
+  wrapper.style.cssText = 'height:100%;width:100%';
+  wrapper.appendChild(widgetDiv);
+  wrapper.appendChild(script);
+
+  container.appendChild(wrapper);
+}
+
+function closeChartModal() {
+  const overlay = document.getElementById('chart-modal-overlay');
+  if(overlay) overlay.style.display = 'none';
+  // Clear widget to stop any background loading
+  const container = document.getElementById('chart-tv-container');
+  if(container) container.innerHTML = '';
+}
+
+// ── Open from Signal entry ──
+function openSignalChart(entry) {
+  const sym = entry.asset || '';
+  const phase = entry.phase || '—';
+  const phaseColor = {'Spring — CONFIRMED':'#22c55e','Cliff — CONFIRMED':'#ef4444','The Conflict':'#f59e0b','Slide':'#f97316','Trap — CONFIRMED':'#a855f7','Recovery':'#34d399','Surge':'#3b82f6'}[phase]||'var(--muted2)';
+  const details = [
+    {label:'DATE',        value: entry.date||'—'},
+    {label:'ASSET',       value: sym, bold:true},
+    {label:'PHASE',       value: phase, color: phaseColor, bold:true},
+    {label:'INST SCORE',  value: entry.inst_score!=null?entry.inst_score+'':' —', color:'var(--accent)'},
+    {label:'BIAS',        value: entry.bias||'—'},
+    {label:'COT %',       value: entry.cot!=null?entry.cot+'%':'—'},
+    {label:'YIELD %',     value: entry.val!=null?entry.val+'%':'—'},
+    {label:'NOTES',       value: entry.notes||'—'},
+  ];
+  openChartModal(sym, entry.date, details, 'W');
+}
+
+// ── Open from Trade log entry ──
+function openTradeChart(trade) {
+  const sym = trade.symbol || trade.asset || '';
+  // Map CFD symbol to futures for charting
+  const CFD_TO_FUTURES = {'EUR/USD':'6E','USD/JPY':'6J','USD/CHF':'6S','GBP/USD':'6B','AUD/USD':'6A','USD/CAD':'6C','NZD/USD':'6N'};
+  const chartSym = CFD_TO_FUTURES[sym] || sym;
+  const isWin = parseFloat(trade.settled_r) > 0;
+  const resultColor = isWin ? 'var(--mega-bull)' : trade.settled_r ? 'var(--mega-bear)' : 'var(--muted2)';
+  const details = [
+    {label:'DATE',        value: trade.date||'—'},
+    {label:'SYMBOL',      value: sym, bold:true},
+    {label:'DIRECTION',   value: trade.direction||'—', color: trade.direction==='Long'?'var(--mega-bull)':'var(--mega-bear)', bold:true},
+    {label:'ENTRY',       value: trade.entry_price!=null?trade.entry_price:'—'},
+    {label:'STOP LOSS',   value: trade.stop_loss!=null?trade.stop_loss:'—', color:'var(--mega-bear)'},
+    {label:'TARGET',      value: trade.take_profit!=null?trade.take_profit:'—', color:'var(--mega-bull)'},
+    {label:'LOTS',        value: trade.lots!=null?trade.lots:'—'},
+    {label:'PHASE',       value: trade.phase_tag||'—'},
+    {label:'RESULT',      value: trade.settled_r!=null?(parseFloat(trade.settled_r)>=0?'+':'')+trade.settled_r+'R':'Open', color:resultColor, bold:true},
+  ];
+  openChartModal(chartSym, trade.date, details, 'D');
+}
+
 // ── TABS ──
 
 
@@ -7328,6 +7476,38 @@ function updateBottomBar(tab) {
   <div class="desk-modal-box" style="max-width:700px">
     <button class="desk-modal-close" onclick="closeDeskModal('desk-trade-modal')">✕</button>
     <div id="desk-trade-content" style="overflow-y:auto;max-height:80vh"></div>
+  </div>
+</div>
+
+
+<!-- ══ CHART MODAL ══ -->
+<div id="chart-modal-overlay" onclick="if(event.target===this)closeChartModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--surface1);border:1px solid var(--border);border-radius:16px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+      <div>
+        <div id="chart-modal-title" style="font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:.08em;color:var(--accent)">Chart</div>
+        <div id="chart-modal-sub" style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);margin-top:2px"></div>
+      </div>
+      <button onclick="closeChartModal()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);border-radius:8px;padding:6px 12px;font-family:'DM Mono',monospace;font-size:.62rem;cursor:pointer">✕ Close</button>
+    </div>
+    <!-- Body -->
+    <div style="display:grid;grid-template-columns:1fr 260px;flex:1;overflow:hidden;min-height:0">
+      <!-- Chart -->
+      <div style="position:relative;min-height:420px">
+        <div id="chart-tv-container" style="width:100%;height:100%;min-height:420px"></div>
+      </div>
+      <!-- Details sidebar -->
+      <div id="chart-details-panel" style="border-left:1px solid var(--border);padding:16px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:.6rem;display:flex;flex-direction:column;gap:10px">
+      </div>
+    </div>
+    <!-- Timeframe toggle -->
+    <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
+      <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">Timeframe:</span>
+      <button onclick="setChartTF('W')" id="chart-tf-w" style="padding:4px 10px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Weekly</button>
+      <button onclick="setChartTF('D')" id="chart-tf-d" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Daily</button>
+      <span style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2);margin-left:8px">Tip: use TradingView toolbar to draw entry/SL/TP lines</span>
+    </div>
   </div>
 </div>
 
