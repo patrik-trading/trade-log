@@ -2148,7 +2148,7 @@ body:not(.light){
       <div class="panel desktop-hide-form" id="log-form-panel" style="padding:16px">
         <div class="ptitle">Log New Trade</div>
         <div class="g4 tl-g4-top">
-          <div class="ig"><label>Transaction Date</label><div class="date-wrap"><input type="date" id="tl-date" oninput="autoMonth()"></div></div>
+          <div class="ig"><label>Open Date</label><div class="date-wrap"><input type="date" id="tl-date" oninput="autoMonth()"></div></div>
           <div class="ig"><label>Month (auto)</label><input type="text" id="tl-month" readonly style="color:var(--muted2)"></div>
           <div class="ig"><label>Account</label><select id="tl-acct-sel" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.8rem;outline:none;width:100%"><option>Default</option></select></div>
         </div>
@@ -2224,7 +2224,6 @@ body:not(.light){
         </div></div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
         <div class="ig"><label>Triggered At <span style="font-size:.52rem;color:var(--muted2)">(date/time)</span></label><input type="date" id="tl-triggered-at"></div>
-        <div class="ig"><label>Opened At</label><input type="date" id="tl-opened-at"></div>
         <div class="ig"><label>Closed At</label><input type="date" id="tl-closed-at"></div>
       </div>
       <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
@@ -2254,8 +2253,8 @@ body:not(.light){
         <div style="font-family:DM Mono;font-size:.58rem;color:var(--muted2);margin-bottom:6px;display:flex;justify-content:space-between"><span>← scroll sideways · scroll down ↕</span><span id="trade-count-label"></span></div>
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto;border-radius:6px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th>Date</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th>Symbol</th><th>Type</th><th>Price</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Add-on</th><th>Phase</th><th>Entry</th><th>Inst. Signal</th><th>Notes</th><th>Actions</th></tr></thead>
-            <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
+            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th>R</th><th>RR</th><th>Add-on</th><th style="min-width:70px">Phase</th><th>Entry</th><th style="min-width:80px">Inst. Signal</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
+            <tbody id="tl-tbody"><tr><td colspan="24" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -3256,7 +3255,7 @@ body:not(.light){
   <div class="edit-modal-box">
     <div class="ptitle">Edit Trade</div>
     <div class="g3">
-      <div class="ig"><label>Date</label><input type="date" id="edit-date"></div>
+      <div class="ig"><label>Open Date</label><input type="date" id="edit-date"></div>
       <div class="ig"><label>Month</label><input type="text" id="edit-month" readonly style="color:var(--muted2)"></div>
       <div class="ig"><label>Account</label><select id="edit-account" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:DM Mono;font-size:.8rem;outline:none;width:100%"></select></div>
     </div>
@@ -3318,7 +3317,6 @@ body:not(.light){
     </div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
         <div class="ig"><label>Triggered At</label><input type="date" id="edit-triggered-at"></div>
-        <div class="ig"><label>Opened At</label><input type="date" id="edit-opened-at"></div>
         <div class="ig"><label>Closed At</label><input type="date" id="edit-closed-at"></div>
       </div>
     <div class="ig" style="margin-bottom:16px"><label>Notes</label><textarea id="edit-notes"></textarea></div>
@@ -4833,7 +4831,7 @@ async function addTrade(){
   if(!date||!symbol){alert('Date and Symbol are required.');return;}
   const pv=document.getElementById('tl-pnl').value,rv=document.getElementById('tl-r').value,rvv=document.getElementById('tl-rvalue').value;
   const riskedV=document.getElementById('tl-risked').value,riskedRV=document.getElementById('tl-risked-r').value;
-  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value,addon:document.getElementById('tl-addon').checked,sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,tp_price:document.getElementById('tl-tp')?.value!==''?parseFloat(document.getElementById('tl-tp').value):null,triggered_at:document.getElementById('tl-triggered-at')?.value?document.getElementById('tl-triggered-at').value+'T00:00:00+00:00':null,opened_at:document.getElementById('tl-opened-at')?.value?document.getElementById('tl-opened-at').value+'T00:00:00+00:00':null,closed_at:document.getElementById('tl-closed-at')?.value?document.getElementById('tl-closed-at').value+'T00:00:00+00:00':null};
+  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value,addon:document.getElementById('tl-addon').checked,sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,tp_price:document.getElementById('tl-tp')?.value!==''?parseFloat(document.getElementById('tl-tp').value):null,triggered_at:document.getElementById('tl-triggered-at')?.value?document.getElementById('tl-triggered-at').value+'T00:00:00+00:00':null,opened_at:document.getElementById('tl-date')?.value?document.getElementById('tl-date').value+'T00:00:00+00:00':null,closed_at:document.getElementById('tl-closed-at')?.value?document.getElementById('tl-closed-at').value+'T00:00:00+00:00':null};
   const btn=document.getElementById('btn-trade');btn.disabled=true;btn.textContent='Saving…';
   try{sync('busy','Saving…');await sbPost('trades',row);trades.unshift(row);renderTrades();resetTradeForm();sync('ok','Saved ✓');}
   catch(e){sync('err','Save failed');alert('Error: '+e.message);}
@@ -4862,7 +4860,7 @@ function renderTrades(){
   const ex=document.getElementById('tl-expect');ex.textContent=exp;ex.style.color=parseFloat(exp)>=0?'var(--mega-bull)':'var(--mega-bear)';
   const sym=currentCurrency==='EUR'?'€':'$';
   const tb=document.getElementById('tl-tbody');
-  if(!ft.length){tb.innerHTML='<tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
+  if(!ft.length){tb.innerHTML='<tr><td colspan="24" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr>';}
   else tb.innerHTML=ft.map(t=>{
     const pc=PC[t.phase]||'#6b7280',ts=t.currency==='EUR'?'€':'$';
     const rC=t.r===null?'td-zero':t.r>0.1?'td-pos':t.r<-0.1?'td-neg':'td-zero';
@@ -4882,7 +4880,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td>${t.date}</td><td>${t.month||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):'—'}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
@@ -6397,7 +6395,7 @@ function openEditModal(id) {
   // Format timestamps for datetime-local input (needs YYYY-MM-DDTHH:MM)
   const fmtDT = v => v ? v.slice(0,10) : ''; // strip time for date input
   document.getElementById('edit-triggered-at').value = fmtDT(t.triggered_at);
-  document.getElementById('edit-opened-at').value    = fmtDT(t.opened_at);
+  // opened_at populated from edit-date (Open Date field)
   document.getElementById('edit-closed-at').value    = fmtDT(t.closed_at);
   document.getElementById('edit-pnl').value     = t.pnl !== null ? t.pnl : '';
   document.getElementById('edit-r').value       = t.r !== null ? t.r : '';
@@ -6512,7 +6510,7 @@ async function saveEdit() {
     sl_price:     document.getElementById('edit-sl')?.value!==''?parseFloat(document.getElementById('edit-sl').value):null,
     tp_price:     document.getElementById('edit-tp')?.value!==''?parseFloat(document.getElementById('edit-tp').value):null,
     triggered_at: document.getElementById('edit-triggered-at')?.value?document.getElementById('edit-triggered-at').value+'T00:00:00+00:00':null,
-    opened_at:    document.getElementById('edit-opened-at')?.value?document.getElementById('edit-opened-at').value+'T00:00:00+00:00':null,
+    opened_at:    document.getElementById('edit-date')?.value?document.getElementById('edit-date').value+'T00:00:00+00:00':null,
     closed_at:    document.getElementById('edit-closed-at')?.value?document.getElementById('edit-closed-at').value+'T00:00:00+00:00':null,
   };
 
