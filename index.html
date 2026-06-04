@@ -7119,7 +7119,7 @@ let chartTradeData = null;
 async function loadChartWidget(sym, tf) {
   const container = document.getElementById('chart-tv-container');
   if(!container) return;
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#475569;font-family:DM Mono,monospace;font-size:.65rem">Loading chart...</div>';
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted2);font-family:DM Mono,monospace;font-size:.65rem">Loading chart...</div>';
 
   const tdKey = localStorage.getItem('td_api_key') || 'ff93af751e884cc09250a810aef28ada';
   if(!tdKey) {
@@ -7152,20 +7152,45 @@ async function loadChartWidget(sym, tf) {
 
     // Build chart
     container.innerHTML = '';
+    // Detect light/dark mode from dashboard
+    // Detect theme by checking background lightness
+    const bgVal = getComputedStyle(document.body).getPropertyValue('--bg').trim()
+      || getComputedStyle(document.body).backgroundColor;
+    const isLight = bgVal.includes('255') || bgVal.includes('#f') || bgVal.includes('#e') ||
+      document.body.classList.contains('light') ||
+      document.documentElement.getAttribute('data-theme') === 'light';
+
+    const bgColor     = isLight ? '#ffffff' : '#0f172a';
+    const textColor   = isLight ? '#1e293b' : '#94a3b8';
+    const gridColor   = isLight ? '#e2e8f0' : '#1e293b';
+    const borderColor = isLight ? '#cbd5e1' : '#334155';
+
     const chart = LightweightCharts.createChart(container, {
       width:  container.clientWidth || 600,
       height: container.clientHeight || 400,
       layout: {
-        background: { color: '#0f172a' },
-        textColor:  '#94a3b8',
+        background:  { color: bgColor },
+        textColor:   textColor,
+        fontSize:    12,
+        fontFamily:  'DM Mono, monospace',
       },
       grid: {
-        vertLines: { color: '#1e293b' },
-        horzLines: { color: '#1e293b' },
+        vertLines: { color: gridColor },
+        horzLines: { color: gridColor },
       },
       crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-      rightPriceScale: { borderColor: '#334155' },
-      timeScale: { borderColor: '#334155', timeVisible: true },
+      rightPriceScale: {
+        borderColor:  borderColor,
+        textColor:    textColor,
+        scaleMargins: { top: 0.1, bottom: 0.1 },
+      },
+      timeScale: {
+        borderColor:   borderColor,
+        textColor:     textColor,
+        timeVisible:   true,
+        fixLeftEdge:   false,
+        fixRightEdge:  false,
+      },
     });
 
     // Resize observer
