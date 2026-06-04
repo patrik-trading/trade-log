@@ -7099,17 +7099,18 @@ function setChartTFButtons(tf) {
 
 // ── Lightweight Charts — symbol map for Twelve Data ──
 const LC_SYM_MAP = {
-  // Futures → Twelve Data CFD symbol
-  '6E':'EURUSD','6J':'USDJPY','6S':'USDCHF',
-  '6B':'GBPUSD','6A':'AUDUSD','6C':'USDCAD',
-  '6N':'NZDUSD','GC':'XAUUSD','SI':'XAGUSD',
-  // CFD pairs direct
-  'EUR/USD':'EURUSD','USD/JPY':'USDJPY','USD/CHF':'USDCHF',
-  'GBP/USD':'GBPUSD','AUD/USD':'AUDUSD','USD/CAD':'USDCAD',
-  'NZD/USD':'NZDUSD','XAU/USD':'XAUUSD','XAG/USD':'XAGUSD',
-  'OANDA:EURUSD':'EURUSD','OANDA:USDJPY':'USDJPY','OANDA:USDCHF':'USDCHF',
-  'OANDA:GBPUSD':'GBPUSD','OANDA:AUDUSD':'AUDUSD','OANDA:USDCAD':'USDCAD',
-  'OANDA:NZDUSD':'NZDUSD','OANDA:XAUUSD':'XAUUSD','OANDA:XAGUSD':'XAGUSD',
+  // Futures → Twelve Data symbol (slash format required)
+  '6E':'EUR/USD','6J':'USD/JPY','6S':'USD/CHF',
+  '6B':'GBP/USD','6A':'AUD/USD','6C':'USD/CAD',
+  '6N':'NZD/USD','GC':'XAU/USD','SI':'XAG/USD',
+  // CFD pairs — already in correct format
+  'EUR/USD':'EUR/USD','USD/JPY':'USD/JPY','USD/CHF':'USD/CHF',
+  'GBP/USD':'GBP/USD','AUD/USD':'AUD/USD','USD/CAD':'USD/CAD',
+  'NZD/USD':'NZD/USD','XAU/USD':'XAU/USD','XAG/USD':'XAG/USD',
+  // OANDA format fallbacks
+  'OANDA:EURUSD':'EUR/USD','OANDA:USDJPY':'USD/JPY','OANDA:USDCHF':'USD/CHF',
+  'OANDA:GBPUSD':'GBP/USD','OANDA:AUDUSD':'AUD/USD','OANDA:USDCAD':'USD/CAD',
+  'OANDA:NZDUSD':'NZD/USD','OANDA:XAUUSD':'XAU/USD','OANDA:XAGUSD':'XAG/USD',
 };
 
 // Store current chart trade data for line drawing
