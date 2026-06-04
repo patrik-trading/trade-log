@@ -7120,7 +7120,7 @@ async function loadChartWidget(sym, tf) {
   if(!container) return;
   container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#475569;font-family:DM Mono,monospace;font-size:.65rem">Loading chart...</div>';
 
-  const tdKey = localStorage.getItem('td_api_key');
+  const tdKey = localStorage.getItem('td_api_key') || 'ff93af751e884cc09250a810aef28ada';
   if(!tdKey) {
     container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;padding:20px"><div style="color:#f59e0b;font-family:DM Mono,monospace;font-size:.65rem;text-align:center">Twelve Data API key needed for charts.<br>Add it in the Settings tab.</div></div>';
     return;
