@@ -1586,6 +1586,7 @@ body:not(.light){
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
 
@@ -7096,50 +7097,155 @@ function setChartTFButtons(tf) {
   if(dBtn) { dBtn.style.background = tf==='D'?'var(--accent)':'transparent'; dBtn.style.color = tf==='D'?'#fff':'var(--muted2)'; dBtn.style.borderColor = tf==='D'?'var(--accent)':'var(--border)'; }
 }
 
-function loadChartWidget(sym, tf) {
+// ── Lightweight Charts — symbol map for Twelve Data ──
+const LC_SYM_MAP = {
+  // Futures → Twelve Data CFD symbol
+  '6E':'EURUSD','6J':'USDJPY','6S':'USDCHF',
+  '6B':'GBPUSD','6A':'AUDUSD','6C':'USDCAD',
+  '6N':'NZDUSD','GC':'XAUUSD','SI':'XAGUSD',
+  // CFD pairs direct
+  'EUR/USD':'EURUSD','USD/JPY':'USDJPY','USD/CHF':'USDCHF',
+  'GBP/USD':'GBPUSD','AUD/USD':'AUDUSD','USD/CAD':'USDCAD',
+  'NZD/USD':'NZDUSD','XAU/USD':'XAUUSD','XAG/USD':'XAGUSD',
+  'OANDA:EURUSD':'EURUSD','OANDA:USDJPY':'USDJPY','OANDA:USDCHF':'USDCHF',
+  'OANDA:GBPUSD':'GBPUSD','OANDA:AUDUSD':'AUDUSD','OANDA:USDCAD':'USDCAD',
+  'OANDA:NZDUSD':'NZDUSD','OANDA:XAUUSD':'XAUUSD','OANDA:XAGUSD':'XAGUSD',
+};
+
+// Store current chart trade data for line drawing
+let chartTradeData = null;
+
+async function loadChartWidget(sym, tf) {
   const container = document.getElementById('chart-tv-container');
   if(!container) return;
-  container.innerHTML = '';
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#475569;font-family:DM Mono,monospace;font-size:.65rem">Loading chart...</div>';
 
-  // TradingView widget script
-  const script = document.createElement('script');
-  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-  script.async = true;
-  script.innerHTML = JSON.stringify({
-    autosize: true,
-    symbol: sym,
-    interval: tf,
-    timezone: 'Europe/London',
-    theme: 'dark',
-    style: '1',
-    locale: 'en',
-    backgroundColor: '#0f172a',
-    gridColor: 'rgba(30,41,59,0.8)',
-    hide_top_toolbar: false,
-    hide_legend: false,
-    save_image: false,
-    calendar: false,
-    hide_volume: false,
-    support_host: 'https://www.tradingview.com'
-  });
+  const tdKey = localStorage.getItem('td_api_key');
+  if(!tdKey) {
+    container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;padding:20px"><div style="color:#f59e0b;font-family:DM Mono,monospace;font-size:.65rem;text-align:center">Twelve Data API key needed for charts.<br>Add it in the Settings tab.</div></div>';
+    return;
+  }
 
-  const widgetDiv = document.createElement('div');
-  widgetDiv.className = 'tradingview-widget-container__widget';
-  widgetDiv.style.cssText = 'height:100%;width:100%';
+  const tdSym = LC_SYM_MAP[sym] || sym;
+  const interval = tf === 'W' ? '1week' : '1day';
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'tradingview-widget-container';
-  wrapper.style.cssText = 'height:100%;width:100%';
-  wrapper.appendChild(widgetDiv);
-  wrapper.appendChild(script);
+  try {
+    // Fetch OHLC data from Twelve Data
+    const url = `https://api.twelvedata.com/time_series?symbol=${tdSym}&interval=${interval}&outputsize=100&format=JSON&apikey=${tdKey}`;
+    const res = await fetch(url);
+    const json = await res.json();
 
-  container.appendChild(wrapper);
+    if(json.status === 'error' || !json.values) {
+      container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;font-family:DM Mono,monospace;font-size:.65rem;padding:20px;text-align:center">${json.message||'No data available for '+tdSym}</div>`;
+      return;
+    }
+
+    // Parse OHLC — Twelve Data returns newest first, reverse for chart
+    const candles = json.values.reverse().map(v => ({
+      time:  v.datetime.slice(0,10),
+      open:  parseFloat(v.open),
+      high:  parseFloat(v.high),
+      low:   parseFloat(v.low),
+      close: parseFloat(v.close),
+    }));
+
+    // Build chart
+    container.innerHTML = '';
+    const chart = LightweightCharts.createChart(container, {
+      width:  container.clientWidth || 600,
+      height: container.clientHeight || 400,
+      layout: {
+        background: { color: '#0f172a' },
+        textColor:  '#94a3b8',
+      },
+      grid: {
+        vertLines: { color: '#1e293b' },
+        horzLines: { color: '#1e293b' },
+      },
+      crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+      rightPriceScale: { borderColor: '#334155' },
+      timeScale: { borderColor: '#334155', timeVisible: true },
+    });
+
+    // Resize observer
+    const ro = new ResizeObserver(() => {
+      chart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
+    });
+    ro.observe(container);
+
+    // Candlestick series
+    const series = chart.addCandlestickSeries({
+      upColor:   '#22c55e', downColor: '#ef4444',
+      borderUpColor: '#22c55e', borderDownColor: '#ef4444',
+      wickUpColor: '#22c55e', wickDownColor: '#ef4444',
+    });
+    series.setData(candles);
+
+    // ── Draw trade levels if available ──
+    if(chartTradeData) {
+      const td = chartTradeData;
+
+      // Entry price line
+      if(td.entry) {
+        const entryLine = series.createPriceLine({
+          price: parseFloat(td.entry),
+          color: '#38bdf8',
+          lineWidth: 1,
+          lineStyle: LightweightCharts.LineStyle.Solid,
+          axisLabelVisible: true,
+          title: 'Entry',
+        });
+      }
+
+      // SL line
+      if(td.sl) {
+        series.createPriceLine({
+          price: parseFloat(td.sl),
+          color: '#ef4444',
+          lineWidth: 1,
+          lineStyle: LightweightCharts.LineStyle.Dashed,
+          axisLabelVisible: true,
+          title: 'SL',
+        });
+      }
+
+      // TP line
+      if(td.tp) {
+        series.createPriceLine({
+          price: parseFloat(td.tp),
+          color: '#22c55e',
+          lineWidth: 1,
+          lineStyle: LightweightCharts.LineStyle.Dashed,
+          axisLabelVisible: true,
+          title: 'TP',
+        });
+      }
+
+      // Scroll to entry date
+      if(td.date) {
+        chart.timeScale().scrollToPosition(0, false);
+        setTimeout(() => {
+          chart.timeScale().setVisibleRange({
+            from: td.date,
+            to: candles[candles.length-1].time,
+          });
+        }, 100);
+      }
+    } else {
+      // No trade data — show last 52 bars
+      chart.timeScale().fitContent();
+    }
+
+  } catch(err) {
+    container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;font-family:DM Mono,monospace;font-size:.65rem;padding:20px;text-align:center">Chart error: ${err.message}</div>`;
+  }
 }
 
 function closeChartModal() {
   const overlay = document.getElementById('chart-modal-overlay');
   if(overlay) overlay.style.display = 'none';
   // Clear widget to stop any background loading
+  chartTradeData = null;
   const container = document.getElementById('chart-tv-container');
   if(container) container.innerHTML = '';
 }
@@ -7159,6 +7265,7 @@ function openSignalChart(entry) {
     {label:'YIELD %',     value: entry.val!=null?entry.val+'%':'—'},
     {label:'NOTES',       value: entry.notes||'—'},
   ];
+  chartTradeData = null;
   openChartModal(sym, entry.date, details, 'W');
 }
 
@@ -7186,6 +7293,13 @@ function openTradeChart(trade) {
     {label:'P&L',         value: trade.pnl!=null?(trade.pnl>=0?'+€':'€')+parseFloat(trade.pnl).toFixed(2):'Open', color: trade.pnl>0?'var(--mega-bull)':trade.pnl<0?'var(--mega-bear)':'var(--muted2)'},
     {label:'RESULT',      value: trade.r!=null?(parseFloat(trade.r)>=0?'+':'')+trade.r+'R':'Open', color:resultColor, bold:true},
   ];
+  // Set trade levels for line drawing
+  chartTradeData = {
+    entry: trade.price != null && trade.price !== '—' ? trade.price : null,
+    sl:    trade.sl_price,
+    tp:    trade.tp_price,
+    date:  trade.opened_at ? trade.opened_at.slice(0,10) : trade.date,
+  };
   openChartModal(chartSym, trade.date, details, 'D');
 }
 
