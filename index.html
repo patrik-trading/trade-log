@@ -7160,10 +7160,10 @@ async function loadChartWidget(sym, tf) {
       document.body.classList.contains('light') ||
       document.documentElement.getAttribute('data-theme') === 'light';
 
-    const bgColor     = isLight ? '#ffffff' : '#0f172a';
-    const textColor   = isLight ? '#1e293b' : '#94a3b8';
-    const gridColor   = isLight ? '#e2e8f0' : '#1e293b';
-    const borderColor = isLight ? '#cbd5e1' : '#334155';
+    const bgColor     = '#ffffff';
+    const textColor   = '#1e293b';
+    const gridColor   = '#e2e8f0';
+    const borderColor = '#cbd5e1';
 
     const chart = LightweightCharts.createChart(container, {
       width:  container.clientWidth || 600,
@@ -7652,14 +7652,14 @@ function updateBottomBar(tab) {
 
 <!-- ══ CHART MODAL ══ -->
 <div id="chart-modal-overlay" onclick="if(event.target===this)closeChartModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:16px">
-  <div style="background:var(--surface1);border:1px solid var(--border);border-radius:16px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+  <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
     <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e2e8f0">
       <div>
-        <div id="chart-modal-title" style="font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:.08em;color:var(--accent)">Chart</div>
-        <div id="chart-modal-sub" style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2);margin-top:2px"></div>
+        <div id="chart-modal-title" style="font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:.08em;color:#0f172a">Chart</div>
+        <div id="chart-modal-sub" style="font-family:'DM Mono',monospace;font-size:.58rem;color:#64748b;margin-top:2px"></div>
       </div>
-      <button onclick="closeChartModal()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);border-radius:8px;padding:6px 12px;font-family:'DM Mono',monospace;font-size:.62rem;cursor:pointer">✕ Close</button>
+      <button onclick="closeChartModal()" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#64748b;border-radius:8px;padding:6px 12px;font-family:'DM Mono',monospace;font-size:.62rem;cursor:pointer">✕ Close</button>
     </div>
     <!-- Body -->
     <div style="display:grid;grid-template-columns:1fr 260px;flex:1;overflow:hidden;min-height:0">
@@ -7668,15 +7668,15 @@ function updateBottomBar(tab) {
         <div id="chart-tv-container" style="width:100%;height:100%;min-height:420px"></div>
       </div>
       <!-- Details sidebar -->
-      <div id="chart-details-panel" style="border-left:1px solid var(--border);padding:16px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:.6rem;display:flex;flex-direction:column;gap:10px">
+      <div id="chart-details-panel" style="border-left:1px solid #e2e8f0;padding:16px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:.6rem;display:flex;flex-direction:column;gap:10px;background:#f8fafc">
       </div>
     </div>
     <!-- Timeframe toggle -->
-    <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
-      <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted2)">Timeframe:</span>
+    <div style="padding:10px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;align-items:center;background:#f8fafc">
+      <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:#64748b">Timeframe:</span>
       <button onclick="setChartTF('W')" id="chart-tf-w" style="padding:4px 10px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Weekly</button>
       <button onclick="setChartTF('D')" id="chart-tf-d" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Daily</button>
-      <span style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2);margin-left:8px">Tip: use TradingView toolbar to draw entry/SL/TP lines</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.55rem;color:#94a3b8;margin-left:8px">Tip: use TradingView toolbar to draw entry/SL/TP lines</span>
     </div>
   </div>
 </div>
