@@ -46,7 +46,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   .tab-btns-desktop{display:none;}
   .tab-btns-mobile{display:none;}
 }
-body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!important;border-color:#e2e8f0!important;}
+body.light .tab-btns-mobile select{background:#f1f5f9!important;color:var(--text)!important;border-color:#e2e8f0!important;}
 .tab-pane{display:none;}
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
@@ -207,21 +207,21 @@ body.light input[type=text],
 body.light input[type=password],
 body.light textarea {
   background: #f4f4f5 !important;
-  color: #0f172a !important;
+  color: var(--text) !important;
   border-color: #e2e8f0 !important;
 }
 body.light select option {
   background: #ffffff !important;
-  color: #0f172a !important;
+  color: var(--text) !important;
 }
 body.light #sig-sort,
 body.light #sig-filter-signal-btn,
 body.light #sig-filter-futures-btn {
   background: #f4f4f5 !important;
-  color: #0f172a !important;
+  color: var(--text) !important;
   border-color: #e2e8f0 !important;
 }
-body.light .sig-chk-row { color: #0f172a !important; }
+body.light .sig-chk-row { color: var(--text) !important; }
 body.light #sig-filter-signal-dd,
 body.light #sig-filter-futures-dd {
   background: #ffffff !important;
@@ -229,7 +229,7 @@ body.light #sig-filter-futures-dd {
 }
 body.light #sig-filter-signal-dd *,
 body.light #sig-filter-futures-dd * {
-  color: #0f172a !important;
+  color: var(--text) !important;
 }
 
 /* ANALYTICS PANEL */
@@ -583,14 +583,14 @@ input[type=date] {
 
 
 body:not(.light){
-  --bg:#0f172a;
-  --surface:#1e293b;
+  --bg:var(--text);
+  --surface:var(--border);
   --surface2:#263042;
-  --border:#334155;
+  --border:var(--border);
   --text:#f8fafc;
-  --muted:#334155;
+  --muted:var(--border);
   --muted2:#64748b;
-  --accent:#38bdf8;
+  --accent:var(--mega-bull);
   --mega-bull:#22c55e;
   --mega-bear:#ef4444;
   --bull:#60a5fa;
@@ -647,7 +647,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   .tab-btns-desktop{display:none;}
   .tab-btns-mobile{display:none;}
 }
-body.light .tab-btns-mobile select{background:#f1f5f9!important;color:#0f172a!important;border-color:#e2e8f0!important;}
+body.light .tab-btns-mobile select{background:#f1f5f9!important;color:var(--text)!important;border-color:#e2e8f0!important;}
 .tab-pane{display:none;}
 .tab-pane.active>*:not(.modal-overlay){max-width:1100px;margin-left:auto;margin-right:auto;}
 .tab-pane.active{display:block;}
@@ -808,21 +808,21 @@ body.light input[type=text],
 body.light input[type=password],
 body.light textarea {
   background: #f4f4f5 !important;
-  color: #0f172a !important;
+  color: var(--text) !important;
   border-color: #e2e8f0 !important;
 }
 body.light select option {
   background: #ffffff !important;
-  color: #0f172a !important;
+  color: var(--text) !important;
 }
 body.light #sig-sort,
 body.light #sig-filter-signal-btn,
 body.light #sig-filter-futures-btn {
   background: #f4f4f5 !important;
-  color: #0f172a !important;
+  color: var(--text) !important;
   border-color: #e2e8f0 !important;
 }
-body.light .sig-chk-row { color: #0f172a !important; }
+body.light .sig-chk-row { color: var(--text) !important; }
 body.light #sig-filter-signal-dd,
 body.light #sig-filter-futures-dd {
   background: #ffffff !important;
@@ -830,7 +830,7 @@ body.light #sig-filter-futures-dd {
 }
 body.light #sig-filter-signal-dd *,
 body.light #sig-filter-futures-dd * {
-  color: #0f172a !important;
+  color: var(--text) !important;
 }
 
 /* ANALYTICS PANEL */
@@ -1356,14 +1356,14 @@ input[type=date] {
 
 
 body:not(.light){
-  --bg:#0f172a;
-  --surface:#1e293b;
+  --bg:var(--text);
+  --surface:var(--border);
   --surface2:#263042;
-  --border:#334155;
+  --border:var(--border);
   --text:#f8fafc;
-  --muted:#334155;
+  --muted:var(--border);
   --muted2:#64748b;
-  --accent:#38bdf8;
+  --accent:var(--mega-bull);
   --mega-bull:#22c55e;
   --mega-bear:#ef4444;
   --bull:#60a5fa;
@@ -3906,7 +3906,7 @@ function renderSignals(){
       <td style="display:flex;gap:2px">
         <button class="tl-edit" onclick="openSigEditModal(${e.id})" title="Edit">✏️</button>
         <button class="tl-del" onclick="deleteEntry(${e.id})" title="Delete">✕</button>
-        <button class="tl-edit" onclick="openSignalChart(entries.find(x=>x.id===${e.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.3)">📈</button>
+        <button class="tl-edit" onclick="openSignalChart(entries.find(x=>x.id===${e.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button>
       </td>
     </tr>`;
   }).join('');
@@ -4913,7 +4913,7 @@ function renderTrades(){
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:DM Mono;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
     return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:DM Mono;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
-        <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
+        <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
 
@@ -5497,7 +5497,7 @@ function renderReview(){
     const posKeys = Object.keys(bucketMap).filter(k=>k!=='BE'&&!k.startsWith('-')).sort((a,b)=>parseFloat(a)-parseFloat(b));
     const bkeys = [...negKeys,'BE',...posKeys];
     const labels = bkeys; // each R value appears once
-    const colors = bkeys.map(k=>{ if(k==='BE') return '#6b7280'; const v=parseFloat(k); return v<-1?'#ef4444':v<0?'#f97316':v>2?'#14532d':v>1?'#16a34a':'#86efac'; });
+    const colors = bkeys.map(k=>{ if(k==='BE') return '#6b7280'; const v=parseFloat(k); return v<-1?'#ef4444':v<0?'#f97316':v>2?'var(--border)':v>1?'#16a34a':'#86efac'; });
     const isLight = document.body.classList.contains('light');
     const gridCol = isLight ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.06)';
     const textCol = isLight ? '#6b6050' : '#5a6380';
@@ -6572,9 +6572,10 @@ async function saveEdit() {
 
 // ── THEME TOGGLE ──
 function toggleTheme(){
-  const isLight=document.body.classList.toggle('light');
+  const isLight = document.body.classList.toggle('light');
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
 }
 
 
@@ -7036,11 +7037,11 @@ function renderTimeline() {
 
   // Legend
   const legend = `
-    <line x1="${padL}" y1="${H+10}" x2="${padL+14}" y2="${H+10}" stroke="#354F52" stroke-width="2.5"/>
+    <line x1="${padL}" y1="${H+10}" x2="${padL+14}" y2="${H+10}" stroke="var(--accent)" stroke-width="2.5"/>
     <circle cx="${padL+7}" cy="${H+10}" r="3.5" fill="#6b7280" stroke="var(--bg)" stroke-width="1"/>
     <text x="${padL+18}" y="${H+13}" fill="#475569" font-size="6" font-family="DM Mono,monospace">Phase</text>
-    <line x1="${padL+60}" y1="${H+10}" x2="${padL+74}" y2="${H+10}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,3"/>
-    <rect x="${padL+64}" y="${H+6.5}" width="5.5" height="5.5" rx="1" fill="#38bdf8" opacity="0.9"/>
+    <line x1="${padL+60}" y1="${H+10}" x2="${padL+74}" y2="${H+10}" stroke="var(--mega-bull)" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <rect x="${padL+64}" y="${H+6.5}" width="5.5" height="5.5" rx="1" fill="var(--mega-bull)" opacity="0.9"/>
     <text x="${padL+78}" y="${H+13}" fill="#475569" font-size="6" font-family="DM Mono,monospace">Inst Score</text>
   `;
 
@@ -7053,9 +7054,9 @@ function renderTimeline() {
     <!-- Y labels -->
     ${yLabels}
     <!-- Score dashed line -->
-    ${scoreLine ? `<path d="${scoreLine}" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4,3" stroke-linejoin="round" opacity="0.7"/>` : ''}
+    ${scoreLine ? `<path d="${scoreLine}" fill="none" stroke="var(--mega-bull)" stroke-width="1" stroke-dasharray="4,3" stroke-linejoin="round" opacity="0.7"/>` : ''}
     <!-- Phase solid line -->
-    <path d="${phaseLine}" fill="none" stroke="#354F52" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
+    <path d="${phaseLine}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
     <!-- Score squares -->
     ${scoreDots}
     <!-- Phase circles -->
@@ -7193,7 +7194,7 @@ async function loadChartWidget(sym, tf) {
 
     const isDark = !document.body.classList.contains('light');
     const bgColor = isDark ? '#0a0a0a' : '#ffffff';
-    const textColor   = isDark ? '#f5f5f7' : '#1e293b';
+    const textColor   = isDark ? '#f5f5f7' : 'var(--border)';
     const gridColor   = isDark ? '#1a1a1a' : '#e2e8f0';
     const borderColor = isDark ? '#2a2a2a' : '#cbd5e1';
 
@@ -7247,7 +7248,7 @@ async function loadChartWidget(sym, tf) {
       if(td.entry) {
         const entryLine = series.createPriceLine({
           price: parseFloat(td.entry),
-          color: '#38bdf8',
+          color: 'var(--mega-bull)',
           lineWidth: 1,
           lineStyle: LightweightCharts.LineStyle.Solid,
           axisLabelVisible: true,
@@ -7614,10 +7615,18 @@ function updateBottomBar(tab) {
 // ── AUTO-CONNECT if credentials saved ──
 (function(){
   const url=localStorage.getItem('sb_url'),key=localStorage.getItem('sb_key');
-  if(localStorage.getItem('theme')==='light'){
+  // Dark is now default — only apply light if user explicitly chose it
+  const savedTheme = localStorage.getItem('theme');
+  if(savedTheme === 'light') {
     document.body.classList.add('light');
-    const btn=document.getElementById('theme-btn');
-    if(btn) btn.textContent='🌙 Dark';
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.textContent = '🌙 Dark';
+  } else {
+    // Ensure dark is active (clear any stale light class)
+    document.body.classList.remove('light');
+    localStorage.setItem('theme', 'dark');
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.textContent = '☀️ Light';
   }
   if(url&&key){SB_URL=url;SB_KEY=key;launch();}
   // Restore last active tab
@@ -7693,7 +7702,7 @@ function updateBottomBar(tab) {
     <!-- Header -->
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
       <div>
-        <div id="chart-modal-title" style="font-family:Syne,sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.08em;color:#0f172a">Chart</div>
+        <div id="chart-modal-title" style="font-family:Syne,sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.08em;color:var(--text)">Chart</div>
         <div id="chart-modal-sub" style="font-family:'Geist Mono',monospace;font-size:.58rem;color:var(--muted2);margin-top:2px"></div>
       </div>
       <button onclick="closeChartModal()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);border-radius:10px;padding:6px 14px;font-family:'Geist',sans-serif;font-size:.72rem;cursor:pointer">✕ Close</button>
