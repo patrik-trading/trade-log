@@ -426,17 +426,17 @@ input[type=date] {
     left: 0;
     right: 0;
     z-index: 9000;
-    background: rgba(255,255,255,.82);
+    background: var(--surface);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(0,0,0,.08);
+    border-top: 1px solid var(--border);
     padding: 6px 0 max(12px, env(safe-area-inset-bottom));
     gap: 0;
   }
 
   body.light .bottom-tab-bar {
-    background: rgba(248,250,252,.92);
-    border-top: 1px solid #e2e8f0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
   }
 
   /* Dark mode bar */
@@ -466,7 +466,7 @@ input[type=date] {
   }
 
   .btb-label {
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Geist', sans-serif;
     font-size: .58rem;
     font-weight: 500;
     color: var(--muted2);
@@ -475,12 +475,22 @@ input[type=date] {
   }
 
   .btb-item.active .btb-label {
-    color: var(--text);
+    color: var(--active-bg);
     font-weight: 700;
   }
 
   .btb-item.active .btb-icon {
-    filter: drop-shadow(0 0 4px rgba(200,169,110,.4));
+    opacity: 1;
+  }
+  .btb-item.active::after {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--active-bg);
+    margin: 0 auto;
+    margin-top: 2px;
   }
 
   /* Push content up so it doesn't hide behind bar */
@@ -1178,17 +1188,17 @@ input[type=date] {
     left: 0;
     right: 0;
     z-index: 9000;
-    background: rgba(255,255,255,.82);
+    background: var(--surface);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(0,0,0,.08);
+    border-top: 1px solid var(--border);
     padding: 6px 0 max(12px, env(safe-area-inset-bottom));
     gap: 0;
   }
 
   body.light .bottom-tab-bar {
-    background: rgba(248,250,252,.92);
-    border-top: 1px solid #e2e8f0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
   }
 
   /* Dark mode bar */
@@ -1218,7 +1228,7 @@ input[type=date] {
   }
 
   .btb-label {
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Geist', sans-serif;
     font-size: .58rem;
     font-weight: 500;
     color: var(--muted2);
@@ -1227,12 +1237,22 @@ input[type=date] {
   }
 
   .btb-item.active .btb-label {
-    color: var(--text);
+    color: var(--active-bg);
     font-weight: 700;
   }
 
   .btb-item.active .btb-icon {
-    filter: drop-shadow(0 0 4px rgba(200,169,110,.4));
+    opacity: 1;
+  }
+  .btb-item.active::after {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--active-bg);
+    margin: 0 auto;
+    margin-top: 2px;
   }
 
   /* Push content up so it doesn't hide behind bar */
