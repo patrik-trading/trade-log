@@ -7,13 +7,13 @@
 <title>Fundamental Trade Log</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#000000;--surface:#0a0a0a;--surface2:#111111;--border:#1a1a1a;--text:#f5f5f7;--muted:#3d3d3f;--muted2:#6e6e73;--accent:#f5f5f7;--mega-bull:#30d158;--mega-bear:#ff453a;--bull:#0a84ff;--bear:#ff9f0a;--trap:#bf5af2;--neutral:#6e6e73;--recovery:#30d158;}
-body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
+:root{color-scheme:dark;--bg:#000000;--surface:#0a0a0a;--surface2:#111111;--border:#1a1a1a;--text:#f5f5f7;--muted:#3d3d3f;--muted2:#6e6e73;--accent:#e8e8ed;--active-bg:#f5f5f7;--active-text:#000000;--mega-bull:#30d158;--mega-bear:#ff453a;--bull:#0a84ff;--bear:#ff9f0a;--trap:#bf5af2;--neutral:#6e6e73;--recovery:#30d158;}
+body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--active-bg:#1d1d1f;--active-text:#ffffff;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
 .theme-toggle{font-family:DM Mono;font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
-body{background:var(--bg);color:var(--text);font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
+html{background:#000000;}html{background:#000000;}body{background:var(--bg);color:var(--text);font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
 body::before{display:none;}
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -39,7 +39,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
 .tab-btn{font-family:'Geist',sans-serif;font-size:.78rem;font-weight:450;letter-spacing:-0.01em;text-transform:none;padding:7px 15px;background:none;border:none;border-radius:980px;color:var(--muted2);cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);}
 .tab-btn:hover{color:var(--text);}
-.tab-btn.active{background:#f5f5f7;color:#000000;font-weight:500;border-bottom:none;}
+.tab-btn.active{background:var(--active-bg);color:var(--active-text);font-weight:600;border-bottom:none;}
 .tab-btns-desktop{display:flex;}
 .tab-btns-mobile{display:none;}
 @media(max-width:700px){
@@ -128,7 +128,7 @@ textarea{resize:vertical;min-height:52px;}
 .tag-btn.sel{color:#ffffff;border-color:transparent;}
 .cur-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .cur-btn{font-family:DM Mono;font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
-.cur-btn.active{background:var(--accent);color:#ffffff;}
+.cur-btn.active{background:var(--active-bg);color:var(--active-text);}
 .btn-log{width:100%;padding:12px;background:#1d1d1f;color:#ffffff;border:none;border-radius:980px;font-family:'Geist',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:-0.01em;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);}
 .btn-log:hover{opacity:.82;}
 .btn-log:disabled{opacity:.4;cursor:not-allowed;}
@@ -235,10 +235,10 @@ body.light #sig-filter-futures-dd * {
 /* ANALYTICS PANEL */
 .analytics-dim-btn{font-family:DM Mono;font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-dim-btn:hover{border-color:var(--muted2);color:var(--text);}
-.analytics-dim-btn.active{background:var(--accent);color:#ffffff;border-color:var(--accent);}
+.analytics-dim-btn.active{background:var(--active-bg);color:var(--active-text);border-color:var(--accent);}
 .analytics-sort-btn{font-family:DM Mono;font-size:.62rem;padding:4px 11px;border-radius:8px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-sort-btn:hover{border-color:var(--muted2);color:var(--text);}
-.analytics-sort-btn.active{background:var(--surface2);color:var(--accent);border-color:var(--accent);}
+.analytics-sort-btn.active{background:var(--surface2);color:var(--text);border-color:var(--border);}
 .analytics-table{width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.7rem;}
 .analytics-table th{background:var(--surface2);color:var(--muted2);padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.05em;white-space:nowrap;}
 .analytics-table th.sortable{cursor:pointer;user-select:none;}
@@ -265,7 +265,7 @@ body.light #sig-filter-futures-dd * {
 .rules-bull{background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);}
 .rules-bear{background:rgba(249,115,22,.15);color:#f97316;border:1px solid rgba(249,115,22,.3);}
 .rules-neutral{background:rgba(107,114,128,.15);color:#6b7280;border:1px solid rgba(107,114,128,.3);}
-.rules-step{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--accent);color:#ffffff;border-radius:50%;font-size:.62rem;font-weight:700;margin-right:6px;flex-shrink:0;}
+.rules-step{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--muted2);color:var(--bg)fff;border-radius:50%;font-size:.62rem;font-weight:700;margin-right:6px;flex-shrink:0;}
 .rules-action-bull{display:inline-block;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
 .rules-action-hold{display:inline-block;background:rgba(200,169,110,.15);color:var(--accent);border:1px solid rgba(200,169,110,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
 .rules-action-exit{display:inline-block;background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
@@ -440,10 +440,7 @@ input[type=date] {
   }
 
   /* Dark mode bar */
-  body:not(.light) .bottom-tab-bar {
-    background: rgba(17,17,19,.85);
-    border-top: 1px solid rgba(255,255,255,.08);
-  }
+
 
   .btb-item {
     flex: 1;
@@ -478,7 +475,7 @@ input[type=date] {
   }
 
   .btb-item.active .btb-label {
-    color: var(--accent);
+    color: var(--text);
     font-weight: 700;
   }
 
@@ -582,25 +579,7 @@ input[type=date] {
 .sig-card-actions{display:flex;gap:6px;margin-top:8px;justify-content:flex-end;}
 
 
-body:not(.light){
-  --bg:var(--text);
-  --surface:var(--border);
-  --surface2:#263042;
-  --border:var(--border);
-  --text:#f8fafc;
-  --muted:var(--border);
-  --muted2:#64748b;
-  --accent:var(--mega-bull);
-  --mega-bull:#22c55e;
-  --mega-bear:#ef4444;
-  --bull:#60a5fa;
-  --bear:#fb923c;
-  --trap:#c084fc;
-  --neutral:#94a3b8;
-  --recovery:#34d399;
-}
-
-tml lang="en">
+/* dark handled by :root */
 <head>
 <!-- v202605150924 -->
 <meta charset="UTF-8">
@@ -608,13 +587,13 @@ tml lang="en">
 <title>Fundamental Trade Log</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#000000;--surface:#0a0a0a;--surface2:#111111;--border:#1a1a1a;--text:#f5f5f7;--muted:#3d3d3f;--muted2:#6e6e73;--accent:#f5f5f7;--mega-bull:#30d158;--mega-bear:#ff453a;--bull:#0a84ff;--bear:#ff9f0a;--trap:#bf5af2;--neutral:#6e6e73;--recovery:#30d158;}
-body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
+:root{color-scheme:dark;--bg:#000000;--surface:#0a0a0a;--surface2:#111111;--border:#1a1a1a;--text:#f5f5f7;--muted:#3d3d3f;--muted2:#6e6e73;--accent:#e8e8ed;--active-bg:#f5f5f7;--active-text:#000000;--mega-bull:#30d158;--mega-bear:#ff453a;--bull:#0a84ff;--bear:#ff9f0a;--trap:#bf5af2;--neutral:#6e6e73;--recovery:#30d158;}
+body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--active-bg:#1d1d1f;--active-text:#ffffff;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
 .theme-toggle{font-family:DM Mono;font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
-body{background:var(--bg);color:var(--text);font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
+html{background:#000000;}html{background:#000000;}body{background:var(--bg);color:var(--text);font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
 body::before{display:none;}
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -640,7 +619,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
 .tab-btn{font-family:'Geist',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.01em;text-transform:none;padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted2);cursor:pointer;transition:all .2s;margin-bottom:-1px;}
 .tab-btn:hover{color:var(--text);}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:700;}
+.tab-btn.active{background:var(--active-bg);color:var(--active-text);border-bottom:none;font-weight:600;}
 .tab-btns-desktop{display:flex;}
 .tab-btns-mobile{display:none;}
 @media(max-width:700px){
@@ -729,8 +708,8 @@ textarea{resize:vertical;min-height:52px;}
 .tag-btn.sel{color:#ffffff;border-color:transparent;}
 .cur-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .cur-btn{font-family:DM Mono;font-size:.68rem;padding:5px 11px;background:var(--surface);color:var(--muted2);border:none;cursor:pointer;transition:all .2s;}
-.cur-btn.active{background:var(--accent);color:#ffffff;}
-.btn-log{width:100%;padding:12px;background:var(--accent);color:#ffffff;border:none;border-radius:10px;font-family:Syne,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.25em;cursor:pointer;transition:opacity .2s;}
+.cur-btn.active{background:var(--active-bg);color:var(--active-text);}
+.btn-log{width:100%;padding:12px;background:var(--active-bg);color:var(--active-text);border:none;border-radius:10px;font-family:Syne,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.25em;cursor:pointer;transition:opacity .2s;}
 .btn-log:hover{opacity:.82;}
 .btn-log:disabled{opacity:.4;cursor:not-allowed;}
 .btn-sm{font-family:DM Mono;font-size:.62rem;letter-spacing:.25em;padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;}
@@ -836,10 +815,10 @@ body.light #sig-filter-futures-dd * {
 /* ANALYTICS PANEL */
 .analytics-dim-btn{font-family:DM Mono;font-size:.65rem;padding:5px 13px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-dim-btn:hover{border-color:var(--muted2);color:var(--text);}
-.analytics-dim-btn.active{background:var(--accent);color:#ffffff;border-color:var(--accent);}
+.analytics-dim-btn.active{background:var(--active-bg);color:var(--active-text);border-color:var(--accent);}
 .analytics-sort-btn{font-family:DM Mono;font-size:.62rem;padding:4px 11px;border-radius:8px;border:1px solid var(--border);color:var(--muted2);background:transparent;cursor:pointer;transition:all .2s;}
 .analytics-sort-btn:hover{border-color:var(--muted2);color:var(--text);}
-.analytics-sort-btn.active{background:var(--surface2);color:var(--accent);border-color:var(--accent);}
+.analytics-sort-btn.active{background:var(--surface2);color:var(--text);border-color:var(--border);}
 .analytics-table{width:100%;border-collapse:collapse;font-family:DM Mono;font-size:.7rem;}
 .analytics-table th{background:var(--surface2);color:var(--muted2);padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;letter-spacing:.05em;white-space:nowrap;}
 .analytics-table th.sortable{cursor:pointer;user-select:none;}
@@ -866,7 +845,7 @@ body.light #sig-filter-futures-dd * {
 .rules-bull{background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);}
 .rules-bear{background:rgba(249,115,22,.15);color:#f97316;border:1px solid rgba(249,115,22,.3);}
 .rules-neutral{background:rgba(107,114,128,.15);color:#6b7280;border:1px solid rgba(107,114,128,.3);}
-.rules-step{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--accent);color:#ffffff;border-radius:50%;font-size:.62rem;font-weight:700;margin-right:6px;flex-shrink:0;}
+.rules-step{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--muted2);color:var(--bg)fff;border-radius:50%;font-size:.62rem;font-weight:700;margin-right:6px;flex-shrink:0;}
 .rules-action-bull{display:inline-block;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
 .rules-action-hold{display:inline-block;background:rgba(200,169,110,.15);color:var(--accent);border:1px solid rgba(200,169,110,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
 .rules-action-exit{display:inline-block;background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:4px;font-size:.68rem;}
@@ -1213,10 +1192,7 @@ input[type=date] {
   }
 
   /* Dark mode bar */
-  body:not(.light) .bottom-tab-bar {
-    background: rgba(17,17,19,.85);
-    border-top: 1px solid rgba(255,255,255,.08);
-  }
+
 
   .btb-item {
     flex: 1;
@@ -1251,7 +1227,7 @@ input[type=date] {
   }
 
   .btb-item.active .btb-label {
-    color: var(--accent);
+    color: var(--text);
     font-weight: 700;
   }
 
@@ -1355,23 +1331,7 @@ input[type=date] {
 .sig-card-actions{display:flex;gap:6px;margin-top:8px;justify-content:flex-end;}
 
 
-body:not(.light){
-  --bg:var(--text);
-  --surface:var(--border);
-  --surface2:#263042;
-  --border:var(--border);
-  --text:#f8fafc;
-  --muted:var(--border);
-  --muted2:#64748b;
-  --accent:var(--mega-bull);
-  --mega-bull:#22c55e;
-  --mega-bear:#ef4444;
-  --bull:#60a5fa;
-  --bear:#fb923c;
-  --trap:#c084fc;
-  --neutral:#94a3b8;
-  --recovery:#34d399;
-}
+/* dark handled by :root */
 
 
 /* ── Trade log mobile cards ── */
@@ -1674,7 +1634,7 @@ body:not(.light){
 <div class="tab-pane active" id="tab-signals">
   <!-- Signal sub-tab bar -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
-    <button id="sig-btn-fx"  onclick="switchSigTab('fx')"  style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s">📡 FX Signals</button>
+    <button id="sig-btn-fx"  onclick="switchSigTab('fx')"  style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:all .15s">📡 FX Signals</button>
     <button id="sig-btn-btc" onclick="switchSigTab('btc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">₿ BTC Bias</button>
   </div>
 
@@ -1994,7 +1954,7 @@ body:not(.light){
   <div id="sig-panel-btc" style="display:none">
     <!-- Fetch bar -->
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <button onclick="fetchBTCData()" id="btc-fetch-btn" style="flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;cursor:pointer">⬇ Fetch Live BTC Data</button>
+      <button onclick="fetchBTCData()" id="btc-fetch-btn" style="flex:1;background:var(--active-bg);color:var(--active-text);border:none;border-radius:8px;padding:9px 14px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;cursor:pointer">⬇ Fetch Live BTC Data</button>
       <div id="btc-last-fetch" style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted2)">Not fetched yet</div>
     </div>
 
@@ -2229,7 +2189,7 @@ body:not(.light){
         <div class="ig"><label>Closed At</label><input type="date" id="tl-closed-at"></div>
       </div>
       <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><input type="checkbox" id="tl-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="tl-addon" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><input type="checkbox" id="tl-addon" style="width:auto;accent-color:var(--mega-bull);cursor:pointer;transform:scale(1.3)"><label for="tl-addon" style="font-family:'Geist',sans-serif;font-size:.75rem;font-weight:500;color:var(--text);cursor:pointer;margin:0">Adjusted entry (add-on)</label></div>
         <button class="btn-log" id="btn-trade" onclick="addTrade()">+ LOG TRADE</button>
       </div>
     </div>
@@ -2386,7 +2346,7 @@ body:not(.light){
 
   <!-- Sub-tab bar -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
-    <button id="conv-btn-cfd" onclick="switchConvTab('cfd')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s">
+    <button id="conv-btn-cfd" onclick="switchConvTab('cfd')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:all .15s">
       🔄 Futures → CFD
     </button>
     <button id="conv-btn-calc" onclick="switchConvTab('calc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','DM Mono';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">
@@ -2401,7 +2361,7 @@ body:not(.light){
 
       <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">🗓 Weekend &mdash; Save Basis</button>
+        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:.2s">🗓 Weekend &mdash; Save Basis</button>
         <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📐 Weekday &mdash; Translate Zones</button>
       </div>
 
@@ -2658,7 +2618,7 @@ body:not(.light){
 
   <!-- Category tabs -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;max-width:520px">
-    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:var(--accent);color:var(--bg);transition:.2s">📊 Indicator Setup</button>
+    <button onclick="switchRulesCat('indicator')" id="rules-btn-indicator" style="flex:1;padding:8px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:.2s">📊 Indicator Setup</button>
     <button onclick="switchRulesCat('bias')" id="rules-btn-bias" style="flex:1;padding:8px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📅 Weekly Bias</button>
     <button onclick="switchRulesCat('trigger')" id="rules-btn-trigger" style="flex:1;padding:8px;border:none;border-radius:10px;font-family:DM Mono;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">⚡ Daily Trigger</button>
   </div>
@@ -3337,7 +3297,7 @@ body:not(.light){
         <div class="ig"><label>Closed At</label><input type="date" id="edit-closed-at"></div>
       </div>
     <div class="ig" style="margin-bottom:16px"><label>Notes</label><textarea id="edit-notes"></textarea></div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--accent);cursor:pointer;transform:scale(1.2)"><label for="edit-addon" style="font-family:DM Mono;font-size:.65rem;color:var(--muted2);cursor:pointer;margin:0">Adjusted entry through add-on</label></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--mega-bull);cursor:pointer;transform:scale(1.3)"><label for="edit-addon" style="font-family:'Geist',sans-serif;font-size:.75rem;font-weight:500;color:var(--text);cursor:pointer;margin:0">Adjusted entry (add-on)</label></div>
     <div style="display:flex;gap:8px">
       <button class="btn-log" id="btn-save-edit" onclick="saveEdit()" style="flex:1">💾 Save Changes</button>
       <button class="btn-sm" onclick="closeEditModal()" style="flex-shrink:0;padding:12px 18px">Cancel</button>
@@ -6181,7 +6141,7 @@ function ztSetMode(mode) {
   const sp=document.getElementById('zt-saved-basis-panel');
   if(mode==='basis'){
     if(bp)bp.style.display='block';if(zp)zp.style.display='none';
-    if(bb){bb.style.background='var(--accent)';bb.style.color='var(--bg)';}
+    if(bb){bb.style.background='var(--active-bg)';bb.style.color='var(--active-text)';}
     if(zb){zb.style.background='transparent';zb.style.color='var(--muted2)';}
     if(sp)sp.style.display='block';
   } else {
@@ -6827,8 +6787,8 @@ function switchSigTab(tab) {
     const btn   = document.getElementById('sig-btn-'+p);
     if(panel) panel.style.display = p===tab?'block':'none';
     if(btn) {
-      btn.style.background = p===tab?'var(--accent)':'transparent';
-      btn.style.color      = p===tab?'#fff':'var(--muted2)';
+      btn.style.background = p===tab?'var(--active-bg)':'transparent';
+      btn.style.color      = p===tab?'var(--active-text)':'var(--muted2)';
       btn.style.fontWeight = p===tab?'600':'500';
     }
   });
@@ -7563,8 +7523,8 @@ function switchConvTab(tab) {
     if(panel) panel.style.display = p === tab ? 'block' : 'none';
     if(btn) {
       if(p === tab) {
-        btn.style.background = 'var(--accent)';
-        btn.style.color      = '#fff';
+        btn.style.background = 'var(--active-bg)';
+        btn.style.color      = 'var(--active-text)';
         btn.style.fontWeight = '600';
       } else {
         btn.style.background = 'transparent';
@@ -7720,7 +7680,7 @@ function updateBottomBar(tab) {
     <!-- Timeframe toggle -->
     <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;background:var(--surface)">
       <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:#64748b">Timeframe:</span>
-      <button onclick="setChartTF('W')" id="chart-tf-w" style="padding:4px 10px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:#fff;font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Weekly</button>
+      <button onclick="setChartTF('W')" id="chart-tf-w" style="padding:4px 10px;border-radius:10px;border:1px solid var(--accent);background:var(--active-bg);color:var(--active-text);font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Weekly</button>
       <button onclick="setChartTF('D')" id="chart-tf-d" style="padding:4px 10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Daily</button>
       <span style="font-family:'DM Mono',monospace;font-size:.55rem;color:#94a3b8;margin-left:8px">Tip: use TradingView toolbar to draw entry/SL/TP lines</span>
     </div>
