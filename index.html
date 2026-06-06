@@ -7046,24 +7046,17 @@ async function fetchBTCData() { return fetchAllCryptoData(); }
 // ── SIGNAL TIMELINE — dual line: solid phase + dashed score ──
 function renderTimeline() {
   const el = document.getElementById('timeline-chart');
-  if(!el) return;
-  if(!entries.length) { el.innerHTML = '<div class="empty">No signals yet</div>'; return; }
+  if (!el) return;
+  if (!entries.length) { el.innerHTML = '<div class="empty">No signals yet</div>'; return; }
 
   const asset = document.getElementById('timeline-asset')?.value || '6J';
 
-  const PHASE_Y = {
-    'Spring — CONFIRMED': 1.0, 'Spring — Waiting for Turn': 0.8,
-    'Recovery': 0.6, 'Surge': 0.7,
-    'Cliff — CONFIRMED': -1.0, 'Cliff — Watching': -0.8,
-    'Trap — CONFIRMED': -0.6, 'Slide': -0.7,
-    'The Conflict': 0.0, 'Wait': 0.0,
-  };
   const PHASE_COLOR = {
-    'Spring — CONFIRMED':'#22c55e','Spring — Waiting for Turn':'#4ade80',
-    'Recovery':'#34d399','Surge':'#3b82f6',
-    'Cliff — CONFIRMED':'#ef4444','Cliff — Watching':'#f87171',
-    'Trap — CONFIRMED':'#a855f7','Slide':'#f97316',
-    'The Conflict':'#f59e0b','Wait':'#6b7280',
+    'Spring — CONFIRMED':'#30d158','Spring — Waiting for Turn':'#34d399',
+    'Recovery':'#34d399','Surge':'#0a84ff',
+    'Cliff — CONFIRMED':'#ff453a','Cliff — Watching':'#ff6961',
+    'Trap — CONFIRMED':'#bf5af2','Slide':'#ff9f0a',
+    'The Conflict':'#ffd60a','Wait':'#6e6e73',
   };
   const PHASE_SHORT = {
     'Spring — CONFIRMED':'Spring ✓','Spring — Waiting for Turn':'Spring~',
@@ -7077,121 +7070,110 @@ function renderTimeline() {
     .filter(e => e.asset === asset)
     .sort((a,b) => a.date.localeCompare(b.date));
 
-  if(!astEntries.length) {
+  if (!astEntries.length) {
     el.innerHTML = '<div class="empty">No signals for ' + asset + '</div>';
     return;
   }
 
-  // SVG dimensions
-  const W = 500, H = 150;
-  const padL = 40, padR = 14, padT = 12, padB = 28;
+  const W = 500, H = 160;
+  const padL = 32, padR = 12, padT = 16, padB = 36;
   const chartW = W - padL - padR;
   const chartH = H - padT - padB;
-  const midY   = padT + chartH / 2;
-
   const n = astEntries.length;
-  const xStep = n > 1 ? chartW / (n - 1) : chartW / 2;
 
-  // Build points
-  const pts = astEntries.map((e, i) => {
-    const phase  = e.phase || 'Wait';
-    const yVal   = PHASE_Y[phase] ?? 0;
-    const sc     = e.inst_score;
-    const scYVal = sc != null ? (sc - 50) / 50 : null; // -1 to +1
-    const x = padL + (n > 1 ? i * xStep : chartW / 2);
-    const y = midY - yVal * (chartH / 2 - 4);
-    const sy = sc != null ? midY - scYVal * (chartH / 2 - 4) : null;
-    return {
-      x, y, sy,
-      phase, color: PHASE_COLOR[phase] || '#6b7280',
-      date: e.date, score: sc,
-      label: PHASE_SHORT[phase] || phase
-    };
-  });
+  // Bar width — narrower when many entries, min 6px
+  const maxBarW = Math.min(52, Math.floor(chartW / n) - 4);
+  const barW    = Math.max(6, maxBarW);
+  const gap     = Math.max(2, (chartW - barW * n) / Math.max(n - 1, 1));
+  const totalW  = barW * n + gap * (n - 1);
+  const startX  = padL + (chartW - totalW) / 2;
 
-  // Phase polyline
-  const phaseLine = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
+  // Y axis: 0-100 score range
+  const scaleY = v => padT + chartH - (v / 100) * chartH;
 
-  // Score polyline (only connect points that have scores)
-  const scorePts = pts.filter(p => p.sy != null);
-  const scoreLine = scorePts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.sy.toFixed(1)).join(' ');
-
-  // Zone fills
-  const bullZone = `M${padL},${midY} L${padL},${padT} L${W-padR},${padT} L${W-padR},${midY} Z`;
-  const bearZone = `M${padL},${midY} L${padL},${H-padB} L${W-padR},${H-padB} L${W-padR},${midY} Z`;
-
-  // Y labels
-  const yLabels = `
-    <text x="${padL-3}" y="${padT+8}"    text-anchor="end" fill="#22c55e" font-size="6.5" font-family="'Geist',sans-serif">▲</text>
-    <text x="${padL-3}" y="${(midY+3).toFixed(0)}" text-anchor="end" fill="#6b7280" font-size="6.5" font-family="'Geist',sans-serif">—</text>
-    <text x="${padL-3}" y="${H-padB-2}"  text-anchor="end" fill="#ef4444" font-size="6.5" font-family="'Geist',sans-serif">▼</text>
-  `;
-
-  // X-axis date labels
-  const xLabels = pts
-    .filter((_,i) => n<=6 || i%(Math.ceil(n/5))===0 || i===n-1)
-    .map(p => `<text x="${p.x}" y="${H-2}" text-anchor="middle" fill="#475569" font-size="6.5" font-family="'Geist',sans-serif">${p.date.slice(5)}</text>`)
-    .join('');
-
-  // Phase dots (circles)
-  const phaseDots = pts.map(p => `
-    <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5"
-      fill="${p.color}" stroke="var(--bg)" stroke-width="1.5">
-      <title>${p.date}: ${p.label}${p.score!=null?' · Score '+p.score:''}</title>
-    </circle>`).join('');
-
-  // Score dots (squares)
-  const scoreDots = pts.map(p => {
-    if(p.sy == null) return '';
-    const sc = p.score;
-    const scColor = sc>=70?'#22c55e':sc>=55?'#34d399':sc<=30?'#ef4444':sc<=45?'#f97316':'#6b7280';
-    return `<rect x="${(p.x-3.5).toFixed(1)}" y="${(p.sy-3.5).toFixed(1)}" width="5.5" height="5.5" rx="1"
-      fill="${scColor}" stroke="var(--bg)" stroke-width="1" opacity="0.9">
-      <title>Inst Score: ${sc}</title>
-    </rect>`;
+  // Gridlines at 25, 50, 75, 100
+  const grids = [25, 50, 75, 100].map(v => {
+    const y = scaleY(v).toFixed(1);
+    return `
+      <line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"
+        stroke="var(--border)" stroke-width="${v===50?'1':'0.5'}"
+        stroke-dasharray="${v===50?'':'4,4'}"/>
+      <text x="${padL-4}" y="${parseFloat(y)+3}" text-anchor="end"
+        fill="#6e6e73" font-size="6.5" font-family="Geist,sans-serif">${v}</text>`;
   }).join('');
 
-  // Last phase label — left of dot
-  const last = pts[pts.length-1];
-  const lastLabel = `
-    <text x="${(last.x-8).toFixed(1)}" y="${(last.y-7).toFixed(1)}"
-      text-anchor="end" fill="${last.color}" font-size="7.5"
-      font-family="'Geist',sans-serif" font-weight="600">${last.label}</text>`;
+  // Bars
+  const bars = astEntries.map((e, i) => {
+    const sc     = e.inst_score != null ? e.inst_score : 0;
+    const phase  = e.phase || 'Wait';
+    const color  = PHASE_COLOR[phase] || '#6e6e73';
+    const label  = PHASE_SHORT[phase] || phase;
+    const x      = startX + i * (barW + gap);
+    const barH   = (sc / 100) * chartH;
+    const y      = scaleY(sc);
+    const isLast = i === n - 1;
 
-  // Legend
-  const legend = `
-    <line x1="${padL}" y1="${H+10}" x2="${padL+14}" y2="${H+10}" stroke="var(--accent)" stroke-width="2.5"/>
-    <circle cx="${padL+7}" cy="${H+10}" r="3.5" fill="#6b7280" stroke="var(--bg)" stroke-width="1"/>
-    <text x="${padL+18}" y="${H+13}" fill="#475569" font-size="6" font-family="'Geist',sans-serif">Phase</text>
-    <line x1="${padL+60}" y1="${H+10}" x2="${padL+74}" y2="${H+10}" stroke="var(--mega-bull)" stroke-width="1.5" stroke-dasharray="4,3"/>
-    <rect x="${padL+64}" y="${H+6.5}" width="5.5" height="5.5" rx="1" fill="var(--mega-bull)" opacity="0.9"/>
-    <text x="${padL+78}" y="${H+13}" fill="#475569" font-size="6" font-family="'Geist',sans-serif">Inst Score</text>
-  `;
+    // Score text inside or above bar
+    const scoreY  = barH > 16 ? y + 12 : y - 4;
+    const scoreTxt = sc > 0
+      ? `<text x="${(x + barW/2).toFixed(1)}" y="${scoreY.toFixed(1)}"
+           text-anchor="middle" fill="${barH>16?'#000':'var(--text)'}"
+           font-size="8" font-weight="700" font-family="Geist,sans-serif">${sc}</text>`
+      : '';
 
-  el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H+20}" style="overflow:visible;display:block">
-    <!-- Zone backgrounds -->
-    <path d="${bullZone}" fill="rgba(34,197,94,.04)"/>
-    <path d="${bearZone}" fill="rgba(239,68,68,.04)"/>
-    <!-- Centre line -->
-    <line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
-    <!-- Y labels -->
-    ${yLabels}
-    <!-- Score dashed line -->
-    ${scoreLine ? `<path d="${scoreLine}" fill="none" stroke="var(--mega-bull)" stroke-width="1" stroke-dasharray="4,3" stroke-linejoin="round" opacity="0.7"/>` : ''}
-    <!-- Phase solid line -->
-    <path d="${phaseLine}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
-    <!-- Score squares -->
-    ${scoreDots}
-    <!-- Phase circles -->
-    ${phaseDots}
-    <!-- Last label -->
-    ${lastLabel}
-    <!-- X labels -->
-    ${xLabels}
-    <!-- Legend -->
-    ${legend}
+    // Date label — show every entry if ≤8, else skip alternating
+    const showDate = n <= 8 || i % Math.ceil(n / 7) === 0 || isLast;
+    const dateStr  = e.date.slice(5); // MM-DD
+    const dateTxt  = showDate
+      ? `<text x="${(x + barW/2).toFixed(1)}" y="${H - padB + 12}"
+           text-anchor="middle" fill="${isLast?'var(--text)':'#6e6e73'}"
+           font-size="${isLast?'6.5':'6'}" font-weight="${isLast?'600':'400'}"
+           font-family="Geist,sans-serif">${dateStr}</text>`
+      : '';
+
+    // Phase label below date
+    const phaseTxt = showDate
+      ? `<text x="${(x + barW/2).toFixed(1)}" y="${H - padB + 23}"
+           text-anchor="middle" fill="${color}"
+           font-size="6" font-family="Geist,sans-serif">${label}</text>`
+      : '';
+
+    // Current bar gets a border ring
+    const strokeAttr = isLast
+      ? `stroke="${color}" stroke-width="1.5"`
+      : '';
+
+    return `
+      <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}"
+        width="${barW}" height="${Math.max(2, barH).toFixed(1)}"
+        rx="3" fill="${color}22" ${strokeAttr}>
+        <title>${e.date}: ${label}${sc?' · Score '+sc:''}</title>
+      </rect>
+      <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}"
+        width="${barW}" height="3" rx="1.5" fill="${color}"/>
+      ${scoreTxt}${dateTxt}${phaseTxt}`;
+  }).join('');
+
+  // NOW label above last bar
+  const lastIdx = n - 1;
+  const lastX   = startX + lastIdx * (barW + gap) + barW / 2;
+  const nowLabel = `<text x="${lastX.toFixed(1)}" y="${padT - 4}"
+    text-anchor="middle" fill="var(--text)" font-size="6.5" font-weight="600"
+    font-family="Geist,sans-serif">NOW</text>`;
+
+  el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
+    <!-- Gridlines -->
+    ${grids}
+    <!-- Bars -->
+    ${bars}
+    <!-- NOW indicator -->
+    ${n > 0 ? nowLabel : ''}
+    <!-- X axis -->
+    <line x1="${padL}" y1="${scaleY(0).toFixed(1)}" x2="${W-padR}" y2="${scaleY(0).toFixed(1)}"
+      stroke="var(--border)" stroke-width="1"/>
   </svg>`;
 }
+
 
 // ── CHART MODAL ──
 let chartWidget = null;
