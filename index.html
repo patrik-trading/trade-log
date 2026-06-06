@@ -7,14 +7,14 @@
 <title>Fundamental Trade Log</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
-body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;}
+:root{--bg:#000000;--surface:#0a0a0a;--surface2:#111111;--border:#1a1a1a;--text:#f5f5f7;--muted:#3d3d3f;--muted2:#6e6e73;--accent:#f5f5f7;--mega-bull:#30d158;--mega-bear:#ff453a;--bull:#0a84ff;--bear:#ff9f0a;--trap:#bf5af2;--neutral:#6e6e73;--recovery:#30d158;}
+body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
 .theme-toggle{font-family:DM Mono;font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
 body{background:var(--bg);color:var(--text);font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(148,163,184,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.08) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+body::before{display:none;}
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
@@ -39,7 +39,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tabs{display:flex;gap:4px;margin-bottom:22px;border-bottom:1px solid var(--border);}
 .tab-btn{font-family:'Geist',sans-serif;font-size:.78rem;font-weight:450;letter-spacing:-0.01em;text-transform:none;padding:7px 15px;background:none;border:none;border-radius:980px;color:var(--muted2);cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);}
 .tab-btn:hover{color:var(--text);}
-.tab-btn.active{background:#1d1d1f;color:#fff;font-weight:500;border-bottom:none;}
+.tab-btn.active{background:#f5f5f7;color:#000000;font-weight:500;border-bottom:none;}
 .tab-btns-desktop{display:flex;}
 .tab-btns-mobile{display:none;}
 @media(max-width:700px){
@@ -608,14 +608,14 @@ tml lang="en">
 <title>Fundamental Trade Log</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
-body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;}
+:root{--bg:#000000;--surface:#0a0a0a;--surface2:#111111;--border:#1a1a1a;--text:#f5f5f7;--muted:#3d3d3f;--muted2:#6e6e73;--accent:#f5f5f7;--mega-bull:#30d158;--mega-bear:#ff453a;--bull:#0a84ff;--bear:#ff9f0a;--trap:#bf5af2;--neutral:#6e6e73;--recovery:#30d158;}
+body.light{--bg:#fbfbfd;--surface:#ffffff;--surface2:#f7f7f9;--border:#f0f0f2;--text:#1d1d1f;--muted:#a1a1a6;--muted2:#6e6e73;--accent:#1d1d1f;--mega-bull:#1d8a4e;--mega-bear:#d4322c;--bull:#0066cc;--bear:#bf6a02;--trap:#7c3aed;--neutral:#6e6e73;--recovery:#1d8a4e;}
 .theme-toggle{font-family:DM Mono;font-size:.72rem;padding:6px 13px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);border-radius:8px;cursor:pointer;font-family:'Inter','DM Mono';transition:all .2s;letter-spacing:.05em;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{max-width:100vw;overflow-x:hidden;}
 body{background:var(--bg);color:var(--text);font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;min-height:100vh;font-size:16px;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(148,163,184,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.08) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+body::before{display:none;}
 .wrapper{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 40px;overflow-x:hidden;}
 #setup-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;width:100%;max-width:560px;}
@@ -1621,7 +1621,7 @@ body:not(.light){
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
     <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span id="sync-status">Connecting…</span></div>
     <div class="badge" id="dateBadge"></div>
-    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Light</button>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" >☀️ Light</button>
     <button class="btn-sm" style="font-size:.55rem;padding:4px 9px" onclick="disconnectDB()">⚙ Reset DB Connection</button>
   </div>
 </header>
@@ -7191,10 +7191,11 @@ async function loadChartWidget(sym, tf) {
       document.body.classList.contains('light') ||
       document.documentElement.getAttribute('data-theme') === 'light';
 
-    const bgColor     = '#ffffff';
-    const textColor   = '#1e293b';
-    const gridColor   = '#e2e8f0';
-    const borderColor = '#cbd5e1';
+    const isDark = !document.body.classList.contains('light');
+    const bgColor = isDark ? '#0a0a0a' : '#ffffff';
+    const textColor   = isDark ? '#f5f5f7' : '#1e293b';
+    const gridColor   = isDark ? '#1a1a1a' : '#e2e8f0';
+    const borderColor = isDark ? '#2a2a2a' : '#cbd5e1';
 
     const chart = LightweightCharts.createChart(container, {
       width:  container.clientWidth || 600,
@@ -7688,14 +7689,14 @@ function updateBottomBar(tab) {
 
 <!-- ══ CHART MODAL ══ -->
 <div id="chart-modal-overlay" onclick="if(event.target===this)closeChartModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:16px">
-  <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
     <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e2e8f0">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
       <div>
         <div id="chart-modal-title" style="font-family:Syne,sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.08em;color:#0f172a">Chart</div>
-        <div id="chart-modal-sub" style="font-family:'DM Mono',monospace;font-size:.58rem;color:#64748b;margin-top:2px"></div>
+        <div id="chart-modal-sub" style="font-family:'Geist Mono',monospace;font-size:.58rem;color:var(--muted2);margin-top:2px"></div>
       </div>
-      <button onclick="closeChartModal()" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#64748b;border-radius:8px;padding:6px 12px;font-family:'DM Mono',monospace;font-size:.62rem;cursor:pointer">✕ Close</button>
+      <button onclick="closeChartModal()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);border-radius:10px;padding:6px 14px;font-family:'Geist',sans-serif;font-size:.72rem;cursor:pointer">✕ Close</button>
     </div>
     <!-- Body -->
     <div style="display:grid;grid-template-columns:1fr 260px;flex:1;overflow:hidden;min-height:0">
@@ -7704,11 +7705,11 @@ function updateBottomBar(tab) {
         <div id="chart-tv-container" style="width:100%;height:100%;min-height:420px"></div>
       </div>
       <!-- Details sidebar -->
-      <div id="chart-details-panel" style="border-left:1px solid #e2e8f0;padding:16px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:.6rem;display:flex;flex-direction:column;gap:10px;background:#f8fafc">
+      <div id="chart-details-panel" style="border-left:1px solid var(--border);padding:16px;overflow-y:auto;font-family:'Geist Mono',monospace;font-size:.6rem;display:flex;flex-direction:column;gap:10px;background:var(--surface2)">
       </div>
     </div>
     <!-- Timeframe toggle -->
-    <div style="padding:10px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;align-items:center;background:#f8fafc">
+    <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;background:var(--surface)">
       <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:#64748b">Timeframe:</span>
       <button onclick="setChartTF('W')" id="chart-tf-w" style="padding:4px 10px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:#fff;font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Weekly</button>
       <button onclick="setChartTF('D')" id="chart-tf-d" style="padding:4px 10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer">Daily</button>
