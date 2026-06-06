@@ -7075,11 +7075,16 @@ function renderTimeline() {
     return;
   }
 
+  // Cap at last 12 entries
+  const MAX_BARS = 12;
+  const visible = astEntries.slice(-MAX_BARS);
+  const clipped = astEntries.length > MAX_BARS;
+
   const W = 500, H = 160;
   const padL = 32, padR = 12, padT = 16, padB = 36;
   const chartW = W - padL - padR;
   const chartH = H - padT - padB;
-  const n = astEntries.length;
+  const n = visible.length;
 
   // Bar width — narrower when many entries, min 6px
   const maxBarW = Math.min(52, Math.floor(chartW / n) - 4);
@@ -7103,7 +7108,7 @@ function renderTimeline() {
   }).join('');
 
   // Bars
-  const bars = astEntries.map((e, i) => {
+  const bars = visible.map((e, i) => {
     const sc     = e.inst_score != null ? e.inst_score : 0;
     const phase  = e.phase || 'Wait';
     const color  = PHASE_COLOR[phase] || '#6e6e73';
@@ -7154,6 +7159,11 @@ function renderTimeline() {
       ${scoreTxt}${dateTxt}${phaseTxt}`;
   }).join('');
 
+  // Clipped note
+  const clipNote = clipped
+    ? `<text x="${padL}" y="${padT-4}" fill="#6e6e73" font-size="6" font-family="Geist,sans-serif">Last ${MAX_BARS} of ${astEntries.length}</text>`
+    : '';
+
   // NOW label above last bar
   const lastIdx = n - 1;
   const lastX   = startX + lastIdx * (barW + gap) + barW / 2;
@@ -7166,6 +7176,8 @@ function renderTimeline() {
     ${grids}
     <!-- Bars -->
     ${bars}
+    <!-- Clip note -->
+    ${clipNote}
     <!-- NOW indicator -->
     ${n > 0 ? nowLabel : ''}
     <!-- X axis -->
