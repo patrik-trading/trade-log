@@ -1952,21 +1952,41 @@ input[type=date] {
 
   <!-- BTC Bias panel -->
   <div id="sig-panel-btc" style="display:none">
+
+    <!-- Coin tab bar -->
+    <div style="display:flex;gap:4px;margin-bottom:12px;background:var(--surface2);border-radius:10px;padding:4px">
+      <button id="crypto-btn-btc" onclick="switchCryptoTab('btc')" style="flex:1;padding:7px;border:none;border-radius:8px;font-family:Geist,sans-serif;font-size:.68rem;font-weight:600;cursor:pointer;background:var(--active-bg);color:var(--active-text)">₿ BTC</button>
+      <button id="crypto-btn-eth" onclick="switchCryptoTab('eth')" style="flex:1;padding:7px;border:none;border-radius:8px;font-family:Geist,sans-serif;font-size:.68rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2)">Ξ ETH</button>
+      <button id="crypto-btn-sol" onclick="switchCryptoTab('sol')" style="flex:1;padding:7px;border:none;border-radius:8px;font-family:Geist,sans-serif;font-size:.68rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2)">◎ SOL</button>
+    </div>
+
+    <!-- Consensus row -->
+    <div id="crypto-consensus" style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <div style="font-family:Geist,sans-serif;font-size:.58rem;color:var(--muted2);letter-spacing:.08em;text-transform:uppercase">Consensus</div>
+      <div id="consensus-label" style="font-family:Geist,sans-serif;font-size:.72rem;font-weight:600;color:var(--muted2)">Fetch to calculate</div>
+      <div style="display:flex;gap:6px">
+        <span id="c-dot-btc" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block"></span>
+        <span id="c-dot-eth" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block"></span>
+        <span id="c-dot-sol" style="width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block"></span>
+      </div>
+    </div>
+
     <!-- Fetch bar -->
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <button onclick="fetchBTCData()" id="btc-fetch-btn" style="flex:1;background:var(--active-bg);color:var(--active-text);border:none;border-radius:8px;padding:9px 14px;font-family:Geist,sans-serif;font-size:.65rem;letter-spacing:.08em;cursor:pointer">⬇ Fetch Live BTC Data</button>
+      <button onclick="fetchAllCryptoData()" id="btc-fetch-btn" style="flex:1;background:var(--active-bg);color:var(--active-text);border:none;border-radius:8px;padding:9px 14px;font-family:Geist,sans-serif;font-size:.65rem;cursor:pointer;font-weight:600">⬇ Fetch Live Data</button>
       <div id="btc-last-fetch" style="font-family:Geist,sans-serif;font-size:.55rem;color:var(--muted2)">Not fetched yet</div>
     </div>
 
     <!-- Signal card -->
     <div id="btc-signal-card" style="border-radius:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface2);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
       <div>
-        <div id="btc-signal-label" style="font-family:Geist,display;font-size:1.4rem;letter-spacing:.08em;color:var(--muted2)">₿ NO DATA</div>
+        <div id="crypto-coin-name" style="font-family:Geist,sans-serif;font-size:.58rem;font-weight:600;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Bitcoin</div>
+        <div id="btc-signal-label" style="font-family:Geist,sans-serif;font-size:1.3rem;font-weight:700;color:var(--muted2)">₿ NO DATA</div>
         <div id="btc-signal-desc" style="font-family:Geist,sans-serif;font-size:.58rem;color:var(--muted2);margin-top:3px">Press fetch to load live data</div>
       </div>
       <div style="text-align:right">
-        <div id="btc-score-num" style="font-family:Geist,display;font-size:2rem;color:var(--muted2);line-height:1">—</div>
-        <div style="font-family:Geist,sans-serif;font-size:.52rem;color:var(--muted2)">SCORE / 100</div>
+        <div id="btc-score-num" style="font-family:Geist,sans-serif;font-size:2.4rem;font-weight:700;color:var(--muted2);line-height:1">—</div>
+        <div style="font-family:Geist,sans-serif;font-size:.52rem;color:var(--muted2);letter-spacing:.08em;text-transform:uppercase">Score / 100</div>
       </div>
     </div>
 
@@ -6797,88 +6817,211 @@ function switchSigTab(tab) {
 }
 
 // ── BTC BIAS fetch ──
-async function fetchBTCData() {
-  const btn=document.getElementById('btc-fetch-btn');
-  const lastEl=document.getElementById('btc-last-fetch');
-  if(btn){btn.disabled=true;btn.textContent='Fetching...';}
-  try {
-    const fgRes=await fetch('https://api.alternative.me/fng/?limit=1');
-    const fgJson=await fgRes.json();
-    const fg=parseInt(fgJson.data[0].value);
-    const fgTxt=fgJson.data[0].value_classification;
-    let avgFunding=null,lsRatio=null;
-    // Binance futures — CORS open, no key needed
-    try{
-      const r=await fetch('https://fapi.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT');
-      const j=await r.json();
-      if(j.lastFundingRate!=null) avgFunding=parseFloat(j.lastFundingRate);
-    }catch(e){}
-    try{
-      const r=await fetch('https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=4h&limit=1');
-      const j=await r.json();
-      if(j[0]?.longAccount) lsRatio=parseFloat(j[0].longAccount)*100;
-    }catch(e){}
-    let btcPrice=null;
-    try{const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');const j=await r.json();btcPrice=j.bitcoin?.usd;}catch(e){}
-    const halvingDate=new Date('2024-04-19');const nextHalving=new Date('2028-04-01');const now=new Date();
-    const elapsed=(now-halvingDate)/86400000;const totalDays=(nextHalving-halvingDate)/86400000;
-    const cycleMonth=Math.floor(elapsed/30.4);const cyclePct=Math.min(100,Math.round(elapsed/totalDays*100));
-    const fgScore=fg<=20?25:fg<=35?20:fg<=50?13:fg<=65?8:fg<=80?3:0;
-    const fundScore=avgFunding===null?13:avgFunding<-0.02?25:avgFunding<-0.01?20:avgFunding<0?15:avgFunding<0.01?10:avgFunding<0.02?5:0;
-    const lsScore=lsRatio===null?13:lsRatio<35?25:lsRatio<42?20:lsRatio<48?13:lsRatio<55?8:lsRatio<65?4:0;
-    const cycleScore=cycleMonth>=6&&cycleMonth<=20?25:cycleMonth>=3&&cycleMonth<=24?18:cycleMonth>=1&&cycleMonth<=30?12:5;
-    // DXY macro adjustment — read from dashboard DXY inputs
-    let dxyAdj = 0;
-    const dxyCot   = parseFloat(document.getElementById('dxy-cot')?.value);
-    const dxyYield = parseFloat(document.getElementById('dxy-yield')?.value);
-    const dxyDir   = (document.getElementById('dxy-cot-dir')?.value||'');
-    if(!isNaN(dxyCot) && !isNaN(dxyYield)) {
-      // DXY bearish = tailwind for BTC (+10)
-      // DXY bullish = headwind for BTC (-10)
-      // DXY conflict = slight headwind (-5)
-      const dxyBearish = dxyCot < 40 && dxyYield > 65;
-      const dxyBullish = dxyCot > 60 && dxyYield < 35;
-      const dxyConflict= (dxyCot > 60 && dxyYield > 65) || (dxyCot < 40 && dxyYield < 35);
-      if(dxyBearish)       dxyAdj = dxyDir==='falling' ? +15 : +10;
-      else if(dxyBullish)  dxyAdj = dxyDir==='rising'  ? -15 : -10;
-      else if(dxyConflict) dxyAdj = -5;
+// ── CRYPTO BIAS: BTC / ETH / SOL ──
+const CRYPTO_STATE = { btc: null, eth: null, sol: null };
+let activeCrypto = 'btc';
+
+function switchCryptoTab(coin) {
+  activeCrypto = coin;
+  ['btc','eth','sol'].forEach(c => {
+    const btn = document.getElementById('crypto-btn-'+c);
+    if (!btn) return;
+    if (c === coin) {
+      btn.style.background = 'var(--active-bg)';
+      btn.style.color = 'var(--active-text)';
+      btn.style.fontWeight = '600';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--muted2)';
+      btn.style.fontWeight = '500';
     }
-    const total = Math.min(100, Math.max(0, fgScore+fundScore+lsScore+cycleScore+dxyAdj));
-    const sigLabel=total>=75?'🌱 BTC ACCUMULATION':total>=55?'📈 BTC BULLISH BIAS':total>=40?'⚡ BTC NEUTRAL':total>=25?'📉 BTC BEARISH BIAS':'🪨 BTC DISTRIBUTION';
-    const sigDesc=total>=75?'Sentiment depressed + funding negative':total>=55?'Conditions favour longs':total>=40?'No clear directional edge':total>=25?'Caution — avoid new longs':'Greed extreme + longs crowded';
-    const sigColor=total>=75?'var(--mega-bull)':total>=55?'var(--bull)':total>=40?'var(--muted2)':total>=25?'var(--bear)':'var(--mega-bear)';
-    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-    const col=(id,c)=>{const el=document.getElementById(id);if(el)el.style.color=c;};
-    set('btc-signal-label',sigLabel);col('btc-signal-label',sigColor);
-    set('btc-signal-desc',sigDesc);
-    set('btc-score-num',total);col('btc-score-num',sigColor);
-    const bar=document.getElementById('btc-score-bar');if(bar){bar.style.width=total+'%';bar.style.background=sigColor;}
-    const sc=s=>s>=18?'var(--mega-bull)':s>=10?'var(--muted2)':'var(--mega-bear)';
-    set('btc-score-fg',fgScore+'/25');col('btc-score-fg',sc(fgScore));
-    set('btc-score-fund',fundScore+'/25');col('btc-score-fund',sc(fundScore));
-    set('btc-score-ls',lsScore+'/25');col('btc-score-ls',sc(lsScore));
-    set('btc-score-cycle',cycleScore+'/25');col('btc-score-cycle',sc(cycleScore));
-    const dxyEl=document.getElementById('btc-score-dxy');
-    if(dxyEl){
-      dxyEl.textContent = dxyAdj===0?'No data':(dxyAdj>0?'+':'')+dxyAdj+' pts';
-      dxyEl.style.color = dxyAdj>0?'var(--mega-bull)':dxyAdj<0?'var(--mega-bear)':'var(--muted2)';
-    }
-    const fgCol=fg<=25?'var(--mega-bull)':fg<=45?'var(--bull)':fg<=55?'var(--muted2)':fg<=75?'var(--bear)':'var(--mega-bear)';
-    set('btc-fg-val',fg);col('btc-fg-val',fgCol);set('btc-fg-label',fgTxt);
-    if(avgFunding!==null){const fCol=avgFunding<0?'var(--mega-bull)':avgFunding>0.02?'var(--mega-bear)':'var(--muted2)';set('btc-fund-val',(avgFunding*100).toFixed(4)+'%');col('btc-fund-val',fCol);set('btc-fund-label',avgFunding<0?'Negative - bullish':avgFunding>0.02?'High - crowded':'Neutral');}
-    if(lsRatio!==null){const lCol=lsRatio<42?'var(--mega-bull)':lsRatio<48?'var(--bull)':lsRatio<55?'var(--muted2)':'var(--mega-bear)';set('btc-ls-val',lsRatio.toFixed(1)+'% long');col('btc-ls-val',lCol);set('btc-ls-label',lsRatio<42?'Contrarian bull':lsRatio>60?'Contrarian bear':'Neutral');}
-    const cycBar=document.getElementById('btc-cycle-bar');if(cycBar)cycBar.style.width=cyclePct+'%';
-    set('btc-cycle-pos','Month '+cycleMonth+' / 48');
-    set('btc-cycle-label',cycleMonth<=6?'Early post-halving':cycleMonth<=18?'Post-halving surge — historically strongest':cycleMonth<=30?'Mid-cycle — trend continuation':cycleMonth<=42?'Late cycle — watch for distribution':'Pre-halving accumulation');
-    if(btcPrice)set('btc-price','$'+btcPrice.toLocaleString());
-    if(lastEl)lastEl.textContent='Updated: '+new Date().toUTCString().slice(0,25);
-    localStorage.setItem('btc_data',JSON.stringify({total,fg,avgFunding,lsRatio,cycleMonth,btcPrice,sigLabel,fetchedAt:Date.now()}));
-  } catch(err) {
-    if(lastEl)lastEl.textContent='Error: '+err.message;
-  } finally {
-    if(btn){btn.disabled=false;btn.textContent='⬇ Fetch Live BTC Data';}
+  });
+  const names = { btc:'Bitcoin', eth:'Ethereum', sol:'Solana' };
+  const nameEl = document.getElementById('crypto-coin-name');
+  if (nameEl) nameEl.textContent = names[coin];
+  if (CRYPTO_STATE[coin]) renderCryptoData(coin, CRYPTO_STATE[coin]);
+  else {
+    const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+    const col = (id,c) => { const el=document.getElementById(id); if(el) el.style.color=c; };
+    const prefix = coin==='btc'?'₿':coin==='eth'?'Ξ':'◎';
+    set('btc-signal-label', prefix+' NO DATA');
+    set('btc-signal-desc','Press fetch to load live data');
+    set('btc-score-num','—');
+    col('btc-signal-label','var(--muted2)');
+    col('btc-score-num','var(--muted2)');
   }
 }
+
+function calcCryptoScore(fg, funding, lsRatio, dxyAdj, coin) {
+  const fgScore = fg<=20?25:fg<=35?20:fg<=50?13:fg<=65?8:fg<=80?3:0;
+  const fundScore = funding===null?13:funding<-0.02?25:funding<-0.01?20:funding<0?15:funding<0.01?10:funding<0.02?5:0;
+  const lsScore = lsRatio===null?13:lsRatio<35?25:lsRatio<42?20:lsRatio<48?13:lsRatio<55?8:lsRatio<65?4:0;
+  // Halving cycle only applies to BTC; ETH/SOL get a flat 13/25
+  const halvingDate = new Date('2024-04-19');
+  const now = new Date();
+  const elapsed = (now - halvingDate) / 86400000;
+  const cycleMonth = Math.floor(elapsed / 30.4);
+  const cycleScore = coin === 'btc'
+    ? (cycleMonth>=6&&cycleMonth<=20?25:cycleMonth>=3&&cycleMonth<=24?18:cycleMonth>=1&&cycleMonth<=30?12:5)
+    : 13;
+  return Math.min(100, Math.max(0, fgScore + fundScore + lsScore + cycleScore + dxyAdj));
+}
+
+function renderCryptoData(coin, d) {
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  const col = (id,c) => { const el=document.getElementById(id); if(el) el.style.color=c; };
+  const total = d.total;
+  const prefix = coin==='btc'?'₿':coin==='eth'?'Ξ':'◎';
+  const name = coin==='btc'?'BTC':coin==='eth'?'ETH':'SOL';
+  const sigLabel = total>=75?prefix+' '+name+' ACCUMULATION':total>=55?prefix+' '+name+' BULLISH BIAS':total>=40?prefix+' '+name+' NEUTRAL':total>=25?prefix+' '+name+' BEARISH BIAS':prefix+' '+name+' DISTRIBUTION';
+  const sigDesc = total>=75?'Sentiment depressed + funding negative':total>=55?'Conditions favour longs':total>=40?'No clear directional edge':total>=25?'Caution — avoid new longs':'Greed extreme + longs crowded';
+  const sigColor = total>=75?'var(--mega-bull)':total>=55?'var(--bull)':total>=40?'var(--muted2)':total>=25?'var(--bear)':'var(--mega-bear)';
+  set('btc-signal-label', sigLabel); col('btc-signal-label', sigColor);
+  set('btc-signal-desc', sigDesc);
+  set('btc-score-num', total); col('btc-score-num', sigColor);
+  const bar = document.getElementById('btc-score-bar');
+  if (bar) { bar.style.width = total+'%'; bar.style.background = sigColor; }
+  const sc = s => s>=18?'var(--mega-bull)':s>=10?'var(--muted2)':'var(--mega-bear)';
+  set('btc-score-fg', d.fgScore+'/25'); col('btc-score-fg', sc(d.fgScore));
+  set('btc-score-fund', d.fundScore+'/25'); col('btc-score-fund', sc(d.fundScore));
+  set('btc-score-ls', d.lsScore+'/25'); col('btc-score-ls', sc(d.lsScore));
+  set('btc-score-cycle', d.cycleScore+'/25'); col('btc-score-cycle', sc(d.cycleScore));
+  const dxyEl = document.getElementById('btc-score-dxy');
+  if (dxyEl) {
+    dxyEl.textContent = d.dxyAdj===0?'No data':(d.dxyAdj>0?'+':'')+d.dxyAdj+' pts';
+    dxyEl.style.color = d.dxyAdj>0?'var(--mega-bull)':d.dxyAdj<0?'var(--mega-bear)':'var(--muted2)';
+  }
+  const fgCol = d.fg<=25?'var(--mega-bull)':d.fg<=45?'var(--bull)':d.fg<=55?'var(--muted2)':d.fg<=75?'var(--bear)':'var(--mega-bear)';
+  set('btc-fg-val', d.fg); col('btc-fg-val', fgCol); set('btc-fg-label', d.fgTxt);
+  if (d.funding !== null) {
+    const fCol = d.funding<0?'var(--mega-bull)':d.funding>0.02?'var(--mega-bear)':'var(--muted2)';
+    set('btc-fund-val', (d.funding*100).toFixed(4)+'%'); col('btc-fund-val', fCol);
+    set('btc-fund-label', d.funding<0?'Negative - bullish':d.funding>0.02?'High - crowded':'Neutral');
+  }
+  if (d.lsRatio !== null) {
+    const lCol = d.lsRatio<42?'var(--mega-bull)':d.lsRatio<48?'var(--bull)':d.lsRatio<55?'var(--muted2)':'var(--mega-bear)';
+    set('btc-ls-val', d.lsRatio.toFixed(1)+'% long'); col('btc-ls-val', lCol);
+    set('btc-ls-label', d.lsRatio<42?'Contrarian bull':d.lsRatio>60?'Contrarian bear':'Neutral');
+  }
+  if (coin === 'btc') {
+    const halvingDate = new Date('2024-04-19');
+    const nextHalving = new Date('2028-04-01');
+    const now = new Date();
+    const elapsed = (now-halvingDate)/86400000;
+    const totalDays = (nextHalving-halvingDate)/86400000;
+    const cycleMonth = Math.floor(elapsed/30.4);
+    const cyclePct = Math.min(100, Math.round(elapsed/totalDays*100));
+    const cycBar = document.getElementById('btc-cycle-bar');
+    if (cycBar) cycBar.style.width = cyclePct+'%';
+    set('btc-cycle-pos', 'Month '+cycleMonth+' / 48');
+    set('btc-cycle-label', cycleMonth<=6?'Early post-halving':cycleMonth<=18?'Post-halving surge — historically strongest':cycleMonth<=30?'Mid-cycle — trend continuation':cycleMonth<=42?'Late cycle — watch for distribution':'Pre-halving accumulation');
+  }
+  if (d.price) set('btc-price', '$'+d.price.toLocaleString());
+}
+
+function updateConsensus() {
+  const scores = Object.entries(CRYPTO_STATE)
+    .filter(([,v]) => v !== null)
+    .map(([k,v]) => ({ coin:k, total:v.total }));
+  if (scores.length === 0) return;
+  const dotColors = { btc:'c-dot-btc', eth:'c-dot-eth', sol:'c-dot-sol' };
+  scores.forEach(({ coin, total }) => {
+    const el = document.getElementById('c-dot-'+coin);
+    if (!el) return;
+    el.style.background = total>=55?'var(--mega-bull)':total>=40?'var(--muted2)':'var(--mega-bear)';
+  });
+  const bullish = scores.filter(s => s.total >= 55).length;
+  const bearish = scores.filter(s => s.total < 40).length;
+  const label = document.getElementById('consensus-label');
+  if (!label) return;
+  if (bullish === scores.length) {
+    label.textContent = '🟢 All Bullish — Risk On'; label.style.color = 'var(--mega-bull)';
+  } else if (bearish === scores.length) {
+    label.textContent = '🔴 All Bearish — Risk Off'; label.style.color = 'var(--mega-bear)';
+  } else if (bullish > bearish) {
+    label.textContent = '🟡 Mostly Bullish — Mixed'; label.style.color = 'var(--bull)';
+  } else if (bearish > bullish) {
+    label.textContent = '🟡 Mostly Bearish — Mixed'; label.style.color = 'var(--bear)';
+  } else {
+    label.textContent = '⚪ No Consensus — Neutral'; label.style.color = 'var(--muted2)';
+  }
+}
+
+async function fetchAllCryptoData() {
+  const btn = document.getElementById('btc-fetch-btn');
+  const lastEl = document.getElementById('btc-last-fetch');
+  if (btn) { btn.disabled=true; btn.textContent='Fetching...'; }
+  // Shared data
+  let fg = 50, fgTxt = 'Neutral';
+  try {
+    const r = await fetch('https://api.alternative.me/fng/?limit=1');
+    const j = await r.json();
+    fg = parseInt(j.data[0].value);
+    fgTxt = j.data[0].value_classification;
+  } catch(e) {}
+  // DXY adjustment (shared)
+  let dxyAdj = 0;
+  const dxyCot = parseFloat(document.getElementById('dxy-cot')?.value);
+  const dxyYield = parseFloat(document.getElementById('dxy-yield')?.value);
+  const dxyDir = (document.getElementById('dxy-cot-dir')?.value||'');
+  if (!isNaN(dxyCot) && !isNaN(dxyYield)) {
+    const dxyBearish = dxyCot<40 && dxyYield>65;
+    const dxyBullish = dxyCot>60 && dxyYield<35;
+    const dxyConflict = (dxyCot>60&&dxyYield>65)||(dxyCot<40&&dxyYield<35);
+    if (dxyBearish)       dxyAdj = dxyDir==='falling'?+15:+10;
+    else if (dxyBullish)  dxyAdj = dxyDir==='rising'?-15:-10;
+    else if (dxyConflict) dxyAdj = -5;
+  }
+  // Fetch per-coin data
+  const coins = [
+    { id:'btc', symbol:'BTCUSDT', cgId:'bitcoin' },
+    { id:'eth', symbol:'ETHUSDT', cgId:'ethereum' },
+    { id:'sol', symbol:'SOLUSDT', cgId:'solana' },
+  ];
+  // Prices in one call
+  let prices = {};
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+    const j = await r.json();
+    prices = { btc:j.bitcoin?.usd, eth:j.ethereum?.usd, sol:j.solana?.usd };
+  } catch(e) {}
+  for (const { id, symbol, cgId } of coins) {
+    let funding = null, lsRatio = null;
+    try {
+      const r = await fetch('https://fapi.binance.com/fapi/v1/premiumIndex?symbol='+symbol);
+      const j = await r.json();
+      if (j.lastFundingRate != null) funding = parseFloat(j.lastFundingRate);
+    } catch(e) {}
+    try {
+      const r = await fetch('https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol='+symbol+'&period=4h&limit=1');
+      const j = await r.json();
+      if (j[0]?.longAccount) lsRatio = parseFloat(j[0].longAccount)*100;
+    } catch(e) {}
+    const halvingDate = new Date('2024-04-19');
+    const elapsed = (new Date()-halvingDate)/86400000;
+    const cycleMonth = Math.floor(elapsed/30.4);
+    const fgScore = fg<=20?25:fg<=35?20:fg<=50?13:fg<=65?8:fg<=80?3:0;
+    const fundScore = funding===null?13:funding<-0.02?25:funding<-0.01?20:funding<0?15:funding<0.01?10:funding<0.02?5:0;
+    const lsScore = lsRatio===null?13:lsRatio<35?25:lsRatio<42?20:lsRatio<48?13:lsRatio<55?8:lsRatio<65?4:0;
+    const cycleScore = id==='btc'
+      ? (cycleMonth>=6&&cycleMonth<=20?25:cycleMonth>=3&&cycleMonth<=24?18:cycleMonth>=1&&cycleMonth<=30?12:5)
+      : 13;
+    const total = Math.min(100, Math.max(0, fgScore+fundScore+lsScore+cycleScore+dxyAdj));
+    CRYPTO_STATE[id] = { total, fg, fgTxt, funding, lsRatio, price:prices[id], fgScore, fundScore, lsScore, cycleScore, dxyAdj };
+  }
+  updateConsensus();
+  const nameEl = document.getElementById('crypto-coin-name');
+  const names = { btc:'Bitcoin', eth:'Ethereum', sol:'Solana' };
+  if (nameEl) nameEl.textContent = names[activeCrypto];
+  renderCryptoData(activeCrypto, CRYPTO_STATE[activeCrypto]);
+  if (lastEl) lastEl.textContent = 'Updated: '+new Date().toUTCString().slice(0,25);
+  if (btn) { btn.disabled=false; btn.textContent='⬇ Fetch Live Data'; }
+  localStorage.setItem('crypto_data', JSON.stringify({ state:CRYPTO_STATE, fetchedAt:Date.now() }));
+}
+
+// Keep old fetchBTCData as alias for backwards compat
+async function fetchBTCData() { return fetchAllCryptoData(); }
+
 
 // ── SIGNAL TIMELINE — dual line: solid phase + dashed score ──
 function renderTimeline() {
