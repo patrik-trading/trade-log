@@ -7122,7 +7122,7 @@ function renderTimeline() {
     const scoreY  = barH > 16 ? y + 12 : y - 4;
     const scoreTxt = sc > 0
       ? `<text x="${(x + barW/2).toFixed(1)}" y="${scoreY.toFixed(1)}"
-           text-anchor="middle" fill="${barH>16?'#000':'var(--text)'}"
+           text-anchor="middle" fill="${barH>16?'#f5f5f7':'var(--muted2)'}"
            font-size="8" font-weight="700" font-family="Geist,sans-serif">${sc}</text>`
       : '';
 
