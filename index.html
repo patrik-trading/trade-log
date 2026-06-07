@@ -7169,7 +7169,7 @@ function renderTimeline() {
   const lastIdx = n - 1;
   const lastX   = startX + lastIdx * (barW + gap) + barW / 2;
   const nowLabel = `<text x="${lastX.toFixed(1)}" y="${padT - 4}"
-    text-anchor="middle" fill="${barH>24?color:'var(--text)'}" font-size="6.5" font-weight="600"
+    text-anchor="middle" fill="var(--text)" font-size="6.5" font-weight="600"
     font-family="Geist,sans-serif">NOW</text>`;
 
   el.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
