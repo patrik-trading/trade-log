@@ -7119,10 +7119,11 @@ function renderTimeline() {
     const isLast = i === n - 1;
 
     // Score text inside or above bar
-    const scoreY  = barH > 24 ? y + 13 : y - 5;
+    const scoreY    = barH > 24 ? y + 13 : y - 5;
+    const scoreColor = barH > 24 ? color : 'var(--text)';
     const scoreTxt = sc > 0
       ? `<text x="${(x + barW/2).toFixed(1)}" y="${scoreY.toFixed(1)}"
-           text-anchor="middle" fill="${barH>24?color:'var(--text)'}"
+           text-anchor="middle" fill="${scoreColor}"
            font-size="8" font-weight="700" font-family="Geist,sans-serif">${sc}</text>`
       : '';
 
