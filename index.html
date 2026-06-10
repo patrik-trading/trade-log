@@ -2432,6 +2432,14 @@ input[type=date] {
             <input type="text" id="zt-cfd-sym" placeholder="Auto-filled" style="font-size:.8rem;background:var(--surface2)" readonly>
           </div>
         </div>
+        <div style="margin-bottom:8px">
+          <button id="zt-sync-btn" onclick="ztFetchBothSynced()" title="Fetches CFD then futures price in one click. Sequential rather than parallel, since the CORS proxy rejects concurrent requests — but CFD responds almost instantly so the gap is negligible." style="width:100%;background:var(--active-bg);color:var(--active-text);border:none;border-radius:8px;padding:10px 14px;font-family:Geist,sans-serif;font-size:.68rem;font-weight:600;cursor:pointer">⚡ Fetch Both — Synced</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
+          <button id="zt-fetch-btn" onclick="ztFetchLivePrices()" style="flex:1;min-width:120px;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer">CFD only</button>
+          <button id="zt-yahoo-btn" onclick="ztFetchYahooFutures()" title="Experimental — real CME futures via Yahoo Finance through a public CORS proxy. May break without notice." style="flex:1;min-width:120px;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer">🧪 Futures only</button>
+        </div>
+        <div id="zt-fetch-status" style="font-family:Geist,sans-serif;font-size:.55rem;color:var(--muted2);margin-bottom:10px;line-height:1.5"></div>
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
             <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
@@ -6597,6 +6605,15 @@ const ZT_MAP = {
   'HG':  { cfd:'Copper',  inv:false },
 };
 
+// Yahoo Finance continuous futures (=F suffix) — EXPERIMENTAL
+// Real CME/COMEX futures prices, but accessed via unofficial endpoint
+// through a public CORS proxy. May break without notice.
+const YAHOO_FUT_MAP = {
+  '6E': '6E=F', '6B': '6B=F', '6A': '6A=F', '6N': '6N=F',
+  '6C': '6C=F', '6J': '6J=F', '6S': '6S=F',
+  'GC': 'GC=F', 'SI': 'SI=F',
+};
+
 function ztAutoFillCFD() {
   const sym = document.getElementById('zt-sym').value;
   const cfdEl = document.getElementById('zt-cfd-sym');
@@ -6612,6 +6629,157 @@ function ztAutoFillCFD() {
   // Re-calc basis if prices already entered
   ztAutoInvert();
   ztCalcBasis();
+}
+
+async function ztFetchLivePrices() {
+  const sym = document.getElementById('zt-sym').value;
+  const btn = document.getElementById('zt-fetch-btn');
+  const statusEl = document.getElementById('zt-fetch-status');
+  if (!sym || !ZT_MAP[sym]) {
+    if (statusEl) { statusEl.textContent = 'Select a symbol first'; statusEl.style.color = 'var(--mega-bear)'; }
+    return;
+  }
+  const tdKey = localStorage.getItem('td_api_key') || 'ff93af751e884cc09250a810aef28ada';
+  const cfdSymbol = LC_SYM_MAP[sym] || ZT_MAP[sym].cfd;
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Fetching...'; }
+  if (statusEl) { statusEl.textContent = ''; }
+
+  try {
+    // Fetch CFD/spot price (Twelve Data has no CME futures coverage —
+    // futures price must be read from TradingView and entered manually)
+    const cfdRes = await fetch(`https://api.twelvedata.com/price?symbol=${encodeURIComponent(cfdSymbol)}&apikey=${tdKey}`);
+    const cfdData = await cfdRes.json();
+    if (cfdData.price) {
+      document.getElementById('zt-cfd-price').value = parseFloat(cfdData.price).toFixed(5);
+      ztCalcBasis();
+      if (statusEl) {
+        statusEl.textContent = 'CFD price updated ' + new Date().toUTCString().slice(17,25) + ' UTC — enter futures price from TradingView';
+        statusEl.style.color = 'var(--mega-bull)';
+      }
+    } else {
+      if (statusEl) { statusEl.textContent = 'CFD price unavailable for ' + sym; statusEl.style.color = 'var(--mega-bear)'; }
+    }
+  } catch (e) {
+    if (statusEl) { statusEl.textContent = 'Fetch failed — check connection'; statusEl.style.color = 'var(--mega-bear)'; }
+  }
+  if (btn) { btn.disabled = false; btn.textContent = '⬇ Fetch Live CFD Price'; }
+}
+
+async function ztFetchYahooFutures() {
+  const sym = document.getElementById('zt-sym').value;
+  const btn = document.getElementById('zt-yahoo-btn');
+  const statusEl = document.getElementById('zt-fetch-status');
+  if (!sym || !YAHOO_FUT_MAP[sym]) {
+    if (statusEl) { statusEl.textContent = 'No Yahoo futures mapping for ' + (sym||'this symbol'); statusEl.style.color = 'var(--mega-bear)'; }
+    return;
+  }
+  const yahooSymbol = YAHOO_FUT_MAP[sym];
+  const yahooUrl    = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}`;
+  const proxyUrl    = `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`;
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Fetching...'; }
+  if (statusEl) { statusEl.textContent = ''; }
+
+  try {
+    const res  = await fetch(proxyUrl);
+    const data = await res.json();
+    const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (price != null) {
+      const dp = Math.abs(price) > 100 ? 3 : 6;
+      document.getElementById('zt-fut-price').value = parseFloat(price).toFixed(dp);
+      ztAutoInvert();
+      ztCalcBasis();
+      if (statusEl) {
+        statusEl.textContent = 'Futures price (Yahoo, experimental) updated ' + new Date().toUTCString().slice(17,25) + ' UTC — verify against TradingView';
+        statusEl.style.color = 'var(--mega-bull)';
+      }
+    } else {
+      if (statusEl) { statusEl.textContent = 'Yahoo returned no price for ' + yahooSymbol + ' — enter manually from TradingView'; statusEl.style.color = 'var(--bear)'; }
+    }
+  } catch (e) {
+    if (statusEl) { statusEl.textContent = 'Yahoo fetch failed (proxy may be down) — enter manually from TradingView'; statusEl.style.color = 'var(--mega-bear)'; }
+  }
+  if (btn) { btn.disabled = false; btn.textContent = '🧪 Try Yahoo Futures'; }
+}
+
+async function ztFetchBothSynced() {
+  const sym = document.getElementById('zt-sym').value;
+  const btn = document.getElementById('zt-sync-btn');
+  const statusEl = document.getElementById('zt-fetch-status');
+  if (!sym || !ZT_MAP[sym]) {
+    if (statusEl) { statusEl.textContent = 'Select a symbol first'; statusEl.style.color = 'var(--mega-bear)'; }
+    return;
+  }
+  const tdKey = localStorage.getItem('td_api_key') || 'ff93af751e884cc09250a810aef28ada';
+  const cfdSymbol = LC_SYM_MAP[sym] || ZT_MAP[sym].cfd;
+  const yahooSymbol = YAHOO_FUT_MAP[sym];
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Syncing...'; }
+  if (statusEl) { statusEl.textContent = ''; }
+
+  const cfdUrl   = `https://api.twelvedata.com/price?symbol=${encodeURIComponent(cfdSymbol)}&apikey=${tdKey}`;
+  const yahooUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+yahooSymbol)}`;
+
+  const fetchOne = async (url) => {
+    try {
+      const r = await fetch(url);
+      const j = await r.json();
+      return { ok:true, status:r.status, data:j };
+    } catch (e) {
+      return { ok:false, error: e.message || String(e) };
+    }
+  };
+
+  const fetchStart = Date.now();
+  // Sequential, not Promise.all — the public CORS proxy (allorigins.win)
+  // appears to reject/fail when hit concurrently with another request.
+  // CFD (Twelve Data) is fast (~0.3s) so doing it first adds negligible delay.
+  const cfdRes   = await fetchOne(cfdUrl);
+  const yahooRes = yahooSymbol ? await fetchOne(yahooUrl) : { ok:false, error:'no Yahoo mapping' };
+  const elapsed = ((Date.now() - fetchStart) / 1000).toFixed(1);
+
+  let msgs = [];
+  let okCount = 0;
+
+  // CFD side
+  if (cfdRes.ok && cfdRes.data?.price) {
+    document.getElementById('zt-cfd-price').value = parseFloat(cfdRes.data.price).toFixed(5);
+    okCount++;
+  } else if (cfdRes.ok) {
+    msgs.push('CFD: ' + JSON.stringify(cfdRes.data).slice(0,60));
+  } else {
+    msgs.push('CFD error: ' + cfdRes.error);
+  }
+
+  // Futures (Yahoo) side
+  const yahooMeta = yahooRes.ok ? yahooRes.data?.chart?.result?.[0]?.meta : null;
+  if (yahooMeta?.regularMarketPrice != null) {
+    const price = yahooMeta.regularMarketPrice;
+    const dp = Math.abs(price) > 100 ? 3 : 6;
+    document.getElementById('zt-fut-price').value = parseFloat(price).toFixed(dp);
+    okCount++;
+    if (yahooMeta.regularMarketTime) {
+      const quoteTime = new Date(yahooMeta.regularMarketTime * 1000);
+      const ageSec = Math.round((Date.now() - quoteTime.getTime()) / 1000);
+      msgs.push('Yahoo age: ' + (ageSec >= 0 ? ageSec+'s' : '—'));
+    }
+  } else if (yahooRes.ok) {
+    const errInfo = yahooRes.data?.chart?.error;
+    msgs.push('Yahoo: ' + (errInfo ? JSON.stringify(errInfo).slice(0,60) : 'no meta in response'));
+  } else {
+    msgs.push('Yahoo error: ' + yahooRes.error);
+  }
+
+  ztAutoInvert();
+  ztCalcBasis();
+
+  if (statusEl) {
+    statusEl.textContent = 'Fetched (' + elapsed + 's) · ' + msgs.join(' · ');
+    statusEl.style.color = okCount === 2 ? 'var(--mega-bull)' : 'var(--bear)';
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = '⚡ Fetch Both — Synced'; }
 }
 
 function ztAutoInvert() {
