@@ -2432,16 +2432,13 @@ input[type=date] {
             <input type="text" id="zt-cfd-sym" placeholder="Auto-filled" style="font-size:.8rem;background:var(--surface2)" readonly>
           </div>
         </div>
-        <div style="margin-bottom:8px">
+        <div style="margin-bottom:10px">
           <button id="zt-sync-btn" onclick="ztFetchBothSynced()" title="Fetches CFD then futures price in one click. Sequential rather than parallel, since the CORS proxy rejects concurrent requests — but CFD responds almost instantly so the gap is negligible." style="width:100%;background:var(--active-bg);color:var(--active-text);border:none;border-radius:8px;padding:10px 14px;font-family:Geist,sans-serif;font-size:.68rem;font-weight:600;cursor:pointer">⚡ Fetch Both — Synced</button>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px">
-          <button id="zt-fetch-btn" onclick="ztFetchLivePrices()" style="flex:1;min-width:120px;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer">CFD only</button>
-          <button id="zt-yahoo-btn" onclick="ztFetchYahooFutures()" title="Experimental — real CME futures via Yahoo Finance through a public CORS proxy. May break without notice." style="flex:1;min-width:120px;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer">🧪 Futures only</button>
         </div>
         <div id="zt-fetch-status" style="font-family:Geist,sans-serif;font-size:.55rem;color:var(--muted2);margin-bottom:10px;line-height:1.5"></div>
         <div class="g2" style="margin-bottom:10px">
           <div class="ig">
+            <button id="zt-yahoo-btn" onclick="ztFetchYahooFutures()" title="Experimental — real CME futures via Yahoo Finance through a public CORS proxy. May break without notice." style="width:100%;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer;margin-bottom:8px">🧪 Futures only</button>
             <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
             <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 0.006302" oninput="ztAutoInvert();ztCalcBasis()">
             <div id="zt-inverted-note" style="display:none;margin-top:6px">
@@ -2451,6 +2448,7 @@ input[type=date] {
             </div>
           </div>
           <div class="ig">
+            <button id="zt-fetch-btn" onclick="ztFetchLivePrices()" style="width:100%;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer;margin-bottom:8px">CFD only</button>
             <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(your broker)</span></label>
             <input type="number" id="zt-cfd-price" step="any" placeholder="e.g. 1.08513" oninput="ztCalcBasis()">
           </div>
@@ -6675,7 +6673,7 @@ async function ztFetchYahooFutures() {
     return;
   }
   const yahooSymbol = YAHOO_FUT_MAP[sym];
-  const yahooUrl    = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}`;
+  const yahooUrl    = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?_=${Date.now()}`;
   const proxyUrl    = `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`;
 
   if (btn) { btn.disabled = true; btn.textContent = 'Fetching...'; }
@@ -6686,7 +6684,7 @@ async function ztFetchYahooFutures() {
     const data = await res.json();
     const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
     if (price != null) {
-      const dp = Math.abs(price) > 100 ? 3 : 6;
+      const dp = Math.abs(price) > 100 ? 3 : 8; // 8dp: inversion (6J/6C/6S) amplifies rounding error
       document.getElementById('zt-fut-price').value = parseFloat(price).toFixed(dp);
       ztAutoInvert();
       ztCalcBasis();
@@ -6719,7 +6717,7 @@ async function ztFetchBothSynced() {
   if (statusEl) { statusEl.textContent = ''; }
 
   const cfdUrl   = `https://api.twelvedata.com/price?symbol=${encodeURIComponent(cfdSymbol)}&apikey=${tdKey}`;
-  const yahooUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+yahooSymbol)}`;
+  const yahooUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+yahooSymbol+'?_='+Date.now())}`;
 
   const fetchOne = async (url) => {
     try {
@@ -6756,7 +6754,7 @@ async function ztFetchBothSynced() {
   const yahooMeta = yahooRes.ok ? yahooRes.data?.chart?.result?.[0]?.meta : null;
   if (yahooMeta?.regularMarketPrice != null) {
     const price = yahooMeta.regularMarketPrice;
-    const dp = Math.abs(price) > 100 ? 3 : 6;
+    const dp = Math.abs(price) > 100 ? 3 : 8; // 8dp: inversion (6J/6C/6S) amplifies rounding error
     document.getElementById('zt-fut-price').value = parseFloat(price).toFixed(dp);
     okCount++;
     if (yahooMeta.regularMarketTime) {
