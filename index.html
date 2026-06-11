@@ -6673,7 +6673,7 @@ async function ztFetchYahooFutures() {
     return;
   }
   const yahooSymbol = YAHOO_FUT_MAP[sym];
-  const yahooUrl    = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?_=${Date.now()}`;
+  const yahooUrl    = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}`;
   const proxyUrl    = `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`;
 
   if (btn) { btn.disabled = true; btn.textContent = 'Fetching...'; }
@@ -6717,7 +6717,7 @@ async function ztFetchBothSynced() {
   if (statusEl) { statusEl.textContent = ''; }
 
   const cfdUrl   = `https://api.twelvedata.com/price?symbol=${encodeURIComponent(cfdSymbol)}&apikey=${tdKey}`;
-  const yahooUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+yahooSymbol+'?_='+Date.now())}`;
+  const yahooUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+yahooSymbol)}`;
 
   const fetchOne = async (url) => {
     try {
