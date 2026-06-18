@@ -4946,7 +4946,8 @@ async function addTrade(){
 }
 
 function duplicateTrade(id) {
-  console.log('duplicateTrade called with id:', id);
+  console.log('📋 duplicateTrade called with id:', id);
+  
   const t = trades.find(trade => trade.id === id);
   if (!t) { 
     console.error('Trade not found with id:', id);
@@ -4955,59 +4956,61 @@ function duplicateTrade(id) {
   }
   console.log('Found trade:', t);
   
-  try {
-    // Populate the new trade form with all data except risk (which the user will adjust)
-    document.getElementById('tl-date').value = t.date || '';
-    document.getElementById('tl-month').value = t.month || '';
-    document.getElementById('tl-symbol').value = t.symbol || '';
-    document.getElementById('tl-size').value = t.size === '—' ? '' : t.size;
-    document.getElementById('tl-price').value = t.price === '—' ? '' : t.price;
-    document.getElementById('tl-sl').value = t.sl_price != null ? t.sl_price : '';
-    document.getElementById('tl-tp').value = t.tp_price != null ? t.tp_price : '';
-    document.getElementById('tl-closed-price').value = t.closed_price != null ? t.closed_price : '';
-    document.getElementById('tl-triggered-at').value = t.triggered_at ? t.triggered_at.slice(0,10) : '';
-    document.getElementById('tl-closed-at').value = t.closed_at ? t.closed_at.slice(0,10) : '';
-    document.getElementById('tl-oc').value = t.oc || 'Close';
-    document.getElementById('tl-dir').value = t.dir || 'Buy';
-    document.getElementById('tl-type').value = t.type || 'Forex';
-    document.getElementById('tl-rvalue').value = t.rvalue != null ? t.rvalue : '';
-    document.getElementById('tl-notes').value = t.notes || '';
-    document.getElementById('tl-addon').checked = t.addon || false;
-    
-    // CLEAR risk fields so user enters new values for this account
-    document.getElementById('tl-risked').value = '';
-    document.getElementById('tl-risked-r').value = '';
-    document.getElementById('tl-pnl').value = '';
-    document.getElementById('tl-r').value = '';
-    document.getElementById('tl-risked').dataset.manual = '';
-    
-    // Account: pick a different one if available
-    const acctSel = document.getElementById('tl-acct-sel');
+  // Populate the new trade form with all data except risk (which the user will adjust)
+  document.getElementById('tl-date').value = t.date || '';
+  document.getElementById('tl-month').value = t.month || '';
+  document.getElementById('tl-symbol').value = t.symbol || '';
+  document.getElementById('tl-size').value = (t.size === '—' || t.size === undefined) ? '' : t.size;
+  document.getElementById('tl-price').value = (t.price === '—' || t.price === undefined) ? '' : t.price;
+  
+  if (document.getElementById('tl-sl')) {
+    document.getElementById('tl-sl').value = (t.sl_price != null) ? t.sl_price : '';
+  }
+  if (document.getElementById('tl-tp')) {
+    document.getElementById('tl-tp').value = (t.tp_price != null) ? t.tp_price : '';
+  }
+  if (document.getElementById('tl-closed-price')) {
+    document.getElementById('tl-closed-price').value = (t.closed_price != null) ? t.closed_price : '';
+  }
+  
+  document.getElementById('tl-oc').value = t.oc || 'Close';
+  document.getElementById('tl-dir').value = t.dir || 'Buy';
+  document.getElementById('tl-type').value = t.type || 'Forex';
+  document.getElementById('tl-rvalue').value = (t.rvalue != null) ? t.rvalue : '';
+  document.getElementById('tl-notes').value = t.notes || '';
+  document.getElementById('tl-addon').checked = t.addon || false;
+  
+  // CLEAR risk fields so user enters new values for this account
+  document.getElementById('tl-risked').value = '';
+  document.getElementById('tl-risked-r').value = '';
+  document.getElementById('tl-pnl').value = '';
+  document.getElementById('tl-r').value = '';
+  document.getElementById('tl-risked').dataset.manual = '';
+  
+  // Account: pick a different one if available
+  const acctSel = document.getElementById('tl-acct-sel');
+  if (acctSel && accounts && accounts.length > 0) {
     const otherAcct = accounts.find(a => a !== t.account);
-    if (otherAcct) { acctSel.value = otherAcct; }
-    
-    // Set currency
-    currentCurrency = t.currency || 'USD';
-    setCurrency(currentCurrency);
-    
-    // Clear phase/entry/inst tags (user can re-select if needed)
-    document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b => {
-      b.classList.remove('sel');
-      b.style.background='';
-      b.style.color='';
-    });
-    
-    console.log('Form populated successfully');
-    
-    // Scroll to form and show confirmation
-    const dateField = document.getElementById('tl-date');
-    if (dateField) dateField.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    sync('ok', '📋 Duplicated from ' + t.symbol + ' — adjust risk and account, then save');
+    if (otherAcct) { 
+      acctSel.value = otherAcct;
+      console.log('Switched account to:', otherAcct);
+    }
   }
-  catch(e) {
-    console.error('Error in duplicateTrade:', e.message, e.stack);
-    alert('Error duplicating trade:\n\n' + e.message);
-  }
+  
+  // Set currency
+  currentCurrency = t.currency || 'USD';
+  setCurrency(currentCurrency);
+  console.log('Set currency to:', currentCurrency);
+  
+  // Clear phase/entry/inst tags (user can re-select if needed)
+  document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b => {
+    b.classList.remove('sel');
+    b.style.background='';
+    b.style.color='';
+  });
+  
+  console.log('✓ Form populated successfully');
+  sync('ok', '📋 ' + t.symbol + ' duplicated — adjust risk & account, then save');
 }
 async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
 function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
