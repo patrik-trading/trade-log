@@ -2168,7 +2168,7 @@ input[type=date] {
           <div class="ig"><label>Price</label><input type="number" id="tl-price" placeholder="0.00000" step="any"></div>
           <div class="ig"><label>Stop Loss</label><input type="number" id="tl-sl" placeholder="0.00000" step="any"></div>
           <div class="ig"><label>Take Profit</label><input type="number" id="tl-tp" placeholder="0.00000" step="any"></div>
-          <div class="ig"></div>
+          <div class="ig"><label>Closed Price</label><input type="number" id="tl-closed-price" placeholder="actual exit price" step="any"></div>
         </div>
         <div class="r-box">
           <div class="r-box-title">≠ R CALCULATION</div>
@@ -4851,18 +4851,101 @@ function autoCalcR(){
 function clearAutoR(){document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.getElementById('r-hint').textContent='';}
 
 async function addTrade(){
-  const date=document.getElementById('tl-date').value,symbol=document.getElementById('tl-symbol').value;
-  if(!date||!symbol){alert('Date and Symbol are required.');return;}
-  const pv=document.getElementById('tl-pnl').value,rv=document.getElementById('tl-r').value,rvv=document.getElementById('tl-rvalue').value;
-  const riskedV=document.getElementById('tl-risked').value,riskedRV=document.getElementById('tl-risked-r').value;
-  const row={id:Date.now(),date,month:document.getElementById('tl-month').value,account:document.getElementById('tl-acct-sel').value||'Default',oc:document.getElementById('tl-oc').value,dir:document.getElementById('tl-dir').value,size:document.getElementById('tl-size').value||'—',symbol,type:document.getElementById('tl-type').value,price:document.getElementById('tl-price').value||'—',risked:riskedV!==''?parseFloat(riskedV):null,risked_r:riskedRV!==''?parseFloat(riskedRV):null,pnl:pv!==''?parseFloat(pv):null,r:rv!==''?parseFloat(rv):null,rvalue:rvv!==''?parseFloat(rvv):null,currency:currentCurrency,phase:getSelTag('phase-tags'),entry:getSelTag('entry-tags'),inst_tag:getSelTag('inst-tags'),notes:document.getElementById('tl-notes').value,addon:document.getElementById('tl-addon').checked,sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,tp_price:document.getElementById('tl-tp')?.value!==''?parseFloat(document.getElementById('tl-tp').value):null,closed_price:document.getElementById('tl-closed-price')?.value!==''?parseFloat(document.getElementById('tl-closed-price').value):null,triggered_at:document.getElementById('tl-triggered-at')?.value?document.getElementById('tl-triggered-at').value+'T00:00:00+00:00':null,opened_at:document.getElementById('tl-date')?.value?document.getElementById('tl-date').value+'T00:00:00+00:00':null,closed_at:document.getElementById('tl-closed-at')?.value?document.getElementById('tl-closed-at').value+'T00:00:00+00:00':null};
-  const btn=document.getElementById('btn-trade');btn.disabled=true;btn.textContent='Saving…';
-  try{sync('busy','Saving…');await sbPost('trades',row);trades.unshift(row);renderTrades();resetTradeForm();sync('ok','Saved ✓');}
-  catch(e){sync('err','Save failed');alert('Error: '+e.message);}
-  btn.disabled=false;btn.textContent='+ LOG TRADE';
+  console.log('=== LOG TRADE CLICKED ===');
+  
+  // Check all required elements exist first
+  const requiredFields = ['tl-date', 'tl-symbol', 'tl-month', 'tl-acct-sel', 'tl-oc', 'tl-dir', 'tl-size', 'tl-type', 'tl-price', 'tl-pnl', 'tl-r', 'tl-rvalue', 'tl-risked', 'tl-risked-r', 'tl-notes', 'tl-addon'];
+  
+  for (const fieldId of requiredFields) {
+    const el = document.getElementById(fieldId);
+    if (!el) {
+      console.error(`MISSING ELEMENT: ${fieldId}`);
+      alert(`Error: Form field "${fieldId}" not found in page. The form may not have loaded correctly.`);
+      return;
+    }
+  }
+  console.log('✓ All required fields found');
+  
+  const date=document.getElementById('tl-date').value;
+  const symbol=document.getElementById('tl-symbol').value;
+  console.log('Date:', date, 'Symbol:', symbol);
+  
+  if(!date || !symbol){
+    alert('Date and Symbol required');
+    return;
+  }
+  
+  const btn=document.getElementById('btn-trade');
+  if (!btn) {
+    console.error('Button element not found');
+    alert('Button element missing');
+    return;
+  }
+  
+  btn.disabled=true;
+  btn.textContent='Saving...';
+  
+  try {
+    const pv=document.getElementById('tl-pnl').value;
+    const rv=document.getElementById('tl-r').value;
+    const rvv=document.getElementById('tl-rvalue').value;
+    const riskedV=document.getElementById('tl-risked').value;
+    const riskedRV=document.getElementById('tl-risked-r').value;
+    
+    const row={
+      id:Date.now(),
+      date:date,
+      month:document.getElementById('tl-month').value,
+      account:document.getElementById('tl-acct-sel').value||'Default',
+      oc:document.getElementById('tl-oc').value,
+      dir:document.getElementById('tl-dir').value,
+      size:document.getElementById('tl-size').value||'—',
+      symbol:symbol,
+      type:document.getElementById('tl-type').value,
+      price:document.getElementById('tl-price').value||'—',
+      risked:riskedV!==''?parseFloat(riskedV):null,
+      risked_r:riskedRV!==''?parseFloat(riskedRV):null,
+      pnl:pv!==''?parseFloat(pv):null,
+      r:rv!==''?parseFloat(rv):null,
+      rvalue:rvv!==''?parseFloat(rvv):null,
+      currency:currentCurrency,
+      phase:getSelTag('phase-tags'),
+      entry:getSelTag('entry-tags'),
+      inst_tag:getSelTag('inst-tags'),
+      notes:document.getElementById('tl-notes').value,
+      addon:document.getElementById('tl-addon').checked,
+      sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,
+      tp_price:document.getElementById('tl-tp')?.value!==''?parseFloat(document.getElementById('tl-tp').value):null,
+      closed_price:document.getElementById('tl-closed-price')?.value!==''?parseFloat(document.getElementById('tl-closed-price').value):null,
+      triggered_at:document.getElementById('tl-triggered-at')?.value?document.getElementById('tl-triggered-at').value+'T00:00:00+00:00':null,
+      opened_at:document.getElementById('tl-date')?.value?document.getElementById('tl-date').value+'T00:00:00+00:00':null,
+      closed_at:document.getElementById('tl-closed-at')?.value?document.getElementById('tl-closed-at').value+'T00:00:00+00:00':null
+    };
+    
+    console.log('Row to save:', row);
+    sync('busy','Saving to Supabase...');
+    const res=await sbPost('trades', row);
+    console.log('Save response:', res);
+    
+    trades.unshift(row);
+    console.log('Trade added to local array, rendering...');
+    renderTrades();
+    resetTradeForm();
+    sync('ok','✓ Trade logged');
+    alert('Trade saved successfully!');
+  }
+  catch(e){
+    console.error('ERROR in addTrade:', e.message, e.stack);
+    sync('err','Failed: '+e.message);
+    alert('Error:\n\n'+e.message);
+  }
+  finally{
+    btn.disabled=false;
+    btn.textContent='+ LOG TRADE';
+  }
 }
 async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
-function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
+function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
 
 function renderTrades(){
