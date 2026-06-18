@@ -4944,6 +4944,56 @@ async function addTrade(){
     btn.textContent='+ LOG TRADE';
   }
 }
+
+function duplicateTrade(id) {
+  const t = trades.find(trade => trade.id === id);
+  if (!t) { alert('Trade not found'); return; }
+  
+  // Populate the new trade form with all data except risk (which the user will adjust)
+  document.getElementById('tl-date').value = t.date || '';
+  document.getElementById('tl-month').value = t.month || '';
+  document.getElementById('tl-symbol').value = t.symbol || '';
+  document.getElementById('tl-size').value = t.size === '—' ? '' : t.size;
+  document.getElementById('tl-price').value = t.price === '—' ? '' : t.price;
+  document.getElementById('tl-sl').value = t.sl_price != null ? t.sl_price : '';
+  document.getElementById('tl-tp').value = t.tp_price != null ? t.tp_price : '';
+  document.getElementById('tl-closed-price').value = t.closed_price != null ? t.closed_price : '';
+  document.getElementById('tl-triggered-at').value = t.triggered_at ? t.triggered_at.slice(0,10) : '';
+  document.getElementById('tl-closed-at').value = t.closed_at ? t.closed_at.slice(0,10) : '';
+  document.getElementById('tl-oc').value = t.oc || 'Close';
+  document.getElementById('tl-dir').value = t.dir || 'Buy';
+  document.getElementById('tl-type').value = t.type || 'Forex';
+  document.getElementById('tl-rvalue').value = t.rvalue != null ? t.rvalue : '';
+  document.getElementById('tl-notes').value = t.notes || '';
+  document.getElementById('tl-addon').checked = t.addon || false;
+  
+  // CLEAR risk fields so user enters new values for this account
+  document.getElementById('tl-risked').value = '';
+  document.getElementById('tl-risked-r').value = '';
+  document.getElementById('tl-pnl').value = '';
+  document.getElementById('tl-r').value = '';
+  document.getElementById('tl-risked').dataset.manual = '';
+  
+  // Account: pick a different one if available
+  const acctSel = document.getElementById('tl-acct-sel');
+  const otherAcct = accounts.find(a => a !== t.account);
+  if (otherAcct) { acctSel.value = otherAcct; }
+  
+  // Set currency
+  currentCurrency = t.currency || 'USD';
+  setCur(currentCurrency);
+  
+  // Clear phase/entry/inst tags (user can re-select if needed)
+  document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b => {
+    b.classList.remove('sel');
+    b.style.background='';
+    b.style.color='';
+  });
+  
+  // Scroll to form and show confirmation
+  document.getElementById('tl-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  sync('ok', '📋 Duplicated from ' + t.symbol + ' — adjust risk and account, then save');
+}
 async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
 function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
@@ -5002,7 +5052,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:Geist;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
