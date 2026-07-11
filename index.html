@@ -2212,6 +2212,8 @@ input[type=date] {
           <button class="tag-btn" data-val="The Conflict" onclick="selTag('phase-tags',this)" style="--tc:#f59e0b">⚡ The Conflict</button>
         </div></div>
         <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
+          <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
+          <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
           <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
           <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
         </div></div>
@@ -3329,6 +3331,8 @@ input[type=date] {
       <button class="tag-btn" data-val="Neutral" onclick="selTag('edit-phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
     </div></div>
     <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
+      <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
+      <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
       <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
       <button class="tag-btn" data-val="Momentum" onclick="selTag('edit-entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
     </div></div>
@@ -5037,7 +5041,19 @@ function renderTrades(){
   const cl=ft.filter(t=>t.oc==='Close'&&t.r!==null);
   const W=cl.filter(t=>t.r>0.1).length,BE=cl.filter(t=>t.r>=-0.1&&t.r<=0.1).length,L=cl.filter(t=>t.r<-0.1).length,TOT=cl.length;
   const tR=ft.reduce((s,t)=>s+(t.r||0),0),sR=ft.filter(t=>t.oc==='Close').reduce((s,t)=>s+(t.r||0),0);
-  const mos=new Set(ft.map(t=>t.month).filter(Boolean)),aRm=mos.size>0?tR/mos.size:null;
+  
+  // Avg R per month: total R divided by ALL months elapsed since first trade, not just months with trades
+  let aRm=null;
+  if(ft.length>0) {
+    const dates=ft.map(t=>t.date).filter(Boolean).sort();
+    if(dates.length>0) {
+      const firstDate=new Date(dates[0]);
+      const lastDate=new Date(dates[dates.length-1]);
+      const monthsElapsed=Math.max(1,(lastDate.getFullYear()-firstDate.getFullYear())*12+(lastDate.getMonth()-firstDate.getMonth())+1);
+      aRm=tR/monthsElapsed;
+    }
+  }
+  
   const aWR=W>0?cl.filter(t=>t.r>0.1).reduce((s,t)=>s+t.r,0)/W:0,aLR=L>0?Math.abs(cl.filter(t=>t.r<-0.1).reduce((s,t)=>s+t.r,0)/L):0;
   const exp=TOT>0?((W/TOT)*aWR-(L/TOT)*aLR).toFixed(2):'—';
   const se=(id,v,c)=>{const el=document.getElementById(id);if(el){el.textContent=v;if(c)el.style.color=c;}};
