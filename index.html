@@ -1676,8 +1676,8 @@ input[type=date] {
     <div class="legend-item" style="--sig-color:var(--mega-bull)"><div class="legend-sig">🌱 MEGA BULLISH — Spring Waiting</div><div class="legend-rule">COT &lt;15 · Yield &lt;35 · Not both ▲ yet</div></div>
     <div class="legend-item" style="--sig-color:var(--recovery)"><div class="legend-sig">♻️ BULLISH — Recovery</div><div class="legend-rule">COT 15–40 ▲ · Yield 40–65 ▲ Rising</div></div>
     <div class="legend-item" style="--sig-color:var(--bull)"><div class="legend-sig">🚀 BULLISH — Surge</div><div class="legend-rule">COT 60–85 ▲ · Yield 60–85 ▲ Rising</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Yield ⏸ Flat/▼</div></div>
-    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff Watching</div><div class="legend-rule">COT &gt;85 · Yield &gt;80 · Not yet confirmed</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield &gt;65 · Yield ⏸ Flat/▼</div></div>
+    <div class="legend-item" style="--sig-color:var(--mega-bear)"><div class="legend-sig">🪨 MEGA BEARISH — Cliff Watching</div><div class="legend-rule">COT &gt;85 · Yield &gt;65 · Not yet confirmed</div></div>
     <div class="legend-item" style="--sig-color:var(--trap)"><div class="legend-sig">🪤 BEARISH — Trap CONFIRMED</div><div class="legend-rule">COT &gt;85 · Yield 50–80 ▼ Falling</div></div>
     <div class="legend-item" style="--sig-color:var(--bear)"><div class="legend-sig">📉 BEARISH — Slide</div><div class="legend-rule">COT 20–45 ▼ · Yield &lt;45 ▼ Falling</div></div>
     <div class="legend-item" style="--sig-color:var(--neutral)"><div class="legend-sig">⚡ NEUTRAL — The Conflict</div><div class="legend-rule">COT &amp; Yield Spread diverging — choppy</div></div>
@@ -2169,6 +2169,7 @@ input[type=date] {
           <div class="ig"><label>Stop Loss</label><input type="number" id="tl-sl" placeholder="0.00000" step="any"></div>
           <div class="ig"><label>Take Profit</label><input type="number" id="tl-tp" placeholder="0.00000" step="any"></div>
           <div class="ig"><label>Closed Price</label><input type="number" id="tl-closed-price" placeholder="actual exit price" step="any"></div>
+          <div class="ig"><label>Max R Reached</label><input type="number" id="tl-max-r" placeholder="highest R during trade" step="0.1"></div>
         </div>
         <div class="r-box">
           <div class="r-box-title">≠ R CALCULATION</div>
@@ -2271,7 +2272,7 @@ input[type=date] {
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto">
         <div style="border-radius:10px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>R</th><th>RR</th><th>Add-on</th><th style="min-width:70px">Phase</th><th>Entry</th><th style="min-width:80px">Inst. Signal</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
+            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th style="min-width:70px">Phase</th><th>Entry</th><th style="min-width:80px">Inst. Signal</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
             <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
@@ -3317,6 +3318,7 @@ input[type=date] {
       <div class="g3">
         <div class="ig"><label>Settled PnL</label><input type="number" id="edit-pnl" step="0.01" oninput="editAutoCalcR()"></div>
           <div class="ig"><label>Closed Price</label><input type="number" id="edit-closed-price" step="any" placeholder="actual exit price"></div>
+    <div class="ig"><label>Max R Reached</label><input type="number" id="edit-max-r" step="0.1" placeholder="highest R during trade"></div>
         <div class="ig"><label>Settled R</label><input type="number" id="edit-r" step="0.1"></div>
         <div class="ig"></div>
       </div>
@@ -3450,22 +3452,22 @@ const SIGS={
     d:'Full trend expansion — strong carry regime with broad institutional participation and momentum alignment. Buy 20 SMA dips when Daily hooks up. Do not fade this move.',
     t:(c,cd,v,vd)=>c>=60&&c<=85&&cd==='rising'&&v>=60&&v<=85&&vd==='rising',
     pl:(c,cd,v,vd)=>[{t:`COT ${c}% (60–85)`,ok:1},{t:'COT ▲',ok:1},{t:`Yield ${v}% (60–85)`,ok:1},{t:'Yield ▲',ok:1}]},
-  // CLIFF: COT>85 + Yield>80 + Yield Flat or Slowing
+  // CLIFF: COT>85 + Yield>65 + Yield Flat or Slowing
   // Crowded carry. Everyone positioned. Asymmetry deteriorating — late-stage exhaustion.
   CC:{l:'MEGA BEARISH',p:'Cliff — CONFIRMED',i:'🪨',c:'var(--mega-bear)',
     d:'Crowded carry trade — everyone already positioned for the bullish macro regime. Trend intact but asymmetry deteriorating. Yield spread flat or slowing signals exhaustion. Short the hook down.',
-    t:(c,cd,v,vd)=>c>85&&v>80&&(vd==='flat'||vd==='falling'),
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ⏸ Flat/▼',ok:1}]},
+    t:(c,cd,v,vd)=>c>85&&v>65&&(vd==='flat'||vd==='falling'),
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>65`,ok:1},{t:'Yield ⏸ Flat/▼',ok:1}]},
   CW:{l:'MEGA BEARISH',p:'Cliff — Watching',i:'🪨',c:'var(--mega-bear)',
     d:'COT at max long and yield spread at historic highs. Not yet confirmed — wait for yield spread to flatten or roll before shorting. Prepare your levels.',
-    t:(c,cd,v,vd)=>c>85&&v>80,
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>80`,ok:1},{t:'Yield ◌/▼',ok:0,w:1}]},
-  // TRAP: COT>85 + Yield 50–80 + Yield Falling
+    t:(c,cd,v,vd)=>c>85&&v>65,
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}%>65`,ok:1},{t:'Yield ◌/▼',ok:0,w:1}]},
+  // TRAP: COT>85 + Yield 35–65 + Yield Falling
   // Institutions heavily long while macro yield advantage deteriorates. Distribution begins.
   TR:{l:'BEARISH',p:'Trap — CONFIRMED',i:'🪤',c:'var(--trap)',
     d:'Institutions remain heavily long while macro yield advantage deteriorates. Distribution phase beginning — longs trapped without carry support. Look for shorts at supply zones.',
-    t:(c,cd,v,vd)=>c>85&&v>=50&&v<=80&&vd==='falling',
-    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}% (50–80)`,ok:1},{t:'Yield ▼ Falling',ok:1}]},
+    t:(c,cd,v,vd)=>c>85&&v>=35&&v<=65&&vd==='falling',
+    pl:(c,cd,v,vd)=>[{t:`COT ${c}%>85`,ok:1},{t:`Yield ${v}% (35–65)`,ok:1},{t:'Yield ▼ Falling',ok:1}]},
   // SLIDE: COT 20–45 + Yield<45 + both Falling
   // Weak macro spread with declining institutional participation. Persistent bearish.
   SL:{l:'BEARISH',p:'Slide',i:'📉',c:'var(--bear)',
@@ -4921,6 +4923,7 @@ async function addTrade(){
       sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,
       tp_price:document.getElementById('tl-tp')?.value!==''?parseFloat(document.getElementById('tl-tp').value):null,
       closed_price:document.getElementById('tl-closed-price')?.value!==''?parseFloat(document.getElementById('tl-closed-price').value):null,
+      max_r_reached:document.getElementById('tl-max-r')?.value!==''?parseFloat(document.getElementById('tl-max-r').value):null,
       triggered_at:document.getElementById('tl-triggered-at')?.value?document.getElementById('tl-triggered-at').value+'T00:00:00+00:00':null,
       opened_at:document.getElementById('tl-date')?.value?document.getElementById('tl-date').value+'T00:00:00+00:00':null,
       closed_at:document.getElementById('tl-closed-at')?.value?document.getElementById('tl-closed-at').value+'T00:00:00+00:00':null
@@ -5017,7 +5020,7 @@ function duplicateTrade(id) {
   sync('ok', '📋 ' + t.symbol + ' duplicated — adjust risk & account, then save');
 }
 async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
-function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
+function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-max-r','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
 
 function renderTrades(){
@@ -5086,7 +5089,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:Geist;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
@@ -6599,6 +6602,7 @@ function openEditModal(id) {
   document.getElementById('edit-sl').value      = t.sl_price != null ? t.sl_price : '';
   document.getElementById('edit-tp').value      = t.tp_price != null ? t.tp_price : '';
   document.getElementById('edit-closed-price').value = t.closed_price != null ? t.closed_price : '';
+  document.getElementById('edit-max-r').value = t.max_r_reached != null ? t.max_r_reached : '';
   // Format timestamps for datetime-local input (needs YYYY-MM-DDTHH:MM)
   const fmtDT = v => v ? v.slice(0,10) : ''; // strip time for date input
   document.getElementById('edit-triggered-at').value = fmtDT(t.triggered_at);
@@ -6717,6 +6721,7 @@ async function saveEdit() {
     sl_price:     document.getElementById('edit-sl')?.value!==''?parseFloat(document.getElementById('edit-sl').value):null,
     tp_price:     document.getElementById('edit-tp')?.value!==''?parseFloat(document.getElementById('edit-tp').value):null,
     closed_price: document.getElementById('edit-closed-price')?.value!==''?parseFloat(document.getElementById('edit-closed-price').value):null,
+    max_r_reached: document.getElementById('edit-max-r')?.value!==''?parseFloat(document.getElementById('edit-max-r').value):null,
     triggered_at: document.getElementById('edit-triggered-at')?.value?document.getElementById('edit-triggered-at').value+'T00:00:00+00:00':null,
     opened_at:    document.getElementById('edit-date')?.value?document.getElementById('edit-date').value+'T00:00:00+00:00':null,
     closed_at:    document.getElementById('edit-closed-at')?.value?document.getElementById('edit-closed-at').value+'T00:00:00+00:00':null,
