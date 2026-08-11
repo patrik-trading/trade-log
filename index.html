@@ -1651,7 +1651,7 @@ input[type=date] {
   </button>
 </div>
 <!-- TAB SIGNALS -->
-<div class="tab-pane active" id="tab-signals">
+
   <!-- Signal sub-tab bar -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
     <button id="sig-btn-fx"  onclick="switchSigTab('fx')"  style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','Geist';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:all .15s">📡 FX Signals</button>
@@ -2066,7 +2066,7 @@ input[type=date] {
     </div>
 
   </div><!-- /sig-panel-btc -->
-</div><!-- /tab-signals -->
+
 
 <!-- TAB TRADE LOG -->
 <div class="tab-pane" id="tab-tradelog">
@@ -2157,6 +2157,8 @@ input[type=date] {
         <div class="g4 tl-g4-mid">
           <div class="ig"><label>Open / Close</label><select id="tl-oc"><option value="Close">Close</option><option value="Open">Open</option><option value="Triggered">Triggered</option></select></div>
           <div class="ig"><label>Direction</label><select id="tl-dir"><option>Buy</option><option>Sell</option></select></div>
+          <div class="ig"><label>Weekly Direction</label><select id="tl-weekly-dir"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
+          <div class="ig"><label>Daily Direction</label><select id="tl-daily-dir"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
           <div class="ig"><label>Size (lots)</label><input type="number" id="tl-size" placeholder="0.00" step="0.01" min="0"></div>
           <div class="ig"><label>Symbol</label><select id="tl-symbol" onchange="tlAutoFillFromSignal()"><option value="">— Select —</option>
 <option value="EUR/USD">EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="USD/JPY">USD/JPY</option><option value="USD/CHF">USD/CHF</option><option value="AUD/USD">AUD/USD</option><option value="USD/CAD">USD/CAD</option><option value="NZD/USD">NZD/USD</option><option value="XAU/USD">XAU/USD</option><option value="XAG/USD">XAG/USD</option><option value="USOil">USOil</option><option value="HG/USD">HG/USD</option></select>
@@ -2215,17 +2217,18 @@ input[type=date] {
         <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
           <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
           <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
-          <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
-          <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
         </div></div>
-        <div class="ig" style="margin-bottom:11px"><label>Institutional Signal Tag
-          <span style="font-family:Geist;font-size:.55rem;color:var(--muted2);margin-left:4px">— from your Institutional Score</span>
-        </label><div class="tag-row" id="inst-tags">
-          <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
-          <button class="tag-btn" data-val="Bullish"               onclick="selTag('inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
-          <button class="tag-btn" data-val="Neutral"               onclick="selTag('inst-tags',this)" style="--tc:#6b7280">⚪ Neutral</button>
-          <button class="tag-btn" data-val="Bearish"               onclick="selTag('inst-tags',this)" style="--tc:#f97316">● Bearish</button>
-          <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
+        <div class="ig" style="margin-bottom:14px"><label>Weekly Zone</label><div class="tag-row" id="weekly-zone-tags">
+          <button class="tag-btn" data-val="RBR" onclick="selTag('weekly-zone-tags',this)" style="--tc:#22c55e">RBR</button>
+          <button class="tag-btn" data-val="RBD" onclick="selTag('weekly-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
+          <button class="tag-btn" data-val="DBD" onclick="selTag('weekly-zone-tags',this)" style="--tc:#f97316">DBD</button>
+          <button class="tag-btn" data-val="DBR" onclick="selTag('weekly-zone-tags',this)" style="--tc:#ef4444">DBR</button>
+        </div></div>
+        <div class="ig" style="margin-bottom:14px"><label>Daily Zone</label><div class="tag-row" id="daily-zone-tags">
+          <button class="tag-btn" data-val="RBR" onclick="selTag('daily-zone-tags',this)" style="--tc:#22c55e">RBR</button>
+          <button class="tag-btn" data-val="RBD" onclick="selTag('daily-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
+          <button class="tag-btn" data-val="DBD" onclick="selTag('daily-zone-tags',this)" style="--tc:#f97316">DBD</button>
+          <button class="tag-btn" data-val="DBR" onclick="selTag('daily-zone-tags',this)" style="--tc:#ef4444">DBR</button>
         </div></div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
         <div class="ig"><label>Triggered At <span style="font-size:.52rem;color:var(--muted2)">(date/time)</span></label><input type="date" id="tl-triggered-at"></div>
@@ -2272,7 +2275,7 @@ input[type=date] {
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto">
         <div style="border-radius:10px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th style="min-width:70px">Phase</th><th>Entry</th><th style="min-width:80px">Inst. Signal</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
+            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>W.Dir</th><th>D.Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th>W.Zone</th><th>D.Zone</th><th>Entry</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
             <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
@@ -3335,15 +3338,18 @@ input[type=date] {
     <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
       <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
       <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
-      <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
-      <button class="tag-btn" data-val="Momentum" onclick="selTag('edit-entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
     </div></div>
-    <div class="ig" style="margin-bottom:14px"><label>Institutional Signal</label><div class="tag-row" id="edit-inst-tags">
-      <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('edit-inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
-      <button class="tag-btn" data-val="Bullish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
-      <button class="tag-btn" data-val="Neutral"               onclick="selTag('edit-inst-tags',this)" style="--tc:#6b7280">⚪ Neutral</button>
-      <button class="tag-btn" data-val="Bearish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#f97316">● Bearish</button>
-      <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('edit-inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
+    <div class="ig" style="margin-bottom:14px"><label>Weekly Zone</label><div class="tag-row" id="edit-weekly-zone-tags">
+      <button class="tag-btn" data-val="RBR" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#22c55e">RBR</button>
+      <button class="tag-btn" data-val="RBD" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
+      <button class="tag-btn" data-val="DBD" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#f97316">DBD</button>
+      <button class="tag-btn" data-val="DBR" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#ef4444">DBR</button>
+    </div></div>
+    <div class="ig" style="margin-bottom:14px"><label>Daily Zone</label><div class="tag-row" id="edit-daily-zone-tags">
+      <button class="tag-btn" data-val="RBR" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#22c55e">RBR</button>
+      <button class="tag-btn" data-val="RBD" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
+      <button class="tag-btn" data-val="DBD" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#f97316">DBD</button>
+      <button class="tag-btn" data-val="DBR" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#ef4444">DBR</button>
     </div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">
         <div class="ig"><label>Triggered At</label><input type="date" id="edit-triggered-at"></div>
@@ -4905,6 +4911,8 @@ async function addTrade(){
       account:document.getElementById('tl-acct-sel').value||'Default',
       oc:document.getElementById('tl-oc').value,
       dir:document.getElementById('tl-dir').value,
+      weekly_dir:document.getElementById('tl-weekly-dir').value||'',
+      daily_dir:document.getElementById('tl-daily-dir').value||'',
       size:document.getElementById('tl-size').value||'—',
       symbol:symbol,
       type:document.getElementById('tl-type').value,
@@ -4915,9 +4923,9 @@ async function addTrade(){
       r:rv!==''?parseFloat(rv):null,
       rvalue:rvv!==''?parseFloat(rvv):null,
       currency:currentCurrency,
-      phase:getSelTag('phase-tags'),
       entry:getSelTag('entry-tags'),
-      inst_tag:getSelTag('inst-tags'),
+      weekly_zone:getSelTag('weekly-zone-tags'),
+      daily_zone:getSelTag('daily-zone-tags'),
       notes:document.getElementById('tl-notes').value,
       addon:document.getElementById('tl-addon').checked,
       sl_price:document.getElementById('tl-sl')?.value!==''?parseFloat(document.getElementById('tl-sl').value):null,
@@ -4982,6 +4990,8 @@ function duplicateTrade(id) {
   
   document.getElementById('tl-oc').value = t.oc || 'Close';
   document.getElementById('tl-dir').value = t.dir || 'Buy';
+  document.getElementById('tl-weekly-dir').value = t.weekly_dir || '';
+  document.getElementById('tl-daily-dir').value = t.daily_dir || '';
   document.getElementById('tl-type').value = t.type || 'Forex';
   document.getElementById('tl-rvalue').value = (t.rvalue != null) ? t.rvalue : '';
   document.getElementById('tl-notes').value = t.notes || '';
@@ -5009,18 +5019,44 @@ function duplicateTrade(id) {
   setCurrency(currentCurrency);
   console.log('Set currency to:', currentCurrency);
   
-  // Clear phase/entry/inst tags (user can re-select if needed)
-  document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b => {
+  // Duplicate entry type tag
+  document.querySelectorAll('#entry-tags .tag-btn').forEach(b => {
     b.classList.remove('sel');
     b.style.background='';
     b.style.color='';
   });
+  if (t.entry) {
+    const eb = document.querySelector(`#entry-tags .tag-btn[data-val="${t.entry}"]`);
+    if (eb) selTag('entry-tags', eb);
+  }
+
+  // Duplicate weekly zone tags
+  document.querySelectorAll('#weekly-zone-tags .tag-btn').forEach(b => {
+    b.classList.remove('sel');
+    b.style.background='';
+    b.style.color='';
+  });
+  if (t.weekly_zone) {
+    const wb = document.querySelector(`#weekly-zone-tags .tag-btn[data-val="${t.weekly_zone}"]`);
+    if (wb) selTag('weekly-zone-tags', wb);
+  }
+
+  // Duplicate daily zone tags
+  document.querySelectorAll('#daily-zone-tags .tag-btn').forEach(b => {
+    b.classList.remove('sel');
+    b.style.background='';
+    b.style.color='';
+  });
+  if (t.daily_zone) {
+    const db = document.querySelector(`#daily-zone-tags .tag-btn[data-val="${t.daily_zone}"]`);
+    if (db) selTag('daily-zone-tags', db);
+  }
   
   console.log('✓ Form populated successfully');
   sync('ok', '📋 ' + t.symbol + ' duplicated — adjust risk & account, then save');
 }
 async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync('busy','Deleting…');await sbDel('trades',id);trades=trades.filter(t=>String(t.id)!==String(id));renderTrades();sync('ok','Deleted ✓');}catch(e){sync('err','Delete failed');alert(e.message);}}
-function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-max-r','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
+function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-max-r','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-weekly-dir').value='';document.getElementById('tl-daily-dir').value='';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#entry-tags .tag-btn,#weekly-zone-tags .tag-btn,#daily-zone-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
 
 function renderTrades(){
@@ -5089,7 +5125,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:Geist;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.weekly_dir||'—'}</td><td>${t.daily_dir||'—'}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${t.weekly_zone||'—'}</td><td>${t.daily_zone||'—'}</td><td>${en}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
@@ -6621,6 +6657,8 @@ function openEditModal(id) {
   document.getElementById('edit-addon').checked  = t.addon || false;
   document.getElementById('edit-oc').value      = t.oc || 'Close';
   document.getElementById('edit-dir').value     = t.dir || 'Buy';
+  document.getElementById('edit-weekly-dir').value = t.weekly_dir || '';
+  document.getElementById('edit-daily-dir').value = t.daily_dir || '';
   document.getElementById('edit-type').value    = t.type || 'Forex';
 
   // Account dropdown
@@ -6630,20 +6668,25 @@ function openEditModal(id) {
   // Currency toggle
   setEditCur(editCurrency);
 
-  // Phase tag
-  document.querySelectorAll('#edit-phase-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
-  if (t.phase) {
-    const pb = document.querySelector(`#edit-phase-tags .tag-btn[data-val="${t.phase}"]`);
-    if (pb) selTag('edit-phase-tags', pb);
-  }
-
   // Entry type tag
   document.querySelectorAll('#edit-entry-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
-  document.querySelectorAll('#edit-inst-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
   if (t.entry) {
     const eb = document.querySelector(`#edit-entry-tags .tag-btn[data-val="${t.entry}"]`);
-  if(t.inst_tag){const ib=document.querySelector(`#edit-inst-tags .tag-btn[data-val="${t.inst_tag}"]`);if(ib)selTag('edit-inst-tags',ib);}
     if (eb) selTag('edit-entry-tags', eb);
+  }
+
+  // Weekly Zone tags
+  document.querySelectorAll('#edit-weekly-zone-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
+  if (t.weekly_zone) {
+    const wb = document.querySelector(`#edit-weekly-zone-tags .tag-btn[data-val="${t.weekly_zone}"]`);
+    if (wb) selTag('edit-weekly-zone-tags', wb);
+  }
+
+  // Daily Zone tags
+  document.querySelectorAll('#edit-daily-zone-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
+  if (t.daily_zone) {
+    const db = document.querySelector(`#edit-daily-zone-tags .tag-btn[data-val="${t.daily_zone}"]`);
+    if (db) selTag('edit-daily-zone-tags', db);
   }
 
   document.getElementById('edit-modal').style.display = 'flex';
@@ -6703,6 +6746,8 @@ async function saveEdit() {
     account:  document.getElementById('edit-account').value || 'Default',
     oc:       document.getElementById('edit-oc').value,
     dir:      document.getElementById('edit-dir').value,
+    weekly_dir: document.getElementById('edit-weekly-dir').value || '',
+    daily_dir: document.getElementById('edit-daily-dir').value || '',
     size:     document.getElementById('edit-size').value || '—',
     symbol:   symVal,
     type:     document.getElementById('edit-type').value,
@@ -6713,9 +6758,9 @@ async function saveEdit() {
     risked:   rvRisked  !== '' ? parseFloat(rvRisked)  : null,
     risked_r: rvRiskedR !== '' ? parseFloat(rvRiskedR) : null,
     currency: editCurrency,
-    phase:    getSelTag('edit-phase-tags'),
     entry:    getSelTag('edit-entry-tags'),
-    inst_tag: getSelTag('edit-inst-tags'),
+    weekly_zone: getSelTag('edit-weekly-zone-tags'),
+    daily_zone: getSelTag('edit-daily-zone-tags'),
     notes:        document.getElementById('edit-notes').value,
     addon:        document.getElementById('edit-addon').checked,
     sl_price:     document.getElementById('edit-sl')?.value!==''?parseFloat(document.getElementById('edit-sl').value):null,
