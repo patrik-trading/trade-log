@@ -6597,9 +6597,9 @@ function openEditModal(id) {
   document.getElementById('edit-max-r').value = t.max_r_reached != null ? t.max_r_reached : '';
   // Format timestamps for datetime-local input (needs YYYY-MM-DDTHH:MM)
   const fmtDT = v => v ? v.slice(0,10) : ''; // strip time for date input
-  document.getElementById('edit-triggered-at').value = fmtDT(t.triggered_at);
+  if(document.getElementById('edit-triggered-at')) document.getElementById('edit-triggered-at').value = fmtDT(t.triggered_at);
   // opened_at populated from edit-date (Open Date field)
-  document.getElementById('edit-closed-at').value    = fmtDT(t.closed_at);
+  if(document.getElementById('edit-closed-at')) document.getElementById('edit-closed-at').value    = fmtDT(t.closed_at);
   document.getElementById('edit-pnl').value     = t.pnl !== null ? t.pnl : '';
   document.getElementById('edit-r').value       = t.r !== null ? t.r : '';
   document.getElementById('edit-rvalue').value  = t.rvalue  !== null ? t.rvalue  : '';
