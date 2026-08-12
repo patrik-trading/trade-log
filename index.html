@@ -2202,31 +2202,14 @@ input[type=date] {
           </div>
           <div class="r-hint" id="r-hint" style="color:var(--muted2)"></div>
         </div>
-        <div class="ig" style="margin-bottom:11px"><label>Phase Tag</label><div class="tag-row" id="phase-tags">
-          <button class="tag-btn" data-val="Spring" onclick="selTag('phase-tags',this)" style="--tc:#22c55e">🌱 Spring</button>
-          <button class="tag-btn" data-val="Cliff" onclick="selTag('phase-tags',this)" style="--tc:#ef4444">🪨 Cliff</button>
-          <button class="tag-btn" data-val="Surge" onclick="selTag('phase-tags',this)" style="--tc:#3b82f6">🚀 Surge</button>
-          <button class="tag-btn" data-val="Slide" onclick="selTag('phase-tags',this)" style="--tc:#f97316">📉 Slide</button>
-          <button class="tag-btn" data-val="Trap" onclick="selTag('phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
-          <button class="tag-btn" data-val="Recovery" onclick="selTag('phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
-          <button class="tag-btn" data-val="Neutral" onclick="selTag('phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
-          <button class="tag-btn" data-val="The Conflict" onclick="selTag('phase-tags',this)" style="--tc:#f59e0b">⚡ The Conflict</button>
-        </div></div>
+
         <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
           <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
           <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
           <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
           <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
         </div></div>
-        <div class="ig" style="margin-bottom:11px"><label>Institutional Signal Tag
-          <span style="font-family:Geist;font-size:.55rem;color:var(--muted2);margin-left:4px">— from your Institutional Score</span>
-        </label><div class="tag-row" id="inst-tags">
-          <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
-          <button class="tag-btn" data-val="Bullish"               onclick="selTag('inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
-          <button class="tag-btn" data-val="Neutral"               onclick="selTag('inst-tags',this)" style="--tc:#6b7280">⚪ Neutral</button>
-          <button class="tag-btn" data-val="Bearish"               onclick="selTag('inst-tags',this)" style="--tc:#f97316">● Bearish</button>
-          <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
-        </div></div>
+
         <div class="ig" style="margin-bottom:11px"><label>Weekly Zone</label><div class="tag-row" id="weekly-zone-tags">
           <button class="tag-btn" data-val="RBR" onclick="selTag('weekly-zone-tags',this)" style="--tc:#22c55e">RBR</button>
           <button class="tag-btn" data-val="RBD" onclick="selTag('weekly-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
@@ -2239,6 +2222,8 @@ input[type=date] {
           <button class="tag-btn" data-val="DBD" onclick="selTag('daily-zone-tags',this)" style="--tc:#f97316">DBD</button>
           <button class="tag-btn" data-val="DBR" onclick="selTag('daily-zone-tags',this)" style="--tc:#ef4444">DBR</button>
         </div></div>
+        <div class="ig"><label>Weekly Direction</label><select id="tl-weekly-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
+        <div class="ig"><label>Daily Direction</label><select id="tl-daily-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
         <div class="ig"><label>Triggered At <span style="font-size:.52rem;color:var(--muted2)">(date/time)</span></label><input type="date" id="tl-triggered-at"></div>
         <div class="ig"><label>Closed At</label><input type="date" id="tl-closed-at"></div>
         <div class="ig" style="margin-bottom:14px"><label>Notes</label><textarea id="tl-notes" placeholder="e.g. COT extreme, entered on daily close..."></textarea></div>
@@ -2282,7 +2267,7 @@ input[type=date] {
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto">
         <div style="border-radius:10px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th style="min-width:70px">Phase</th><th>Entry</th><th style="min-width:80px">Inst. Signal</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
+            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th>W.Dir</th><th>D.Dir</th><th>W.Zone</th><th>D.Zone</th><th>Entry</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
             <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
@@ -3333,28 +3318,13 @@ input[type=date] {
         <div class="ig"></div>
       </div>
     </div>
-    <div class="ig" style="margin-bottom:11px"><label>Phase Tag</label><div class="tag-row" id="edit-phase-tags">
-      <button class="tag-btn" data-val="Spring" onclick="selTag('edit-phase-tags',this)" style="--tc:#22c55e">🌱 Spring</button>
-      <button class="tag-btn" data-val="Cliff" onclick="selTag('edit-phase-tags',this)" style="--tc:#ef4444">🪨 Cliff</button>
-      <button class="tag-btn" data-val="Surge" onclick="selTag('edit-phase-tags',this)" style="--tc:#3b82f6">🚀 Surge</button>
-      <button class="tag-btn" data-val="Slide" onclick="selTag('edit-phase-tags',this)" style="--tc:#f97316">📉 Slide</button>
-      <button class="tag-btn" data-val="Trap" onclick="selTag('edit-phase-tags',this)" style="--tc:#a855f7">🪤 Trap</button>
-      <button class="tag-btn" data-val="Recovery" onclick="selTag('edit-phase-tags',this)" style="--tc:#34d399">♻️ Recovery</button>
-      <button class="tag-btn" data-val="Neutral" onclick="selTag('edit-phase-tags',this)" style="--tc:#6b7280">⏸ Neutral</button>
-    </div></div>
     <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
       <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
       <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
       <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
       <button class="tag-btn" data-val="Momentum" onclick="selTag('edit-entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
     </div></div>
-    <div class="ig" style="margin-bottom:14px"><label>Institutional Signal</label><div class="tag-row" id="edit-inst-tags">
-      <button class="tag-btn" data-val="High Conviction Long"  onclick="selTag('edit-inst-tags',this)" style="--tc:#22c55e">● High Conviction Long</button>
-      <button class="tag-btn" data-val="Bullish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#3b82f6">● Bullish</button>
-      <button class="tag-btn" data-val="Neutral"               onclick="selTag('edit-inst-tags',this)" style="--tc:#6b7280">⚪ Neutral</button>
-      <button class="tag-btn" data-val="Bearish"               onclick="selTag('edit-inst-tags',this)" style="--tc:#f97316">● Bearish</button>
-      <button class="tag-btn" data-val="High Conviction Short" onclick="selTag('edit-inst-tags',this)" style="--tc:#ef4444">● High Conviction Short</button>
-    </div></div>
+
     <div class="ig" style="margin-bottom:14px"><label>Weekly Zone</label><div class="tag-row" id="edit-weekly-zone-tags">
       <button class="tag-btn" data-val="RBR" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#22c55e">RBR</button>
       <button class="tag-btn" data-val="RBD" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
@@ -3367,6 +3337,8 @@ input[type=date] {
       <button class="tag-btn" data-val="DBD" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#f97316">DBD</button>
       <button class="tag-btn" data-val="DBR" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#ef4444">DBR</button>
     </div></div>
+    <div class="ig"><label>Weekly Direction</label><select id="edit-weekly-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
+    <div class="ig"><label>Daily Direction</label><select id="edit-daily-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
     <div class="ig" style="margin-bottom:16px"><label>Notes</label><textarea id="edit-notes"></textarea></div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input type="checkbox" id="edit-addon" style="width:auto;accent-color:var(--mega-bull);cursor:pointer;transform:scale(1.3)"><label for="edit-addon" style="font-family:Geist,sans-serif;font-size:.75rem;font-weight:500;color:var(--text);cursor:pointer;margin:0">Adjusted entry (add-on)</label></div>
     <div style="display:flex;gap:8px">
@@ -4933,9 +4905,8 @@ async function addTrade(){
       r:rv!==''?parseFloat(rv):null,
       rvalue:rvv!==''?parseFloat(rvv):null,
       currency:currentCurrency,
-      phase:getSelTag('phase-tags'),
-      entry:getSelTag('entry-tags'),
-      inst_tag:getSelTag('inst-tags'),
+      weekly_dir:document.getElementById('tl-weekly-dir').value,
+      daily_dir:document.getElementById('tl-daily-dir').value,
       weekly_zone:getSelTag('weekly-zone-tags'),
       daily_zone:getSelTag('daily-zone-tags'),
       notes:document.getElementById('tl-notes').value,
@@ -5109,7 +5080,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:Geist;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${ph}</td><td>${en}</td>${instCell}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${t.weekly_dir||'—'}</td><td>${t.daily_dir||'—'}</td><td>${t.weekly_zone||'—'}</td><td>${t.daily_zone||'—'}</td><td>${en}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
@@ -6659,14 +6630,15 @@ function openEditModal(id) {
 
   // Entry type tag
   document.querySelectorAll('#edit-entry-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
-  document.querySelectorAll('#edit-inst-tags .tag-btn').forEach(b => { b.classList.remove('sel'); b.style.background=''; b.style.color=''; });
   if (t.entry) {
     const eb = document.querySelector(`#edit-entry-tags .tag-btn[data-val="${t.entry}"]`);
     if (eb) selTag('edit-entry-tags', eb);
   }
-  if(t.inst_tag){const ib=document.querySelector(`#edit-inst-tags .tag-btn[data-val="${t.inst_tag}"]`);if(ib)selTag('edit-inst-tags',ib);}
   if(t.weekly_zone){const wb=document.querySelector(`#edit-weekly-zone-tags .tag-btn[data-val="${t.weekly_zone}"]`);if(wb)selTag('edit-weekly-zone-tags',wb);}
   if(t.daily_zone){const db=document.querySelector(`#edit-daily-zone-tags .tag-btn[data-val="${t.daily_zone}"]`);if(db)selTag('edit-daily-zone-tags',db);}
+  
+  document.getElementById('edit-weekly-dir').value = t.weekly_dir || '';
+  document.getElementById('edit-daily-dir').value = t.daily_dir || '';
 
   document.getElementById('edit-modal').style.display = 'flex';
 }
@@ -6737,7 +6709,8 @@ async function saveEdit() {
     currency: editCurrency,
     phase:    getSelTag('edit-phase-tags'),
     entry:    getSelTag('edit-entry-tags'),
-    inst_tag: getSelTag('edit-inst-tags'),
+    weekly_dir: document.getElementById('edit-weekly-dir').value,
+    daily_dir: document.getElementById('edit-daily-dir').value,
     weekly_zone: getSelTag('edit-weekly-zone-tags'),
     daily_zone: getSelTag('edit-daily-zone-tags'),
     notes:        document.getElementById('edit-notes').value,
