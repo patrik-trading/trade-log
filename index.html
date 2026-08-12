@@ -2970,12 +2970,10 @@ async function launch(){
   document.getElementById('setup-screen').style.display='none';
   document.getElementById('main-app').style.display='block';
   const today=new Date();
-  document.getElementById('eDate').value=today.toISOString().slice(0,10);
   document.getElementById('tl-date').value=today.toISOString().slice(0,10);
   document.getElementById('dateBadge').textContent=today.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   autoMonth();setCurrency(currentCurrency);
   setTimeout(loadDXYValues, 300);
-  setTimeout(ztLoadBasisFromSupabase, 900);
   setTimeout(tdLoadKey, 500);
   // Set default review period to YTD
   const rvNow=new Date();document.getElementById('rv-from').value=`${rvNow.getFullYear()}-01-01`;document.getElementById('rv-to').value=rvNow.toISOString().slice(0,10);
@@ -2985,7 +2983,7 @@ async function launch(){
     const ar=await sbGet('accounts','name.asc');
     accounts=ar.map(a=>a.name);
     if(!accounts.includes('Default'))accounts.unshift('Default');
-    refreshAcctDDs();renderTrades();renderSignals();sync('ok','Synced ✓');
+    refreshAcctDDs();renderTrades();sync('ok','Synced ✓');
   }catch(e){sync('err','Load failed — '+e.message);console.error(e);}
 }
 
