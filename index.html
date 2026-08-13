@@ -4535,16 +4535,21 @@ function renderAnalytics(ft) {
 
   // Only include trades that have a real value for every active dimension
   const eligible = ft.filter(t => {
-    if (activeDims.has('symbol')   && !norm(t.symbol))   return false;
-    if (activeDims.has('phase')    && !norm(t.phase))    return false;
-    if (activeDims.has('entry')    && !norm(t.entry))    return false;
-    if (activeDims.has('inst_tag') && !norm(t.inst_tag)) return false;
+    if (activeDims.has('symbol')     && !norm(t.symbol))     return false;
+    if (activeDims.has('weekly_dir') && !norm(t.weekly_dir)) return false;
+    if (activeDims.has('daily_dir')  && !norm(t.daily_dir))  return false;
+    if (activeDims.has('weekly_zone') && !norm(t.weekly_zone)) return false;
+    if (activeDims.has('daily_zone')  && !norm(t.daily_zone))  return false;
+    if (activeDims.has('entry')      && !norm(t.entry))      return false;
     return true;
   });
 
   if (!eligible.length) {
     const missing = [];
-    if (activeDims.has('phase')) missing.push('Phase');
+    if (activeDims.has('weekly_dir')) missing.push('W.Dir');
+    if (activeDims.has('daily_dir')) missing.push('D.Dir');
+    if (activeDims.has('weekly_zone')) missing.push('W.Zone');
+    if (activeDims.has('daily_zone')) missing.push('D.Zone');
     if (activeDims.has('entry')) missing.push('Entry Type');
     container.innerHTML = `<div class="empty">No trades found with all selected dimensions filled.<br><span style="font-size:.65rem;color:var(--muted)">Make sure trades have ${missing.join(' and ')} tagged.</span></div>`;
     return;
@@ -4555,7 +4560,10 @@ function renderAnalytics(ft) {
   eligible.forEach(t => {
     const parts = [];
     if (activeDims.has('symbol')) parts.push(norm(t.symbol) || t.symbol);
-    if (activeDims.has('phase'))  parts.push(normalizePhase(t.phase) || norm(t.phase) || t.phase);
+    if (activeDims.has('weekly_dir')) parts.push(norm(t.weekly_dir) || t.weekly_dir);
+    if (activeDims.has('daily_dir')) parts.push(norm(t.daily_dir) || t.daily_dir);
+    if (activeDims.has('weekly_zone')) parts.push(norm(t.weekly_zone) || t.weekly_zone);
+    if (activeDims.has('daily_zone')) parts.push(norm(t.daily_zone) || t.daily_zone);
     if (activeDims.has('entry'))  parts.push(norm(t.entry)  || t.entry);
     const key = parts.join('||');
     if (!groups[key]) groups[key] = {
@@ -4593,19 +4601,29 @@ function renderAnalytics(ft) {
   const beTotal = eligible.filter(t => t.r !== null && t.r >= -0.1 && t.r <= 0.1).length;
 
   const dimCols = [];
-  if (activeDims.has('symbol'))   dimCols.push('<th>Symbol</th>');
-  if (activeDims.has('phase'))    dimCols.push('<th>Phase</th>');
-  if (activeDims.has('entry'))    dimCols.push('<th>Entry Type</th>');
-  if (activeDims.has('inst_tag')) dimCols.push('<th>Inst. Signal</th>');
+  if (activeDims.has('symbol'))      dimCols.push('<th>Symbol</th>');
+  if (activeDims.has('weekly_dir'))  dimCols.push('<th>W.Dir</th>');
+  if (activeDims.has('daily_dir'))   dimCols.push('<th>D.Dir</th>');
+  if (activeDims.has('weekly_zone')) dimCols.push('<th>W.Zone</th>');
+  if (activeDims.has('daily_zone'))  dimCols.push('<th>D.Zone</th>');
+  if (activeDims.has('entry'))       dimCols.push('<th>Entry Type</th>');
 
   const rowsHtml = rows.map(g => {
     const labelCells = [];
     if (activeDims.has('symbol')) {
       labelCells.push(`<td style="font-family:Syne,sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.04em;color:var(--accent)">${g.symbol}</td>`);
     }
-    if (activeDims.has('phase')) {
-      const pc = PC[g.phase] || '#6b7280';
-      labelCells.push(`<td><span style="font-family:Geist;font-size:.72rem;color:${pc}">${g.phase}</span></td>`);
+    if (activeDims.has('weekly_dir')) {
+      labelCells.push(`<td><span style="font-family:Geist;font-size:.72rem">${g.weekly_dir||'—'}</span></td>`);
+    }
+    if (activeDims.has('daily_dir')) {
+      labelCells.push(`<td><span style="font-family:Geist;font-size:.72rem">${g.daily_dir||'—'}</span></td>`);
+    }
+    if (activeDims.has('weekly_zone')) {
+      labelCells.push(`<td><span style="font-family:Geist;font-size:.72rem">${g.weekly_zone||'—'}</span></td>`);
+    }
+    if (activeDims.has('daily_zone')) {
+      labelCells.push(`<td><span style="font-family:Geist;font-size:.72rem">${g.daily_zone||'—'}</span></td>`);
     }
     if (activeDims.has('entry')) {
       const ec = entryColors[g.entry] || '#6b7280';
