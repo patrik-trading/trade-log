@@ -1959,166 +1959,51 @@ input[type=date] {
   <!-- Sub-tab bar -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
     <button id="conv-btn-cfd" onclick="switchConvTab('cfd')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','Geist';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:all .15s">
-      🔄 CFD Calculator
+      💱 Swap Fees
     </button>
     <button id="conv-btn-calc" onclick="switchConvTab('calc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','Geist';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">
       🧮 Trade Calculator
     </button>
   </div>
 
-  <!-- CFD CONVERTER PANEL -->
+  <!-- SWAP FEES TRACKER PANEL -->
   <div id="conv-panel-cfd">
-  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-bottom:16px">
-    <div style="display:flex;flex-direction:column;gap:14px">
-
-      <!-- MODE TOGGLE -->
-      <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px">
-        <button id="zt-mode-btn-basis" onclick="ztSetMode('basis')" style="flex:1;padding:7px;border:none;border-radius:10px;font-family:Geist;font-size:.65rem;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:.2s">🗓 Weekend &mdash; Save Basis</button>
-        <button id="zt-mode-btn-zones" onclick="ztSetMode('zones')" style="flex:1;padding:7px;border:none;border-radius:10px;font-family:Geist;font-size:.65rem;cursor:pointer;background:transparent;color:var(--muted2);transition:.2s">📐 Weekday &mdash; Translate Zones</button>
-      </div>
-
-      <!-- WEEKEND: Save basis per symbol -->
-      <div id="zt-panel-basis" class="panel">
-        <div class="ptitle">Save Basis Per Symbol</div>
-        <div style="font-family:Geist;font-size:.6rem;color:var(--muted2);margin-bottom:12px;line-height:1.7">Saturday morning &mdash; open both charts simultaneously and read the current price at the same moment for an accurate basis.</div>
-        <div class="g2" style="margin-bottom:10px">
-          <div class="ig">
-            <label>Symbol <span style="font-size:.55rem;color:var(--muted2)">(6E, GC etc.)</span></label>
-            <select id="zt-sym" onchange="ztAutoFillCFD()" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:10px;outline:none;width:100%">
-              <option value="">— Select —</option>
-              <option value="6E">6E — EUR/USD</option>
-              <option value="6B">6B — GBP/USD</option>
-              <option value="6A">6A — AUD/USD</option>
-              <option value="6N">6N — NZD/USD</option>
-              <option value="6C">6C — USD/CAD</option>
-              <option value="6J">6J — USD/JPY</option>
-              <option value="6S">6S — USD/CHF</option>
-              <option value="GC">GC — XAU/USD</option>
-              <option value="SI">SI — XAG/USD</option>
-              <option value="CL">CL — USOil</option>
-              <option value="HG">HG — Copper</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>CFD Symbol <span style="font-size:.55rem;color:var(--muted2)">(broker)</span></label>
-            <input type="text" id="zt-cfd-sym" placeholder="Auto-filled" style="font-size:.8rem;background:var(--surface2)" readonly>
-          </div>
-        </div>
-        <div style="margin-bottom:10px">
-          <button id="zt-sync-btn" onclick="ztFetchBothSynced()" title="Fetches the prior trading day's daily close for both futures and CFD. Fixed reference points avoid live timing-gap and proxy-caching issues; basis is stable day to day." style="width:100%;background:var(--active-bg);color:var(--active-text);border:none;border-radius:8px;padding:10px 14px;font-family:Geist,sans-serif;font-size:.68rem;font-weight:600;cursor:pointer">📅 Fetch Prior Close</button>
-        </div>
-        <div id="zt-fetch-status" style="font-family:Geist,sans-serif;font-size:.55rem;color:var(--muted2);margin-bottom:10px;line-height:1.5"></div>
-        <div class="g2" style="margin-bottom:10px">
-          <div class="ig">
-            <button id="zt-yahoo-btn" onclick="ztFetchYahooFutures()" title="Prior day close via Yahoo Finance through a public CORS proxy. May break without notice." style="width:100%;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer;margin-bottom:8px">🧪 Futures prior close</button>
-            <label>Futures Price <span style="font-size:.55rem;color:var(--muted2)">(TradingView)</span></label>
-            <input type="number" id="zt-fut-price" step="any" placeholder="e.g. 0.006302" oninput="ztAutoInvert();ztCalcBasis()">
-            <div id="zt-inverted-note" style="display:none;margin-top:6px">
-              <div style="font-family:Geist;font-size:.58rem;color:var(--muted2);margin-bottom:3px">1 ÷ Futures price</div>
-              <div id="zt-inv-price" style="font-family:Syne,sans-serif;font-weight:700;font-size:1.2rem;color:var(--accent);letter-spacing:.04em">—</div>
-              <div style="font-family:Geist;font-size:.55rem;color:var(--muted2)">equivalent CFD price</div>
-            </div>
-          </div>
-          <div class="ig">
-            <button id="zt-fetch-btn" onclick="ztFetchLivePrices()" style="width:100%;background:var(--surface2);color:var(--muted2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:Geist,sans-serif;font-size:.6rem;font-weight:500;cursor:pointer;margin-bottom:8px">CFD prior close</button>
-            <label>CFD Price <span style="font-size:.55rem;color:var(--muted2)">(your broker)</span></label>
-            <input type="number" id="zt-cfd-price" step="any" placeholder="e.g. 1.08513" oninput="ztCalcBasis()">
-          </div>
-        </div>
-        <div id="zt-basis-display" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;margin-bottom:10px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:Geist;font-size:.62rem;color:var(--muted2)">Basis (CFD &minus; Futures)</div>
-            <div id="zt-basis-val" style="font-family:Syne,sans-serif;font-weight:700;font-size:1.3rem;color:var(--accent)">&mdash;</div>
-          </div>
-          <div id="zt-basis-note" style="font-family:Geist;font-size:.6rem;color:var(--muted2);margin-top:4px"></div>
-        </div>
-        <button class="btn-log" onclick="ztSaveBasisForSymbol()" style="width:100%">💾 Save Basis for This Symbol</button>
-      </div>
-
-      <!-- WEEKDAY: Translate zones using saved basis -->
-      <div id="zt-panel-zones" class="panel" style="display:none">
-        <div class="ptitle">CFD Calculator</div>
-        <div class="ig" style="margin-bottom:10px">
-          <label>Select Symbol</label>
-          <select id="zt-zone-sym" onchange="ztLoadBasisForSym()" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:10px;outline:none;width:100%">
-            <option value="">-- choose symbol --</option>
-          </select>
-        </div>
-        <div id="zt-active-basis" style="display:none;background:var(--bg);border:1px solid rgba(200,169,110,.3);border-radius:10px;padding:8px 12px;margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;font-family:Geist;font-size:.6rem">
-            <span style="color:var(--muted2)">Active basis</span>
-            <span id="zt-active-basis-val" style="color:var(--accent)"></span>
-          </div>
-          <div id="zt-active-basis-date" style="font-family:Geist;color:var(--muted2);font-size:.55rem;margin-top:2px"></div>
-        </div>
-        <div id="zt-no-basis-warn" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-family:Geist;font-size:.6rem;color:#ef4444">
-          No saved basis for this symbol. Switch to Weekend mode to save one first.
-        </div>
-        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px">
-          <div style="font-family:Geist;font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-bottom:10px">ZONE LEVELS (FUTURES CHART)</div>
-          <div style="margin-bottom:10px">
-            <div style="font-family:Geist;font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 1 <select id="zt-type-1" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:Geist;font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
-            </div>
-            <div class="g2" style="margin-bottom:0">
-              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z1-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z1-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:10px;margin-bottom:10px">
-            <div style="font-family:Geist;font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 2 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-2" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:Geist;font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
-            </div>
-            <div class="g2" style="margin-bottom:0">
-              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z2-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z2-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:10px">
-            <div style="font-family:Geist;font-size:.6rem;color:var(--muted2);margin-bottom:5px;display:flex;align-items:center;gap:8px">
-              ZONE 3 <span style="opacity:.5;font-size:.55rem">(optional)</span><select id="zt-type-3" onchange="ztTranslate()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:4px;font-family:Geist;font-size:.58rem;outline:none"><option value="demand">Demand</option><option value="supply">Supply</option></select>
-            </div>
-            <div class="g2" style="margin-bottom:0">
-              <div class="ig" style="margin-bottom:0"><label>Top</label><input type="number" id="zt-z3-top" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-              <div class="ig" style="margin-bottom:0"><label>Bottom</label><input type="number" id="zt-z3-bot" step="any" placeholder="0.00000" oninput="ztTranslate()"></div>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:7px">
-          <button class="btn-log" onclick="ztSaveZones()" style="flex:1">💾 Save Translation</button>
-          <button class="btn-sm" onclick="ztClear()">🗑️ Clear</button>
-        </div>
+    <div style="margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:14px">
+        <div class="ig"><label>Date</label><input type="date" id="sf-date"></div>
+        <div class="ig"><label>Currency Pair</label><input type="text" id="sf-pair" placeholder="e.g., EURUSD"></div>
+        <div class="ig"><label>Swap Fee (pips)</label><input type="number" id="sf-pips" step="0.01" placeholder="e.g., -1.71"></div>
+        <button onclick="addSwapFee()" style="align-self:flex-end;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:500">+ Add</button>
       </div>
     </div>
 
-    <!-- RIGHT: Results + Saved -->
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="panel">
-        <div class="ptitle">CFD Zone Equivalents</div>
-        <div id="zt-results"><div class="empty">Select symbol and enter zone levels to translate</div></div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px">
+      <h3 style="margin:0 0 12px 0;font-size:.9rem;color:var(--text)">Swap Fee History</h3>
+      <div style="max-height:400px;overflow-y:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);font-size:.75rem;font-weight:500;color:var(--muted)">
+              <th style="text-align:left;padding:8px">Date</th>
+              <th style="text-align:left;padding:8px">Pair</th>
+              <th style="text-align:right;padding:8px">Fee (pips)</th>
+              <th style="text-align:center;padding:8px">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="sf-table-body">
+            <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="panel" id="zt-saved-basis-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="ptitle" style="margin:0">Saved Basis Values</div><button class="btn-sm" onclick="ztLoadBasisFromSupabase().then(()=>ztPopulateSymSelector())" style="font-size:.6rem">↺ Sync</button></div>
-        <div style="font-family:Geist;font-size:.6rem;color:var(--muted2);margin-bottom:8px;line-height:1.6">Re-save after quarterly contract rolls (Mar, Jun, Sep, Dec).</div>
-        <div id="zt-basis-history"></div>
-      </div>
-      <div class="panel">
-        <div class="ptitle">Saved Zone Translations</div>
-        <div id="zt-saved-zones"><div class="empty">No saved zones yet</div></div>
-      </div>
-      <div class="panel">
-        <div class="ptitle">How It Works</div>
-        <div style="font-family:Geist;font-size:.65rem;color:var(--muted2);line-height:2">
-          <div><b style="color:var(--accent)">Weekend:</b> Save basis once per symbol. Open both charts at same moment.</div>
-          <div><b style="color:var(--accent)">Weekday:</b> Select symbol, enter futures zone &rarr; CFD zone instantly.</div>
-          <div><b style="color:var(--accent)">Formula:</b> CFD = Futures + Basis</div>
-          <div><b style="color:var(--accent)">Stability:</b> FX basis moves 1&ndash;3 pips/day. Re-save weekly or after quarterly roll.</div>
-        </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <h3 style="margin:0 0 12px 0;font-size:.9rem;color:var(--text)">Summary by Pair</h3>
+      <div id="sf-summary" style="font-size:.8rem;color:var(--muted2)">
+        No data
       </div>
     </div>
   </div>
 
-  </div><!-- /conv-panel-cfd -->
 
   <!-- TRADE CALCULATOR PANEL -->
   <div id="conv-panel-calc" style="display:none">
@@ -2476,6 +2361,40 @@ async function launch(){
   }catch(e){sync('err','Load failed — '+e.message);console.error(e);}
 }
 
+// Swap Fees Storage
+let swapFees = [];
+function addSwapFee() {
+  const date = document.getElementById('sf-date').value;
+  const pair = document.getElementById('sf-pair').value.toUpperCase();
+  const pips = parseFloat(document.getElementById('sf-pips').value);
+  if (!date || !pair || isNaN(pips)) { alert('Fill all fields'); return; }
+  swapFees.push({date, pair, pips});
+  swapFees.sort((a,b) => new Date(b.date) - new Date(a.date));
+  document.getElementById('sf-date').value = '';
+  document.getElementById('sf-pair').value = '';
+  document.getElementById('sf-pips').value = '';
+  renderSwapFees();
+}
+function deleteSwapFee(i) {
+  swapFees.splice(i, 1);
+  renderSwapFees();
+}
+function renderSwapFees() {
+  const tb = document.getElementById('sf-table-body');
+  if (!swapFees.length) { tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</td></tr>'; return; }
+  tb.innerHTML = swapFees.map((sf, i) => `<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px;font-size:.75rem">${sf.date}</td><td style="padding:8px;font-size:.75rem;font-weight:500">${sf.pair}</td><td style="padding:8px;text-align:right;font-size:.75rem;color:${sf.pips<0?'var(--mega-bear)':'var(--mega-bull)}'}">${sf.pips>=0?'+':''}${sf.pips.toFixed(2)}</td><td style="padding:8px;text-align:center"><button onclick="deleteSwapFee(${i})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.8rem">✕</button></td></tr>`).join('');
+  const summary = {};
+  swapFees.forEach(sf => {
+    if (!summary[sf.pair]) summary[sf.pair] = {fees: [], avg: 0};
+    summary[sf.pair].fees.push(sf.pips);
+  });
+  Object.keys(summary).forEach(p => {
+    const fees = summary[p].fees;
+    summary[p].avg = fees.reduce((a,b)=>a+b,0)/fees.length;
+  });
+  const sumDiv = document.getElementById('sf-summary');
+  sumDiv.innerHTML = Object.keys(summary).map(p => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>${p}</span><span style="color:${summary[p].avg<0?'var(--mega-bear)':'var(--mega-bull)'}">Avg: ${summary[p].avg>=0?'+':''}${summary[p].avg.toFixed(3)}</span></div>`).join('');
+}
 // ── STATE ──
 let trades=[],entries=[],accounts=['Default'];
 let currentCurrency=localStorage.getItem('fxCurrency')||'USD';
