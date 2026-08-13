@@ -1611,14 +1611,14 @@ input[type=date] {
   <div class="tab-btns-desktop">
     <button class="tab-btn active" onclick="switchTab('tradelog')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 4v16"/></svg>Trade Log</button>
     <button class="tab-btn" onclick="switchTab('review')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Performance Review</button>
-    <button class="tab-btn" onclick="switchTab('converter')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Futures→CFD</button>
+    <button class="tab-btn" onclick="switchTab('converter')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M4 7h16M4 12h16M4 17h16"/></svg>CFD Calculator</button>
   </div>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
     <select onchange="switchTab(this.value);this.blur()" id="mobile-tab-select" style="width:100%;padding:10px 14px;font-family:Geist;font-size:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);outline:none;cursor:pointer;display:none">
       <option value="tradelog">Trade Log</option>
       <option value="review">Performance Review</option>
-      <option value="converter">Futures → CFD</option>
+      <option value="converter">CFD</option>
     </select>
   </div>
 </div>
@@ -1957,7 +1957,7 @@ input[type=date] {
   <!-- Sub-tab bar -->
   <div style="display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:18px">
     <button id="conv-btn-cfd" onclick="switchConvTab('cfd')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','Geist';font-size:.72rem;font-weight:600;cursor:pointer;background:var(--active-bg);color:var(--active-text);transition:all .15s">
-      🔄 Futures → CFD
+      🔄 CFD Calculator
     </button>
     <button id="conv-btn-calc" onclick="switchConvTab('calc')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Inter','Geist';font-size:.72rem;font-weight:500;cursor:pointer;background:transparent;color:var(--muted2);transition:all .15s">
       🧮 Trade Calculator
