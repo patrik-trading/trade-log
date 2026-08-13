@@ -1969,10 +1969,11 @@ input[type=date] {
   <!-- SWAP FEES TRACKER PANEL -->
   <div id="conv-panel-cfd">
     <div style="margin-bottom:16px">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;margin-bottom:14px">
         <div class="ig"><label>Date</label><input type="date" id="sf-date"></div>
         <div class="ig"><label>Currency Pair</label><input type="text" id="sf-pair" placeholder="e.g., EURUSD"></div>
-        <div class="ig"><label>Swap Fee (pips)</label><input type="number" id="sf-pips" step="0.01" placeholder="e.g., -1.71"></div>
+        <div class="ig"><label>Swap Fee Long (pips)</label><input type="number" id="sf-pips-long" step="0.01" placeholder="e.g., 0.5"></div>
+        <div class="ig"><label>Swap Fee Short (pips)</label><input type="number" id="sf-pips-short" step="0.01" placeholder="e.g., -1.71"></div>
         <button onclick="addSwapFee()" style="align-self:flex-end;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:500">+ Add</button>
       </div>
     </div>
@@ -1985,7 +1986,8 @@ input[type=date] {
             <tr style="border-bottom:1px solid var(--border);font-size:.75rem;font-weight:500;color:var(--muted)">
               <th style="text-align:left;padding:8px">Date</th>
               <th style="text-align:left;padding:8px">Pair</th>
-              <th style="text-align:right;padding:8px">Fee (pips)</th>
+              <th style="text-align:right;padding:8px">Long (pips)</th>
+              <th style="text-align:right;padding:8px">Short (pips)</th>
               <th style="text-align:center;padding:8px">Delete</th>
             </tr>
           </thead>
@@ -2357,43 +2359,75 @@ async function launch(){
     const ar=await sbGet('accounts','name.asc');
     accounts=ar.map(a=>a.name);
     if(!accounts.includes('Default'))accounts.unshift('Default');
-    refreshAcctDDs();renderTrades();sync('ok','Synced ✓');
+    refreshAcctDDs();renderTrades();loadSwapFees();sync('ok','Synced ✓');
   }catch(e){sync('err','Load failed — '+e.message);console.error(e);}
 }
 
 // Swap Fees Storage
 let swapFees = [];
-function addSwapFee() {
+async function addSwapFee() {
   const date = document.getElementById('sf-date').value;
   const pair = document.getElementById('sf-pair').value.toUpperCase();
-  const pips = parseFloat(document.getElementById('sf-pips').value);
-  if (!date || !pair || isNaN(pips)) { alert('Fill all fields'); return; }
-  swapFees.push({date, pair, pips});
-  swapFees.sort((a,b) => new Date(b.date) - new Date(a.date));
-  document.getElementById('sf-date').value = '';
-  document.getElementById('sf-pair').value = '';
-  document.getElementById('sf-pips').value = '';
-  renderSwapFees();
+  const long = parseFloat(document.getElementById('sf-pips-long').value);
+  const short = parseFloat(document.getElementById('sf-pips-short').value);
+  if (!date || !pair || isNaN(long) || isNaN(short)) { alert('Fill all fields'); return; }
+  
+  try {
+    const res = await sbPost('swap_fees', {date, pair, swap_fee_long: long, swap_fee_short: short});
+    swapFees.unshift({id: res.id, date, pair, long, short});
+    document.getElementById('sf-date').value = '';
+    document.getElementById('sf-pair').value = '';
+    document.getElementById('sf-pips-long').value = '';
+    document.getElementById('sf-pips-short').value = '';
+    renderSwapFees();
+  } catch(e) { alert('Error saving: ' + e.message); }
+}
+async function loadSwapFees() {
+  try {
+    const data = await sbGet('swap_fees');
+    swapFees = data.map(d => ({id: d.id, date: d.date, pair: d.pair, long: d.swap_fee_long, short: d.swap_fee_short}));
+    swapFees.sort((a,b) => new Date(b.date) - new Date(a.date));
+    renderSwapFees();
+  } catch(e) { console.error('Error loading swap fees:', e); }
+}
+async function deleteSwapFeeDB(id) {
+  try {
+    await sbDel('swap_fees', id);
+    swapFees = swapFees.filter(sf => sf.id !== id);
+    renderSwapFees();
+  } catch(e) { alert('Error deleting: ' + e.message); }
 }
 function deleteSwapFee(i) {
-  swapFees.splice(i, 1);
-  renderSwapFees();
+  const sf = swapFees[i];
+  if (sf.id) deleteSwapFeeDB(sf.id);
+  else { swapFees.splice(i, 1); renderSwapFees(); }
 }
 function renderSwapFees() {
   const tb = document.getElementById('sf-table-body');
-  if (!swapFees.length) { tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</td></tr>'; return; }
-  tb.innerHTML = swapFees.map((sf, i) => `<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px;font-size:.75rem">${sf.date}</td><td style="padding:8px;font-size:.75rem;font-weight:500">${sf.pair}</td><td style="padding:8px;text-align:right;font-size:.75rem;color:${sf.pips<0?'var(--mega-bear)':'var(--mega-bull)}'}">${sf.pips>=0?'+':''}${sf.pips.toFixed(2)}</td><td style="padding:8px;text-align:center"><button onclick="deleteSwapFee(${i})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.8rem">✕</button></td></tr>`).join('');
+  if (!swapFees.length) { tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</td></tr>'; return; }
+  tb.innerHTML = swapFees.map((sf, i) => {
+    const longColor = sf.long < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
+    const shortColor = sf.short < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
+    return `<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px;font-size:.75rem">${sf.date}</td><td style="padding:8px;font-size:.75rem;font-weight:500">${sf.pair}</td><td style="padding:8px;text-align:right;font-size:.75rem;color:${longColor}">${sf.long>=0?'+':''}${sf.long.toFixed(2)}</td><td style="padding:8px;text-align:right;font-size:.75rem;color:${shortColor}">${sf.short>=0?'+':''}${sf.short.toFixed(2)}</td><td style="padding:8px;text-align:center"><button onclick="deleteSwapFee(${i})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.8rem">✕</button></td></tr>`;
+  }).join('');
   const summary = {};
   swapFees.forEach(sf => {
-    if (!summary[sf.pair]) summary[sf.pair] = {fees: [], avg: 0};
-    summary[sf.pair].fees.push(sf.pips);
+    if (!summary[sf.pair]) summary[sf.pair] = {longFees: [], shortFees: [], avgLong: 0, avgShort: 0};
+    summary[sf.pair].longFees.push(sf.long);
+    summary[sf.pair].shortFees.push(sf.short);
   });
   Object.keys(summary).forEach(p => {
-    const fees = summary[p].fees;
-    summary[p].avg = fees.reduce((a,b)=>a+b,0)/fees.length;
+    const long = summary[p].longFees;
+    const short = summary[p].shortFees;
+    summary[p].avgLong = long.reduce((a,b)=>a+b,0)/long.length;
+    summary[p].avgShort = short.reduce((a,b)=>a+b,0)/short.length;
   });
   const sumDiv = document.getElementById('sf-summary');
-  sumDiv.innerHTML = Object.keys(summary).map(p => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>${p}</span><span style="color:${summary[p].avg<0?'var(--mega-bear)':'var(--mega-bull)'}">Avg: ${summary[p].avg>=0?'+':''}${summary[p].avg.toFixed(3)}</span></div>`).join('');
+  sumDiv.innerHTML = Object.keys(summary).map(p => {
+    const longColor = summary[p].avgLong < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
+    const shortColor = summary[p].avgShort < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
+    return `<div style="display:grid;grid-template-columns:100px 1fr 1fr;padding:8px 0;border-bottom:1px solid var(--border);gap:16px"><span>${p}</span><span style="text-align:right;color:${longColor}">Long: ${summary[p].avgLong>=0?'+':''}${summary[p].avgLong.toFixed(3)}</span><span style="text-align:right;color:${shortColor}">Short: ${summary[p].avgShort>=0?'+':''}${summary[p].avgShort.toFixed(3)}</span></div>`;
+  }).join('');
 }
 // ── STATE ──
 let trades=[],entries=[],accounts=['Default'];
