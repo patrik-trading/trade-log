@@ -2035,7 +2035,7 @@ input[type=date] {
 
       <!-- WEEKDAY: Translate zones using saved basis -->
       <div id="zt-panel-zones" class="panel" style="display:none">
-        <div class="ptitle">Translate Futures Zones &rarr; CFD</div>
+        <div class="ptitle">CFD Calculator</div>
         <div class="ig" style="margin-bottom:10px">
           <label>Select Symbol</label>
           <select id="zt-zone-sym" onchange="ztLoadBasisForSym()" style="font-size:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:10px;outline:none;width:100%">
@@ -2377,6 +2377,8 @@ input[type=date] {
         <div class="ig"><label>Settled PnL</label><input type="number" id="edit-pnl" step="0.01" oninput="editAutoCalcR()"></div>
           <div class="ig"><label>Closed Price</label><input type="number" id="edit-closed-price" step="any" placeholder="actual exit price"></div>
     <div class="ig"><label>Max R Reached</label><input type="number" id="edit-max-r" step="0.1" placeholder="highest R during trade"></div>
+    <div class="ig"><label>Triggered At</label><input type="date" id="edit-triggered-at"></div>
+    <div class="ig"><label>Closed At</label><input type="date" id="edit-closed-at"></div>
         <div class="ig"><label>Settled R</label><input type="number" id="edit-r" step="0.1"></div>
         <div class="ig"></div>
       </div>
