@@ -1988,20 +1988,9 @@ input[type=date] {
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px">
       <h3 style="margin:0 0 12px 0;font-size:.9rem;color:var(--text)">Swap Fee History</h3>
       <div style="max-height:400px;overflow-y:auto">
-        <table style="width:100%;border-collapse:collapse">
-          <thead>
-            <tr style="border-bottom:1px solid var(--border);font-size:.75rem;font-weight:500;color:var(--muted)">
-              <th style="text-align:left;padding:8px">Date</th>
-              <th style="text-align:left;padding:8px">Pair</th>
-              <th style="text-align:right;padding:8px">Long (pips)</th>
-              <th style="text-align:right;padding:8px">Short (pips)</th>
-              <th style="text-align:center;padding:8px">Delete</th>
-            </tr>
-          </thead>
-          <tbody id="sf-table-body">
-            <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</td></tr>
-          </tbody>
-        </table>
+        <div id="sf-table-body" style="display:flex;flex-direction:column;gap:10px">
+          <div style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2404,18 +2393,30 @@ function deleteSwapFee(i) {
 }
 function renderSwapFees() {
   const tb = document.getElementById('sf-table-body');
-  if (!swapFees.length) { tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</td></tr>'; return; }
+  if (!swapFees.length) { 
+    tb.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted2);font-size:.75rem">No swap fees recorded yet</div>';
+    return; 
+  }
   
   // Sort by date newest first
   const sorted = [...swapFees].sort((a,b) => new Date(b.date) - new Date(a.date));
   
-  tb.innerHTML = sorted.map((sf, i) => {
+  tb.innerHTML = sorted.map((sf, idx) => {
     const longColor = sf.long < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
     const shortColor = sf.short < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
-    return `<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px;font-size:.75rem">${sf.date}</td><td style="padding:8px;font-size:.75rem;font-weight:500">${sf.pair}</td><td style="padding:8px;text-align:right;font-size:.75rem;color:${longColor}">${sf.long>=0?'+':''}${sf.long.toFixed(2)}</td><td style="padding:8px;text-align:right;font-size:.75rem;color:${shortColor}">${sf.short>=0?'+':''}${sf.short.toFixed(2)}</td><td style="padding:8px;text-align:center"><button onclick="deleteSwapFee(${swapFees.indexOf(sf)})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.8rem">✕</button></td></tr>`;
+    const actualIdx = swapFees.indexOf(sf);
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;display:grid;grid-template-columns:60px 70px 1fr 30px;gap:12px;align-items:center;font-size:.75rem">
+      <div style="font-weight:500">${sf.date}</div>
+      <div style="font-weight:600">${sf.pair}</div>
+      <div style="display:flex;gap:16px;justify-content:flex-end">
+        <span style="color:${longColor}">L: ${sf.long>=0?'+':''}${sf.long.toFixed(2)}</span>
+        <span style="color:${shortColor}">S: ${sf.short>=0?'+':''}${sf.short.toFixed(2)}</span>
+      </div>
+      <button onclick="deleteSwapFee(${actualIdx})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.8rem;padding:0">✕</button>
+    </div>`;
   }).join('');
   
-  // Get most recent per pair
+  // Get most recent per pair (no duplicates)
   const mostRecent = {};
   swapFees.forEach(sf => {
     if (!mostRecent[sf.pair] || new Date(sf.date) > new Date(mostRecent[sf.pair].date)) {
@@ -2429,7 +2430,12 @@ function renderSwapFees() {
     const sf = mostRecent[p];
     const longColor = sf.long < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
     const shortColor = sf.short < 0 ? 'var(--mega-bear)' : 'var(--mega-bull)';
-    return `<div style="display:grid;grid-template-columns:80px 60px auto auto;padding:8px 0;border-bottom:1px solid var(--border);gap:16px;align-items:center"><span style="font-weight:500">${p}</span><span style="font-size:.75rem;color:var(--muted2)">${sf.date}</span><span style="text-align:right;color:${longColor};font-size:.75rem">L: ${sf.long>=0?'+':''}${sf.long.toFixed(2)}</span><span style="text-align:right;color:${shortColor};font-size:.75rem">S: ${sf.short>=0?'+':''}${sf.short.toFixed(2)}</span></div>`;
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;display:grid;grid-template-columns:60px 1fr 1fr 1fr;gap:12px;align-items:center;font-size:.75rem;margin-bottom:8px">
+      <div style="font-weight:600">${p}</div>
+      <div style="color:var(--muted2);font-size:.7rem">${sf.date}</div>
+      <div style="text-align:right;color:${longColor}">L: ${sf.long>=0?'+':''}${sf.long.toFixed(2)}</div>
+      <div style="text-align:right;color:${shortColor}">S: ${sf.short>=0?'+':''}${sf.short.toFixed(2)}</div>
+    </div>`;
   }).join('');
 }
 // ── STATE ──
