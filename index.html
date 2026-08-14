@@ -1969,12 +1969,14 @@ input[type=date] {
   <!-- SWAP FEES TRACKER PANEL -->
   <div id="conv-panel-cfd">
     <div style="margin-bottom:16px">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;margin-bottom:14px">
-        <div class="ig"><label>Date</label><input type="date" id="sf-date"></div>
-        <div class="ig"><label>Currency Pair</label><input type="text" id="sf-pair" placeholder="e.g., EURUSD"></div>
-        <div class="ig"><label>Swap Fee Long (pips)</label><input type="number" id="sf-pips-long" step="0.01" placeholder="e.g., 0.5"></div>
-        <div class="ig"><label>Swap Fee Short (pips)</label><input type="number" id="sf-pips-short" step="0.01" placeholder="e.g., -1.71"></div>
-        <button onclick="addSwapFee()" style="align-self:flex-end;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:500">+ Add</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="ig"><label>Date</label><input type="date" id="sf-date" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+        <div class="ig"><label>Currency Pair</label><select id="sf-pair" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:.8rem;cursor:pointer"><option value="">Select pair...</option><option>AUDUSD</option><option>EURUSD</option><option>GBPUSD</option><option>NZDUSD</option><option>USDCAD</option><option>USDCHF</option><option>USDJPY</option><option>XAGUSD</option><option>XAUUSD</option></select></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px">
+        <div class="ig"><label>Long (pips)</label><input type="number" id="sf-pips-long" step="0.01" placeholder="e.g., 0.5" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+        <div class="ig"><label>Short (pips)</label><input type="number" id="sf-pips-short" step="0.01" placeholder="e.g., -1.71" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+        <button onclick="addSwapFee()" style="align-self:flex-end;padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:500;white-space:nowrap">+ Add</button>
       </div>
     </div>
 
@@ -2356,10 +2358,10 @@ async function launch(){
 let swapFees = [];
 async function addSwapFee() {
   const date = document.getElementById('sf-date').value;
-  const pair = document.getElementById('sf-pair').value.toUpperCase();
+  const pair = document.getElementById('sf-pair').value.trim().toUpperCase();
   const long = parseFloat(document.getElementById('sf-pips-long').value);
   const short = parseFloat(document.getElementById('sf-pips-short').value);
-  if (!date || !pair || isNaN(long) || isNaN(short)) { alert('Fill all fields'); return; }
+  if (!date || !pair || pair === 'SELECT PAIR...' || isNaN(long) || isNaN(short)) { alert('Fill all fields'); return; }
   
   try {
     const res = await sbPost('swap_fees', {date, pair, swap_fee_long: long, swap_fee_short: short});
@@ -2374,7 +2376,7 @@ async function addSwapFee() {
 async function loadSwapFees() {
   try {
     const data = await sbGet('swap_fees');
-    swapFees = data.map(d => ({id: d.id, date: d.date, pair: d.pair, long: d.swap_fee_long, short: d.swap_fee_short}));
+    swapFees = data.map(d => ({id: d.id, date: d.date, pair: d.pair.trim().toUpperCase(), long: d.swap_fee_long, short: d.swap_fee_short}));
     swapFees.sort((a,b) => new Date(b.date) - new Date(a.date));
     renderSwapFees();
   } catch(e) { console.error('Error loading swap fees:', e); }
