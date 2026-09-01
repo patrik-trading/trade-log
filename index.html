@@ -1777,25 +1777,37 @@ input[type=date] {
           <div class="r-hint" id="r-hint" style="color:var(--muted2)"></div>
         </div>
 
-        <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
-          <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
-          <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
-          <button class="tag-btn" data-val="Extreme" onclick="selTag('entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
-          <button class="tag-btn" data-val="Momentum" onclick="selTag('entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
-        </div></div>
-
         <div class="ig" style="margin-bottom:11px"><label>Weekly Zone</label><div class="tag-row" id="weekly-zone-tags">
           <button class="tag-btn" data-val="RBR" onclick="selTag('weekly-zone-tags',this)" style="--tc:#22c55e">RBR</button>
           <button class="tag-btn" data-val="RBD" onclick="selTag('weekly-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
           <button class="tag-btn" data-val="DBD" onclick="selTag('weekly-zone-tags',this)" style="--tc:#f97316">DBD</button>
           <button class="tag-btn" data-val="DBR" onclick="selTag('weekly-zone-tags',this)" style="--tc:#ef4444">DBR</button>
+          <button class="tag-btn" data-val="N/A" onclick="selTag('weekly-zone-tags',this)" style="--tc:#6b7280">N/A</button>
         </div></div>
+
         <div class="ig" style="margin-bottom:11px"><label>Daily Zone</label><div class="tag-row" id="daily-zone-tags">
           <button class="tag-btn" data-val="RBR" onclick="selTag('daily-zone-tags',this)" style="--tc:#22c55e">RBR</button>
           <button class="tag-btn" data-val="RBD" onclick="selTag('daily-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
           <button class="tag-btn" data-val="DBD" onclick="selTag('daily-zone-tags',this)" style="--tc:#f97316">DBD</button>
           <button class="tag-btn" data-val="DBR" onclick="selTag('daily-zone-tags',this)" style="--tc:#ef4444">DBR</button>
+          <button class="tag-btn" data-val="N/A" onclick="selTag('daily-zone-tags',this)" style="--tc:#6b7280">N/A</button>
         </div></div>
+
+        <div class="ig" style="margin-bottom:11px"><label>CVD/Delta</label><div class="tag-row" id="cvd-tags">
+          <button class="tag-btn" data-val="Positive" onclick="selTag('cvd-tags',this)" style="--tc:#22c55e">✓ Positive</button>
+          <button class="tag-btn" data-val="Negative" onclick="selTag('cvd-tags',this)" style="--tc:#ef4444">✗ Negative</button>
+        </div></div>
+
+        <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="entry-tags">
+          <button class="tag-btn" data-val="Zone Touch" onclick="selTag('entry-tags',this)" style="--tc:#10b981">● Zone Touch</button>
+          <button class="tag-btn" data-val="In Zone" onclick="selTag('entry-tags',this)" style="--tc:#8b5cf6">● In Zone</button>
+        </div></div>
+
+        <div class="ig"><label>Daily Base</label><div class="tag-row" id="daily-base-tags">
+          <button class="tag-btn" data-val="Red" onclick="selTag('daily-base-tags',this)" style="--tc:#ef4444">🔴 Red</button>
+          <button class="tag-btn" data-val="Green" onclick="selTag('daily-base-tags',this)" style="--tc:#22c55e">🟢 Green</button>
+        </div></div>
+
         <div class="ig"><label>Weekly Direction</label><select id="tl-weekly-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
         <div class="ig"><label>Daily Direction</label><select id="tl-daily-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
         <div class="ig"><label>Triggered At <span style="font-size:.52rem;color:var(--muted2)">(date/time)</span></label><input type="date" id="tl-triggered-at"></div>
@@ -2264,10 +2276,8 @@ input[type=date] {
       </div>
     </div>
     <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
-      <button class="tag-btn" data-val="Quiet Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Quiet Reversal</button>
-      <button class="tag-btn" data-val="Confirmation Reversal" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● Confirmation Reversal</button>
-      <button class="tag-btn" data-val="Extreme" onclick="selTag('edit-entry-tags',this)" style="--tc:#ef4444">● Extreme</button>
-      <button class="tag-btn" data-val="Momentum" onclick="selTag('edit-entry-tags',this)" style="--tc:#3b82f6">● Momentum</button>
+      <button class="tag-btn" data-val="Zone Touch" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Zone Touch</button>
+      <button class="tag-btn" data-val="In Zone" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● In Zone</button>
     </div></div>
 
     <div class="ig" style="margin-bottom:14px"><label>Weekly Zone</label><div class="tag-row" id="edit-weekly-zone-tags">
@@ -2275,12 +2285,26 @@ input[type=date] {
       <button class="tag-btn" data-val="RBD" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
       <button class="tag-btn" data-val="DBD" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#f97316">DBD</button>
       <button class="tag-btn" data-val="DBR" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#ef4444">DBR</button>
+      <button class="tag-btn" data-val="N/A" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#6b7280">N/A</button>
     </div></div>
     <div class="ig" style="margin-bottom:14px"><label>Daily Zone</label><div class="tag-row" id="edit-daily-zone-tags">
       <button class="tag-btn" data-val="RBR" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#22c55e">RBR</button>
       <button class="tag-btn" data-val="RBD" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#3b82f6">RBD</button>
       <button class="tag-btn" data-val="DBD" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#f97316">DBD</button>
       <button class="tag-btn" data-val="DBR" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#ef4444">DBR</button>
+      <button class="tag-btn" data-val="N/A" onclick="selTag('edit-daily-zone-tags',this)" style="--tc:#6b7280">N/A</button>
+    </div></div>
+    <div class="ig" style="margin-bottom:14px"><label>CVD/Delta</label><div class="tag-row" id="edit-cvd-tags">
+      <button class="tag-btn" data-val="Positive" onclick="selTag('edit-cvd-tags',this)" style="--tc:#22c55e">✓ Positive</button>
+      <button class="tag-btn" data-val="Negative" onclick="selTag('edit-cvd-tags',this)" style="--tc:#ef4444">✗ Negative</button>
+    </div></div>
+    <div class="ig" style="margin-bottom:14px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
+      <button class="tag-btn" data-val="Zone Touch" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Zone Touch</button>
+      <button class="tag-btn" data-val="In Zone" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● In Zone</button>
+    </div></div>
+    <div class="ig" style="margin-bottom:14px"><label>Daily Base</label><div class="tag-row" id="edit-daily-base-tags">
+      <button class="tag-btn" data-val="Red" onclick="selTag('edit-daily-base-tags',this)" style="--tc:#ef4444">🔴 Red</button>
+      <button class="tag-btn" data-val="Green" onclick="selTag('edit-daily-base-tags',this)" style="--tc:#22c55e">🟢 Green</button>
     </div></div>
     <div class="ig"><label>Weekly Direction</label><select id="edit-weekly-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
     <div class="ig"><label>Daily Direction</label><select id="edit-daily-dir" style="cursor:pointer"><option value="">—</option><option>Up</option><option>Down</option><option>Sideways</option></select></div>
@@ -3935,6 +3959,8 @@ async function addTrade(){
       rvalue:rvv!==''?parseFloat(rvv):null,
       currency:currentCurrency,
       entry:getSelTag('entry-tags'),
+      daily_base:getSelTag('daily-base-tags'),
+      cvd:getSelTag('cvd-tags'),
       weekly_dir:document.getElementById('tl-weekly-dir')?.value || null,
       daily_dir:document.getElementById('tl-daily-dir')?.value || null,
       weekly_zone:getSelTag('weekly-zone-tags'),
@@ -5683,7 +5709,9 @@ function openEditModal(id) {
     if (eb) selTag('edit-entry-tags', eb);
   }
   if(t.weekly_zone){const wb=document.querySelector(`#edit-weekly-zone-tags .tag-btn[data-val="${t.weekly_zone}"]`);if(wb)selTag('edit-weekly-zone-tags',wb);}
-  if(t.daily_zone){const db=document.querySelector(`#edit-daily-zone-tags .tag-btn[data-val="${t.daily_zone}"]`);if(db)selTag('edit-daily-zone-tags',db);}
+  if(t.daily_base){const db=document.querySelector(`#edit-daily-base-tags .tag-btn[data-val="${t.daily_base}"]`);if(db)selTag('edit-daily-base-tags',db);}
+  if(t.cvd){const cv=document.querySelector(`#edit-cvd-tags .tag-btn[data-val="${t.cvd}"]`);if(cv)selTag('edit-cvd-tags',cv);}
+  if(t.daily_zone){const dz=document.querySelector(`#edit-daily-zone-tags .tag-btn[data-val="${t.daily_zone}"]`);if(dz)selTag('edit-daily-zone-tags',dz);}
   
   document.getElementById('edit-weekly-dir').value = t.weekly_dir || '';
   document.getElementById('edit-daily-dir').value = t.daily_dir || '';
@@ -5757,10 +5785,12 @@ async function saveEdit() {
     currency: editCurrency,
     phase:    getSelTag('edit-phase-tags'),
     entry:    getSelTag('edit-entry-tags'),
-    weekly_dir: document.getElementById('edit-weekly-dir')?.value || null,
-    daily_dir: document.getElementById('edit-daily-dir')?.value || null,
     weekly_zone: getSelTag('edit-weekly-zone-tags'),
     daily_zone: getSelTag('edit-daily-zone-tags'),
+    cvd:      getSelTag('edit-cvd-tags'),
+    daily_base: getSelTag('edit-daily-base-tags'),
+    weekly_dir: document.getElementById('edit-weekly-dir')?.value || null,
+    daily_dir: document.getElementById('edit-daily-dir')?.value || null,
     notes:        document.getElementById('edit-notes').value,
     addon:        document.getElementById('edit-addon').checked,
     sl_price:     document.getElementById('edit-sl')?.value!==''?parseFloat(document.getElementById('edit-sl').value):null,
