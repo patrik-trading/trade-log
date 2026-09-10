@@ -1612,6 +1612,7 @@ input[type=date] {
     <button class="tab-btn active" onclick="switchTab('tradelog')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 4v16"/></svg>Trade Log</button>
     <button class="tab-btn" onclick="switchTab('review')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Performance Review</button>
     <button class="tab-btn" onclick="switchTab('converter')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M4 7h16M4 12h16M4 17h16"/></svg>CFD Calculator</button>
+    <button class="tab-btn" onclick="switchTab('tagmgr')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/></svg>Tag Manager</button>
   </div>
   <!-- Mobile tab selector -->
   <div class="tab-btns-mobile">
@@ -1619,6 +1620,7 @@ input[type=date] {
       <option value="tradelog">Trade Log</option>
       <option value="review">Performance Review</option>
       <option value="converter">CFD</option>
+      <option value="tagmgr">Tag Manager</option>
     </select>
   </div>
 </div>
@@ -2121,6 +2123,29 @@ input[type=date] {
   </div><!-- /conv-panel-calc -->
 
 </div><!-- /tab-converter -->
+
+<!-- TAG MANAGER TAB -->
+<div class="tab-pane" id="tab-tagmgr">
+  <div class="panel">
+    <div class="ptitle">Tag Manager</div>
+    <p style="font-family:Geist;font-size:.72rem;color:var(--muted2);margin-bottom:18px">Add, edit, remove tags. Hide or delete entire tag groups.</p>
+    
+    <div id="tag-groups-container"></div>
+
+    <!-- Add New Tag Group -->
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
+      <div style="font-family:Geist;font-size:.7rem;color:var(--accent);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:600">
+        <div style="width:3px;height:12px;background:var(--accent);border-radius:2px"></div>
+        Create New Tag Group
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+        <input type="text" id="new-group-name" placeholder="Group name (e.g., Setup Type)" style="padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:.75rem">
+        <button onclick="createNewTagGroup()" style="padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:500;white-space:nowrap;font-size:.75rem">+ Create</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /tab-tagmgr -->
 
 <!-- TAB TRADING RULES -->
 
@@ -6956,6 +6981,10 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => closeSheet('trade-sheet'), 1500);
     });
   }
+  
+  // Initialize Tag Manager
+  initTagManager();
+  refreshTagDropdowns();
 });
 
 
@@ -7269,6 +7298,242 @@ function updateBottomBar(tab) {
     </div>
   </div>
 </div>
+
+<script>
+// ══════════════════════════════════════
+// TAG MANAGER
+// ══════════════════════════════════════
+
+const defaultTags = {
+  'weekly-dir': { label: 'Weekly Direction', tags: ['Up', 'Down', 'Sideways'], hidden: false },
+  'daily-dir': { label: 'Daily Direction', tags: ['Up', 'Down', 'Sideways'], hidden: false },
+  'daily-zone': { label: 'Daily Zone', tags: ['RBR', 'RBD', 'DBD', 'DBR'], hidden: false },
+  'entry-type': { label: 'Entry Type', tags: ['Zone Touch', 'In Zone', 'Asia Session Zone'], hidden: false },
+  'cvd': { label: 'CVD/Delta', tags: ['Positive', 'Negative'], hidden: false },
+  'daily-base': { label: 'Daily Base', tags: ['Red', 'Green'], hidden: false }
+};
+
+function initTagManager() {
+  let tags = JSON.parse(localStorage.getItem('trading-tags'));
+  
+  // Migrate old format (arrays) to new format (objects with metadata)
+  if (tags && !tags['weekly-dir']?.label) {
+    // Old format detected, convert it
+    tags = defaultTags;
+  }
+  
+  // Use defaults if nothing exists
+  if (!tags) {
+    tags = defaultTags;
+  }
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  renderTagManager(tags);
+}
+
+function renderTagManager(tags) {
+  const container = document.getElementById('tag-groups-container');
+  if (!container || !tags) return;
+  
+  container.innerHTML = '';
+  
+  for (const [groupId, groupData] of Object.entries(tags)) {
+    // Skip if not in new format
+    if (!groupData.label || !Array.isArray(groupData.tags)) continue;
+    
+    const groupDiv = document.createElement('div');
+    groupDiv.id = `tag-group-${groupId}`;
+    groupDiv.style.cssText = 'margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);';
+    
+    // Header with toggle and delete
+    const header = document.createElement('div');
+    header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px';
+    
+    const titleDiv = document.createElement('div');
+    titleDiv.style.cssText = 'display:flex;align-items:center;gap:8px;flex:1';
+    
+    const icon = document.createElement('div');
+    icon.style.cssText = 'width:3px;height:12px;background:var(--accent);border-radius:2px';
+    
+    const title = document.createElement('div');
+    title.style.cssText = 'font-family:Geist;font-size:.7rem;color:var(--text);letter-spacing:.25em;text-transform:uppercase;font-weight:600';
+    title.textContent = groupData.label;
+    
+    titleDiv.appendChild(icon);
+    titleDiv.appendChild(title);
+    
+    const actionsDiv = document.createElement('div');
+    actionsDiv.style.cssText = 'display:flex;gap:6px';
+    
+    const toggleBtn = document.createElement('button');
+    toggleBtn.style.cssText = 'padding:4px 12px;font-size:.65rem;border:1px solid var(--border);background:var(--surface);color:var(--muted2);border-radius:6px;cursor:pointer;transition:all .2s';
+    toggleBtn.textContent = groupData.hidden ? '👁️ Show' : '👁️‍🗨️ Hide';
+    toggleBtn.onclick = () => toggleGroupVisibility(groupId);
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.style.cssText = 'padding:4px 12px;font-size:.65rem;border:1px solid var(--mega-bear);background:transparent;color:var(--mega-bear);border-radius:6px;cursor:pointer;transition:all .2s';
+    deleteBtn.textContent = '🗑️ Delete';
+    deleteBtn.onclick = () => {
+      if (confirm(`Delete group "${groupData.label}" and all its tags?`)) {
+        deleteTagGroup(groupId);
+      }
+    };
+    
+    actionsDiv.appendChild(toggleBtn);
+    actionsDiv.appendChild(deleteBtn);
+    
+    header.appendChild(titleDiv);
+    header.appendChild(actionsDiv);
+    
+    // Tags display
+    const tagsDiv = document.createElement('div');
+    tagsDiv.id = `tm-${groupId}`;
+    tagsDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;opacity:' + (groupData.hidden ? '0.5' : '1') + ';pointer-events:' + (groupData.hidden ? 'none' : 'auto');
+    
+    groupData.tags.forEach(tag => {
+      const badge = document.createElement('div');
+      badge.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:.72rem;color:var(--text)';
+      badge.innerHTML = `
+        ${tag}
+        <button onclick="removeTag('${groupId}', '${tag.replace(/'/g, "\\'")}'" style="background:none;border:none;color:var(--muted2);cursor:pointer;padding:0;font-size:.8rem;line-height:1;opacity:.6;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">×</button>
+      `;
+      tagsDiv.appendChild(badge);
+    });
+    
+    // Input and add button
+    const inputDiv = document.createElement('div');
+    inputDiv.style.cssText = 'display:grid;grid-template-columns:1fr auto;gap:8px;opacity:' + (groupData.hidden ? '0.5' : '1') + ';pointer-events:' + (groupData.hidden ? 'none' : 'auto');
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = `tm-${groupId}-input`;
+    input.placeholder = `New tag for ${groupData.label}`;
+    input.style.cssText = 'padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:.75rem';
+    input.onkeypress = (e) => {
+      if (e.key === 'Enter') {
+        addTagToCategory(groupId);
+      }
+    };
+    
+    const addBtn = document.createElement('button');
+    addBtn.style.cssText = 'padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:500;white-space:nowrap;font-size:.75rem';
+    addBtn.textContent = '+ Add';
+    addBtn.onclick = () => addTagToCategory(groupId);
+    
+    inputDiv.appendChild(input);
+    inputDiv.appendChild(addBtn);
+    
+    groupDiv.appendChild(header);
+    groupDiv.appendChild(tagsDiv);
+    groupDiv.appendChild(inputDiv);
+    
+    container.appendChild(groupDiv);
+  }
+}
+
+function addTagToCategory(groupId) {
+  const input = document.getElementById(`tm-${groupId}-input`);
+  if (!input || !input.value.trim()) return;
+  
+  const newTag = input.value.trim();
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  
+  if (!tags[groupId]) return;
+  if (!tags[groupId].tags.includes(newTag)) {
+    tags[groupId].tags.push(newTag);
+  }
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  input.value = '';
+  renderTagManager(tags);
+  refreshTagDropdowns();
+}
+
+function removeTag(groupId, tag) {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  if (tags[groupId]) {
+    tags[groupId].tags = tags[groupId].tags.filter(t => t !== tag);
+  }
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  renderTagManager(tags);
+  refreshTagDropdowns();
+}
+
+function toggleGroupVisibility(groupId) {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  if (tags[groupId]) {
+    tags[groupId].hidden = !tags[groupId].hidden;
+  }
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  renderTagManager(tags);
+  refreshTagDropdowns();
+}
+
+function deleteTagGroup(groupId) {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  delete tags[groupId];
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  renderTagManager(tags);
+  refreshTagDropdowns();
+}
+
+function createNewTagGroup() {
+  const input = document.getElementById('new-group-name');
+  if (!input || !input.value.trim()) return;
+  
+  const groupName = input.value.trim();
+  const groupId = 'custom-' + Date.now();
+  
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  tags[groupId] = {
+    label: groupName,
+    tags: [],
+    hidden: false
+  };
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  input.value = '';
+  renderTagManager(tags);
+}
+
+function refreshTagDropdowns() {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  
+  // Refresh visible groups only
+  for (const [groupId, groupData] of Object.entries(tags)) {
+    if (!groupData.label || !Array.isArray(groupData.tags)) continue;
+    if (groupData.hidden) continue;
+    
+    const container = document.getElementById(`${groupId}-tags`);
+    if (!container) continue;
+    
+    container.innerHTML = '';
+    groupData.tags.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'tag-btn';
+      btn.setAttribute('data-val', tag);
+      btn.onclick = function() { selTag(groupId + '-tags', this); };
+      
+      // Color coding based on group
+      if (groupId === 'entry-type' && tag === 'Asia Session Zone') {
+        btn.style.setProperty('--tc', '#f59e0b');
+        btn.textContent = '🌏 ' + tag;
+      } else {
+        btn.style.setProperty('--tc', '#6e6e73');
+        btn.textContent = '● ' + tag;
+      }
+      
+      container.appendChild(btn);
+    });
+  }
+}
+
+// Initialize on page load
+// (handled in first DOMContentLoaded above)
+</script>
 
 </body>
 </html>
