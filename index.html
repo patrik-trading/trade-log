@@ -1826,7 +1826,7 @@ input[type=date] {
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto">
         <div style="border-radius:10px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th>W.Zone</th><th>D.Zone</th><th>CVD</th><th>D.Base</th><th>Entry</th><th>W.Dir</th><th>D.Dir</th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
+            <thead id="tl-thead"><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th id="tl-tag-headers"></th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
             <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
@@ -4157,7 +4157,7 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:Geist;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td><td>${t.weekly_zone||'—'}</td><td>${t.daily_zone||'—'}</td><td>${t.cvd||'—'}</td><td>${t.daily_base||'—'}</td><td>${en}</td><td>${t.weekly_dir||'—'}</td><td>${t.daily_dir||'—'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openQuickEditTags(${t.id})" title="Edit Tags">🏷️</button><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td>${generateTagColumnsCells(t)}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openQuickEditTags(${t.id})" title="Edit Tags">🏷️</button><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
 
@@ -7888,8 +7888,43 @@ function selectTagFromGroup(groupNum, tag) {
   localStorage.setItem(`tl-taggroup-${groupNum}-value`, tag);
 }
 
+function generateTagColumnsCells(trade) {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  let html = '';
+  
+  for (const [groupId, groupData] of Object.entries(tags)) {
+    if (!groupData.label || !Array.isArray(groupData.tags) || groupData.hidden) continue;
+    
+    const value = trade[groupId] || '—';
+    html += `<td>${value}</td>`;
+  }
+  
+  return html;
+}
+
+function updateTableHeaders() {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  const headerContainer = document.getElementById('tl-tag-headers');
+  if (!headerContainer) return;
+  
+  headerContainer.innerHTML = '';
+  
+  // Add header for each visible tag group
+  for (const [groupId, groupData] of Object.entries(tags)) {
+    if (!groupData.label || !Array.isArray(groupData.tags) || groupData.hidden) continue;
+    
+    const th = document.createElement('th');
+    th.textContent = groupData.label;
+    th.style.minWidth = '70px';
+    headerContainer.appendChild(th);
+  }
+}
+
 function refreshTagDropdowns() {
   const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  
+  // Update table headers with dynamic tag group names
+  updateTableHeaders();
   
   // ════════════════════════════════════════
   // RENDER TRADE LOG TAG GROUPS
