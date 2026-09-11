@@ -1821,6 +1821,7 @@ input[type=date] {
             <option value="ALL">All Symbols</option>
           </select>
           <button onclick="document.getElementById('tl-oc-filter').value='ALL';document.getElementById('tl-sym-filter').value='ALL';renderTrades();" style="background:none;border:1px solid var(--border);color:var(--muted2);padding:3px 8px;border-radius:8px;font-family:Geist,sans-serif;font-size:.58rem;cursor:pointer">✕ Clear</button>
+          <button onclick="openBatchEditTagsModal()" style="background:var(--accent);border:1px solid var(--accent);color:white;padding:4px 10px;border-radius:8px;font-family:Geist,sans-serif;font-size:.58rem;cursor:pointer;font-weight:500">🏷️ Quick Edit Tags</button>
         </div>
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto">
         <div style="border-radius:10px;border:1px solid var(--border)">
@@ -5672,6 +5673,119 @@ async function restoreJSON(input){
 // ── EDIT TRADE ──
 let editingId = null;
 let editCurrency = 'USD';
+
+function openBatchEditTagsModal() {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  const visibleGroups = Object.entries(tags).filter(([gId, gData]) => 
+    gData.label && Array.isArray(gData.tags) && !gData.hidden
+  );
+  
+  if (visibleGroups.length === 0) {
+    alert('No tag groups available. Create some in Tag Manager first!');
+    return;
+  }
+  
+  let html = `
+    <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999" onclick="if(event.target===this)this.remove()">
+      <div style="background:var(--surface);padding:24px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:450px;width:90%">
+        <h3 style="margin:0 0 6px 0;font-size:.95rem;font-weight:600">Quick Edit Tags — Batch</h3>
+        <p style="margin:0 0 20px 0;font-size:.7rem;color:var(--muted2)">Select tags to apply. Leave blank to skip a group.</p>
+        <div style="max-height:60vh;overflow-y:auto;margin-bottom:20px">
+  `;
+  
+  // Create dropdowns for each visible tag group
+  visibleGroups.forEach(([groupId, groupData]) => {
+    html += `
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:.75rem;font-weight:500;margin-bottom:6px;color:var(--text)">${groupData.label}</label>
+        <select id="batch-${groupId}" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--text);cursor:pointer;font-size:.75rem">
+          <option value="">— Skip this group —</option>
+    `;
+    
+    groupData.tags.forEach(tag => {
+      html += `<option value="${tag}">${tag}</option>`;
+    });
+    
+    html += `</select></div>`;
+  });
+  
+  html += `
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="this.closest('div').parentElement.remove()" style="padding:8px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:500;color:var(--text)">Cancel</button>
+          <button onclick="applyBatchEditTags()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:6px;cursor:pointer;font-weight:500;color:white">Apply to All Visible</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+async function applyBatchEditTags() {
+  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  const visibleGroups = Object.entries(tags).filter(([gId, gData]) => 
+    gData.label && Array.isArray(gData.tags) && !gData.hidden
+  );
+  
+  // Collect selected tag values
+  const updates = {};
+  visibleGroups.forEach(([groupId, _]) => {
+    const select = document.getElementById(`batch-${groupId}`);
+    if (select && select.value) {
+      updates[groupId] = select.value;
+    }
+  });
+  
+  if (Object.keys(updates).length === 0) {
+    alert('Please select at least one tag to apply');
+    return;
+  }
+  
+  // Get visible trades (respecting current filters)
+  const ocFilter = document.getElementById('tl-oc-filter')?.value || 'ALL';
+  const symFilter = document.getElementById('tl-sym-filter')?.value || 'ALL';
+  
+  const visibleTrades = trades.filter(t => {
+    if (ocFilter !== 'ALL' && t.oc !== ocFilter) return false;
+    if (symFilter !== 'ALL' && t.symbol !== symFilter) return false;
+    return true;
+  });
+  
+  if (visibleTrades.length === 0) {
+    alert('No trades to update based on current filters');
+    return;
+  }
+  
+  const confirmMsg = `Apply these tags to ${visibleTrades.length} trade(s)?\n\n${Object.entries(updates).map(([gId, val]) => `${tags[gId]?.label}: ${val}`).join('\n')}`;
+  
+  if (!confirm(confirmMsg)) return;
+  
+  // Update all visible trades in Supabase
+  try {
+    for (const trade of visibleTrades) {
+      const { error } = await supabase
+        .from('trades')
+        .update(updates)
+        .eq('id', trade.id);
+      
+      if (error) {
+        console.error('Update error for trade', trade.id, error);
+      } else {
+        // Update local trade object
+        Object.assign(trade, updates);
+      }
+    }
+    
+    // Close modal and refresh table
+    document.querySelector('[onclick*="applyBatchEditTags"]')?.closest('[style*="position:fixed"]')?.remove();
+    renderTrades();
+    alert(`✓ Updated ${visibleTrades.length} trade(s) with new tags`);
+  } catch (err) {
+    console.error('Batch update error:', err);
+    alert('Error updating trades');
+  }
+}
 
 function openQuickEditTags(id) {
   const trade = trades.find(t => t.id === id);
