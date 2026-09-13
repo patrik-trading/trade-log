@@ -1822,11 +1822,12 @@ input[type=date] {
           </select>
           <button onclick="document.getElementById('tl-oc-filter').value='ALL';document.getElementById('tl-sym-filter').value='ALL';renderTrades();" style="background:none;border:1px solid var(--border);color:var(--muted2);padding:3px 8px;border-radius:8px;font-family:Geist,sans-serif;font-size:.58rem;cursor:pointer">✕ Clear</button>
           <button onclick="openBatchEditTagsModal()" style="background:var(--accent);border:1px solid var(--accent);color:white;padding:4px 10px;border-radius:8px;font-family:Geist,sans-serif;font-size:.58rem;cursor:pointer;font-weight:500">🏷️ Quick Edit Tags</button>
+          <button onclick="openColumnVisibilityMenu()" style="background:none;border:1px solid var(--border);color:var(--text);padding:4px 10px;border-radius:8px;font-family:Geist,sans-serif;font-size:.58rem;cursor:pointer;font-weight:500">👁️ Columns</button>
         </div>
         <div class="tl-wrap" style="max-height:560px;overflow-y:auto;overflow-x:auto">
         <div style="border-radius:10px;border:1px solid var(--border)">
           <table class="tl" style="font-size:.62rem">
-            <thead id="tl-thead"><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><th id="tl-tag-headers"></th><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
+            <thead><tr><th style="min-width:80px">Opened</th><th style="min-width:80px">Triggered</th><th style="min-width:80px">Closed</th><th>Month</th><th>O/C</th><th>Dir</th><th>Size</th><th style="min-width:70px">Symbol</th><th>Type</th><th style="min-width:72px">Price</th><th style="min-width:72px">SL</th><th style="min-width:72px">TP</th><th>1R Val</th><th>Risked</th><th>Risked R</th><th>PnL</th><th style="min-width:80px">Closed Price</th><th>Max R</th><th>R</th><th>RR</th><th>Add-on</th><script id="tl-tag-cols-marker" type="application/placeholder"></script><th style="min-width:100px">Notes</th><th>Actions</th></tr></thead>
             <tbody id="tl-tbody"><tr><td colspan="25" class="empty" style="text-align:center;padding:22px">No trades logged yet</td></tr></tbody>
           </table>
         </div>
@@ -2271,10 +2272,6 @@ input[type=date] {
         <div class="ig"></div>
       </div>
     </div>
-    <div class="ig" style="margin-bottom:11px"><label>Entry Type</label><div class="tag-row" id="edit-entry-tags">
-      <button class="tag-btn" data-val="Zone Touch" onclick="selTag('edit-entry-tags',this)" style="--tc:#10b981">● Zone Touch</button>
-      <button class="tag-btn" data-val="In Zone" onclick="selTag('edit-entry-tags',this)" style="--tc:#8b5cf6">● In Zone</button>
-    </div></div>
 
     <div class="ig" style="margin-bottom:14px"><label>Weekly Zone</label><div class="tag-row" id="edit-weekly-zone-tags">
       <button class="tag-btn" data-val="RBR" onclick="selTag('edit-weekly-zone-tags',this)" style="--tc:#22c55e">RBR</button>
@@ -2371,6 +2368,7 @@ async function launch(){
     const ar=await sbGet('accounts','name.asc');
     accounts=ar.map(a=>a.name);
     if(!accounts.includes('Default'))accounts.unshift('Default');
+    await loadTagGroupsFromSupabase();
     refreshAcctDDs();renderTrades();loadSwapFees();sync('ok','Synced ✓');
   }catch(e){sync('err','Load failed — '+e.message);console.error(e);}
 }
@@ -3913,6 +3911,14 @@ function collectTagGroupValues() {
             values['weekly_dir'] = value;
           } else if (groupId === 'daily-dir') {
             values['daily_dir'] = value;
+          } else if (groupId === 'weekly-zone') {
+            values['weekly_zone'] = value;
+          } else if (groupId === 'daily-zone') {
+            values['daily_zone'] = value;
+          } else if (groupId === 'daily-base') {
+            values['daily_base'] = value;
+          } else if (groupId === 'entry-type') {
+            values['entry'] = value;
           } else {
             // For other groups, use groupId as key
             values[groupId] = value;
@@ -4091,7 +4097,32 @@ async function deleteTrade(id){if(!confirm('Delete this trade?'))return;try{sync
 function resetTradeForm(){['tl-size','tl-symbol','tl-price','tl-sl','tl-tp','tl-closed-price','tl-max-r','tl-pnl','tl-r','tl-rvalue','tl-risked','tl-risked-r','tl-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('tl-risked').dataset.manual='';document.getElementById('tl-oc').value='Close';document.getElementById('tl-dir').value='Buy';document.getElementById('tl-type').value='Forex';document.getElementById('r-hint').textContent='';document.getElementById('r-auto-badge').style.display='none';document.getElementById('tl-addon').checked=false;document.querySelectorAll('#phase-tags .tag-btn,#entry-tags .tag-btn,#inst-tags .tag-btn').forEach(b=>{b.classList.remove('sel');b.style.background='';b.style.color='';});}
 function rFmt(v){return v===null?'—':(v>0?'+':'')+v.toFixed(1);}
 
+function renderTagGroupHeaders() {
+  const tags = getTagGroups();
+  const marker = document.getElementById('tl-tag-cols-marker');
+  if (!marker) return;
+  
+  // Remove any previously inserted tag headers (marked with data-tag-th)
+  const tr = marker.parentElement;
+  tr.querySelectorAll('[data-tag-th]').forEach(el => el.remove());
+  
+  // Build TH elements and insert them right after the marker, in order
+  let insertAfter = marker;
+  for (const [groupId, groupData] of Object.entries(tags)) {
+    if (!groupData.label || !Array.isArray(groupData.tags)) continue;
+    
+    const th = document.createElement('th');
+    th.style.minWidth = '70px';
+    th.textContent = groupData.label;
+    th.setAttribute('data-tag-th', groupId);
+    insertAfter.insertAdjacentElement('afterend', th);
+    insertAfter = th; // Next one goes after this one, preserving order
+  }
+}
+
 function renderTrades(){
+  // Render tag group headers
+  renderTagGroupHeaders();
   const af  = document.getElementById('tl-acct-filter')?.value || 'ALL';
   const ocf = document.getElementById('tl-oc-filter')?.value  || 'ALL';
   const symf= document.getElementById('tl-sym-filter')?.value || 'ALL';
@@ -4157,10 +4188,10 @@ function renderTrades(){
     const instCell = t.inst_tag
       ? `<td><span style="display:inline-flex;align-items:center;gap:4px;font-family:Geist;font-size:.62rem;color:${ic2};white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:${ic2};flex-shrink:0;display:inline-block"></span>${t.inst_tag}</span></td>`
       : '<td style="color:var(--muted2)">—</td>';
-    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td>${generateTagColumnsCells(t)}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openQuickEditTags(${t.id})" title="Edit Tags">🏷️</button><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
+    return`<tr><td style="color:var(--muted2);font-size:.6rem">${t.opened_at?t.opened_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.triggered_at?t.triggered_at.slice(0,10):'—'}</td><td style="color:var(--muted2);font-size:.6rem">${t.closed_at?t.closed_at.slice(0,10):t.date}</td><td>${(t.closed_at?t.closed_at.slice(0,7):t.date?t.date.slice(0,7):t.month)||'—'}</td><td>${t.oc}</td><td class="${t.dir==='Buy'?'td-buy':'td-sell'}">${t.dir}</td><td>${t.size}</td><td style="font-weight:500">${t.symbol}${acTag}</td><td>${t.type}</td><td>${t.price}</td><td style="color:var(--mega-bear)">${t.sl_price!=null?t.sl_price:'—'}</td><td style="color:var(--mega-bull)">${t.tp_price!=null?t.tp_price:'—'}</td><td style="color:var(--muted2)">${t.rvalue!=null?ts+t.rvalue:'—'}</td>${riskedCell}${riskedRCell}<td class="${pC}">${t.pnl!==null?(t.pnl>=0?'+':'')+ts+t.pnl.toFixed(2):'—'}</td><td style="color:var(--text);font-weight:500">${t.closed_price!=null?t.closed_price:'—'}</td><td style="color:var(--accent)">${t.max_r_reached!=null?t.max_r_reached.toFixed(2):'—'}</td><td class="${rC}">${rFmt(t.r)}</td>${rrCell}<td style="text-align:center">${t.addon?'<span style="background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);color:var(--accent);font-family:Geist;font-size:.6rem;padding:2px 7px;border-radius:3px">+</span>':'—'}</td>${generateTagColumnsCells(t)}<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;color:var(--muted2)">${t.notes?t.notes.substring(0,32)+(t.notes.length>32?'…':''):''}</td><td style="display:flex;gap:2px"><button class="tl-edit" onclick="openEditModal(${t.id})" title="Edit">✏️</button><button class="tl-edit" onclick="duplicateTrade(${t.id})" title="Duplicate for another account">📋</button><button class="tl-del" onclick="deleteTrade(${t.id})" title="Delete">✕</button>
         <button class="tl-edit" onclick="openTradeChart(trades.find(x=>x.id===${t.id}))" title="View Chart" style="background:rgba(56,189,248,.12);color:var(--mega-bull);border-color:rgba(56,189,248,.3)">📈</button></td></tr>`;
   }).join('');
-
+  applyColumnVisibility();
 
   // ── STREAKS (BE trades ignored, not streak-breaking) ──
   const closedChron = ft.filter(t=>t.oc==='Close'&&t.r!==null).slice().reverse();
@@ -5784,98 +5815,6 @@ async function applyBatchEditTags() {
   } catch (err) {
     console.error('Batch update error:', err);
     alert('Error updating trades');
-  }
-}
-
-function openQuickEditTags(id) {
-  const trade = trades.find(t => t.id === id);
-  if (!trade) return;
-  
-  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
-  const visibleGroups = Object.entries(tags).filter(([gId, gData]) => 
-    gData.label && Array.isArray(gData.tags) && !gData.hidden
-  );
-  
-  let html = `
-    <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999" onclick="if(event.target===this)this.remove()">
-      <div style="background:var(--surface);padding:24px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:400px;width:90%">
-        <h3 style="margin:0 0 20px 0;font-size:.95rem;font-weight:600">Edit Tags — Trade #${id}</h3>
-        <div style="max-height:60vh;overflow-y:auto;margin-bottom:20px">
-  `;
-  
-  // Create dropdowns for each visible tag group
-  visibleGroups.forEach(([groupId, groupData], idx) => {
-    const currentValue = trade[groupId] || '';
-    
-    html += `
-      <div style="margin-bottom:16px">
-        <label style="display:block;font-size:.75rem;font-weight:500;margin-bottom:6px;color:var(--text)">${groupData.label}</label>
-        <select id="qet-${groupId}" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--text);cursor:pointer;font-size:.75rem">
-          <option value="">— None —</option>
-    `;
-    
-    groupData.tags.forEach(tag => {
-      const selected = tag === currentValue ? 'selected' : '';
-      html += `<option value="${tag}" ${selected}>${tag}</option>`;
-    });
-    
-    html += `</select></div>`;
-  });
-  
-  html += `
-        </div>
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button onclick="this.closest('div').parentElement.remove()" style="padding:8px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:500;color:var(--text)">Cancel</button>
-          <button onclick="saveQuickEditTags(${id})" style="padding:8px 16px;background:var(--accent);border:none;border-radius:6px;cursor:pointer;font-weight:500;color:white">Save Tags</button>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  document.body.insertAdjacentHTML('beforeend', html);
-}
-
-async function saveQuickEditTags(id) {
-  const trade = trades.find(t => t.id === id);
-  if (!trade) return;
-  
-  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
-  const visibleGroups = Object.entries(tags).filter(([gId, gData]) => 
-    gData.label && Array.isArray(gData.tags) && !gData.hidden
-  );
-  
-  // Collect new tag values
-  const updates = {};
-  visibleGroups.forEach(([groupId, _]) => {
-    const select = document.getElementById(`qet-${groupId}`);
-    if (select) {
-      const value = select.value || null;
-      updates[groupId] = value;
-    }
-  });
-  
-  // Update local trade object
-  Object.assign(trade, updates);
-  
-  // Update Supabase
-  try {
-    const { error } = await supabase
-      .from('trades')
-      .update(updates)
-      .eq('id', id);
-    
-    if (error) {
-      console.error('Update error:', error);
-      alert('Error saving tags: ' + error.message);
-      return;
-    }
-    
-    // Close modal and refresh table
-    document.querySelector('[onclick*="saveQuickEditTags"]')?.closest('[style*="position:fixed"]')?.remove();
-    renderTrades();
-  } catch (err) {
-    console.error('Save error:', err);
-    alert('Error saving tags');
   }
 }
 
@@ -7506,14 +7445,62 @@ function updateBottomBar(tab) {
 const defaultTags = {
   'weekly-dir': { label: 'Weekly Direction', tags: ['Up', 'Down', 'Sideways'], hidden: false },
   'daily-dir': { label: 'Daily Direction', tags: ['Up', 'Down', 'Sideways'], hidden: false },
+  'weekly-zone': { label: 'Weekly Zone', tags: ['RBR', 'RBD', 'DBD', 'DBR'], hidden: false },
   'daily-zone': { label: 'Daily Zone', tags: ['RBR', 'RBD', 'DBD', 'DBR'], hidden: false },
   'entry-type': { label: 'Entry Type', tags: ['Zone Touch', 'In Zone', 'Asia Session Zone'], hidden: false },
   'cvd': { label: 'CVD/Delta', tags: ['Positive', 'Negative'], hidden: false },
   'daily-base': { label: 'Daily Base', tags: ['Red', 'Green'], hidden: false }
 };
 
+function getTagGroups() {
+  let tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  
+  // Backfill: existing saved tag data predates the Weekly Zone group.
+  // Must run here (not just in initTagManager) so Trade Log renders
+  // correctly even if Tag Manager was never opened this session.
+  if (!tags['weekly-zone']) {
+    tags = { ...tags, 'weekly-zone': defaultTags['weekly-zone'] };
+    localStorage.setItem('trading-tags', JSON.stringify(tags));
+  }
+  
+  return tags;
+}
+
+// Loads tag group definitions from Supabase (source of truth across devices)
+// and mirrors them into localStorage so every existing read path — which
+// all read localStorage synchronously — keeps working unchanged.
+async function loadTagGroupsFromSupabase() {
+  try {
+    const rows = await sbGet('trading_tags');
+    if (rows && rows.length > 0 && rows[0].groups && Object.keys(rows[0].groups).length > 0) {
+      localStorage.setItem('trading-tags', JSON.stringify(rows[0].groups));
+    } else {
+      // No row yet in this Supabase project — push up whatever this
+      // device currently has (existing localStorage, or defaults) so
+      // the row exists for next time and for other devices.
+      const current = getTagGroups();
+      await saveTagGroupsToSupabase(current);
+    }
+  } catch (e) {
+    // Table may not exist yet if the SQL migration hasn't been run.
+    // Fall back silently to localStorage-only behavior rather than breaking the app.
+    console.log('Could not load tag groups from Supabase:', e.message);
+  }
+}
+
+// Pushes the current tag group definitions up to Supabase so other
+// devices pick them up. Call this every time tags are created, edited,
+// deleted, reordered, or a group's visibility is toggled.
+async function saveTagGroupsToSupabase(tags) {
+  try {
+    await sbUpsert('trading_tags', [{ id: 1, groups: tags }]);
+  } catch (e) {
+    console.log('Could not save tag groups to Supabase:', e.message);
+  }
+}
+
 function initTagManager() {
-  let tags = JSON.parse(localStorage.getItem('trading-tags'));
+  let tags = getTagGroups();
   
   // Migrate old format (arrays) to new format (objects with metadata)
   if (tags && !tags['weekly-dir']?.label) {
@@ -7521,12 +7508,8 @@ function initTagManager() {
     tags = defaultTags;
   }
   
-  // Use defaults if nothing exists
-  if (!tags) {
-    tags = defaultTags;
-  }
-  
   localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
   renderTagManager(tags);
 }
 
@@ -7723,6 +7706,7 @@ function addTagToCategory(groupId) {
   }
   
   localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
   console.log('Saved to localStorage');
   input.value = '';
   renderTagManager(tags);
@@ -7737,6 +7721,7 @@ function removeTag(groupId, tag) {
   }
   
   localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
   renderTagManager(tags);
   refreshTagDropdowns();
 }
@@ -7748,6 +7733,7 @@ function toggleGroupVisibility(groupId) {
   }
   
   localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
   renderTagManager(tags);
   refreshTagDropdowns();
 }
@@ -7757,6 +7743,7 @@ function deleteTagGroup(groupId) {
   delete tags[groupId];
   
   localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
   renderTagManager(tags);
   refreshTagDropdowns();
 }
@@ -7776,6 +7763,7 @@ function createNewTagGroup() {
   };
   
   localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
   input.value = '';
   renderTagManager(tags);
   refreshTagDropdowns();
@@ -7889,42 +7877,113 @@ function selectTagFromGroup(groupNum, tag) {
 }
 
 function generateTagColumnsCells(trade) {
-  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
+  const tags = getTagGroups();
   let html = '';
   
+  // Map hyphenated group IDs to their actual underscore field names on the trade object
+  const fieldKeyMap = {
+    'weekly-dir': 'weekly_dir',
+    'daily-dir': 'daily_dir',
+    'weekly-zone': 'weekly_zone',
+    'daily-zone': 'daily_zone',
+    'daily-base': 'daily_base',
+    'entry-type': 'entry'
+  };
+  
+  // Add TD for each tag group (show all)
   for (const [groupId, groupData] of Object.entries(tags)) {
-    if (!groupData.label || !Array.isArray(groupData.tags) || groupData.hidden) continue;
+    if (!groupData.label || !Array.isArray(groupData.tags)) continue;
     
-    const value = trade[groupId] || '—';
-    html += `<td>${value}</td>`;
+    const fieldKey = fieldKeyMap[groupId] || groupId;
+    const value = trade[fieldKey] || '—';
+    html += `<td data-tag-td="${groupId}">${value}</td>`;
   }
   
   return html;
 }
 
-function updateTableHeaders() {
-  const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
-  const headerContainer = document.getElementById('tl-tag-headers');
-  if (!headerContainer) return;
-  
-  headerContainer.innerHTML = '';
-  
-  // Add header for each visible tag group
+// Applies each group's columnHidden flag to its already-rendered header
+// and cells. Always run this AFTER headers and rows exist — it only
+// toggles visibility on elements that are already there, in a fixed
+// order, so header/data alignment can never drift from this step.
+function applyColumnVisibility() {
+  const tags = getTagGroups();
   for (const [groupId, groupData] of Object.entries(tags)) {
-    if (!groupData.label || !Array.isArray(groupData.tags) || groupData.hidden) continue;
-    
-    const th = document.createElement('th');
-    th.textContent = groupData.label;
-    th.style.minWidth = '70px';
-    headerContainer.appendChild(th);
+    const show = !groupData.columnHidden;
+    document.querySelectorAll(`[data-tag-th="${groupId}"], [data-tag-td="${groupId}"]`)
+      .forEach(el => { el.style.display = show ? '' : 'none'; });
   }
+}
+
+function openColumnVisibilityMenu() {
+  const tags = getTagGroups();
+  const groups = Object.entries(tags).filter(([gId, gData]) => gData.label && Array.isArray(gData.tags));
+  
+  if (groups.length === 0) {
+    alert('No tag columns available. Create some in Tag Manager first!');
+    return;
+  }
+  
+  let html = `
+    <div id="col-vis-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999" onclick="if(event.target===this)this.remove()">
+      <div style="background:var(--surface);padding:24px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:400px;width:90%">
+        <h3 style="margin:0 0 6px 0;font-size:.95rem;font-weight:600">Show/Hide Columns</h3>
+        <p style="margin:0 0 20px 0;font-size:.7rem;color:var(--muted2)">Choose which tag columns appear in the Trade Log table.</p>
+        <div style="max-height:60vh;overflow-y:auto;margin-bottom:20px">
+  `;
+  
+  groups.forEach(([groupId, groupData]) => {
+    const checked = groupData.columnHidden ? '' : 'checked';
+    html += `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface2);border-radius:6px;margin-bottom:8px">
+        <input type="checkbox" id="colvis-${groupId}" ${checked} style="cursor:pointer">
+        <label for="colvis-${groupId}" style="flex:1;cursor:pointer;font-size:.75rem">${groupData.label}</label>
+      </div>
+    `;
+  });
+  
+  html += `
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="document.getElementById('col-vis-overlay').remove()" style="padding:8px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:500;color:var(--text)">Cancel</button>
+          <button onclick="saveColumnVisibilityMenu()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:6px;cursor:pointer;font-weight:500;color:white">Apply</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function saveColumnVisibilityMenu() {
+  const tags = getTagGroups();
+  
+  for (const [groupId, groupData] of Object.entries(tags)) {
+    if (!groupData.label || !Array.isArray(groupData.tags)) continue;
+    const checkbox = document.getElementById(`colvis-${groupId}`);
+    if (checkbox) {
+      groupData.columnHidden = !checkbox.checked;
+    }
+  }
+  
+  localStorage.setItem('trading-tags', JSON.stringify(tags));
+  saveTagGroupsToSupabase(tags);
+  document.getElementById('col-vis-overlay')?.remove();
+  applyColumnVisibility();
 }
 
 function refreshTagDropdowns() {
   const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
   
   // Update table headers with dynamic tag group names
-  updateTableHeaders();
+  renderTagGroupHeaders();
+  
+  // Rebuild the actual table rows too — a group being added, deleted,
+  // or hidden should be reflected in the visible table right away,
+  // not just in the header row.
+  if (typeof trades !== 'undefined') {
+    renderTrades();
+  }
   
   // ════════════════════════════════════════
   // RENDER TRADE LOG TAG GROUPS
