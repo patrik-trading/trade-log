@@ -3896,6 +3896,7 @@ function clearAutoR(){document.getElementById('r-auto-badge').style.display='non
 
 function collectTagGroupValues() {
   const values = {};
+  const customTags = {};
   const tags = JSON.parse(localStorage.getItem('trading-tags')) || defaultTags;
   
   // Collect values from all 6 tag group selectors
@@ -3920,12 +3921,21 @@ function collectTagGroupValues() {
           } else if (groupId === 'entry-type') {
             values['entry'] = value;
           } else {
-            // For other groups, use groupId as key
-            values[groupId] = value;
+            // Any group not explicitly mapped above is a custom group
+            // (created via "Create New Group" in Tag Manager). These
+            // have no dedicated column in the trades table, so they
+            // all nest inside the single custom_tags jsonb column
+            // instead — this way a new custom group never needs a
+            // database schema change to start working.
+            customTags[groupId] = value;
           }
         }
       }
     }
+  }
+  
+  if (Object.keys(customTags).length > 0) {
+    values['custom_tags'] = customTags;
   }
   
   return values;
@@ -5918,6 +5928,13 @@ async function saveEdit() {
   const symVal  = document.getElementById('edit-symbol').value;
   if (!dateVal || !symVal) { alert('Date and Symbol are required.'); return; }
 
+  // This modal has no fields for custom tag groups (created via Tag
+  // Manager's "Create New Group") — only the built-in ones. Carry the
+  // existing trade's custom_tags through unchanged so a routine edit
+  // here never drops that data from memory or overwrites it in the DB.
+  const existingTrade = trades.find(t => t.id === editingId);
+  const existingCustomTags = existingTrade?.custom_tags || {};
+
   const pv   = document.getElementById('edit-pnl').value;
   const rv   = document.getElementById('edit-r').value;
   const rvv  = document.getElementById('edit-rvalue').value;
@@ -5956,6 +5973,7 @@ async function saveEdit() {
     daily_base: getSelTag('edit-daily-base-tags'),
     weekly_dir: document.getElementById('edit-weekly-dir')?.value || null,
     daily_dir: document.getElementById('edit-daily-dir')?.value || null,
+    custom_tags: existingCustomTags,
     notes:        document.getElementById('edit-notes').value,
     addon:        document.getElementById('edit-addon').checked,
     sl_price:     document.getElementById('edit-sl')?.value!==''?parseFloat(document.getElementById('edit-sl').value):null,
@@ -7894,9 +7912,17 @@ function generateTagColumnsCells(trade) {
   for (const [groupId, groupData] of Object.entries(tags)) {
     if (!groupData.label || !Array.isArray(groupData.tags)) continue;
     
-    const fieldKey = fieldKeyMap[groupId] || groupId;
-    const value = trade[fieldKey] || '—';
-    html += `<td data-tag-td="${groupId}">${value}</td>`;
+    let value;
+    if (fieldKeyMap[groupId]) {
+      // Pre-existing group with its own dedicated column
+      value = trade[fieldKeyMap[groupId]];
+    } else {
+      // Custom group (created via Tag Manager) — value lives nested
+      // inside the shared custom_tags jsonb column, not a top-level
+      // column of its own.
+      value = trade.custom_tags?.[groupId];
+    }
+    html += `<td data-tag-td="${groupId}">${value || '—'}</td>`;
   }
   
   return html;
